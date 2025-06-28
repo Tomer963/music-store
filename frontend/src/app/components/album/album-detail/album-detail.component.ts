@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-album-detail',
-  template: '<div>Album Detail</div>',
-  styles: []
+  selector: "app-album-detail",
+  standalone: true,
+  imports: [CommonModule],
+  template: "<div>Album Detail</div>",
+  styles: [],
 })
 export class AlbumDetailComponent {}

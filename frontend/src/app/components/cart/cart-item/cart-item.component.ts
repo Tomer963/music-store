@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-cart-item',
-  template: '<div>Cart Item</div>',
-  styles: []
+  selector: "app-cart-item",
+  standalone: true,
+  imports: [CommonModule],
+  template: "<div>Cart Item</div>",
+  styles: [],
 })
 export class CartItemComponent {}

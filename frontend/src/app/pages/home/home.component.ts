@@ -4,15 +4,27 @@
  */
 
 import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { Subject, takeUntil } from "rxjs";
 import { AlbumService } from "../../services/album.service";
 import { Album } from "../../models/album.model";
 import { environment } from "../../../environments/environment";
+import { SpinnerComponent } from "../../components/shared/spinner/spinner.component";
+import { AlbumCardComponent } from "../../components/album/album-card/album-card.component";
+import { SidebarComponent } from "../../components/layout/sidebar/sidebar.component";
 
 @Component({
   selector: "app-home",
+  standalone: true,
+  imports: [
+    CommonModule,
+    SpinnerComponent,
+    AlbumCardComponent,
+    SidebarComponent,
+  ],
   templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.css"]})
+  styleUrls: ["./home.component.css"],
+})
 export class HomeComponent implements OnInit, OnDestroy {
   featuredAlbum: Album | null = null;
   topAlbums: Album[] = [];
@@ -53,7 +65,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error("Failed to load albums:", error);
           this.isLoading = false;
-        }});
+        },
+      });
   }
 
   /**
@@ -111,7 +124,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error("Failed to load more albums:", error);
           this.isLoadingMore = false;
-        }});
+        },
+      });
   }
 
   /**

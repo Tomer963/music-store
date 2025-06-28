@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-register',
-  template: '<div>Register Page</div>',
-  styles: []
+  selector: "app-register",
+  standalone: true,
+  imports: [CommonModule],
+  template: "<div>Register Page</div>",
+  styles: [],
 })
 export class RegisterComponent {}

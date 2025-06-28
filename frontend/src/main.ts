@@ -2,16 +2,20 @@
  * Main entry point for the Angular application
  */
 
-import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
-import { AppModule } from "./app/app.module";
-import { environment } from "./environments/environment";
+import { bootstrapApplication } from "@angular/platform-browser";
+import { provideRouter } from "@angular/router";
+import { provideHttpClient, withInterceptors } from "@angular/common/http";
+import { provideAnimations } from "@angular/platform-browser/animations";
+import { importProvidersFrom } from "@angular/core";
+import { AppComponent } from "./app/app.component";
+import { routes } from "./app/app.routes";
+import { authInterceptor } from "./app/interceptors/auth.interceptor";
+import { errorInterceptor } from "./app/interceptors/error.interceptor";
 
-// Enable production mode if needed
-if (environment.production) {
-  // Production mode optimizations will be enabled
-}
-
-// Bootstrap the Angular application
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  .catch((err) => console.error("Error bootstrapping the application:", err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
+    provideAnimations(),
+  ],
+}).catch((err) => console.error("Error bootstrapping the application:", err));

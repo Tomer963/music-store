@@ -4,6 +4,7 @@
  */
 
 import { Component, Input, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
 import { Album } from "../../../models/album.model";
 import { CartService } from "../../../services/cart.service";
@@ -11,8 +12,11 @@ import { AlbumService } from "../../../services/album.service";
 
 @Component({
   selector: "app-album-card",
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: "./album-card.component.html",
-  styleUrls: ["./album-card.component.css"]})
+  styleUrls: ["./album-card.component.css"],
+})
 export class AlbumCardComponent implements OnInit {
   @Input() album!: Album;
   @Input() size: "small" | "medium" | "large" = "medium";
@@ -63,7 +67,8 @@ export class AlbumCardComponent implements OnInit {
       error: (error) => {
         console.error("Failed to add to cart:", error);
         this.isAddingToCart = false;
-      }});
+      },
+    });
   }
 
   /**

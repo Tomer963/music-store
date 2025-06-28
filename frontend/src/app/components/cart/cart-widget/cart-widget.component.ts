@@ -4,16 +4,21 @@
  */
 
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 import { CartService } from "../../../services/cart.service";
 import { AlbumService } from "../../../services/album.service";
 import { Cart, CartItem } from "../../../models/cart.model";
+import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 
 @Component({
   selector: "app-cart-widget",
+  standalone: true,
+  imports: [CommonModule, SpinnerComponent],
   templateUrl: "./cart-widget.component.html",
-  styleUrls: ["./cart-widget.component.css"]})
+  styleUrls: ["./cart-widget.component.css"],
+})
 export class CartWidgetComponent implements OnInit, OnDestroy {
   cart: Cart = { items: [], itemCount: 0, total: 0 };
   isLoading = true;
@@ -46,7 +51,8 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
     this.cartService.removeFromCart(itemId).subscribe({
       error: (error) => {
         console.error("Failed to remove item:", error);
-      }});
+      },
+    });
   }
 
   /**

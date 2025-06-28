@@ -3,24 +3,30 @@
  * Provides search functionality with autocomplete suggestions
  */
 
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { ReactiveFormsModule, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
-import { FormControl } from "@angular/forms";
 import {
   Subject,
   debounceTime,
   distinctUntilChanged,
   filter,
   switchMap,
-  takeUntil} from "rxjs";
+  takeUntil,
+} from "rxjs";
 import { SearchService } from "../../../services/search.service";
 import { Album } from "../../../models/album.model";
 import { environment } from "../../../../environments/environment";
+import { SpinnerComponent } from "../spinner/spinner.component";
 
 @Component({
   selector: "app-search-box",
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
   templateUrl: "./search-box.component.html",
-  styleUrls: ["./search-box.component.css"]})
+  styleUrls: ["./search-box.component.css"],
+})
 export class SearchBoxComponent implements OnInit, OnDestroy {
   searchControl = new FormControl("");
   searchResults: Album[] = [];
@@ -53,7 +59,8 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
           console.error("Search error:", error);
           this.isSearching = false;
           this.searchResults = [];
-        }});
+        },
+      });
 
     // Hide results when search is cleared
     this.searchControl.valueChanges
@@ -103,8 +110,13 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   /**
    * Handle click outside
    */
-  onClickOutside(): void {
-    this.hideResults();
+  @HostListener("document:click", ["$event"])
+  onClickOutside(event: Event): void {
+    const target = event.target as HTMLElement;
+    const searchBox = target.closest(".search-box");
+    if (!searchBox) {
+      this.hideResults();
+    }
   }
 
   /**

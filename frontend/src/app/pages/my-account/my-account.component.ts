@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-my-account',
-  template: '<div>My Account Page</div>',
-  styles: []
+  selector: "app-my-account",
+  standalone: true,
+  imports: [CommonModule],
+  template: "<div>My Account Page</div>",
+  styles: [],
 })
 export class MyAccountComponent {}

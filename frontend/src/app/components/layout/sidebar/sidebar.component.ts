@@ -4,15 +4,21 @@
  */
 
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { Router, NavigationEnd } from "@angular/router";
 import { Subject, filter, takeUntil } from "rxjs";
 import { CategoryService } from "../../../services/category.service";
 import { Category } from "../../../models/album.model";
+import { CartWidgetComponent } from "../../cart/cart-widget/cart-widget.component";
+import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 
 @Component({
   selector: "app-sidebar",
+  standalone: true,
+  imports: [CommonModule, CartWidgetComponent, SpinnerComponent],
   templateUrl: "./sidebar.component.html",
-  styleUrls: ["./sidebar.component.css"]})
+  styleUrls: ["./sidebar.component.css"],
+})
 export class SidebarComponent implements OnInit, OnDestroy {
   categories: Category[] = [];
   activeCategoryId: string | null = null;
@@ -51,7 +57,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error("Failed to load categories:", error);
           this.isLoadingCategories = false;
-        }});
+        },
+      });
   }
 
   /**

@@ -1,7 +1,8 @@
-import { Directive, ElementRef, OnInit } from '@angular/core';
+import { Directive, ElementRef, OnInit } from "@angular/core";
 
 @Directive({
-  selector: '[appLazyLoad]'
+  selector: "[appLazyLoad]",
+  standalone: true,
 })
 export class LazyLoadDirective implements OnInit {
   constructor(private el: ElementRef) {}
