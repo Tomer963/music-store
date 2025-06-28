@@ -1,0 +1,268 @@
+/* Header Component Styles */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-sticky);
+  background-color: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
+/* Top Navigation */
+.nav-top {
+  background-color: #444;
+  color: var(--white);
+  font-size: 0.875rem;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 40px;
+  align-items: center;
+}
+
+.nav-item {
+  margin-right: var(--spacing-lg);
+}
+
+.nav-item a {
+  color: var(--white);
+  text-decoration: none;
+  padding: var(--spacing-xs) 0;
+  transition: color var(--transition-fast);
+}
+
+.nav-item a:hover,
+.nav-item a.active {
+  color: var(--primary-color);
+}
+
+/* Main Header */
+.header-main {
+  background-color: var(--primary-color);
+  padding: var(--spacing-md) 0;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+}
+
+/* Logo */
+.logo {
+  flex-shrink: 0;
+}
+
+.logo-link {
+  display: block;
+  text-decoration: none;
+}
+
+.logo-text {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Search Wrapper */
+.search-wrapper {
+  flex: 1;
+  max-width: 500px;
+}
+
+/* Cart Wrapper */
+.cart-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.welcome-text {
+  color: var(--white);
+  font-size: 0.875rem;
+  text-align: right;
+  line-height: 1.3;
+}
+
+.cart-icon-wrapper {
+  position: relative;
+}
+
+.cart-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: var(--spacing-xs);
+  transition: transform var(--transition-fast);
+}
+
+.cart-button:hover {
+  transform: scale(1.1);
+}
+
+.cart-icon {
+  font-size: 2rem;
+  filter: brightness(0) invert(1);
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: var(--secondary-color);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Mobile Menu Toggle */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-sm);
+}
+
+.menu-icon {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--white);
+  position: relative;
+  transition: background-color var(--transition-fast);
+}
+
+.menu-icon::before,
+.menu-icon::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--white);
+  transition: transform var(--transition-fast);
+}
+
+.menu-icon::before {
+  transform: translateY(-8px);
+}
+
+.menu-icon::after {
+  transform: translateY(8px);
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100vh;
+  background-color: var(--white);
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  transition: right var(--transition-normal);
+  z-index: var(--z-modal);
+}
+
+.mobile-menu.open {
+  right: 0;
+}
+
+.mobile-menu-content {
+  padding: var(--spacing-lg);
+}
+
+.close-menu {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--secondary-color);
+}
+
+.mobile-nav-list {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--spacing-xl);
+}
+
+.mobile-nav-list li {
+  margin-bottom: var(--spacing-md);
+}
+
+.mobile-nav-list a {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-size: 1.125rem;
+  display: block;
+  padding: var(--spacing-sm) 0;
+  transition: color var(--transition-fast);
+}
+
+.mobile-nav-list a:hover {
+  color: var(--primary-color);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .nav-top {
+    display: none;
+  }
+
+  .header-main {
+    padding: var(--spacing-sm) 0;
+  }
+
+  .logo-text {
+    font-size: 2rem;
+  }
+
+  .search-wrapper {
+    display: none;
+  }
+
+  .welcome-text {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .cart-count {
+    font-size: 0.625rem;
+    padding: 1px 4px;
+    min-width: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .header-content {
+    gap: var(--spacing-sm);
+  }
+
+  .logo-text {
+    font-size: 1.75rem;
+  }
+
+  .cart-icon {
+    font-size: 1.5rem;
+  }
+}

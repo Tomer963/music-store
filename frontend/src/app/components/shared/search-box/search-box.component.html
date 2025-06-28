@@ -1,0 +1,54 @@
+<!-- Search Box Component -->
+<div class="search-box" (clickOutside)="onClickOutside()">
+  <form class="search-form" (ngSubmit)="onSearch()">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search"
+      [formControl]="searchControl"
+      autocomplete="off"
+      (focus)="showResults = searchResults.length > 0"
+    />
+    <button type="submit" class="search-button" [disabled]="isSearching">
+      <span class="search-icon">🔍</span>
+    </button>
+  </form>
+
+  <!-- Search Results Dropdown -->
+  <div
+    class="search-results"
+    *ngIf="showResults && (searchResults.length > 0 || isSearching)"
+  >
+    <!-- Loading State -->
+    <div class="search-loading" *ngIf="isSearching">
+      <app-spinner [size]="'small'"></app-spinner>
+      <span>Searching...</span>
+    </div>
+
+    <!-- Results -->
+    <div class="results-list" *ngIf="!isSearching && searchResults.length > 0">
+      <div
+        class="result-item"
+        *ngFor="let album of searchResults"
+        (click)="selectAlbum(album._id)"
+      >
+        <img
+          [src]="album.images[0]?.url || '/assets/images/album-placeholder.jpg'"
+          [alt]="album.title"
+          class="result-image"
+        />
+        <div class="result-info">
+          <div class="result-title">{{ album.title }}</div>
+          <div class="result-artist">
+            {{ album.artist }}, Released on {{ album.releaseYear }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div class="no-results" *ngIf="!isSearching && searchResults.length === 0">
+      No albums found
+    </div>
+  </div>
+</div>

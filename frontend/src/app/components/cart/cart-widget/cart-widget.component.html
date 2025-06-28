@@ -1,0 +1,69 @@
+<!-- Cart Widget Component -->
+<div class="cart-widget">
+  <!-- Cart Header -->
+  <div class="cart-header">
+    <h3 class="cart-title">My Cart</h3>
+  </div>
+
+  <!-- Loading State -->
+  <div class="cart-loading" *ngIf="isLoading">
+    <app-spinner [size]="'small'"></app-spinner>
+  </div>
+
+  <!-- Cart Content -->
+  <div class="cart-content" *ngIf="!isLoading">
+    <!-- Empty Cart -->
+    <div class="empty-cart" *ngIf="cart.itemCount === 0">
+      <p>Your cart is empty</p>
+    </div>
+
+    <!-- Cart Items -->
+    <div class="cart-items" *ngIf="cart.itemCount > 0">
+      <!-- Item Count -->
+      <p class="item-count">
+        There are {{ cart.itemCount }} items in your cart
+      </p>
+
+      <!-- Total -->
+      <div class="cart-total">
+        <span class="total-label">Subtotal:</span>
+        <span class="total-amount">{{ formatPrice(cart.total) }}</span>
+        <button class="checkout-btn" (click)="goToCheckout()">Checkout</button>
+      </div>
+
+      <!-- Items List -->
+      <div class="items-list">
+        <div class="cart-item" *ngFor="let item of cart.items">
+          <!-- Remove Button -->
+          <button
+            class="remove-btn"
+            (click)="removeItem(item._id)"
+            title="Remove from cart"
+          >
+            ×
+          </button>
+
+          <!-- Item Image -->
+          <img
+            [src]="getImageUrl(item)"
+            [alt]="item.album.title"
+            class="item-image"
+          />
+
+          <!-- Item Details -->
+          <div class="item-details">
+            <h4 class="item-title">{{ item.album.title }}</h4>
+            <p class="item-artist">{{ item.album.artist }}</p>
+            <div class="item-price">
+              <span class="quantity">{{ item.quantity }}</span>
+              <span class="multiply">×</span>
+              <span class="price">{{ formatPrice(item.album.price) }}</span>
+              <span class="equals">=</span>
+              <span class="total">{{ getItemTotal(item) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

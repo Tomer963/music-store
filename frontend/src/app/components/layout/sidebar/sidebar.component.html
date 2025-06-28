@@ -1,0 +1,42 @@
+<!-- Sidebar Component -->
+<aside class="sidebar" *ngIf="showSidebar">
+  <!-- Categories Section -->
+  <section class="categories-section">
+    <div class="section-header">
+      <h2 class="section-title">Categories</h2>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoadingCategories">
+      <app-spinner [size]="'small'"></app-spinner>
+    </div>
+
+    <!-- Categories List -->
+    <ul class="categories-list" *ngIf="!isLoadingCategories">
+      <li
+        class="category-item"
+        *ngFor="let category of categories"
+        [class.active]="isCategoryActive(category._id)"
+        (click)="selectCategory(category._id)"
+      >
+        <span class="category-name">{{ category.name }}</span>
+        <span class="category-count" *ngIf="category.albumCount">
+          ({{ category.albumCount }})
+        </span>
+      </li>
+    </ul>
+
+    <!-- No Categories -->
+    <div
+      class="no-categories"
+      *ngIf="!isLoadingCategories && categories.length === 0"
+    >
+      <p>No categories available</p>
+    </div>
+  </section>
+
+  <!-- Cart Widget -->
+  <section class="cart-section">
+    <app-cart-widget></app-cart-widget>
+  </section>
+</aside>

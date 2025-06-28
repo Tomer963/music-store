@@ -1,0 +1,90 @@
+<!-- Header Component -->
+<header class="header">
+  <!-- Top Navigation Bar -->
+  <nav class="nav-top">
+    <div class="container">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Home
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="currentUser">
+          <a routerLink="/my-account" routerLinkActive="active"> My Account </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/wishlist" routerLinkActive="active"> My Wishlist </a>
+        </li>
+        <li class="nav-item" *ngIf="!currentUser">
+          <a routerLink="/login" routerLinkActive="active"> Log In </a>
+        </li>
+        <li class="nav-item" *ngIf="currentUser">
+          <a href="#" (click)="logout(); $event.preventDefault()"> Logout </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Header -->
+  <div class="header-main">
+    <div class="container">
+      <div class="header-content">
+        <!-- Logo -->
+        <div class="logo">
+          <a routerLink="/" class="logo-link">
+            <span class="logo-text">MUSIC</span>
+          </a>
+        </div>
+
+        <!-- Search Box -->
+        <div class="search-wrapper">
+          <app-search-box></app-search-box>
+        </div>
+
+        <!-- Cart Widget -->
+        <div class="cart-wrapper">
+          <div class="welcome-text" *ngIf="!currentUser">
+            Welcome to our<br />online store!
+          </div>
+          <div class="cart-icon-wrapper">
+            <button class="cart-button" routerLink="/checkout">
+              <span class="cart-icon">🛒</span>
+              <span class="cart-count" *ngIf="cartItemCount > 0">{{
+                cartItemCount
+              }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="menu-toggle" (click)="toggleMenu()">
+          <span class="menu-icon"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.open]="isMenuOpen">
+    <div class="mobile-menu-content">
+      <button class="close-menu" (click)="closeMenu()">×</button>
+      <ul class="mobile-nav-list">
+        <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
+        <li *ngIf="currentUser">
+          <a routerLink="/my-account" (click)="closeMenu()">My Account</a>
+        </li>
+        <li><a routerLink="/wishlist" (click)="closeMenu()">My Wishlist</a></li>
+        <li *ngIf="!currentUser">
+          <a routerLink="/login" (click)="closeMenu()">Log In</a>
+        </li>
+        <li *ngIf="currentUser">
+          <a href="#" (click)="logout(); $event.preventDefault()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>

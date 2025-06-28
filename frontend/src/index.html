@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Music Store - Your Online Music Shop</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Browse and purchase your favorite music albums online. Wide selection of genres including Rock, Jazz, Classical, and more."
+    />
+    <meta
+      name="keywords"
+      content="music, albums, online store, rock, jazz, classical, pop"
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Preconnect to improve performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <app-root></app-root>
+
+    <!-- Loading screen shown before Angular loads -->
+    <div id="initial-loader">
+      <style>
+        #initial-loader {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: #fff;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+        }
+
+        .loader-content {
+          text-align: center;
+        }
+
+        .music-note {
+          font-size: 60px;
+          animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .loader-text {
+          margin-top: 20px;
+          font-family: "Roboto", sans-serif;
+          font-size: 18px;
+          color: #333;
+        }
+
+        @keyframes pulse {
+          0% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          50% {
+            transform: scale(1.1);
+            opacity: 0.7;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+      </style>
+      <div class="loader-content">
+        <div class="music-note">🎵</div>
+        <div class="loader-text">Loading Music Store...</div>
+      </div>
+    </div>
+
+    <script>
+      // Remove loader when Angular is ready
+      window.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+          const loader = document.getElementById("initial-loader");
+          if (loader) {
+            loader.style.opacity = "0";
+            loader.style.transition = "opacity 0.3s ease-out";
+            setTimeout(function () {
+              loader.remove();
+            }, 300);
+          }
+        }, 100);
+      });
+    </script>
+  </body>
+</html>

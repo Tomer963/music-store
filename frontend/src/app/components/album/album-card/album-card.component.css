@@ -1,0 +1,297 @@
+/* Album Card Component Styles */
+
+.album-card {
+  position: relative;
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--transition-normal),
+    box-shadow var(--transition-normal);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.album-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Size Variations */
+.album-card.small {
+  min-height: 150px;
+}
+
+.album-card.medium {
+  min-height: 250px;
+}
+
+.album-card.large {
+  min-height: 400px;
+}
+
+/* Album Image */
+.album-image {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* 1:1 Aspect Ratio */
+  overflow: hidden;
+  background-color: var(--gray-light);
+}
+
+.album-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.album-card:hover .album-image img {
+  transform: scale(1.05);
+}
+
+/* Hover Overlay */
+.hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.album-card.hovered .hover-overlay {
+  opacity: 1;
+}
+
+.hover-content {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: none;
+  background-color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+.album-card.hovered .action-btn {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.album-card.hovered .action-btn:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+.album-card.hovered .action-btn:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+.action-btn:hover:not(:disabled) {
+  background-color: var(--white);
+  transform: scale(1.1);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-btn .icon {
+  font-size: 1.25rem;
+}
+
+.price-tag,
+.out-of-stock {
+  color: var(--white);
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.out-of-stock {
+  color: var(--error-color);
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+}
+
+/* Album Info */
+.album-info {
+  padding: var(--spacing-md);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.album-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--secondary-color);
+  margin: 0 0 var(--spacing-xs) 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album-artist {
+  font-size: 0.875rem;
+  color: var(--primary-color);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Additional Info */
+.additional-info {
+  margin-top: var(--spacing-sm);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.album-description {
+  font-size: 0.875rem;
+  color: var(--gray-dark);
+  line-height: 1.4;
+  margin-bottom: var(--spacing-sm);
+  flex: 1;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.price {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--secondary-color);
+}
+
+.add-to-cart-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.add-to-cart-btn:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+}
+
+.add-to-cart-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Price Info */
+.price-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--gray-light);
+}
+
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background-color: var(--background-color);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.icon-btn:hover:not(:disabled) {
+  background-color: var(--gray-light);
+  transform: scale(1.1);
+}
+
+.icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon-btn span {
+  font-size: 1rem;
+}
+
+/* Size-specific styles */
+.album-card.small .album-info {
+  padding: var(--spacing-sm);
+}
+
+.album-card.small .album-title {
+  font-size: 0.875rem;
+}
+
+.album-card.small .album-artist {
+  font-size: 0.75rem;
+}
+
+.album-card.large .album-title {
+  font-size: 1.25rem;
+}
+
+.album-card.large .album-artist {
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hover-overlay {
+    opacity: 1;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 50%);
+  }
+
+  .action-btn {
+    transform: translateY(0);
+    opacity: 1;
+    width: 36px;
+    height: 36px;
+  }
+
+  .action-btn .icon {
+    font-size: 1rem;
+  }
+}

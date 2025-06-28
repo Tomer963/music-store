@@ -1,0 +1,26 @@
+/* App Component Styles */
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 120px; /* Space for fixed header */
+  padding-bottom: var(--spacing-xl);
+  background-color: var(--background-color);
+}
+
+.content-wrapper {
+  width: 100%;
+  min-height: calc(100vh - 200px); /* Ensure minimum height */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 100px; /* Smaller header space on mobile */
+  }
+}
