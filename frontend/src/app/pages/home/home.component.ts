@@ -39,10 +39,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private albumService: AlbumService) {}
+  constructor(private albumService: AlbumService) {
+    console.log('HomeComponent constructor');
+  }
 
   ngOnInit(): void {
+    console.log('HomeComponent ngOnInit - starting to load albums');
     this.loadNewAlbums();
+  }
+
+  ngAfterViewInit(): void {
+    console.log('HomeComponent view initialized - checking for sidebar');
   }
 
   ngOnDestroy(): void {
@@ -54,11 +61,14 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Load new albums
    */
   private loadNewAlbums(): void {
+    console.log('loadNewAlbums called');
     this.albumService
       .getNewAlbums()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (albums) => {
+          console.log('Albums received:', albums);
+          console.log('Number of albums:', albums?.length);
           this.processAlbums(albums);
           this.isLoading = false;
         },
@@ -74,26 +84,37 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param albums Albums array
    */
   private processAlbums(albums: Album[]): void {
+    console.log('processAlbums called with', albums?.length, 'albums');
+    
+    if (!albums || albums.length === 0) {
+      console.warn('No albums to process!');
+      return;
+    }
+    
     this.allAlbums = albums;
 
     // Set featured album (newest)
     if (albums.length > 0) {
       this.featuredAlbum = albums[0];
+      console.log('Featured album set:', this.featuredAlbum);
     }
 
     // Set top 8 albums (2-9)
     if (albums.length > 1) {
       this.topAlbums = albums.slice(1, 9);
+      console.log('Top albums set:', this.topAlbums.length);
     }
 
     // Set side albums (10-11)
     if (albums.length > 9) {
       this.sideAlbums = albums.slice(9, 11);
+      console.log('Side albums set:', this.sideAlbums.length);
     }
 
     // Set remaining albums (12-23)
     if (albums.length > 11) {
       this.remainingAlbums = albums.slice(11, 23);
+      console.log('Remaining albums set:', this.remainingAlbums.length);
     }
   }
 

@@ -1,0 +1,135 @@
+<!-- Album Detail Page -->
+<div class="album-detail-page">
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <app-spinner></app-spinner>
+  </div>
+
+  <!-- Album Content -->
+  <div class="album-content" *ngIf="!isLoading && album">
+    <div class="container">
+      <!-- Breadcrumb Navigation -->
+      <nav class="breadcrumb">
+        <a routerLink="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-separator">&gt;</span>
+        <a [routerLink]="['/category', getCategoryId()]" class="breadcrumb-link">{{ categoryName }}</a>
+        <span class="breadcrumb-separator">&gt;</span>
+        <span class="breadcrumb-current">{{ album.title }}</span>
+      </nav>
+
+      <!-- Album Details Section -->
+      <div class="album-details">
+        <!-- Left Side - Images -->
+        <div class="album-images">
+          <!-- Main Image -->
+          <div class="main-image">
+            <img [src]="selectedImageUrl" [alt]="album.title" />
+          </div>
+          
+          <!-- Thumbnail Images -->
+          <div class="thumbnail-images">
+            <div 
+              class="thumbnail" 
+              *ngFor="let imageUrl of getAdditionalImages()"
+              [class.active]="selectedImageUrl === imageUrl"
+              (click)="selectImage(imageUrl)"
+            >
+              <img [src]="imageUrl" [alt]="album.title" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side - Album Info -->
+        <div class="album-info">
+          <!-- Album Title and Year -->
+          <h1 class="album-title">
+            {{ album.title }} ({{ album.releaseYear }})
+          </h1>
+
+          <!-- Availability -->
+          <div class="availability">
+            <span class="availability-label">Availability:</span>
+            <span class="availability-status" [class.in-stock]="album.inStock" [class.out-of-stock]="!album.inStock">
+              {{ album.inStock ? 'In Stock' : 'Out of Stock' }}
+            </span>
+          </div>
+
+          <!-- Stock Count -->
+          <div class="stock-info" *ngIf="album.inStock">
+            <span class="stock-count">{{ album.stock }} items remaining</span>
+          </div>
+
+          <!-- Price -->
+          <div class="price-section">
+            <span class="price">{{ formatPrice(album.price) }}</span>
+          </div>
+
+          <!-- Short Description -->
+          <div class="short-description">
+            <p>{{ album.description }}</p>
+          </div>
+
+          <!-- Purchase Section -->
+          <div class="purchase-section">
+            <!-- Quantity Selector -->
+            <div class="quantity-section">
+              <label class="quantity-label">Quantity:</label>
+              <div class="quantity-controls">
+                <button 
+                  class="quantity-btn minus" 
+                  (click)="decreaseQuantity()"
+                  [disabled]="quantity <= 1"
+                >
+                  -
+                </button>
+                <input 
+                  type="number" 
+                  class="quantity-input" 
+                  [(ngModel)]="quantity"
+                  (change)="validateQuantity()"
+                  min="1"
+                  [max]="album.stock"
+                  [disabled]="!album.inStock"
+                />
+                <button 
+                  class="quantity-btn plus" 
+                  (click)="increaseQuantity()"
+                  [disabled]="quantity >= album.stock || !album.inStock"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <!-- Add to Cart Button -->
+            <button 
+              class="add-to-cart-btn"
+              (click)="addToCart()"
+              [disabled]="isAddingToCart || !album.inStock"
+            >
+              {{ isAddingToCart ? 'Adding...' : 'Add to Cart' }}
+            </button>
+
+            <!-- Wishlist Button -->
+            <button 
+              class="wishlist-btn"
+              [class.active]="isInWishlist"
+              (click)="toggleWishlist()"
+              [title]="isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'"
+            >
+              <span class="heart-icon">{{ isInWishlist ? '❤️' : '🤍' }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Long Description Section -->
+      <div class="long-description-section" *ngIf="album.longDescription">
+        <h2>About this Album</h2>
+        <div class="long-description">
+          <p>{{ album.longDescription }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

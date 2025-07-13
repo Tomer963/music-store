@@ -1,0 +1,223 @@
+/* Category Page Styles */
+
+.category-page {
+  position: relative;
+  min-height: calc(100vh - 120px);
+  padding-bottom: var(--spacing-xl);
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.category-content {
+  padding: var(--spacing-lg) 0;
+  margin-right: 300px; /* Space for sidebar */
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  font-size: 0.875rem;
+  color: var(--gray-medium);
+}
+
+.breadcrumb-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.breadcrumb-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  margin: 0 var(--spacing-sm);
+  color: var(--gray-medium);
+}
+
+.breadcrumb-current {
+  color: var(--secondary-color);
+  font-weight: 500;
+}
+
+/* Category Header */
+.category-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.category-title {
+  font-size: 2rem;
+  color: var(--secondary-color);
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+}
+
+.album-count {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--gray-medium);
+}
+
+/* Albums Grid */
+.albums-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.album-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* Album Description */
+.album-description {
+  font-size: 0.875rem;
+  color: var(--gray-dark);
+  line-height: 1.4;
+  padding: 0 var(--spacing-sm);
+}
+
+/* Wishlist Button */
+.wishlist-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  padding: var(--spacing-sm);
+  background-color: var(--white);
+  border: 2px solid var(--gray-light);
+  border-radius: var(--radius-sm);
+  color: var(--gray-dark);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.wishlist-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.wishlist-btn.active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--white);
+}
+
+.wishlist-btn.active:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+.wishlist-icon {
+  font-size: 1.125rem;
+}
+
+/* No Albums Message */
+.no-albums {
+  text-align: center;
+  padding: var(--spacing-xxl) 0;
+  color: var(--gray-medium);
+}
+
+.no-albums p {
+  font-size: 1.125rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Load More */
+.load-more {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--gray-medium);
+}
+
+.load-more p {
+  margin-top: var(--spacing-md);
+}
+
+/* End of List */
+.end-of-list {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--gray-medium);
+  font-size: 0.875rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .category-content {
+    margin-right: 250px;
+  }
+  
+  .albums-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .category-content {
+    margin-right: 0;
+  }
+  
+  .albums-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .category-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+  
+  .album-count {
+    font-size: 1rem;
+  }
+  
+  .albums-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+/* Album card appear animation */
+.album-item {
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.album-item:nth-child(1) { animation-delay: 0.1s; }
+.album-item:nth-child(2) { animation-delay: 0.15s; }
+.album-item:nth-child(3) { animation-delay: 0.2s; }
+.album-item:nth-child(4) { animation-delay: 0.25s; }
+.album-item:nth-child(5) { animation-delay: 0.3s; }
+.album-item:nth-child(6) { animation-delay: 0.35s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

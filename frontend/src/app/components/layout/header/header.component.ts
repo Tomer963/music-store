@@ -70,14 +70,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
     this.closeMenu();
+    this.router.navigate(['/']);
   }
 
   /**
-   * Navigate to route
-   * @param route Route path
+   * Check if user is logged in
    */
-  navigateTo(route: string): void {
-    this.router.navigate([route]);
-    this.closeMenu();
+  isLoggedIn(): boolean {
+    return this.currentUser !== null;
   }
 }

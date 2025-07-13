@@ -1,5 +1,5 @@
 <!-- Search Box Component -->
-<div class="search-box" (clickOutside)="onClickOutside()">
+<div class="search-box">
   <form class="search-form" (ngSubmit)="onSearch()">
     <input
       type="text"
@@ -33,7 +33,7 @@
         (click)="selectAlbum(album._id)"
       >
         <img
-          [src]="album.images[0]?.url || '/assets/images/album-placeholder.jpg'"
+          [src]="getAlbumImageUrl(album)"
           [alt]="album.title"
           class="result-image"
         />

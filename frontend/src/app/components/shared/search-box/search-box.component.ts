@@ -14,10 +14,10 @@ import {
   filter,
   switchMap,
   takeUntil,
+  of,
 } from "rxjs";
 import { SearchService } from "../../../services/search.service";
 import { Album } from "../../../models/album.model";
-import { environment } from "../../../../environments/environment";
 import { SpinnerComponent } from "../spinner/spinner.component";
 
 @Component({
@@ -37,40 +37,46 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   constructor(private searchService: SearchService, private router: Router) {}
 
   ngOnInit(): void {
+    console.log('SearchBox initialized');
+    
     // Set up search with debounce
     this.searchControl.valueChanges
       .pipe(
         takeUntil(this.destroy$),
-        debounceTime(environment.searchDebounceTime),
+        debounceTime(300), // Use direct value instead of environment
         distinctUntilChanged(),
-        filter((query) => query !== null && query.trim().length >= 3),
         switchMap((query) => {
+          console.log('Search query changed:', query);
+          
+          // Reset if query is too short
+          if (!query || query.trim().length < 3) {
+            this.searchResults = [];
+            this.showResults = false;
+            this.isSearching = false;
+            return of([]);
+          }
+          
+          // Start searching
+          console.log('Starting search for:', query);
           this.isSearching = true;
-          return this.searchService.searchAlbums(query!);
+          this.showResults = true;
+          return this.searchService.searchAlbums(query);
         })
       )
       .subscribe({
         next: (results) => {
+          console.log('Search results received:', results);
           this.searchResults = results;
           this.isSearching = false;
+          // Keep showing results even if empty
           this.showResults = true;
         },
         error: (error) => {
           console.error("Search error:", error);
           this.isSearching = false;
           this.searchResults = [];
+          this.showResults = true;
         },
-      });
-
-    // Hide results when search is cleared
-    this.searchControl.valueChanges
-      .pipe(
-        takeUntil(this.destroy$),
-        filter((query) => !query || query.trim().length < 3)
-      )
-      .subscribe(() => {
-        this.searchResults = [];
-        this.showResults = false;
       });
   }
 
@@ -111,7 +117,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
    * Handle click outside
    */
   @HostListener("document:click", ["$event"])
-  onClickOutside(event: Event): void {
+  onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
     const searchBox = target.closest(".search-box");
     if (!searchBox) {
@@ -120,7 +126,19 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Format release year
+   * Get album image URL
+   * @param album Album object
+   * @returns Image URL
+   */
+  getAlbumImageUrl(album: Album): string {
+    if (album.images && album.images.length > 0 && album.images[0].url) {
+      return album.images[0].url;
+    }
+    return '/assets/images/album-placeholder.jpg';
+  }
+
+  /**
+   * Format album info for display
    * @param album Album object
    * @returns Formatted string
    */

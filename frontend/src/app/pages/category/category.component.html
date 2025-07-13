@@ -1,0 +1,80 @@
+<!-- Category Page -->
+<div class="category-page">
+  <div class="container">
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="isLoading">
+      <app-spinner></app-spinner>
+    </div>
+
+    <!-- Category Content -->
+    <div class="category-content" *ngIf="!isLoading && category">
+      <!-- Breadcrumb Navigation -->
+      <nav class="breadcrumb">
+        <a routerLink="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-separator">></span>
+        <span class="breadcrumb-current">{{ category.name }}</span>
+      </nav>
+
+      <!-- Category Header -->
+      <div class="category-header">
+        <h1 class="category-title">
+          {{ category.name }}
+          <span class="album-count">({{ totalAlbums }} albums)</span>
+        </h1>
+      </div>
+
+      <!-- Albums Grid -->
+      <div class="albums-grid" *ngIf="albums.length > 0">
+        <div 
+          class="album-item" 
+          *ngFor="let album of albums; trackBy: trackByAlbum"
+        >
+          <!-- Album Card -->
+          <app-album-card
+            [album]="album"
+            [size]="'medium'"
+            [showInfo]="true"
+            [showPrice]="true"
+          >
+          </app-album-card>
+          
+          <!-- Album Description -->
+          <div class="album-description">
+            {{ album.description | slice:0:100 }}...
+          </div>
+          
+          <!-- Wishlist Button -->
+          <button 
+            class="wishlist-btn"
+            [class.active]="isInWishlist(album._id)"
+            (click)="isInWishlist(album._id) ? removeFromWishlist(album._id) : addToWishlist(album._id)"
+            [title]="isInWishlist(album._id) ? 'Remove from wishlist' : 'Add to wishlist'"
+          >
+            <span class="wishlist-icon">{{ isInWishlist(album._id) ? '❤️' : '🤍' }}</span>
+            {{ isInWishlist(album._id) ? 'In Wishlist' : 'Add to Wishlist' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- No Albums Message -->
+      <div class="no-albums" *ngIf="!isLoading && albums.length === 0">
+        <p>No albums found in this category.</p>
+        <a routerLink="/" class="btn btn-primary">Back to Home</a>
+      </div>
+
+      <!-- Load More Spinner -->
+      <div class="load-more" *ngIf="isLoadingMore">
+        <app-spinner [size]="'small'"></app-spinner>
+        <p>Loading more albums...</p>
+      </div>
+
+      <!-- End of List Message -->
+      <div class="end-of-list" *ngIf="!hasMore && albums.length > 0 && !isLoadingMore">
+        <p>You've reached the end of this category!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+</div>

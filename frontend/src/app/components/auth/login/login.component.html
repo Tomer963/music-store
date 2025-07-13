@@ -1,0 +1,250 @@
+<!-- Login Page with Register Modal -->
+<div class="login-page">
+  <div class="container">
+    <div class="login-wrapper">
+      <!-- Left Side - Create Account -->
+      <div class="create-account-section">
+        <div class="create-account-content">
+          <h2>New to Music Store?</h2>
+          <p>Join our community and enjoy exclusive benefits!</p>
+          <ul class="benefits-list">
+            <li>🎵 Access to thousands of albums</li>
+            <li>💿 Exclusive member discounts</li>
+            <li>❤️ Create your wishlist</li>
+            <li>📦 Track your orders</li>
+            <li>🎸 Personalized recommendations</li>
+          </ul>
+          <button class="btn btn-primary btn-large" (click)="openRegisterModal()">
+            Create Account
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Side - Login Form -->
+      <div class="login-section">
+        <h2>Login to Your Account</h2>
+        <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="login-form">
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="form-control"
+              [class.error]="loginEmail?.invalid && loginEmail?.touched"
+              placeholder="Enter your email"
+            />
+            <div *ngIf="loginEmail?.invalid && loginEmail?.touched" class="form-error">
+              <span *ngIf="loginEmail?.errors?.['required']">Email is required</span>
+              <span *ngIf="loginEmail?.errors?.['invalidEmail']">Please enter a valid email address</span>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <div class="password-input-wrapper">
+              <input
+                #passwordInput
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                formControlName="password"
+                class="form-control"
+                [class.error]="loginPassword?.invalid && loginPassword?.touched"
+                placeholder="Enter your password"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="toggleLoginPassword()"
+                [title]="showPassword ? 'Hide password' : 'Show password'"
+              >
+                {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+              </button>
+            </div>
+            <div *ngIf="loginPassword?.invalid && loginPassword?.touched" class="form-error">
+              <span *ngIf="loginPassword?.errors?.['required']">Password is required</span>
+              <span *ngIf="loginPassword?.errors?.['minLength']">Password must be at least 6 characters</span>
+              <span *ngIf="loginPassword?.errors?.['noUppercase']">Password must contain at least one uppercase letter</span>
+            </div>
+          </div>
+
+          <!-- Remember Me & Forgot Password -->
+          <div class="form-options">
+            <label class="checkbox-label">
+              <input type="checkbox" />
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-link">Forgot Password?</a>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="loginError" class="error-message">
+            {{ loginError }}
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            [disabled]="loginForm.invalid || isLoading"
+          >
+            <span *ngIf="!isLoading">Login</span>
+            <span *ngIf="isLoading">Logging in...</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal-overlay" *ngIf="showRegisterModal" (click)="closeRegisterModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()" [class.loading]="isRegistering">
+      <!-- Close Button -->
+      <button class="modal-close" (click)="closeRegisterModal()" *ngIf="!registrationSuccess">×</button>
+
+      <!-- Registration Success Message -->
+      <div class="success-message" *ngIf="registrationSuccess">
+        <div class="success-icon">✅</div>
+        <h3>Registration Successful!</h3>
+        <p>Welcome to Music Store! You have been successfully registered.</p>
+        <p class="redirect-message">Redirecting to login in 5 seconds...</p>
+      </div>
+
+      <!-- Registration Form -->
+      <div class="register-content" *ngIf="!registrationSuccess">
+        <h2>Create Your Account</h2>
+        <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()" class="register-form">
+          <!-- First Name -->
+          <div class="form-group">
+            <label for="firstName" class="form-label">First Name</label>
+            <input
+              type="text"
+              id="firstName"
+              formControlName="firstName"
+              class="form-control"
+              [class.error]="firstName?.invalid && firstName?.touched"
+              placeholder="Enter your first name"
+            />
+            <div *ngIf="firstName?.invalid && firstName?.touched" class="form-error">
+              <span *ngIf="firstName?.errors?.['required']">First name is required</span>
+              <span *ngIf="firstName?.errors?.['minlength']">Must be at least 2 characters</span>
+              <span *ngIf="firstName?.errors?.['maxlength']">Must be no more than 12 characters</span>
+            </div>
+          </div>
+
+          <!-- Last Name -->
+          <div class="form-group">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              formControlName="lastName"
+              class="form-control"
+              [class.error]="lastName?.invalid && lastName?.touched"
+              placeholder="Enter your last name"
+            />
+            <div *ngIf="lastName?.invalid && lastName?.touched" class="form-error">
+              <span *ngIf="lastName?.errors?.['required']">Last name is required</span>
+              <span *ngIf="lastName?.errors?.['minlength']">Must be at least 2 characters</span>
+              <span *ngIf="lastName?.errors?.['maxlength']">Must be no more than 12 characters</span>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="registerEmail" class="form-label">Email Address</label>
+            <input
+              type="email"
+              id="registerEmail"
+              formControlName="email"
+              class="form-control"
+              [class.error]="registerEmail?.invalid && registerEmail?.touched"
+              placeholder="Enter your email"
+            />
+            <div *ngIf="registerEmail?.invalid && registerEmail?.touched" class="form-error">
+              <span *ngIf="registerEmail?.errors?.['required']">Email is required</span>
+              <span *ngIf="registerEmail?.errors?.['invalidEmail']">Please enter a valid email address</span>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label for="registerPassword" class="form-label">Password</label>
+            <div class="password-input-wrapper">
+              <input
+                [type]="showRegisterPassword ? 'text' : 'password'"
+                id="registerPassword"
+                formControlName="password"
+                class="form-control"
+                [class.error]="registerPassword?.invalid && registerPassword?.touched"
+                placeholder="Create a password"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="toggleRegisterPassword()"
+                [title]="showRegisterPassword ? 'Hide password' : 'Show password'"
+              >
+                {{ showRegisterPassword ? '👁️' : '👁️‍🗨️' }}
+              </button>
+            </div>
+            <div *ngIf="registerPassword?.invalid && registerPassword?.touched" class="form-error">
+              <span *ngIf="registerPassword?.errors?.['required']">Password is required</span>
+              <span *ngIf="registerPassword?.errors?.['minLength']">Password must be at least 6 characters</span>
+              <span *ngIf="registerPassword?.errors?.['noUppercase']">Password must contain at least one uppercase letter</span>
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="form-group">
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <div class="password-input-wrapper">
+              <input
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                id="confirmPassword"
+                formControlName="confirmPassword"
+                class="form-control"
+                [class.error]="confirmPassword?.invalid && confirmPassword?.touched"
+                placeholder="Confirm your password"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="toggleConfirmPassword()"
+                [title]="showConfirmPassword ? 'Hide password' : 'Show password'"
+              >
+                {{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}
+              </button>
+            </div>
+            <div *ngIf="confirmPassword?.touched" class="form-error">
+              <span *ngIf="confirmPassword?.errors?.['required']">Please confirm your password</span>
+              <span *ngIf="confirmPassword?.errors?.['passwordMismatch']">Passwords do not match</span>
+            </div>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="registerError" class="error-message">
+            {{ registerError }}
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            [disabled]="registerForm.invalid || isRegistering"
+          >
+            <span *ngIf="!isRegistering">Register</span>
+            <span *ngIf="isRegistering">Registering...</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Loading Overlay -->
+      <div class="loading-overlay" *ngIf="isRegistering">
+        <div class="loader"></div>
+      </div>
+    </div>
+  </div>
+</div>
