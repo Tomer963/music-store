@@ -30,12 +30,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   topAlbums: Album[] = [];
   sideAlbums: Album[] = [];
   remainingAlbums: Album[] = [];
-  allAlbums: Album[] = [];
+  displayedAlbums: Album[] = [];
+  allAlbumsLoaded = false;
 
   isLoading = true;
   isLoadingMore = false;
   currentPage = 1;
   hasMore = true;
+  initialAlbumsDisplayed = false;
 
   private destroy$ = new Subject<void>();
 
@@ -51,7 +53,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load new albums
+   * Load new albums (23 albums)
    */
   private loadNewAlbums(): void {
     this.albumService
@@ -71,37 +73,45 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Process and organize albums for display
-   * @param albums Albums array
+   * @param albums Albums array (23 albums)
    */
   private processAlbums(albums: Album[]): void {
-    this.allAlbums = albums;
-
-    // Set featured album (newest)
+    // Set featured album (newest - index 0)
     if (albums.length > 0) {
       this.featuredAlbum = albums[0];
     }
 
-    // Set top 8 albums (2-9)
+    // Set top 8 albums (indices 1-8)
     if (albums.length > 1) {
       this.topAlbums = albums.slice(1, 9);
     }
 
-    // Set side albums (10-11)
+    // Set side 2 albums (indices 9-10)
     if (albums.length > 9) {
       this.sideAlbums = albums.slice(9, 11);
     }
 
-    // Set remaining albums (12-23)
+    // Set remaining 12 albums (indices 11-22)
     if (albums.length > 11) {
       this.remainingAlbums = albums.slice(11, 23);
+      this.displayedAlbums = [...this.remainingAlbums];
+      this.initialAlbumsDisplayed = true;
+    }
+
+    // If we got all 23 albums from the initial load, we need to check if there are more
+    if (albums.length === 23) {
+      this.hasMore = true;
+    } else {
+      this.hasMore = false;
+      this.allAlbumsLoaded = true;
     }
   }
 
   /**
    * Load more albums on scroll
    */
-  loadMoreAlbums(): void {
-    if (this.isLoadingMore || !this.hasMore) {
+  private loadMoreAlbums(): void {
+    if (this.isLoadingMore || !this.hasMore || !this.initialAlbumsDisplayed) {
       return;
     }
 
@@ -113,17 +123,23 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
-          this.remainingAlbums = [
-            ...this.remainingAlbums,
-            ...response.data.results,
-          ];
-          this.hasMore =
-            response.data.pagination.page < response.data.pagination.pages;
+          if (response.data.results.length > 0) {
+            this.displayedAlbums = [
+              ...this.displayedAlbums,
+              ...response.data.results,
+            ];
+            this.hasMore =
+              response.data.pagination.page < response.data.pagination.pages;
+          } else {
+            this.hasMore = false;
+            this.allAlbumsLoaded = true;
+          }
           this.isLoadingMore = false;
         },
         error: (error) => {
           console.error("Failed to load more albums:", error);
           this.isLoadingMore = false;
+          this.hasMore = false;
         },
       });
   }
@@ -143,6 +159,10 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @returns true if should load more
    */
   private shouldLoadMore(): boolean {
+    if (!this.initialAlbumsDisplayed || this.isLoadingMore || !this.hasMore) {
+      return false;
+    }
+
     const scrollPosition = window.pageYOffset + window.innerHeight;
     const scrollHeight = document.documentElement.scrollHeight;
     const threshold = environment.infiniteScrollThreshold;

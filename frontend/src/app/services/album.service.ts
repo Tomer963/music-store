@@ -107,23 +107,17 @@ export class AlbumService {
    * @returns Main image URL or placeholder
    */
   getMainImageUrl(album: Album): string {
-    // Check if album and images exist
-    if (!album || !album.images || album.images.length === 0) {
-      return '/assets/images/album-placeholder.jpg';
+    if (!album.images || album.images.length === 0) {
+      return "/assets/images/album-placeholder.jpg";
     }
-
-    // Find the main image
+    
     const mainImage = album.images.find((img) => img.isMain);
-    
-    // Return the main image URL or the first image URL
-    const imageUrl = mainImage ? mainImage.url : album.images[0].url;
-    
-    // Ensure the URL starts with /
-    if (imageUrl && !imageUrl.startsWith('/') && !imageUrl.startsWith('http')) {
-      return '/' + imageUrl;
+    if (mainImage && mainImage.url) {
+      return mainImage.url;
     }
     
-    return imageUrl || '/assets/images/album-placeholder.jpg';
+    // Return first image if no main image is marked
+    return album.images[0].url || "/assets/images/album-placeholder.jpg";
   }
 
   /**

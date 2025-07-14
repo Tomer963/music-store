@@ -1,28 +1,25 @@
 /* Sidebar Component Styles */
 
 .sidebar {
-  position: fixed;
-  top: 120px;
-  left: 0;
-  width: 280px;
-  max-width: 90vw;
-  height: calc(100vh - 120px);
   background-color: var(--white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 140px;
+  height: fit-content;
+  max-height: calc(100vh - 160px);
   overflow-y: auto;
-  padding: var(--spacing-lg);
-  z-index: 10;
 }
 
 /* Categories Section */
 .categories-section {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
 }
 
 .section-header {
   background-color: var(--primary-color);
-  margin: 0 calc(-1 * var(--spacing-lg));
-  padding: var(--spacing-md) var(--spacing-lg);
-  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
 }
 
 .section-title {
@@ -44,7 +41,7 @@
 /* Categories List */
 .categories-list {
   list-style: none;
-  padding: 0;
+  padding: var(--spacing-md);
   margin: 0;
 }
 
@@ -59,25 +56,20 @@
   cursor: pointer;
   transition: all var(--transition-fast);
   border-radius: var(--radius-sm);
-  text-decoration: none;
 }
 
 .category-item:hover {
   background-color: var(--primary-dark);
-  transform: translateX(-4px);
+  transform: translateX(4px);
 }
 
-/* Active category - Black background */
 .category-item.active {
-  background-color: var(--black);
+  background-color: var(--secondary-color);
   color: var(--white);
-  font-weight: 600;
-  transform: translateX(-4px);
 }
 
-/* Prevent hover effect on active category */
-.category-item.active:hover {
-  background-color: var(--black);
+.category-item:last-child {
+  margin-bottom: 0;
 }
 
 .category-name {
@@ -99,11 +91,8 @@
 
 /* Cart Section */
 .cart-section {
-  position: sticky;
-  bottom: 0;
-  background-color: var(--white);
-  margin: 0 calc(-1 * var(--spacing-lg));
-  padding: 0 var(--spacing-lg) var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--background-color);
 }
 
 /* Custom Scrollbar */
@@ -123,28 +112,9 @@
 /* Responsive */
 @media (max-width: 1200px) {
   .sidebar {
-    width: 250px;
-  }
-}
-
-@media (max-width: 992px) {
-  .sidebar {
-    position: static;
-    width: 100%;
-    max-width: none;
-    height: auto;
     margin-top: var(--spacing-lg);
-    padding: var(--spacing-md);
-  }
-
-  .section-header {
-    margin: 0 calc(-1 * var(--spacing-md));
-    padding: var(--spacing-sm) var(--spacing-md);
-  }
-
-  .cart-section {
-    margin: 0 calc(-1 * var(--spacing-md));
-    padding: 0 var(--spacing-md) var(--spacing-md);
+    position: static;
+    max-height: none;
   }
 }
 
@@ -158,6 +128,10 @@
   .category-item {
     justify-content: center;
     text-align: center;
+  }
+
+  .category-item:hover {
+    transform: none;
   }
 
   .category-count {

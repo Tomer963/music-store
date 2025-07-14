@@ -3,7 +3,6 @@
 .home-page {
   position: relative;
   min-height: calc(100vh - 120px);
-  display: flex;
 }
 
 .loading-container {
@@ -11,14 +10,33 @@
   justify-content: center;
   align-items: center;
   min-height: 400px;
-  width: 100%;
 }
 
 .home-content {
-  flex: 1;
   padding: var(--spacing-lg) 0;
-  margin-left: 280px; /* Space for left sidebar */
-  transition: margin-left var(--transition-normal);
+}
+
+.container-fluid {
+  width: 100%;
+  padding: 0 var(--spacing-lg);
+}
+
+.main-layout {
+  display: flex;
+  gap: var(--spacing-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.sidebar-area {
+  width: 280px;
+  flex-shrink: 0;
+  margin-right: var(--spacing-lg);
+}
+
+.main-area {
+  flex: 1;
+  min-width: 0;
 }
 
 /* Featured Section */
@@ -29,34 +47,30 @@
 .featured-wrapper {
   display: grid;
   grid-template-columns: 400px 1fr;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
-  align-items: start;
 }
 
 .featured-album {
   position: relative;
-  height: 400px;
 }
 
-/* Top 8 Albums Grid - 2x4 layout */
 .top-albums-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: var(--spacing-md);
-  height: 400px;
 }
 
-/* Side Albums - 2 albums below featured section */
+/* Side Albums */
 .side-albums {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   margin-bottom: var(--spacing-xl);
 }
 
-/* Albums Section - Bottom 12 albums */
+/* Albums Section */
 .albums-section {
   margin-bottom: var(--spacing-xl);
 }
@@ -87,62 +101,39 @@
     grid-template-columns: 350px 1fr;
   }
   
-  .featured-album {
-    height: 350px;
-  }
-  
-  .top-albums-grid {
-    height: 350px;
+  .sidebar-area {
+    width: 250px;
   }
 }
 
 @media (max-width: 1200px) {
-  .home-content {
-    margin-left: 250px;
-  }
-  
   .albums-grid {
     grid-template-columns: repeat(3, 1fr);
   }
   
-  .featured-wrapper {
-    grid-template-columns: 300px 1fr;
-  }
-  
-  .featured-album {
-    height: 300px;
-  }
-  
   .top-albums-grid {
-    height: 300px;
     grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .sidebar-area {
+    display: none;
+  }
+  
+  .main-area {
+    margin-left: 0;
   }
 }
 
 @media (max-width: 992px) {
-  .home-content {
-    margin-left: 0;
-  }
-  
   .featured-wrapper {
     grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-  }
-  
-  .featured-album {
-    height: auto;
   }
 
   .top-albums-grid {
-    height: auto;
     grid-template-columns: repeat(4, 1fr);
   }
 
   .side-albums {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  
-  .albums-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
@@ -166,6 +157,10 @@
 }
 
 @media (max-width: 576px) {
+  .container-fluid {
+    padding: 0 var(--spacing-md);
+  }
+
   .top-albums-grid,
   .side-albums,
   .albums-grid {
@@ -187,42 +182,18 @@
   animation: fadeInUp 0.5s ease-out backwards;
 }
 
-.albums-grid app-album-card:nth-child(1) {
-  animation-delay: 0.1s;
-}
-.albums-grid app-album-card:nth-child(2) {
-  animation-delay: 0.15s;
-}
-.albums-grid app-album-card:nth-child(3) {
-  animation-delay: 0.2s;
-}
-.albums-grid app-album-card:nth-child(4) {
-  animation-delay: 0.25s;
-}
-.albums-grid app-album-card:nth-child(5) {
-  animation-delay: 0.3s;
-}
-.albums-grid app-album-card:nth-child(6) {
-  animation-delay: 0.35s;
-}
-.albums-grid app-album-card:nth-child(7) {
-  animation-delay: 0.4s;
-}
-.albums-grid app-album-card:nth-child(8) {
-  animation-delay: 0.45s;
-}
-.albums-grid app-album-card:nth-child(9) {
-  animation-delay: 0.5s;
-}
-.albums-grid app-album-card:nth-child(10) {
-  animation-delay: 0.55s;
-}
-.albums-grid app-album-card:nth-child(11) {
-  animation-delay: 0.6s;
-}
-.albums-grid app-album-card:nth-child(12) {
-  animation-delay: 0.65s;
-}
+.albums-grid app-album-card:nth-child(1) { animation-delay: 0.1s; }
+.albums-grid app-album-card:nth-child(2) { animation-delay: 0.15s; }
+.albums-grid app-album-card:nth-child(3) { animation-delay: 0.2s; }
+.albums-grid app-album-card:nth-child(4) { animation-delay: 0.25s; }
+.albums-grid app-album-card:nth-child(5) { animation-delay: 0.3s; }
+.albums-grid app-album-card:nth-child(6) { animation-delay: 0.35s; }
+.albums-grid app-album-card:nth-child(7) { animation-delay: 0.4s; }
+.albums-grid app-album-card:nth-child(8) { animation-delay: 0.45s; }
+.albums-grid app-album-card:nth-child(9) { animation-delay: 0.5s; }
+.albums-grid app-album-card:nth-child(10) { animation-delay: 0.55s; }
+.albums-grid app-album-card:nth-child(11) { animation-delay: 0.6s; }
+.albums-grid app-album-card:nth-child(12) { animation-delay: 0.65s; }
 
 @keyframes fadeInUp {
   from {

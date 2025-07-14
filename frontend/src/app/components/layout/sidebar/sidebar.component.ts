@@ -23,7 +23,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   categories: Category[] = [];
   activeCategoryId: string | null = null;
   isLoadingCategories = true;
-  showSidebar = true;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -43,7 +42,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load categories from service and sort alphabetically
+   * Load categories from service
    */
   private loadCategories(): void {
     this.categoryService
@@ -51,10 +50,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (categories) => {
-          // Sort categories alphabetically by name
-          this.categories = categories.sort((a, b) => 
-            a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })
-          );
+          this.categories = categories;
           this.isLoadingCategories = false;
         },
         error: (error) => {
@@ -79,15 +75,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Check current route and update sidebar visibility
+   * Check current route and update active category
    */
   private checkCurrentRoute(): void {
     const url = this.router.url;
-
-    // Show sidebar only on home, category, and album pages
-    this.showSidebar =
-      url === "/" || url.includes("/category/") || url.includes("/album/");
-
+    
     // Extract category ID from URL if on category page
     const categoryMatch = url.match(/\/category\/([a-f0-9]{24})/);
     this.activeCategoryId = categoryMatch ? categoryMatch[1] : null;
@@ -98,7 +90,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
    * @param categoryId Category ID
    */
   selectCategory(categoryId: string): void {
-    this.activeCategoryId = categoryId;
     this.router.navigate(["/category", categoryId]);
   }
 

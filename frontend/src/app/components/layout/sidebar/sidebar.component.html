@@ -1,5 +1,5 @@
 <!-- Sidebar Component -->
-<aside class="sidebar" *ngIf="showSidebar">
+<aside class="sidebar">
   <!-- Categories Section -->
   <section class="categories-section">
     <div class="section-header">
@@ -14,14 +14,10 @@
     <!-- Categories List -->
     <ul class="categories-list" *ngIf="!isLoadingCategories">
       <li
-        *ngFor="let category of categories"
         class="category-item"
+        *ngFor="let category of categories"
         [class.active]="isCategoryActive(category._id)"
         (click)="selectCategory(category._id)"
-        role="button"
-        tabindex="0"
-        [attr.aria-label]="'Navigate to ' + category.name + ' category'"
-        [attr.aria-pressed]="isCategoryActive(category._id)"
       >
         <span class="category-name">{{ category.name }}</span>
         <span class="category-count" *ngIf="category.albumCount">

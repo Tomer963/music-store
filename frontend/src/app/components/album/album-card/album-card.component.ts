@@ -24,7 +24,6 @@ export class AlbumCardComponent implements OnInit {
   @Input() showInfo = false;
   @Input() showPrice = false;
 
-  isHovered = false;
   isAddingToCart = false;
   mainImageUrl = "";
 
@@ -35,7 +34,6 @@ export class AlbumCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Get the main image URL using the service
     this.mainImageUrl = this.albumService.getMainImageUrl(this.album);
   }
 
@@ -62,7 +60,7 @@ export class AlbumCardComponent implements OnInit {
     this.cartService.addToCart(this.album._id).subscribe({
       next: () => {
         this.isAddingToCart = false;
-        // Show success feedback (could use a toast service)
+        // Show success feedback
         this.showAddedFeedback();
       },
       error: (error) => {
@@ -76,15 +74,17 @@ export class AlbumCardComponent implements OnInit {
    * Show visual feedback when item is added to cart
    */
   private showAddedFeedback(): void {
-    // Simple visual feedback - could be enhanced with animations
-    const originalText = this.isHovered;
-    this.isHovered = false;
+    // Flash the cart icon or show a toast notification
+    // For now, just a simple console log
+    console.log(`${this.album.title} added to cart`);
+  }
 
-    setTimeout(() => {
-      if (originalText) {
-        this.isHovered = true;
-      }
-    }, 1000);
+  /**
+   * Handle image load error
+   * @param event Error event
+   */
+  onImageError(event: any): void {
+    event.target.src = '/assets/images/album-placeholder.jpg';
   }
 
   /**
@@ -100,10 +100,10 @@ export class AlbumCardComponent implements OnInit {
    * @returns Truncated description
    */
   getTruncatedDescription(): string {
-    const maxLength = 100;
-    if (this.album.description.length <= maxLength) {
-      return this.album.description;
+    const maxLength = this.size === 'medium' ? 100 : 150;
+    if (!this.album.description || this.album.description.length <= maxLength) {
+      return this.album.description || '';
     }
-    return this.album.description.substring(0, maxLength) + "...";
+    return this.album.description.substring(0, maxLength) + '...';
   }
 }
