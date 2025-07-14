@@ -4,7 +4,6 @@
   <nav class="nav-top">
     <div class="container">
       <ul class="nav-list">
-        <!-- Home - Always visible -->
         <li class="nav-item">
           <a
             routerLink="/"
@@ -14,31 +13,20 @@
             Home
           </a>
         </li>
-        
-        <!-- My Account - Only visible when logged in -->
-        <li class="nav-item" *ngIf="isLoggedIn()">
-          <a routerLink="/my-account" routerLinkActive="active">
-            My Account
-          </a>
-        </li>
-        
-        <!-- My Wishlist - Always visible -->
         <li class="nav-item">
-          <a routerLink="/wishlist" routerLinkActive="active">
-            My Wishlist
-          </a>
+          <a routerLink="/my-account" routerLinkActive="active"> My Account </a>
         </li>
-        
-        <!-- Log In / Logout -->
-        <li class="nav-item" *ngIf="!isLoggedIn()">
-          <a routerLink="/login" routerLinkActive="active">
-            Log In
-          </a>
+        <li class="nav-item">
+          <a routerLink="/wishlist" routerLinkActive="active"> My Wishlist </a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn()">
-          <a href="#" (click)="logout(); $event.preventDefault()">
-            Logout
-          </a>
+        <li class="nav-item">
+          <a routerLink="/checkout" routerLinkActive="active"> Checkout </a>
+        </li>
+        <li class="nav-item" *ngIf="!currentUser">
+          <a routerLink="/login" routerLinkActive="active"> Log In </a>
+        </li>
+        <li class="nav-item" *ngIf="currentUser">
+          <a href="#" (click)="logout(); $event.preventDefault()"> Logout </a>
         </li>
       </ul>
     </div>
@@ -62,11 +50,8 @@
 
         <!-- Cart Widget -->
         <div class="cart-wrapper">
-          <div class="welcome-text" *ngIf="!isLoggedIn()">
+          <div class="welcome-text" *ngIf="!currentUser">
             Welcome to our<br />online store!
-          </div>
-          <div class="welcome-text" *ngIf="isLoggedIn() && currentUser">
-            Welcome back,<br />{{ currentUser.firstName }}!
           </div>
           <div class="cart-icon-wrapper">
             <button class="cart-button" routerLink="/checkout">
@@ -91,26 +76,16 @@
     <div class="mobile-menu-content">
       <button class="close-menu" (click)="closeMenu()">×</button>
       <ul class="mobile-nav-list">
-        <!-- Home - Always visible -->
+        <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
         <li>
-          <a routerLink="/" (click)="closeMenu()">Home</a>
-        </li>
-        
-        <!-- My Account - Only visible when logged in -->
-        <li *ngIf="isLoggedIn()">
           <a routerLink="/my-account" (click)="closeMenu()">My Account</a>
         </li>
-        
-        <!-- My Wishlist - Always visible -->
-        <li>
-          <a routerLink="/wishlist" (click)="closeMenu()">My Wishlist</a>
-        </li>
-        
-        <!-- Log In / Logout -->
-        <li *ngIf="!isLoggedIn()">
+        <li><a routerLink="/wishlist" (click)="closeMenu()">My Wishlist</a></li>
+        <li><a routerLink="/checkout" (click)="closeMenu()">Checkout</a></li>
+        <li *ngIf="!currentUser">
           <a routerLink="/login" (click)="closeMenu()">Log In</a>
         </li>
-        <li *ngIf="isLoggedIn()">
+        <li *ngIf="currentUser">
           <a href="#" (click)="logout(); $event.preventDefault()">Logout</a>
         </li>
       </ul>

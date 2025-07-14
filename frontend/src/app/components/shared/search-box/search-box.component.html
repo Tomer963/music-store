@@ -3,6 +3,8 @@
   <form class="search-form" (ngSubmit)="onSearch()">
     <input
       type="text"
+      id="search-input"
+      name="search"
       class="search-input"
       placeholder="Search"
       [formControl]="searchControl"

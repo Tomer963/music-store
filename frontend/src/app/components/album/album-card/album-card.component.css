@@ -61,25 +61,50 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
+  background: linear-gradient(to top, rgba(128, 128, 128, 0.9) 0%, rgba(128, 128, 128, 0.7) 50%, transparent 100%);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: var(--spacing-md);
   opacity: 0;
-  transition: opacity var(--transition-normal);
+  transition: all var(--transition-normal);
+  transform: translateY(50%);
 }
 
 .album-card.hovered .hover-overlay {
   opacity: 1;
+  transform: translateY(0);
 }
 
 .hover-content {
   display: flex;
   gap: var(--spacing-sm);
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  height: 100%;
+  margin-bottom: var(--spacing-sm);
+}
+
+.overlay-info {
+  margin-bottom: var(--spacing-md);
+}
+
+.overlay-info .album-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--white);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.overlay-info .album-artist {
+  font-size: 0.875rem;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.overlay-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
 }
 
 .action-btn {
@@ -164,6 +189,15 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Hover overlay text colors */
+.hover-overlay .album-title {
+  color: var(--white);
+}
+
+.hover-overlay .album-artist {
+  color: var(--primary-color);
 }
 
 /* Additional Info */

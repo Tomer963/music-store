@@ -3,7 +3,7 @@
 .sidebar {
   position: fixed;
   top: 120px;
-  right: 0;
+  left: 0;
   width: 280px;
   max-width: 90vw;
   height: calc(100vh - 120px);
@@ -59,6 +59,7 @@
   cursor: pointer;
   transition: all var(--transition-fast);
   border-radius: var(--radius-sm);
+  text-decoration: none;
 }
 
 .category-item:hover {
@@ -66,9 +67,17 @@
   transform: translateX(-4px);
 }
 
+/* Active category - Black background */
 .category-item.active {
-  background-color: var(--secondary-color);
+  background-color: var(--black);
   color: var(--white);
+  font-weight: 600;
+  transform: translateX(-4px);
+}
+
+/* Prevent hover effect on active category */
+.category-item.active:hover {
+  background-color: var(--black);
 }
 
 .category-name {

@@ -18,7 +18,30 @@
   min-height: calc(100vh - 200px); /* Ensure minimum height */
 }
 
+/* Layout with sidebar */
+.page-with-sidebar {
+  display: flex;
+}
+
+.page-content {
+  flex: 1;
+  margin-left: 280px; /* Space for left sidebar */
+  transition: margin-left var(--transition-normal);
+}
+
 /* Responsive adjustments */
+@media (max-width: 1200px) {
+  .page-content {
+    margin-left: 250px; /* Smaller sidebar width */
+  }
+}
+
+@media (max-width: 992px) {
+  .page-content {
+    margin-left: 0; /* Remove margin on tablets */
+  }
+}
+
 @media (max-width: 768px) {
   .main-content {
     padding-top: 100px; /* Smaller header space on mobile */

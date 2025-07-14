@@ -43,7 +43,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load categories from service
+   * Load categories from service and sort alphabetically
    */
   private loadCategories(): void {
     this.categoryService
@@ -51,7 +51,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (categories) => {
-          this.categories = categories;
+          // Sort categories alphabetically by name
+          this.categories = categories.sort((a, b) => 
+            a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })
+          );
           this.isLoadingCategories = false;
         },
         error: (error) => {
@@ -95,6 +98,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
    * @param categoryId Category ID
    */
   selectCategory(categoryId: string): void {
+    this.activeCategoryId = categoryId;
     this.router.navigate(["/category", categoryId]);
   }
 

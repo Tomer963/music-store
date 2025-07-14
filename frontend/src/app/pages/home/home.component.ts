@@ -30,26 +30,20 @@ export class HomeComponent implements OnInit, OnDestroy {
   topAlbums: Album[] = [];
   sideAlbums: Album[] = [];
   remainingAlbums: Album[] = [];
+  additionalAlbums: Album[] = [];
   allAlbums: Album[] = [];
 
   isLoading = true;
   isLoadingMore = false;
-  currentPage = 1;
+  currentPage = 2; // Start from page 2 since page 1 is the initial 23 albums
   hasMore = true;
 
   private destroy$ = new Subject<void>();
 
-  constructor(private albumService: AlbumService) {
-    console.log('HomeComponent constructor');
-  }
+  constructor(private albumService: AlbumService) {}
 
   ngOnInit(): void {
-    console.log('HomeComponent ngOnInit - starting to load albums');
     this.loadNewAlbums();
-  }
-
-  ngAfterViewInit(): void {
-    console.log('HomeComponent view initialized - checking for sidebar');
   }
 
   ngOnDestroy(): void {
@@ -58,17 +52,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load new albums
+   * Load new albums (first 23)
    */
   private loadNewAlbums(): void {
-    console.log('loadNewAlbums called');
     this.albumService
       .getNewAlbums()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (albums) => {
-          console.log('Albums received:', albums);
-          console.log('Number of albums:', albums?.length);
           this.processAlbums(albums);
           this.isLoading = false;
         },
@@ -84,42 +75,31 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @param albums Albums array
    */
   private processAlbums(albums: Album[]): void {
-    console.log('processAlbums called with', albums?.length, 'albums');
-    
-    if (!albums || albums.length === 0) {
-      console.warn('No albums to process!');
-      return;
-    }
-    
     this.allAlbums = albums;
 
-    // Set featured album (newest)
+    // Set featured album (newest - position 1)
     if (albums.length > 0) {
       this.featuredAlbum = albums[0];
-      console.log('Featured album set:', this.featuredAlbum);
     }
 
-    // Set top 8 albums (2-9)
+    // Set top 8 albums (positions 2-9)
     if (albums.length > 1) {
       this.topAlbums = albums.slice(1, 9);
-      console.log('Top albums set:', this.topAlbums.length);
     }
 
-    // Set side albums (10-11)
+    // Set side albums (positions 10-11)
     if (albums.length > 9) {
       this.sideAlbums = albums.slice(9, 11);
-      console.log('Side albums set:', this.sideAlbums.length);
     }
 
-    // Set remaining albums (12-23)
+    // Set remaining albums (positions 12-23)
     if (albums.length > 11) {
       this.remainingAlbums = albums.slice(11, 23);
-      console.log('Remaining albums set:', this.remainingAlbums.length);
     }
   }
 
   /**
-   * Load more albums on scroll
+   * Load more albums via AJAX on scroll
    */
   loadMoreAlbums(): void {
     if (this.isLoadingMore || !this.hasMore) {
@@ -127,17 +107,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.isLoadingMore = true;
-    this.currentPage++;
 
     this.albumService
       .getAlbums(this.currentPage, environment.itemsPerPage)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
-          this.remainingAlbums = [
-            ...this.remainingAlbums,
+          // Add new albums to additional albums array
+          this.additionalAlbums = [
+            ...this.additionalAlbums,
             ...response.data.results,
           ];
+          
+          // Update pagination
+          this.currentPage++;
           this.hasMore =
             response.data.pagination.page < response.data.pagination.pages;
           this.isLoadingMore = false;

@@ -8,10 +8,10 @@
   <!-- Main Content -->
   <div class="home-content" *ngIf="!isLoading">
     <div class="container">
-      <!-- Featured Section -->
+      <!-- Featured Section - Top 11 Albums -->
       <section class="featured-section" *ngIf="featuredAlbum">
         <div class="featured-wrapper">
-          <!-- Featured Album (Large) -->
+          <!-- Featured Album (Large - Left Side) -->
           <div class="featured-album">
             <app-album-card
               [album]="featuredAlbum"
@@ -21,7 +21,7 @@
             </app-album-card>
           </div>
 
-          <!-- Top Albums Grid -->
+          <!-- Top 8 Albums Grid (2x4) -->
           <div class="top-albums-grid">
             <app-album-card
               *ngFor="let album of topAlbums; trackBy: trackByAlbum"
@@ -33,23 +33,35 @@
           </div>
         </div>
 
-        <!-- Side Albums -->
+        <!-- Side Albums (Albums 10-11) -->
         <div class="side-albums" *ngIf="sideAlbums.length > 0">
           <app-album-card
             *ngFor="let album of sideAlbums; trackBy: trackByAlbum"
             [album]="album"
             [size]="'medium'"
-            [showInfo]="true"
+            [showHover]="true"
           >
           </app-album-card>
         </div>
       </section>
 
-      <!-- Remaining Albums Section -->
+      <!-- Remaining Albums Section (Albums 12-23) -->
       <section class="albums-section" *ngIf="remainingAlbums.length > 0">
         <div class="albums-grid">
           <app-album-card
             *ngFor="let album of remainingAlbums; trackBy: trackByAlbum"
+            [album]="album"
+            [size]="'medium'"
+            [showInfo]="true"
+            [showPrice]="true"
+          >
+          </app-album-card>
+        </div>
+
+        <!-- Additional Albums (Loaded via AJAX on scroll) -->
+        <div class="albums-grid" *ngIf="additionalAlbums.length > 0">
+          <app-album-card
+            *ngFor="let album of additionalAlbums; trackBy: trackByAlbum"
             [album]="album"
             [size]="'medium'"
             [showInfo]="true"

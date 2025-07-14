@@ -14,28 +14,37 @@
     <img [src]="mainImageUrl" [alt]="album.title" loading="lazy" />
 
     <!-- Hover Overlay -->
-    <div class="hover-overlay" *ngIf="showHover && isHovered">
-      <div class="hover-content">
-        <button
-          class="action-btn info-btn"
-          (click)="viewAlbum()"
-          title="View Details"
-        >
-          <span class="icon">ℹ️</span>
-        </button>
-        <button
-          class="action-btn cart-btn"
-          (click)="addToCart($event)"
-          [disabled]="isAddingToCart || !album.inStock"
-          title="Add to Cart"
-        >
-          <span class="icon">🛒</span>
-        </button>
+    <div class="hover-overlay" *ngIf="showHover">
+      <!-- Album Info at top -->
+      <div class="overlay-info">
+        <h3 class="album-title">{{ album.title }}</h3>
+        <p class="album-artist">{{ album.artist }}</p>
       </div>
-      <div class="price-tag" *ngIf="album.inStock">
-        {{ getFormattedPrice() }}
+      
+      <!-- Actions at bottom -->
+      <div class="overlay-actions">
+        <div class="hover-content">
+          <button
+            class="action-btn info-btn"
+            (click)="viewAlbum(); $event.stopPropagation()"
+            title="View Details"
+          >
+            <span class="icon">ℹ️</span>
+          </button>
+          <button
+            class="action-btn cart-btn"
+            (click)="addToCart($event)"
+            [disabled]="isAddingToCart || !album.inStock"
+            title="Add to Cart"
+          >
+            <span class="icon">🛒</span>
+          </button>
+        </div>
+        <div class="price-tag" *ngIf="album.inStock">
+          {{ getFormattedPrice() }}
+        </div>
+        <div class="out-of-stock" *ngIf="!album.inStock">Out of Stock</div>
       </div>
-      <div class="out-of-stock" *ngIf="!album.inStock">Out of Stock</div>
     </div>
   </div>
 
