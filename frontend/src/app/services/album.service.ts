@@ -58,7 +58,7 @@ export class AlbumService {
    */
   getNewAlbums(): Observable<Album[]> {
     return this.http.get<ApiResponse<Album[]>>(`${this.apiUrl}/new`).pipe(
-      map((response) => response.data || []),
+      map((response) => response.data!),
       catchError(this.handleError)
     );
   }
@@ -74,7 +74,7 @@ export class AlbumService {
     return this.http
       .get<ApiResponse<Album[]>>(`${this.apiUrl}/search`, { params })
       .pipe(
-        map((response) => response.data || []),
+        map((response) => response.data!),
         catchError(this.handleError)
       );
   }
@@ -107,27 +107,23 @@ export class AlbumService {
    * @returns Main image URL or placeholder
    */
   getMainImageUrl(album: Album): string {
-    // Check if album has images
-    if (!album.images || album.images.length === 0) {
-      return "https://via.placeholder.com/400x400/333/fff?text=No+Image";
+    // Check if album and images exist
+    if (!album || !album.images || album.images.length === 0) {
+      return '/assets/images/album-placeholder.jpg';
     }
 
-    // Find main image
+    // Find the main image
     const mainImage = album.images.find((img) => img.isMain);
+    
+    // Return the main image URL or the first image URL
     const imageUrl = mainImage ? mainImage.url : album.images[0].url;
-
-    // Fix for relative URLs - prepend base URL
-    if (imageUrl.startsWith('/assets/')) {
-      return `http://localhost:3000${imageUrl}`;
+    
+    // Ensure the URL starts with /
+    if (imageUrl && !imageUrl.startsWith('/') && !imageUrl.startsWith('http')) {
+      return '/' + imageUrl;
     }
-
-    // If it's already a full URL, return as is
-    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-      return imageUrl;
-    }
-
-    // Default placeholder
-    return "https://via.placeholder.com/400x400/333/fff?text=" + encodeURIComponent(album.title);
+    
+    return imageUrl || '/assets/images/album-placeholder.jpg';
   }
 
   /**

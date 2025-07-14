@@ -70,7 +70,7 @@ const limiter = rateLimit({
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
   message: "Too many requests from this IP, please try again later.",
 });
-app.use("/api", limiter);
+// app.use("/api", limiter);
 
 // Body parsing middleware
 app.use(express.json());

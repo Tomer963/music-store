@@ -30,12 +30,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   topAlbums: Album[] = [];
   sideAlbums: Album[] = [];
   remainingAlbums: Album[] = [];
-  additionalAlbums: Album[] = [];
   allAlbums: Album[] = [];
 
   isLoading = true;
   isLoadingMore = false;
-  currentPage = 2; // Start from page 2 since page 1 is the initial 23 albums
+  currentPage = 1;
   hasMore = true;
 
   private destroy$ = new Subject<void>();
@@ -52,7 +51,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load new albums (first 23)
+   * Load new albums
    */
   private loadNewAlbums(): void {
     this.albumService
@@ -77,29 +76,29 @@ export class HomeComponent implements OnInit, OnDestroy {
   private processAlbums(albums: Album[]): void {
     this.allAlbums = albums;
 
-    // Set featured album (newest - position 1)
+    // Set featured album (newest)
     if (albums.length > 0) {
       this.featuredAlbum = albums[0];
     }
 
-    // Set top 8 albums (positions 2-9)
+    // Set top 8 albums (2-9)
     if (albums.length > 1) {
       this.topAlbums = albums.slice(1, 9);
     }
 
-    // Set side albums (positions 10-11)
+    // Set side albums (10-11)
     if (albums.length > 9) {
       this.sideAlbums = albums.slice(9, 11);
     }
 
-    // Set remaining albums (positions 12-23)
+    // Set remaining albums (12-23)
     if (albums.length > 11) {
       this.remainingAlbums = albums.slice(11, 23);
     }
   }
 
   /**
-   * Load more albums via AJAX on scroll
+   * Load more albums on scroll
    */
   loadMoreAlbums(): void {
     if (this.isLoadingMore || !this.hasMore) {
@@ -107,20 +106,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.isLoadingMore = true;
+    this.currentPage++;
 
     this.albumService
       .getAlbums(this.currentPage, environment.itemsPerPage)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
-          // Add new albums to additional albums array
-          this.additionalAlbums = [
-            ...this.additionalAlbums,
+          this.remainingAlbums = [
+            ...this.remainingAlbums,
             ...response.data.results,
           ];
-          
-          // Update pagination
-          this.currentPage++;
           this.hasMore =
             response.data.pagination.page < response.data.pagination.pages;
           this.isLoadingMore = false;
@@ -152,15 +148,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     const threshold = environment.infiniteScrollThreshold;
 
     return scrollPosition >= scrollHeight - threshold;
-  }
-
-  /**
-   * Get album main image URL
-   * @param album Album object
-   * @returns Image URL
-   */
-  getMainImageUrl(album: Album): string {
-    return this.albumService.getMainImageUrl(album);
   }
 
   /**

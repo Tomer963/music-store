@@ -35,6 +35,7 @@ export class AlbumCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Get the main image URL using the service
     this.mainImageUrl = this.albumService.getMainImageUrl(this.album);
   }
 
