@@ -1,195 +1,154 @@
-<!-- Register Page -->
-<div class="register-page">
-  <div class="container">
-    <div class="register-wrapper">
-      <!-- Register Card -->
-      <div class="register-card">
-        <!-- Header -->
-        <div class="register-header">
-          <h1 class="register-title">Create Account</h1>
-          <p class="register-subtitle">Join us and start shopping for your favorite music!</p>
-        </div>
+<!-- Registration Modal Component -->
+<div class="modal-overlay" (click)="onCancel()">
+  <div 
+    class="modal-container" 
+    (click)="$event.stopPropagation()"
+    [class.loading]="isLoading"
+    [class.success]="isSuccess"
+  >
+    <!-- Close Button -->
+    <button 
+      class="close-btn" 
+      (click)="onCancel()"
+      [disabled]="isLoading"
+      type="button"
+    >
+      ×
+    </button>
 
-        <!-- Register Form -->
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-          <!-- Name Fields Row -->
-          <div class="form-row">
-            <!-- First Name -->
-            <div class="form-group">
-              <label for="firstName" class="form-label">First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                formControlName="firstName"
-                class="form-control"
-                [class.error]="firstName?.invalid && firstName?.touched"
-                placeholder="Enter your first name"
-              />
-              <div *ngIf="firstName?.invalid && firstName?.touched" class="form-error">
-                <span *ngIf="firstName?.errors?.['required']">First name is required</span>
-                <span *ngIf="firstName?.errors?.['minlength']">Must be at least 2 characters</span>
-              </div>
-            </div>
+    <!-- Success State -->
+    <div class="success-content" *ngIf="isSuccess">
+      <div class="success-icon">✓</div>
+      <h2 class="success-title">Registration Successful!</h2>
+      <p class="success-message">Your account has been created successfully.</p>
+    </div>
 
-            <!-- Last Name -->
-            <div class="form-group">
-              <label for="lastName" class="form-label">Last Name</label>
-              <input
-                type="text"
-                id="lastName"
-                formControlName="lastName"
-                class="form-control"
-                [class.error]="lastName?.invalid && lastName?.touched"
-                placeholder="Enter your last name"
-              />
-              <div *ngIf="lastName?.invalid && lastName?.touched" class="form-error">
-                <span *ngIf="lastName?.errors?.['required']">Last name is required</span>
-                <span *ngIf="lastName?.errors?.['minlength']">Must be at least 2 characters</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Email Field -->
-          <div class="form-group">
-            <label for="email" class="form-label">Email Address</label>
+    <!-- Registration Form -->
+    <div class="form-content" *ngIf="!isSuccess">
+      <h2 class="modal-title">Registration</h2>
+      
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <!-- Profile Information Section -->
+        <div class="form-section">
+          <h3 class="section-title">Profile Informations</h3>
+          
+          <!-- First Name -->
+          <div class="form-group" [class.has-error]="hasError('firstName')">
             <input
-              type="email"
-              id="email"
-              formControlName="email"
+              type="text"
               class="form-control"
-              [class.error]="email?.invalid && email?.touched"
-              placeholder="Enter your email"
+              formControlName="firstName"
+              placeholder="First Name"
+              [class.error]="hasError('firstName')"
             />
-            <div *ngIf="email?.invalid && email?.touched" class="form-error">
-              <span *ngIf="email?.errors?.['required']">Email is required</span>
-              <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
-            </div>
+            <span class="form-error" *ngIf="hasError('firstName')">
+              {{ getErrorMessage('firstName') }}
+            </span>
           </div>
 
-          <!-- Password Field -->
-          <div class="form-group">
-            <label for="password" class="form-label">Password</label>
-            <div class="password-input-wrapper">
-              <input
-                [type]="showPassword ? 'text' : 'password'"
-                id="password"
-                formControlName="password"
-                class="form-control"
-                [class.error]="password?.invalid && password?.touched"
-                placeholder="Create a password"
-              />
-              <button
-                type="button"
-                class="password-toggle"
-                (click)="togglePasswordVisibility()"
-                [title]="showPassword ? 'Hide password' : 'Show password'"
-              >
-                {{ showPassword ? '👁️' : '👁️‍🗨️' }}
-              </button>
-            </div>
-            <div *ngIf="password?.invalid && password?.touched" class="form-error">
-              <span *ngIf="password?.errors?.['required']">Password is required</span>
-              <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
-            </div>
+          <!-- Last Name -->
+          <div class="form-group" [class.has-error]="hasError('lastName')">
+            <input
+              type="text"
+              class="form-control"
+              formControlName="lastName"
+              placeholder="Last Name"
+              [class.error]="hasError('lastName')"
+            />
+            <span class="form-error" *ngIf="hasError('lastName')">
+              {{ getErrorMessage('lastName') }}
+            </span>
           </div>
 
-          <!-- Confirm Password Field -->
-          <div class="form-group">
-            <label for="confirmPassword" class="form-label">Confirm Password</label>
-            <div class="password-input-wrapper">
-              <input
-                [type]="showConfirmPassword ? 'text' : 'password'"
-                id="confirmPassword"
-                formControlName="confirmPassword"
-                class="form-control"
-                [class.error]="confirmPassword?.invalid && confirmPassword?.touched"
-                placeholder="Confirm your password"
-              />
-              <button
-                type="button"
-                class="password-toggle"
-                (click)="toggleConfirmPasswordVisibility()"
-                [title]="showConfirmPassword ? 'Hide password' : 'Show password'"
-              >
-                {{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}
-              </button>
-            </div>
-            <div *ngIf="confirmPassword?.touched" class="form-error">
-              <span *ngIf="confirmPassword?.errors?.['required']">Please confirm your password</span>
-              <span *ngIf="confirmPassword?.errors?.['passwordMismatch']">Passwords do not match</span>
-            </div>
-          </div>
-
-          <!-- Error Message -->
-          <div *ngIf="error" class="error-message">
-            {{ error }}
-          </div>
-
-          <!-- Submit Button -->
-          <button
-            type="submit"
-            class="btn btn-primary btn-block"
-            [disabled]="registerForm.invalid || isLoading"
-          >
-            <span *ngIf="!isLoading">Create Account</span>
-            <span *ngIf="isLoading">Creating Account...</span>
-          </button>
-
-          <!-- Demo Fill Button (for testing) -->
-          <button
-            type="button"
-            class="btn btn-outline btn-block demo-fill"
-            (click)="fillDemoData()"
-            [disabled]="isLoading"
-          >
-            Fill Demo Data
-          </button>
-        </form>
-
-        <!-- Login Link -->
-        <div class="login-section">
-          <p>
-            Already have an account?
-            <a routerLink="/login" class="login-link">Login here</a>
+          <!-- Required Fields Note -->
+          <p class="required-note">
+            First name is required<span class="required">!</span><br>
+            Last name is required<span class="required">!</span>
           </p>
         </div>
-      </div>
 
-      <!-- Side Benefits -->
-      <div class="register-benefits">
-        <h2>🎵 Join Music Store Today!</h2>
-        <p>Create your account and enjoy these benefits:</p>
-        <div class="benefits-list">
-          <div class="benefit-item">
-            <span class="benefit-icon">💿</span>
-            <div>
-              <h3>Exclusive Deals</h3>
-              <p>Get access to member-only discounts and offers</p>
-            </div>
+        <!-- Login Data Section -->
+        <div class="form-section">
+          <h3 class="section-title">Login Datas</h3>
+          
+          <!-- Email -->
+          <div class="form-group" [class.has-error]="hasError('email')">
+            <input
+              type="email"
+              class="form-control"
+              formControlName="email"
+              placeholder="E-mail address"
+              [class.error]="hasError('email')"
+            />
+            <span class="form-error" *ngIf="hasError('email')">
+              {{ getErrorMessage('email') }}
+            </span>
           </div>
-          <div class="benefit-item">
-            <span class="benefit-icon">❤️</span>
-            <div>
-              <h3>Wishlist</h3>
-              <p>Save your favorite albums for later</p>
-            </div>
+
+          <!-- Password -->
+          <div class="form-group" [class.has-error]="hasError('password')">
+            <input
+              type="password"
+              class="form-control"
+              formControlName="password"
+              placeholder="Password"
+              [class.error]="hasError('password')"
+            />
+            <span class="form-error" *ngIf="hasError('password')">
+              {{ getErrorMessage('password') }}
+            </span>
           </div>
-          <div class="benefit-item">
-            <span class="benefit-icon">📦</span>
-            <div>
-              <h3>Order Tracking</h3>
-              <p>Track your orders in real-time</p>
-            </div>
+
+          <!-- Confirm Password -->
+          <div class="form-group" [class.has-error]="hasError('confirmPassword')">
+            <input
+              type="password"
+              class="form-control"
+              formControlName="confirmPassword"
+              placeholder="Password confirmation"
+              [class.error]="hasError('confirmPassword')"
+            />
+            <span class="form-error" *ngIf="hasError('confirmPassword')">
+              {{ getErrorMessage('confirmPassword') }}
+            </span>
           </div>
-          <div class="benefit-item">
-            <span class="benefit-icon">🎸</span>
-            <div>
-              <h3>Personalized Recommendations</h3>
-              <p>Discover new music based on your taste</p>
-            </div>
-          </div>
+
+          <!-- Required Fields Note -->
+          <p class="required-note">
+            Email address is required<span class="required">!</span><br>
+            Password is required<span class="required">!</span>
+          </p>
         </div>
-      </div>
+
+        <!-- Error Message -->
+        <div class="registration-error" *ngIf="registrationError">
+          {{ registrationError }}
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          class="btn btn-primary register-btn"
+          [disabled]="isLoading"
+        >
+          Register
+        </button>
+
+        <!-- Login Link -->
+        <p class="login-link">
+          or <a href="#" (click)="onCancel(); $event.preventDefault()">login</a>
+        </p>
+      </form>
     </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" *ngIf="isLoading">
+      <app-spinner [size]="'medium'"></app-spinner>
+    </div>
+
+    <!-- Flags for demo purposes -->
+    <span class="flag flag-3">3</span>
+    <span class="flag flag-5" *ngIf="registerForm.invalid && registerForm.touched">5</span>
+    <span class="flag flag-6" *ngIf="isLoading">6</span>
   </div>
 </div>
