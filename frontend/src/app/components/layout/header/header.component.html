@@ -13,14 +13,11 @@
             Home
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="currentUser">
           <a routerLink="/my-account" routerLinkActive="active"> My Account </a>
         </li>
         <li class="nav-item">
           <a routerLink="/wishlist" routerLinkActive="active"> My Wishlist </a>
-        </li>
-        <li class="nav-item">
-          <a routerLink="/checkout" routerLinkActive="active"> Checkout </a>
         </li>
         <li class="nav-item" *ngIf="!currentUser">
           <a routerLink="/login" routerLinkActive="active"> Log In </a>
@@ -77,11 +74,10 @@
       <button class="close-menu" (click)="closeMenu()">×</button>
       <ul class="mobile-nav-list">
         <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
-        <li>
+        <li *ngIf="currentUser">
           <a routerLink="/my-account" (click)="closeMenu()">My Account</a>
         </li>
         <li><a routerLink="/wishlist" (click)="closeMenu()">My Wishlist</a></li>
-        <li><a routerLink="/checkout" (click)="closeMenu()">Checkout</a></li>
         <li *ngIf="!currentUser">
           <a routerLink="/login" (click)="closeMenu()">Log In</a>
         </li>

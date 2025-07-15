@@ -11,7 +11,21 @@
       <div class="main-layout">
         <!-- Sidebar (Left) -->
         <aside class="sidebar-area">
-          <app-sidebar></app-sidebar>
+          <!-- Categories Only -->
+          <div class="categories-wrapper">
+            <app-sidebar [showCart]="false" [showTitle]="false"></app-sidebar>
+          </div>
+          
+          <!-- Side Albums (2 albums) - Below Categories -->
+          <div class="side-albums" *ngIf="sideAlbums.length > 0">
+            <app-album-card
+              *ngFor="let album of sideAlbums; trackBy: trackByAlbum"
+              [album]="album"
+              [size]="'medium'"
+              [showInfo]="true"
+            >
+            </app-album-card>
+          </div>
         </aside>
 
         <!-- Main Content Area -->
@@ -40,24 +54,25 @@
                 </app-album-card>
               </div>
             </div>
-
-            <!-- Side Albums (2 albums) - Below -->
-            <div class="side-albums" *ngIf="sideAlbums.length > 0">
-              <app-album-card
-                *ngFor="let album of sideAlbums; trackBy: trackByAlbum"
-                [album]="album"
-                [size]="'medium'"
-                [showInfo]="true"
-              >
-              </app-album-card>
-            </div>
           </section>
 
-          <!-- Remaining Albums Section (12 albums) -->
+          <!-- Remaining Albums Section (12 albums only on initial load) -->
           <section class="albums-section" *ngIf="remainingAlbums.length > 0">
             <div class="albums-grid">
               <app-album-card
-                *ngFor="let album of displayedAlbums; trackBy: trackByAlbum"
+                *ngFor="let album of remainingAlbums; trackBy: trackByAlbum"
+                [album]="album"
+                [size]="'medium'"
+                [showInfo]="true"
+                [showPrice]="true"
+              >
+              </app-album-card>
+            </div>
+
+            <!-- Additional Albums (loaded on scroll) -->
+            <div class="albums-grid" *ngIf="additionalAlbums.length > 0">
+              <app-album-card
+                *ngFor="let album of additionalAlbums; trackBy: trackByAlbum"
                 [album]="album"
                 [size]="'medium'"
                 [showInfo]="true"

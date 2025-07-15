@@ -2,7 +2,8 @@
 <aside class="sidebar">
   <!-- Categories Section -->
   <section class="categories-section">
-    <div class="section-header">
+    <!-- Title Header (only if showTitle is true) -->
+    <div class="section-header" *ngIf="showTitle">
       <h2 class="section-title">Categories</h2>
     </div>
 
@@ -35,8 +36,8 @@
     </div>
   </section>
 
-  <!-- Cart Widget -->
-  <section class="cart-section">
+  <!-- Cart Widget (only if showCart is true) -->
+  <section class="cart-section" *ngIf="showCart">
     <app-cart-widget></app-cart-widget>
   </section>
 </aside>

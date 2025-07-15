@@ -1,9 +1,9 @@
 /**
  * Sidebar Component
- * Displays categories and cart widget
+ * Displays categories and optionally cart widget
  */
 
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router, NavigationEnd } from "@angular/router";
 import { Subject, filter, takeUntil } from "rxjs";
@@ -20,6 +20,9 @@ import { SpinnerComponent } from "../../shared/spinner/spinner.component";
   styleUrls: ["./sidebar.component.css"],
 })
 export class SidebarComponent implements OnInit, OnDestroy {
+  @Input() showCart: boolean = true;
+  @Input() showTitle: boolean = true;
+  
   categories: Category[] = [];
   activeCategoryId: string | null = null;
   isLoadingCategories = true;
