@@ -1,77 +1,82 @@
-import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { Subject, takeUntil, switchMap, of } from "rxjs";
-import { AlbumService } from "../../services/album.service";
-import { CategoryService } from "../../services/category.service";
-import { WishlistService } from "../../services/wishlist.service";
-import { Album, Category, PaginatedResponse } from "../../models/album.model";
-import { AlbumCardComponent } from "../../components/album/album-card/album-card.component";
-import { SpinnerComponent } from "../../components/shared/spinner/spinner.component";
-import { SidebarComponent } from "../../components/layout/sidebar/sidebar.component";
+/**
+ * Category Component
+ * Displays albums for a specific category
+ */
+
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil, switchMap } from 'rxjs';
+import { AlbumService } from '../../services/album.service';
+import { CategoryService } from '../../services/category.service';
+import { WishlistService } from '../../services/wishlist.service';
+import { AuthService } from '../../services/auth.service';
+import { Album, Category } from '../../models/album.model';
+import { SpinnerComponent } from '../../components/shared/spinner/spinner.component';
+import { AlbumCardComponent } from '../../components/album/album-card/album-card.component';
+import { SidebarComponent } from '../../components/layout/sidebar/sidebar.component';
 
 @Component({
-  selector: "app-category",
+  selector: 'app-category',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    AlbumCardComponent,
-    SpinnerComponent,
-    SidebarComponent,
-  ],
-  templateUrl: "./category.component.html",
-  styleUrls: ["./category.component.css"],
+  imports: [CommonModule, SpinnerComponent, AlbumCardComponent, SidebarComponent],
+  templateUrl: './category.component.html',
+  styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit, OnDestroy {
   category: Category | null = null;
   albums: Album[] = [];
-  totalAlbums = 0;
-  currentPage = 1;
-  itemsPerPage = 12;
   isLoading = true;
-  isLoadingMore = false;
-  hasMore = true;
-  categoryId = '';
-  
+  isAuthenticated = false;
+  wishlistIds: string[] = [];
   private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private albumService: AlbumService,
     private categoryService: CategoryService,
-    private wishlistService: WishlistService
+    private wishlistService: WishlistService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    // Subscribe to route params and load category
+    // Check authentication status
+    this.authService.currentUser$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => {
+        this.isAuthenticated = !!user;
+        if (this.isAuthenticated) {
+          this.loadWishlist();
+        }
+      });
+
+    // Subscribe to wishlist changes
+    this.wishlistService.wishlist$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(ids => {
+        this.wishlistIds = ids;
+      });
+
+    // Load category and albums when route params change
     this.route.params
       .pipe(
         takeUntil(this.destroy$),
-        switchMap((params) => {
-          this.categoryId = params['id'];
-          this.resetData();
-          
-          // Temporary workaround - get all categories and find the one we need
-          return this.categoryService.getCategories();
+        switchMap(params => {
+          const categoryId = params['id'];
+          this.isLoading = true;
+          return this.categoryService.getCategoryWithAlbums(categoryId);
         })
       )
       .subscribe({
-        next: (categories) => {
-          const foundCategory = categories.find(c => c._id === this.categoryId);
-          if (foundCategory) {
-            this.category = foundCategory;
-            this.loadAlbums();
-          } else {
-            console.error("Category not found");
-            this.router.navigate(['/404']);
-          }
+        next: (data) => {
+          this.category = { _id: data.category, name: data.category } as Category;
+          this.albums = data.albums;
+          this.isLoading = false;
         },
         error: (error) => {
-          console.error("Failed to load category:", error);
-          this.router.navigate(['/404']);
-        },
+          console.error('Failed to load category:', error);
+          this.isLoading = false;
+        }
       });
   }
 
@@ -81,100 +86,58 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Reset component data
+   * Load user's wishlist
    */
-  private resetData(): void {
-    this.albums = [];
-    this.currentPage = 1;
-    this.hasMore = true;
-    this.isLoading = true;
-  }
-
-  /**
-   * Load albums for the category
-   */
-  private loadAlbums(): void {
-    if (!this.categoryId) return;
-
-    // For now, let's get all albums and filter them
-    this.albumService
-      .getNewAlbums()
+  private loadWishlist(): void {
+    this.wishlistService.getWishlist()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (allAlbums) => {
-          // Filter albums by category
-          const filteredAlbums = allAlbums.filter(album => {
-            if (typeof album.category === 'object') {
-              return album.category._id === this.categoryId;
-            }
-            return album.category === this.categoryId;
-          });
-          
-          // Simulate pagination
-          const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-          const endIndex = startIndex + this.itemsPerPage;
-          
-          if (this.currentPage === 1) {
-            this.albums = filteredAlbums.slice(startIndex, endIndex);
-          } else {
-            this.albums = [...this.albums, ...filteredAlbums.slice(startIndex, endIndex)];
-          }
-          
-          this.totalAlbums = filteredAlbums.length;
-          this.hasMore = endIndex < filteredAlbums.length;
-          this.isLoading = false;
-          this.isLoadingMore = false;
-        },
-        error: (error: any) => {
-          console.error("Failed to load albums:", error);
-          this.isLoading = false;
-          this.isLoadingMore = false;
-        },
+        error: (error) => console.error('Failed to load wishlist:', error)
       });
   }
 
   /**
-   * Load more albums
+   * Check if album is in wishlist
+   * @param albumId Album ID
+   * @returns true if in wishlist
    */
-  loadMoreAlbums(): void {
-    if (this.isLoadingMore || !this.hasMore || this.isLoading) {
+  isInWishlist(albumId: string): boolean {
+    return this.wishlistIds.includes(albumId);
+  }
+
+  /**
+   * Toggle album in wishlist
+   * @param albumId Album ID
+   */
+  toggleWishlist(albumId: string): void {
+    if (!this.isAuthenticated) {
+      // Redirect to login or show message
+      console.log('Please login to add to wishlist');
       return;
     }
 
-    this.isLoadingMore = true;
-    this.currentPage++;
-    this.loadAlbums();
-  }
-
-  /**
-   * Listen for scroll events
-   */
-  @HostListener("window:scroll", ["$event"])
-  onScroll(): void {
-    if (this.shouldLoadMore()) {
-      this.loadMoreAlbums();
+    if (this.isInWishlist(albumId)) {
+      this.removeFromWishlist(albumId);
+    } else {
+      this.addToWishlist(albumId);
     }
-  }
-
-  /**
-   * Check if should load more albums
-   */
-  private shouldLoadMore(): boolean {
-    const scrollPosition = window.pageYOffset + window.innerHeight;
-    const scrollHeight = document.documentElement.scrollHeight;
-    const threshold = 200; // pixels from bottom
-
-    return scrollPosition >= scrollHeight - threshold;
   }
 
   /**
    * Add album to wishlist
+   * @param albumId Album ID
    */
-  addToWishlist(albumId: string): void {
+  private addToWishlist(albumId: string): void {
+    console.log('Adding album to wishlist:', albumId);
+    
+    if (!albumId || albumId.length !== 24) {
+      console.error('Invalid album ID:', albumId);
+      return;
+    }
+    
     this.wishlistService.addToWishlist(albumId).subscribe({
       next: () => {
-        console.log('Added to wishlist');
-        // Show success message
+        console.log('Added to wishlist successfully');
       },
       error: (error) => {
         console.error('Failed to add to wishlist:', error);
@@ -184,8 +147,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Remove album from wishlist
+   * @param albumId Album ID
    */
-  removeFromWishlist(albumId: string): void {
+  private removeFromWishlist(albumId: string): void {
     this.wishlistService.removeFromWishlist(albumId).subscribe({
       next: () => {
         console.log('Removed from wishlist');
@@ -197,14 +161,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Check if album is in wishlist
-   */
-  isInWishlist(albumId: string): boolean {
-    return this.wishlistService.isInWishlist(albumId);
-  }
-
-  /**
    * Track by function for ngFor
+   * @param index Item index
+   * @param album Album object
+   * @returns Unique identifier
    */
   trackByAlbum(index: number, album: Album): string {
     return album._id;

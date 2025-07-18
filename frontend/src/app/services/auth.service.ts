@@ -1,14 +1,25 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
-import { tap, catchError, map } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
-import { User, AuthResponse, LoginCredentials, RegistrationData, TokenPayload } from '../models/user.model';
-import { ApiResponse } from '../models/album.model';
+/**
+ * Authentication Service
+ * Handles user authentication, registration, and session management
+ */
+
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
+import { BehaviorSubject, Observable, throwError } from "rxjs";
+import { tap, catchError, map } from "rxjs/operators";
+import { environment } from "../../environments/environment";
+import {
+  User,
+  AuthResponse,
+  LoginCredentials,
+  RegistrationData,
+  TokenPayload,
+} from "../models/user.model";
+import { ApiResponse } from "../models/album.model";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
@@ -24,10 +35,8 @@ export class AuthService {
   initializeAuth(): void {
     const token = this.getToken();
     if (token && !this.isTokenExpired(token)) {
-      // Only try to load profile if we have a valid token
       this.loadUserProfile();
     } else {
-      // Clear any invalid token
       this.clearAuth();
     }
   }
@@ -38,23 +47,14 @@ export class AuthService {
    * @returns Observable of auth response
    */
   register(data: RegistrationData): Observable<AuthResponse> {
-    console.log('AuthService.register called with:', data);
-    console.log('Sending to URL:', `${this.apiUrl}/register`);
-    
     return this.http
       .post<ApiResponse<AuthResponse>>(`${this.apiUrl}/register`, data)
       .pipe(
-        map((response) => {
-          console.log('Raw response from server:', response);
-          return response.data!;
-        }),
+        map((response) => response.data!),
         tap((authData) => {
           this.setAuthData(authData);
         }),
-        catchError((error) => {
-          console.error('Auth service error:', error);
-          return this.handleError(error);
-        })
+        catchError(this.handleError)
       );
   }
 
@@ -79,19 +79,28 @@ export class AuthService {
    * Logout user
    */
   logout(): void {
-    // Clear local auth first
-    this.clearAuth();
+    // Get token before clearing
+    const token = this.getToken();
     
-    // Then notify the server (but don't wait for response)
-    this.http.get(`${this.apiUrl}/logout`).subscribe({
-      complete: () => {
-        this.router.navigate(['/']);
-      },
-      error: () => {
-        // Still navigate even if logout endpoint fails
-        this.router.navigate(['/']);
-      }
-    });
+    if (token) {
+      // Call logout endpoint with proper headers
+      this.http.get<ApiResponse<any>>(`${this.apiUrl}/logout`).subscribe({
+        next: () => {
+          this.clearAuth();
+          this.router.navigate(["/"]);
+        },
+        error: (error) => {
+          console.error("Logout error:", error);
+          // Even if logout fails, clear local auth
+          this.clearAuth();
+          this.router.navigate(["/"]);
+        },
+      });
+    } else {
+      // No token, just clear local state
+      this.clearAuth();
+      this.router.navigate(["/"]);
+    }
   }
 
   /**
@@ -104,11 +113,7 @@ export class AuthService {
       tap((user) => {
         this.currentUserSubject.next(user);
       }),
-      catchError((error) => {
-        // If profile fetch fails, clear auth
-        this.clearAuth();
-        return throwError(() => error);
-      })
+      catchError(this.handleError)
     );
   }
 
@@ -162,11 +167,9 @@ export class AuthService {
       next: (user) => {
         this.currentUserSubject.next(user);
       },
-      error: (error) => {
-        console.warn('Failed to load user profile:', error);
-        // Don't clear auth here - token might still be valid
-        // Let the error interceptor handle 401s
-      }
+      error: () => {
+        this.clearAuth();
+      },
     });
   }
 
@@ -191,19 +194,15 @@ export class AuthService {
    * @returns Token payload
    */
   private decodeToken(token: string): TokenPayload {
-    try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
-      );
-      return JSON.parse(jsonPayload);
-    } catch (error) {
-      throw new Error('Invalid token format');
-    }
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
   }
 
   /**
@@ -212,15 +211,7 @@ export class AuthService {
    * @returns Observable error
    */
   private handleError(error: any): Observable<never> {
-    console.error('Auth error:', error);
-    
-    // Extract error details
-    let errorDetails = {
-      status: error.status,
-      message: error.error?.message || error.message || 'An error occurred',
-      error: error.error
-    };
-    
-    return throwError(() => errorDetails);
+    console.error("Auth error:", error);
+    return throwError(() => error);
   }
 }

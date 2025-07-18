@@ -7,7 +7,7 @@ import { Router } from "express";
 import * as wishlistController from "../controllers/wishlistController.js";
 import { authenticate } from "../middleware/auth.js";
 import { validateRequest } from "../middleware/validation.js";
-import { mongoIdValidation } from "../utils/validators.js";
+import { albumIdValidation } from "../utils/validators.js";
 
 const router = Router();
 
@@ -17,13 +17,13 @@ router.use(authenticate);
 router.get("/", wishlistController.getWishlist);
 router.post(
   "/:albumId",
-  mongoIdValidation,
+  albumIdValidation,
   validateRequest,
   wishlistController.addToWishlist
 );
 router.delete(
   "/:albumId",
-  mongoIdValidation,
+  albumIdValidation,
   validateRequest,
   wishlistController.removeFromWishlist
 );

@@ -5,11 +5,10 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Album, ApiResponse } from '../models/album.model';
-import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,29 +18,17 @@ export class WishlistService {
   private wishlistSubject = new BehaviorSubject<string[]>([]);
   public wishlist$ = this.wishlistSubject.asObservable();
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService
-  ) {
-    // Initialize wishlist when user logs in
-    this.authService.currentUser$.subscribe(user => {
-      if (user && user.wishlist) {
-        this.wishlistSubject.next(user.wishlist);
-      } else {
-        this.wishlistSubject.next([]);
-      }
-    });
-  }
+  constructor(private http: HttpClient) {}
 
   /**
-   * Get user's wishlist albums
+   * Get user's wishlist
    * @returns Observable of albums array
    */
   getWishlist(): Observable<Album[]> {
     return this.http.get<ApiResponse<Album[]>>(this.apiUrl).pipe(
       map(response => response.data || []),
       tap(albums => {
-        // Update wishlist IDs
+        // Update wishlist subject with album IDs
         const albumIds = albums.map(album => album._id);
         this.wishlistSubject.next(albumIds);
       }),
@@ -54,16 +41,31 @@ export class WishlistService {
    * @param albumId Album ID to add
    * @returns Observable of updated wishlist
    */
-  addToWishlist(albumId: string): Observable<string[]> {
+  addToWishlist(albumId: string): Observable<{ wishlist: string[] }> {
+    console.log('Adding to wishlist, albumId:', albumId);
+    console.log('URL:', `${this.apiUrl}/${albumId}`);
+    
+    // The backend expects albumId as a URL parameter, not in the body
     return this.http.post<ApiResponse<{ wishlist: string[] }>>(
       `${this.apiUrl}/${albumId}`,
-      {}
+      {} // Empty body since albumId is in URL
     ).pipe(
-      map(response => response.data?.wishlist || []),
-      tap(wishlist => {
-        this.wishlistSubject.next(wishlist);
+      map(response => {
+        console.log('Wishlist add response:', response);
+        return response.data!;
       }),
-      catchError(this.handleError)
+      tap(data => {
+        if (data.wishlist) {
+          this.wishlistSubject.next(data.wishlist);
+        }
+      }),
+      catchError(error => {
+        console.error('Wishlist error details:', error);
+        if (error.error) {
+          console.error('Error body:', error.error);
+        }
+        return this.handleError(error);
+      })
     );
   }
 
@@ -72,13 +74,15 @@ export class WishlistService {
    * @param albumId Album ID to remove
    * @returns Observable of updated wishlist
    */
-  removeFromWishlist(albumId: string): Observable<string[]> {
+  removeFromWishlist(albumId: string): Observable<{ wishlist: string[] }> {
     return this.http.delete<ApiResponse<{ wishlist: string[] }>>(
       `${this.apiUrl}/${albumId}`
     ).pipe(
-      map(response => response.data?.wishlist || []),
-      tap(wishlist => {
-        this.wishlistSubject.next(wishlist);
+      map(response => response.data!),
+      tap(data => {
+        if (data.wishlist) {
+          this.wishlistSubject.next(data.wishlist);
+        }
       }),
       catchError(this.handleError)
     );
@@ -94,28 +98,15 @@ export class WishlistService {
   }
 
   /**
-   * Toggle album in wishlist
-   * @param albumId Album ID to toggle
-   * @returns Observable of updated wishlist
+   * Get current wishlist IDs
+   * @returns Array of album IDs
    */
-  toggleWishlist(albumId: string): Observable<string[]> {
-    if (this.isInWishlist(albumId)) {
-      return this.removeFromWishlist(albumId);
-    } else {
-      return this.addToWishlist(albumId);
-    }
+  getWishlistIds(): string[] {
+    return this.wishlistSubject.value;
   }
 
   /**
-   * Get wishlist count
-   * @returns Current wishlist count
-   */
-  getWishlistCount(): number {
-    return this.wishlistSubject.value.length;
-  }
-
-  /**
-   * Clear local wishlist (used on logout)
+   * Clear local wishlist (on logout)
    */
   clearWishlist(): void {
     this.wishlistSubject.next([]);

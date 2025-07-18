@@ -41,6 +41,10 @@ export const registerValidation = [
     )
     .matches(/[A-Z]/)
     .withMessage("Password must contain at least one uppercase letter"),
+
+  body("confirmPassword")
+    .custom((value, { req }) => value === req.body.password)
+    .withMessage("Passwords do not match"),
 ];
 
 export const loginValidation = [
@@ -167,4 +171,9 @@ export const creditCardValidation = [
 // ID validation
 export const mongoIdValidation = [
   param("id").isMongoId().withMessage("Invalid ID format"),
+];
+
+// Album ID validation (for routes with :albumId parameter)
+export const albumIdValidation = [
+  param("albumId").isMongoId().withMessage("Invalid album ID format"),
 ];
