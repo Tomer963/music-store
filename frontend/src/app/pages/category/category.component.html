@@ -7,44 +7,38 @@
 
   <!-- Main Content -->
   <div class="category-content" *ngIf="!isLoading">
-    <div class="container">
-      <!-- Category Header -->
-      <div class="category-header" *ngIf="category">
-        <h1 class="category-title">{{ category.name }}</h1>
-        <p class="album-count">{{ albums.length }} albums found</p>
-      </div>
+    <div class="container-with-sidebar">
+      <div class="main-content">
+        <!-- Category Header -->
+        <div class="category-header">
+          <h1 class="category-title">{{ category?.name || 'Category' }}</h1>
+          <p class="album-count">
+            There are <strong>{{ albums.length }}</strong> products.
+          </p>
+        </div>
 
-      <!-- Albums Grid -->
-      <div class="albums-grid" *ngIf="albums.length > 0">
-        <div class="album-wrapper" *ngFor="let album of albums; trackBy: trackByAlbum">
-          <app-album-card
-            [album]="album"
-            [size]="'medium'"
-            [showInfo]="true"
-            [showPrice]="true"
-          >
-          </app-album-card>
-          
-          <!-- Wishlist Button -->
-          <button
-            class="wishlist-btn"
-            [class.active]="isInWishlist(album._id)"
-            (click)="toggleWishlist(album._id)"
-            [disabled]="!isAuthenticated"
-            [title]="!isAuthenticated ? 'Login to add to wishlist' : isInWishlist(album._id) ? 'Remove from wishlist' : 'Add to wishlist'"
-          >
-            <span class="wishlist-icon">{{ isInWishlist(album._id) ? '❤️' : '🤍' }}</span>
-          </button>
+        <!-- Albums Grid -->
+        <div class="albums-section">
+          <div class="albums-grid">
+            <app-album-card
+              *ngFor="let album of albums; trackBy: trackByAlbum"
+              [album]="album"
+              [size]="'medium'"
+              [showInfo]="true"
+              [showPrice]="true"
+            >
+            </app-album-card>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state" *ngIf="albums.length === 0">
+            <p>No albums found in this category.</p>
+          </div>
         </div>
       </div>
 
-      <!-- No Albums Message -->
-      <div class="no-albums" *ngIf="!isLoading && albums.length === 0">
-        <p>No albums found in this category.</p>
-      </div>
+      <!-- Sidebar -->
+      <app-sidebar></app-sidebar>
     </div>
   </div>
-
-  <!-- Sidebar -->
-  <app-sidebar></app-sidebar>
 </div>

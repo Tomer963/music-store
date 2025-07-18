@@ -1,10 +1,11 @@
 /* Category Page Component Styles */
 
 .category-page {
-  position: relative;
   min-height: calc(100vh - 120px);
+  background-color: var(--background-color);
 }
 
+/* Loading Container */
 .loading-container {
   display: flex;
   justify-content: center;
@@ -12,110 +13,155 @@
   min-height: 400px;
 }
 
-.category-content {
-  padding: var(--spacing-lg) 0;
+/* Container with Sidebar Layout */
+.container-with-sidebar {
+  display: flex;
+  flex-direction: row-reverse; /* This puts sidebar on the left */
+  gap: var(--spacing-lg);
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
 }
 
 /* Category Header */
 .category-header {
+  background-color: var(--white);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   margin-bottom: var(--spacing-xl);
 }
 
 .category-title {
+  font-size: 2rem;
+  font-weight: 600;
   color: var(--secondary-color);
-  margin-bottom: var(--spacing-sm);
+  margin: 0 0 var(--spacing-sm) 0;
 }
 
 .album-count {
-  color: var(--gray-medium);
-  font-size: 1.125rem;
+  font-size: 1rem;
+  color: var(--gray-dark);
+  margin: 0;
+}
+
+.album-count strong {
+  color: var(--secondary-color);
+  font-weight: 600;
+}
+
+/* Albums Section */
+.albums-section {
+  background-color: var(--white);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Albums Grid */
 .albums-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
 }
 
-.album-wrapper {
-  position: relative;
-}
-
-/* Wishlist Button */
-.wishlist-btn {
-  position: absolute;
-  top: var(--spacing-sm);
-  right: var(--spacing-sm);
-  width: 40px;
-  height: 40px;
-  border: none;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
-  z-index: 10;
-  box-shadow: var(--shadow-sm);
-}
-
-.wishlist-btn:hover:not(:disabled) {
-  background-color: var(--white);
-  transform: scale(1.1);
-  box-shadow: var(--shadow-md);
-}
-
-.wishlist-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.wishlist-btn.active .wishlist-icon {
-  animation: heartbeat 0.6s ease;
-}
-
-.wishlist-icon {
-  font-size: 1.25rem;
-}
-
-@keyframes heartbeat {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.3); }
-  50% { transform: scale(1); }
-  75% { transform: scale(1.3); }
-  100% { transform: scale(1); }
-}
-
-/* No Albums */
-.no-albums {
+/* Empty State */
+.empty-state {
   text-align: center;
-  padding: var(--spacing-xxl);
+  padding: var(--spacing-xxl) var(--spacing-lg);
   color: var(--gray-medium);
 }
 
-/* Responsive */
-@media (max-width: 1200px) {
-  .albums-grid {
-    grid-template-columns: repeat(3, 1fr);
+.empty-state p {
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+/* Animation for album cards */
+.albums-grid app-album-card {
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.albums-grid app-album-card:nth-child(1) { animation-delay: 0.1s; }
+.albums-grid app-album-card:nth-child(2) { animation-delay: 0.15s; }
+.albums-grid app-album-card:nth-child(3) { animation-delay: 0.2s; }
+.albums-grid app-album-card:nth-child(4) { animation-delay: 0.25s; }
+.albums-grid app-album-card:nth-child(5) { animation-delay: 0.3s; }
+.albums-grid app-album-card:nth-child(6) { animation-delay: 0.35s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 992px) {
+/* Responsive Styles */
+@media (max-width: 1400px) {
+  .container-with-sidebar {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 1200px) {
   .albums-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 576px) {
-  .albums-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
+@media (max-width: 992px) {
+  .container-with-sidebar {
+    flex-direction: column;
   }
 
-  .category-content {
-    padding: var(--spacing-md) 0;
+  .main-content {
+    order: 2;
+  }
+
+  app-sidebar {
+    order: 1;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-header {
+    padding: var(--spacing-md);
+  }
+
+  .category-title {
+    font-size: 1.5rem;
+  }
+
+  .albums-section {
+    padding: var(--spacing-md);
+  }
+
+  .albums-grid {
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 576px) {
+  .container-with-sidebar {
+    padding: var(--spacing-sm);
+  }
+
+  .albums-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-header,
+  .albums-section {
+    border-radius: 0;
   }
 }

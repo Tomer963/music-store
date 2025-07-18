@@ -1,31 +1,21 @@
 /* Sidebar Component Styles */
 
 .sidebar {
+  position: sticky;
+  top: 120px;
+  width: 280px;
+  max-width: 90vw;
+  height: fit-content;
+  max-height: calc(100vh - 140px);
   background-color: var(--white);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
+  overflow-y: auto;
+  padding: var(--spacing-lg);
+  z-index: 10;
 }
 
 /* Categories Section */
 .categories-section {
-  padding: var(--spacing-md);
-}
-
-.section-header {
-  background-color: var(--primary-color);
-  margin: calc(-1 * var(--spacing-md));
-  margin-bottom: var(--spacing-md);
-  padding: var(--spacing-md);
-}
-
-.section-title {
-  color: var(--white);
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin-bottom: var(--spacing-xl);
 }
 
 /* Loading State */
@@ -57,16 +47,12 @@
 
 .category-item:hover {
   background-color: var(--primary-dark);
-  transform: translateX(4px);
+  transform: translateX(-4px);
 }
 
 .category-item.active {
   background-color: var(--secondary-color);
   color: var(--white);
-}
-
-.category-item:last-child {
-  margin-bottom: 0;
 }
 
 .category-name {
@@ -88,12 +74,51 @@
 
 /* Cart Section */
 .cart-section {
-  padding: var(--spacing-md);
-  background-color: var(--background-color);
-  margin-top: var(--spacing-lg);
+  position: sticky;
+  bottom: 0;
+  background-color: var(--white);
+  margin: 0 calc(-1 * var(--spacing-lg));
+  padding: 0 var(--spacing-lg) var(--spacing-lg);
+  border-top: 1px solid var(--gray-light);
+}
+
+/* Custom Scrollbar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: var(--gray-light);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--gray-medium);
+  border-radius: var(--radius-sm);
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 250px;
+  }
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+  }
+
+  .cart-section {
+    margin: 0 calc(-1 * var(--spacing-md));
+    padding: 0 var(--spacing-md) var(--spacing-md);
+  }
+}
+
 @media (max-width: 768px) {
   .categories-list {
     display: grid;
@@ -104,10 +129,6 @@
   .category-item {
     justify-content: center;
     text-align: center;
-  }
-
-  .category-item:hover {
-    transform: none;
   }
 
   .category-count {
