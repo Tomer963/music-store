@@ -1,22 +1,20 @@
 /**
  * Header Component
  * Displays the main navigation header with logo, search, and cart
- * Fully responsive with mobile menu
  */
 
-import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router, RouterModule } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 import { AuthService } from "../../../services/auth.service";
 import { CartService } from "../../../services/cart.service";
 import { User } from "../../../models/user.model";
-import { SearchBoxComponent } from "../../shared/search-box/search-box.component";
 
 @Component({
   selector: "app-header",
   standalone: true,
-  imports: [CommonModule, RouterModule, SearchBoxComponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: "./header.component.html",
   styleUrls: ["./header.component.css"],
 })
@@ -24,7 +22,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   cartItemCount: number = 0;
   isMenuOpen: boolean = false;
-  isMobile: boolean = false;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -34,9 +31,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Check if mobile on init
-    this.checkIfMobile();
-
     // Subscribe to current user
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
@@ -56,32 +50,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Listen for window resize
+   * Get user first name safely
    */
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event): void {
-    this.checkIfMobile();
-    // Close mobile menu on resize to desktop
-    if (!this.isMobile && this.isMenuOpen) {
-      this.closeMenu();
-    }
+  getUserFirstName(): string {
+    return this.currentUser?.firstName || '';
   }
 
   /**
-   * Listen for escape key to close menu
+   * Get cart count as string
    */
-  @HostListener('document:keydown.escape', ['$event'])
-  onEscapeKey(event: KeyboardEvent): void {
-    if (this.isMenuOpen) {
-      this.closeMenu();
-    }
-  }
-
-  /**
-   * Check if mobile device
-   */
-  private checkIfMobile(): void {
-    this.isMobile = window.innerWidth <= 768;
+  getCartCount(): string {
+    return this.cartItemCount.toString();
   }
 
   /**
@@ -89,12 +68,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
    */
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
-    // Prevent body scroll when menu is open
-    if (this.isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
   }
 
   /**
@@ -102,13 +75,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
    */
   closeMenu(): void {
     this.isMenuOpen = false;
-    document.body.style.overflow = '';
   }
 
   /**
    * Handle logout
    */
-  logout(): void {
+  logout(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+    }
     this.authService.logout();
     this.closeMenu();
   }
@@ -120,14 +95,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
   navigateTo(route: string): void {
     this.router.navigate([route]);
     this.closeMenu();
-  }
-
-  /**
-   * Get user display name
-   * @returns Display name or email
-   */
-  getUserDisplayName(): string {
-    if (!this.currentUser) return '';
-    return this.currentUser.firstName || this.currentUser.email.split('@')[0];
   }
 }

@@ -1,103 +1,116 @@
-<!-- Login Page Component -->
+<!-- Login Component -->
 <div class="login-page">
   <div class="container">
     <div class="login-wrapper">
-      <!-- Left Box - New Customers -->
-      <div class="login-box new-customers-box">
-        <h2 class="box-title">NEW CUSTOMERS</h2>
-        <p class="box-description">
-          By creating an account with our store, you will be able to move through
-          the checkout process faster, store multiple shipping addresses, view and
-          track your orders in your account and more.
-        </p>
-        <button 
-          class="btn btn-primary create-account-btn" 
-          (click)="showRegister()"
-          [disabled]="showRegisterModal"
-        >
-          Create an Account
-        </button>
-        <span class="flag flag-1">1</span>
-      </div>
+      <!-- Login Card -->
+      <div class="login-card">
+        <h1 class="login-title">Welcome Back!</h1>
+        <p class="login-subtitle">Please login to your account</p>
 
-      <!-- Right Box - Registered Customers -->
-      <div class="login-box registered-customers-box">
-        <h2 class="box-title">REGISTERED CUSTOMERS</h2>
-        
-        <!-- Success Message -->
-        <div class="success-message" *ngIf="registrationSuccess">
-          <p>Registration successful! Please log in with your new account.</p>
+        <!-- Error Message -->
+        <div class="alert alert-error" *ngIf="error">
+          <strong>Login Failed:</strong> {{ error }}
+          <div *ngIf="error.includes('Cannot connect to server')" class="error-details">
+            <p>Please make sure:</p>
+            <ul>
+              <li>The backend server is running on port 3000</li>
+              <li>You have MongoDB installed and running</li>
+              <li>Run 'npm start' in the backend folder</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Success Message for New Users -->
+        <div class="alert alert-info" *ngIf="showRegisterHint">
+          <p>No account yet? <a routerLink="/register">Click here to register</a></p>
         </div>
 
         <!-- Login Form -->
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <p class="form-intro">If you have an account with us, please log in.</p>
-
           <!-- Email Field -->
-          <div class="form-group" [class.has-error]="hasError('email')">
-            <label for="email" class="form-label">
-              Email Address <span class="required">*</span>
-            </label>
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
             <input
               type="email"
               id="email"
               class="form-control"
-              formControlName="email"
-              placeholder="your@email.com"
               [class.error]="hasError('email')"
+              formControlName="email"
+              placeholder="Enter your email"
+              autocomplete="email"
             />
             <span class="form-error" *ngIf="hasError('email')">
-              This is a required field.
+              {{ getErrorMessage('email') }}
             </span>
           </div>
 
           <!-- Password Field -->
-          <div class="form-group" [class.has-error]="hasError('password')">
-            <label for="password" class="form-label">
-              Password <span class="required">*</span>
-            </label>
-            <input
-              type="password"
-              id="password"
-              class="form-control"
-              formControlName="password"
-              placeholder="••••••"
-              [class.error]="hasError('password')"
-            />
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <div class="password-input-wrapper">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                class="form-control"
+                [class.error]="hasError('password')"
+                formControlName="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePasswordVisibility()"
+                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+              >
+                <span class="icon">{{ showPassword ? '👁️' : '👁️‍🗨️' }}</span>
+              </button>
+            </div>
             <span class="form-error" *ngIf="hasError('password')">
-              This is a required field.
+              {{ getErrorMessage('password') }}
             </span>
           </div>
 
-          <!-- Error Message -->
-          <div class="login-error" *ngIf="loginError">
-            {{ loginError }}
-          </div>
-
-          <!-- Required Fields Note -->
-          <p class="required-note"><span class="required">*</span> Required Fields</p>
-
           <!-- Submit Button -->
-          <button 
-            type="submit" 
-            class="btn btn-primary login-btn"
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
             [disabled]="isLoading"
           >
             <span *ngIf="!isLoading">Login</span>
-            <app-spinner *ngIf="isLoading" [size]="'small'" [color]="'white'"></app-spinner>
+            <span *ngIf="isLoading">Logging in...</span>
           </button>
         </form>
 
-        <!-- Flag for error state demo -->
-        <span class="flag flag-4" *ngIf="loginForm.invalid && loginForm.touched">4</span>
+        <!-- Register Link -->
+        <div class="register-link">
+          <p>Don't have an account?</p>
+          <a routerLink="/register" class="link">Create Account</a>
+        </div>
+      </div>
+
+      <!-- Features Section -->
+      <div class="features-section">
+        <h2>Why Create an Account?</h2>
+        <ul class="features-list">
+          <li>
+            <span class="icon">❤️</span>
+            <span>Save your favorite albums to wishlist</span>
+          </li>
+          <li>
+            <span class="icon">📦</span>
+            <span>Track your orders easily</span>
+          </li>
+          <li>
+            <span class="icon">🚚</span>
+            <span>Faster checkout with saved information</span>
+          </li>
+          <li>
+            <span class="icon">🎵</span>
+            <span>Get personalized recommendations</span>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
-
-  <!-- Registration Modal -->
-  <app-register
-    *ngIf="showRegisterModal"
-    (registrationComplete)="onRegistrationComplete($event)"
-    (cancel)="onRegistrationCancel()"
-  ></app-register>
 </div>

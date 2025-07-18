@@ -1,103 +1,103 @@
 /**
  * Register Component
- * Modal for user registration
+ * Handles user registration
  */
 
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  AbstractControl,
-} from "@angular/forms";
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from "@angular/forms";
+import { RouterModule, Router } from "@angular/router";
 import { AuthService } from "../../../services/auth.service";
-import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 
 @Component({
   selector: "app-register",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.css"],
 })
 export class RegisterComponent implements OnInit {
-  @Output() registrationComplete = new EventEmitter<string>();
-  @Output() cancel = new EventEmitter<void>();
-
   registerForm!: FormGroup;
   isLoading = false;
-  registrationError = "";
-  isSuccess = false;
+  error: string | null = null;
+  showPassword = false;
+  showConfirmPassword = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.registerForm = this.fb.group(
-      {
-        firstName: [
-          "",
-          [
-            Validators.required,
-            Validators.minLength(2),
-            Validators.maxLength(12),
-          ],
-        ],
-        lastName: [
-          "",
-          [
-            Validators.required,
-            Validators.minLength(2),
-            Validators.maxLength(12),
-          ],
-        ],
-        email: ["", [Validators.required, Validators.email]],
-        password: [
-          "",
-          [
-            Validators.required,
-            Validators.minLength(6),
-            this.passwordValidator,
-          ],
-        ],
-        confirmPassword: ["", [Validators.required]],
-      },
-      {
-        validators: this.passwordMatchValidator,
-      }
-    );
+    // Initialize form with validators
+    this.registerForm = this.formBuilder.group({
+      firstName: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(12),
+        Validators.pattern(/^[a-zA-Z\s]*$/)
+      ]],
+      lastName: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(12),
+        Validators.pattern(/^[a-zA-Z\s]*$/)
+      ]],
+      email: ['', [
+        Validators.required,
+        Validators.email
+      ]],
+      password: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        this.passwordValidator
+      ]],
+      confirmPassword: ['', [
+        Validators.required
+      ]]
+    }, {
+      validators: this.passwordMatchValidator
+    });
   }
 
   /**
-   * Password validator - must contain at least one uppercase letter
+   * Custom password validator
    */
-  passwordValidator(control: AbstractControl): { [key: string]: boolean } | null {
+  passwordValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
-    if (!value) return null;
+    if (!value) {
+      return null;
+    }
 
     const hasUpperCase = /[A-Z]/.test(value);
-    return hasUpperCase ? null : { noUpperCase: true };
+    if (!hasUpperCase) {
+      return { uppercase: true };
+    }
+
+    return null;
   }
 
   /**
    * Password match validator
    */
-  passwordMatchValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    const password = control.get("password");
-    const confirmPassword = control.get("confirmPassword");
+  passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const password = group.get('password');
+    const confirmPassword = group.get('confirmPassword');
 
-    if (!password || !confirmPassword) return null;
+    if (!password || !confirmPassword) {
+      return null;
+    }
 
     if (password.value !== confirmPassword.value) {
-      confirmPassword.setErrors({ passwordMismatch: true });
-      return { passwordMismatch: true };
+      confirmPassword.setErrors({ mismatch: true });
+      return { mismatch: true };
     } else {
-      // Clear error if passwords match
+      // Clear mismatch error if passwords match
       const errors = confirmPassword.errors;
       if (errors) {
-        delete errors["passwordMismatch"];
-        confirmPassword.setErrors(Object.keys(errors).length === 0 ? null : errors);
+        delete errors['mismatch'];
+        confirmPassword.setErrors(Object.keys(errors).length ? errors : null);
       }
     }
 
@@ -108,122 +108,106 @@ export class RegisterComponent implements OnInit {
    * Handle form submission
    */
   onSubmit(): void {
-    // Mark all fields as touched
-    this.markFormGroupTouched(this.registerForm);
-
     if (this.registerForm.invalid) {
+      this.markFormGroupTouched(this.registerForm);
       return;
     }
 
     this.isLoading = true;
-    this.registrationError = "";
+    this.error = null;
 
-    // Remove confirmPassword from submission data
+    // Remove confirmPassword before sending to API
     const { confirmPassword, ...registrationData } = this.registerForm.value;
 
     this.authService.register(registrationData).subscribe({
       next: (response) => {
         this.isLoading = false;
-        this.isSuccess = true;
-
-        // Show success message briefly
-        setTimeout(() => {
-          this.registrationComplete.emit(registrationData.email);
-        }, 2000);
+        // Navigate to home after successful registration
+        this.router.navigate(['/']);
       },
       error: (error) => {
         this.isLoading = false;
-        this.registrationError =
-          error.error?.message || "Registration failed. Please try again.";
-      },
+        this.error = error.message || 'Registration failed. Please try again.';
+      }
     });
   }
 
   /**
-   * Close modal
+   * Toggle password visibility
    */
-  onCancel(): void {
-    if (!this.isLoading) {
-      this.cancel.emit();
+  togglePasswordVisibility(field: 'password' | 'confirmPassword'): void {
+    if (field === 'password') {
+      this.showPassword = !this.showPassword;
+    } else {
+      this.showConfirmPassword = !this.showConfirmPassword;
     }
   }
 
   /**
-   * Mark all fields as touched
+   * Mark all form fields as touched
    */
   private markFormGroupTouched(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach((key) => {
+    Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
       control?.markAsTouched();
     });
   }
 
   /**
+   * Get form control
+   */
+  get f() {
+    return this.registerForm.controls;
+  }
+
+  /**
    * Check if field has error
    */
-  hasError(fieldName: string, errorType?: string): boolean {
-    const field = this.registerForm.get(fieldName);
-    if (!field) return false;
-
-    if (errorType) {
-      return field.hasError(errorType) && (field.dirty || field.touched);
-    }
-
-    return field.invalid && (field.dirty || field.touched);
+  hasError(field: string): boolean {
+    const control = this.registerForm.get(field);
+    return !!(control && control.invalid && (control.dirty || control.touched));
   }
 
   /**
    * Get error message for field
    */
-  getErrorMessage(fieldName: string): string {
-    const field = this.registerForm.get(fieldName);
-    if (!field || !field.errors) return "";
-
-    switch (fieldName) {
-      case "firstName":
-      case "lastName":
-        if (field.hasError("required")) {
-          return `${fieldName === "firstName" ? "First" : "Last"} name is required`;
-        }
-        if (field.hasError("minlength")) {
-          return `Must be at least 2 characters`;
-        }
-        if (field.hasError("maxlength")) {
-          return `Cannot exceed 12 characters`;
-        }
-        break;
-
-      case "email":
-        if (field.hasError("required")) {
-          return "Email is required";
-        }
-        if (field.hasError("email")) {
-          return "Please enter a valid email address";
-        }
-        break;
-
-      case "password":
-        if (field.hasError("required")) {
-          return "Password is required";
-        }
-        if (field.hasError("minlength")) {
-          return "Password must be at least 6 characters";
-        }
-        if (field.hasError("noUpperCase")) {
-          return "Password must contain at least one uppercase letter";
-        }
-        break;
-
-      case "confirmPassword":
-        if (field.hasError("required")) {
-          return "Please confirm your password";
-        }
-        if (field.hasError("passwordMismatch")) {
-          return "Passwords do not match";
-        }
-        break;
+  getErrorMessage(field: string): string {
+    const control = this.registerForm.get(field);
+    if (control?.errors) {
+      if (control.errors['required']) {
+        return `${this.formatFieldName(field)} is required`;
+      }
+      if (control.errors['email']) {
+        return 'Please enter a valid email';
+      }
+      if (control.errors['minlength']) {
+        const minLength = control.errors['minlength'].requiredLength;
+        return `${this.formatFieldName(field)} must be at least ${minLength} characters`;
+      }
+      if (control.errors['maxlength']) {
+        const maxLength = control.errors['maxlength'].requiredLength;
+        return `${this.formatFieldName(field)} cannot exceed ${maxLength} characters`;
+      }
+      if (control.errors['pattern']) {
+        return `${this.formatFieldName(field)} can only contain letters`;
+      }
+      if (control.errors['uppercase']) {
+        return 'Password must contain at least one uppercase letter';
+      }
+      if (control.errors['mismatch']) {
+        return 'Passwords do not match';
+      }
     }
+    return '';
+  }
 
-    return "";
+  /**
+   * Format field name for display
+   */
+  private formatFieldName(field: string): string {
+    return field
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase())
+      .trim();
   }
 }

@@ -1,154 +1,147 @@
-<!-- Registration Modal Component -->
-<div class="modal-overlay" (click)="onCancel()">
-  <div 
-    class="modal-container" 
-    (click)="$event.stopPropagation()"
-    [class.loading]="isLoading"
-    [class.success]="isSuccess"
-  >
-    <!-- Close Button -->
-    <button 
-      class="close-btn" 
-      (click)="onCancel()"
-      [disabled]="isLoading"
-      type="button"
-    >
-      ×
-    </button>
+<!-- Register Component -->
+<div class="register-page">
+  <div class="container">
+    <div class="register-wrapper">
+      <!-- Register Card -->
+      <div class="register-card">
+        <h1 class="register-title">Create Account</h1>
+        <p class="register-subtitle">Join us and start shopping for your favorite music!</p>
 
-    <!-- Success State -->
-    <div class="success-content" *ngIf="isSuccess">
-      <div class="success-icon">✓</div>
-      <h2 class="success-title">Registration Successful!</h2>
-      <p class="success-message">Your account has been created successfully.</p>
-    </div>
-
-    <!-- Registration Form -->
-    <div class="form-content" *ngIf="!isSuccess">
-      <h2 class="modal-title">Registration</h2>
-      
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <!-- Profile Information Section -->
-        <div class="form-section">
-          <h3 class="section-title">Profile Informations</h3>
-          
-          <!-- First Name -->
-          <div class="form-group" [class.has-error]="hasError('firstName')">
-            <input
-              type="text"
-              class="form-control"
-              formControlName="firstName"
-              placeholder="First Name"
-              [class.error]="hasError('firstName')"
-            />
-            <span class="form-error" *ngIf="hasError('firstName')">
-              {{ getErrorMessage('firstName') }}
-            </span>
-          </div>
-
-          <!-- Last Name -->
-          <div class="form-group" [class.has-error]="hasError('lastName')">
-            <input
-              type="text"
-              class="form-control"
-              formControlName="lastName"
-              placeholder="Last Name"
-              [class.error]="hasError('lastName')"
-            />
-            <span class="form-error" *ngIf="hasError('lastName')">
-              {{ getErrorMessage('lastName') }}
-            </span>
-          </div>
-
-          <!-- Required Fields Note -->
-          <p class="required-note">
-            First name is required<span class="required">!</span><br>
-            Last name is required<span class="required">!</span>
-          </p>
+        <!-- Error Message -->
+        <div class="alert alert-error" *ngIf="error">
+          {{ error }}
         </div>
 
-        <!-- Login Data Section -->
-        <div class="form-section">
-          <h3 class="section-title">Login Datas</h3>
-          
-          <!-- Email -->
-          <div class="form-group" [class.has-error]="hasError('email')">
+        <!-- Register Form -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <!-- Name Fields Row -->
+          <div class="form-row">
+            <!-- First Name -->
+            <div class="form-group">
+              <label class="form-label" for="firstName">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                class="form-control"
+                [class.error]="hasError('firstName')"
+                formControlName="firstName"
+                placeholder="John"
+                autocomplete="given-name"
+              />
+              <span class="form-error" *ngIf="hasError('firstName')">
+                {{ getErrorMessage('firstName') }}
+              </span>
+            </div>
+
+            <!-- Last Name -->
+            <div class="form-group">
+              <label class="form-label" for="lastName">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                class="form-control"
+                [class.error]="hasError('lastName')"
+                formControlName="lastName"
+                placeholder="Doe"
+                autocomplete="family-name"
+              />
+              <span class="form-error" *ngIf="hasError('lastName')">
+                {{ getErrorMessage('lastName') }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
             <input
               type="email"
+              id="email"
               class="form-control"
-              formControlName="email"
-              placeholder="E-mail address"
               [class.error]="hasError('email')"
+              formControlName="email"
+              placeholder="john.doe@example.com"
+              autocomplete="email"
             />
             <span class="form-error" *ngIf="hasError('email')">
               {{ getErrorMessage('email') }}
             </span>
           </div>
 
-          <!-- Password -->
-          <div class="form-group" [class.has-error]="hasError('password')">
-            <input
-              type="password"
-              class="form-control"
-              formControlName="password"
-              placeholder="Password"
-              [class.error]="hasError('password')"
-            />
+          <!-- Password Field -->
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <div class="password-input-wrapper">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                class="form-control"
+                [class.error]="hasError('password')"
+                formControlName="password"
+                placeholder="Enter password"
+                autocomplete="new-password"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePasswordVisibility('password')"
+                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+              >
+                <span class="icon">{{ showPassword ? '👁️' : '👁️‍🗨️' }}</span>
+              </button>
+            </div>
             <span class="form-error" *ngIf="hasError('password')">
               {{ getErrorMessage('password') }}
             </span>
+            <div class="password-requirements">
+              <small>Password must be at least 6 characters and contain one uppercase letter</small>
+            </div>
           </div>
 
-          <!-- Confirm Password -->
-          <div class="form-group" [class.has-error]="hasError('confirmPassword')">
-            <input
-              type="password"
-              class="form-control"
-              formControlName="confirmPassword"
-              placeholder="Password confirmation"
-              [class.error]="hasError('confirmPassword')"
-            />
+          <!-- Confirm Password Field -->
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword">Confirm Password</label>
+            <div class="password-input-wrapper">
+              <input
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                id="confirmPassword"
+                class="form-control"
+                [class.error]="hasError('confirmPassword')"
+                formControlName="confirmPassword"
+                placeholder="Confirm password"
+                autocomplete="new-password"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePasswordVisibility('confirmPassword')"
+                [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'"
+              >
+                <span class="icon">{{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}</span>
+              </button>
+            </div>
             <span class="form-error" *ngIf="hasError('confirmPassword')">
               {{ getErrorMessage('confirmPassword') }}
             </span>
           </div>
 
-          <!-- Required Fields Note -->
-          <p class="required-note">
-            Email address is required<span class="required">!</span><br>
-            Password is required<span class="required">!</span>
-          </p>
-        </div>
-
-        <!-- Error Message -->
-        <div class="registration-error" *ngIf="registrationError">
-          {{ registrationError }}
-        </div>
-
-        <!-- Submit Button -->
-        <button 
-          type="submit" 
-          class="btn btn-primary register-btn"
-          [disabled]="isLoading"
-        >
-          Register
-        </button>
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            [disabled]="isLoading"
+          >
+            <span *ngIf="!isLoading">Create Account</span>
+            <span *ngIf="isLoading">Creating Account...</span>
+          </button>
+        </form>
 
         <!-- Login Link -->
-        <p class="login-link">
-          or <a href="#" (click)="onCancel(); $event.preventDefault()">login</a>
-        </p>
-      </form>
+        <div class="login-link">
+          <p>Already have an account?</p>
+          <a routerLink="/login" class="link">Login</a>
+        </div>
+      </div>
     </div>
-
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" *ngIf="isLoading">
-      <app-spinner [size]="'medium'"></app-spinner>
-    </div>
-
-    <!-- Flags for demo purposes -->
-    <span class="flag flag-3">3</span>
-    <span class="flag flag-5" *ngIf="registerForm.invalid && registerForm.touched">5</span>
-    <span class="flag flag-6" *ngIf="isLoading">6</span>
   </div>
 </div>
