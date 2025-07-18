@@ -1,101 +1,133 @@
+/**
+ * Wishlist Service
+ * Handles wishlist operations
+ */
+
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { tap, delay } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { tap, catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { Album, ApiResponse } from '../models/album.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WishlistService {
-  private wishlistKey = 'music_store_wishlist';
+  private apiUrl = `${environment.apiUrl}/wishlist`;
   private wishlistSubject = new BehaviorSubject<string[]>([]);
   public wishlist$ = this.wishlistSubject.asObservable();
 
-  constructor() {
-    this.loadWishlist();
-  }
-
-  /**
-   * Load wishlist from localStorage
-   */
-  private loadWishlist(): void {
-    const wishlistStr = localStorage.getItem(this.wishlistKey);
-    if (wishlistStr) {
-      try {
-        const wishlist = JSON.parse(wishlistStr);
-        this.wishlistSubject.next(wishlist);
-      } catch (error) {
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {
+    // Initialize wishlist when user logs in
+    this.authService.currentUser$.subscribe(user => {
+      if (user && user.wishlist) {
+        this.wishlistSubject.next(user.wishlist);
+      } else {
         this.wishlistSubject.next([]);
       }
-    }
+    });
   }
 
   /**
-   * Save wishlist to localStorage
+   * Get user's wishlist albums
+   * @returns Observable of albums array
    */
-  private saveWishlist(wishlist: string[]): void {
-    localStorage.setItem(this.wishlistKey, JSON.stringify(wishlist));
-    this.wishlistSubject.next(wishlist);
+  getWishlist(): Observable<Album[]> {
+    return this.http.get<ApiResponse<Album[]>>(this.apiUrl).pipe(
+      map(response => response.data || []),
+      tap(albums => {
+        // Update wishlist IDs
+        const albumIds = albums.map(album => album._id);
+        this.wishlistSubject.next(albumIds);
+      }),
+      catchError(this.handleError)
+    );
   }
 
   /**
-   * Get current wishlist
+   * Add album to wishlist
+   * @param albumId Album ID to add
+   * @returns Observable of updated wishlist
    */
-  getWishlist(): string[] {
-    return this.wishlistSubject.value;
+  addToWishlist(albumId: string): Observable<string[]> {
+    return this.http.post<ApiResponse<{ wishlist: string[] }>>(
+      `${this.apiUrl}/${albumId}`,
+      {}
+    ).pipe(
+      map(response => response.data?.wishlist || []),
+      tap(wishlist => {
+        this.wishlistSubject.next(wishlist);
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Remove album from wishlist
+   * @param albumId Album ID to remove
+   * @returns Observable of updated wishlist
+   */
+  removeFromWishlist(albumId: string): Observable<string[]> {
+    return this.http.delete<ApiResponse<{ wishlist: string[] }>>(
+      `${this.apiUrl}/${albumId}`
+    ).pipe(
+      map(response => response.data?.wishlist || []),
+      tap(wishlist => {
+        this.wishlistSubject.next(wishlist);
+      }),
+      catchError(this.handleError)
+    );
   }
 
   /**
    * Check if album is in wishlist
+   * @param albumId Album ID to check
+   * @returns true if in wishlist
    */
   isInWishlist(albumId: string): boolean {
     return this.wishlistSubject.value.includes(albumId);
   }
 
   /**
-   * Add album to wishlist
+   * Toggle album in wishlist
+   * @param albumId Album ID to toggle
+   * @returns Observable of updated wishlist
    */
-  addToWishlist(albumId: string): Observable<void> {
-    return of(undefined).pipe(
-      delay(300),
-      tap(() => {
-        const currentWishlist = this.wishlistSubject.value;
-        if (!currentWishlist.includes(albumId)) {
-          this.saveWishlist([...currentWishlist, albumId]);
-        }
-      })
-    );
-  }
-
-  /**
-   * Remove album from wishlist
-   */
-  removeFromWishlist(albumId: string): Observable<void> {
-    return of(undefined).pipe(
-      delay(300),
-      tap(() => {
-        const currentWishlist = this.wishlistSubject.value;
-        const updatedWishlist = currentWishlist.filter(id => id !== albumId);
-        this.saveWishlist(updatedWishlist);
-      })
-    );
-  }
-
-  /**
-   * Clear wishlist
-   */
-  clearWishlist(): Observable<void> {
-    return of(undefined).pipe(
-      delay(300),
-      tap(() => {
-        this.saveWishlist([]);
-      })
-    );
+  toggleWishlist(albumId: string): Observable<string[]> {
+    if (this.isInWishlist(albumId)) {
+      return this.removeFromWishlist(albumId);
+    } else {
+      return this.addToWishlist(albumId);
+    }
   }
 
   /**
    * Get wishlist count
+   * @returns Current wishlist count
    */
   getWishlistCount(): number {
     return this.wishlistSubject.value.length;
+  }
+
+  /**
+   * Clear local wishlist (used on logout)
+   */
+  clearWishlist(): void {
+    this.wishlistSubject.next([]);
+  }
+
+  /**
+   * Handle HTTP errors
+   * @param error HTTP error response
+   * @returns Observable error
+   */
+  private handleError(error: any): Observable<never> {
+    console.error('Wishlist service error:', error);
+    return throwError(() => error);
   }
 }

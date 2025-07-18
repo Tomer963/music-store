@@ -1,0 +1,73 @@
+<!-- Wishlist Page Component -->
+<div class="wishlist-page">
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <app-spinner></app-spinner>
+  </div>
+
+  <!-- Main Content -->
+  <div class="wishlist-content" *ngIf="!isLoading">
+    <div class="container">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1 class="page-title">My Wishlist</h1>
+        <p class="page-subtitle" *ngIf="isLoggedIn && wishlistAlbums.length > 0">
+          You have {{ wishlistAlbums.length }} album<span *ngIf="wishlistAlbums.length > 1">s</span> in your wishlist
+        </p>
+      </div>
+
+      <!-- Not Logged In State -->
+      <div class="auth-prompt" *ngIf="!isLoggedIn">
+        <div class="auth-card">
+          <div class="auth-icon">❤️</div>
+          <h2 class="auth-title">Sign in to view your wishlist</h2>
+          <p class="auth-message">
+            Create an account or log in to save your favorite albums and access them anytime.
+          </p>
+          <button class="btn btn-primary" (click)="goToLogin()">
+            Log In / Register
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty Wishlist State -->
+      <div class="empty-wishlist" *ngIf="isLoggedIn && wishlistAlbums.length === 0">
+        <div class="empty-card">
+          <div class="empty-icon">💔</div>
+          <h2 class="empty-title">Your wishlist is empty</h2>
+          <p class="empty-message">
+            Start exploring our music collection and add your favorite albums to your wishlist.
+          </p>
+          <button class="btn btn-primary" routerLink="/">
+            Browse Albums
+          </button>
+        </div>
+      </div>
+
+      <!-- Wishlist Grid -->
+      <div class="wishlist-grid" *ngIf="isLoggedIn && wishlistAlbums.length > 0">
+        <div class="album-wrapper" *ngFor="let album of wishlistAlbums; trackBy: trackByAlbum">
+          <div class="remove-btn-wrapper">
+            <button 
+              class="remove-btn" 
+              (click)="removeFromWishlist(album._id)"
+              title="Remove from wishlist"
+            >
+              ❌
+            </button>
+          </div>
+          <app-album-card
+            [album]="album"
+            [size]="'medium'"
+            [showInfo]="true"
+            [showPrice]="true"
+          >
+          </app-album-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+</div>
