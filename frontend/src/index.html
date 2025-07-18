@@ -4,20 +4,44 @@
     <meta charset="utf-8" />
     <title>Music Store - Your Online Music Shop</title>
     <base href="/" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Browse and purchase your favorite music albums online. Wide selection of genres including Rock, Jazz, Classical, and more."
-    />
-    <meta
-      name="keywords"
-      content="music, albums, online store, rock, jazz, classical, pop"
-    />
+    
+    <!-- Viewport and responsive meta tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#ff0000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- SEO Meta tags -->
+    <meta name="description" content="Browse and purchase your favorite music albums online. Wide selection of genres including Rock, Jazz, Classical, and more. Free shipping on orders over $50.">
+    <meta name="keywords" content="music, albums, online store, rock, jazz, classical, pop, vinyl, CD, digital music">
+    <meta name="author" content="Music Store">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Music Store - Your Online Music Shop">
+    <meta property="og:description" content="Browse and purchase your favorite music albums online. Wide selection of genres.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://musicstore.com">
+    <meta property="og:image" content="/assets/images/og-image.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Music Store - Your Online Music Shop">
+    <meta name="twitter:description" content="Browse and purchase your favorite music albums online.">
+    <meta name="twitter:image" content="/assets/images/twitter-card.jpg">
+    
+    <!-- Favicon and app icons -->
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
 
     <!-- Preconnect to improve performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
 
     <!-- Google Fonts -->
     <link
@@ -30,9 +54,34 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/assets/fonts/roboto-v30-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- No JavaScript fallback -->
+    <noscript>
+      <style>
+        .requires-js { display: none !important; }
+        .no-js-message {
+          display: block;
+          padding: 20px;
+          text-align: center;
+          background: #ff0000;
+          color: white;
+        }
+      </style>
+    </noscript>
   </head>
   <body>
     <app-root></app-root>
+
+    <!-- No JavaScript message -->
+    <noscript>
+      <div class="no-js-message">
+        <h1>JavaScript Required</h1>
+        <p>Please enable JavaScript in your browser to use the Music Store.</p>
+      </div>
+    </noscript>
 
     <!-- Loading screen shown before Angular loads -->
     <div id="initial-loader">
@@ -52,6 +101,7 @@
 
         .loader-content {
           text-align: center;
+          padding: 20px;
         }
 
         .music-note {
@@ -61,7 +111,7 @@
 
         .loader-text {
           margin-top: 20px;
-          font-family: "Roboto", sans-serif;
+          font-family: "Roboto", -apple-system, BlinkMacSystemFont, sans-serif;
           font-size: 18px;
           color: #333;
         }
@@ -80,9 +130,26 @@
             opacity: 1;
           }
         }
+
+        /* Responsive loader */
+        @media (max-width: 576px) {
+          .music-note {
+            font-size: 48px;
+          }
+          .loader-text {
+            font-size: 16px;
+          }
+        }
+
+        /* Reduce motion */
+        @media (prefers-reduced-motion: reduce) {
+          .music-note {
+            animation: none;
+          }
+        }
       </style>
       <div class="loader-content">
-        <div class="music-note">🎵</div>
+        <div class="music-note" role="img" aria-label="Loading">🎵</div>
         <div class="loader-text">Loading Music Store...</div>
       </div>
     </div>
@@ -90,6 +157,7 @@
     <script>
       // Remove loader when Angular is ready
       window.addEventListener("DOMContentLoaded", function () {
+        // Add a small delay to ensure smooth transition
         setTimeout(function () {
           const loader = document.getElementById("initial-loader");
           if (loader) {
@@ -101,6 +169,14 @@
           }
         }, 100);
       });
+
+      // Handle loader timeout (remove after 10 seconds regardless)
+      setTimeout(function() {
+        const loader = document.getElementById("initial-loader");
+        if (loader) {
+          loader.remove();
+        }
+      }, 10000);
     </script>
   </body>
 </html>

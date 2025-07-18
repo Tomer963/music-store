@@ -9,21 +9,30 @@
             routerLink="/"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
+            aria-label="Home"
           >
             Home
           </a>
         </li>
         <li class="nav-item" *ngIf="currentUser">
-          <a routerLink="/my-account" routerLinkActive="active"> My Account </a>
+          <a routerLink="/my-account" routerLinkActive="active" aria-label="My Account">
+            My Account
+          </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/wishlist" routerLinkActive="active"> My Wishlist </a>
+          <a routerLink="/wishlist" routerLinkActive="active" aria-label="My Wishlist">
+            My Wishlist
+          </a>
         </li>
         <li class="nav-item" *ngIf="!currentUser">
-          <a routerLink="/login" routerLinkActive="active"> Log In </a>
+          <a routerLink="/login" routerLinkActive="active" aria-label="Log In">
+            Log In
+          </a>
         </li>
         <li class="nav-item" *ngIf="currentUser">
-          <a href="#" (click)="logout(); $event.preventDefault()"> Logout </a>
+          <a href="#" (click)="logout(); $event.preventDefault()" aria-label="Logout">
+            Logout
+          </a>
         </li>
       </ul>
     </div>
@@ -35,56 +44,106 @@
       <div class="header-content">
         <!-- Logo -->
         <div class="logo">
-          <a routerLink="/" class="logo-link">
+          <a routerLink="/" class="logo-link" aria-label="Music Store Home">
             <span class="logo-text">MUSIC</span>
           </a>
         </div>
 
-        <!-- Search Box -->
-        <div class="search-wrapper">
+        <!-- Search Box (Desktop) -->
+        <div class="search-wrapper hide-mobile">
           <app-search-box></app-search-box>
         </div>
 
-        <!-- Cart Widget -->
+        <!-- Cart and User Info -->
         <div class="cart-wrapper">
           <div class="welcome-text" *ngIf="!currentUser">
             Welcome to our<br />online store!
           </div>
+          <div class="welcome-text" *ngIf="currentUser">
+            Hello, {{ currentUser.firstName }}!
+          </div>
+          
+          <!-- Cart Icon -->
           <div class="cart-icon-wrapper">
-            <button class="cart-button" routerLink="/checkout">
+            <button 
+              class="cart-button" 
+              routerLink="/checkout"
+              [attr.aria-label]="'Shopping cart with ' + cartItemCount + ' items'"
+            >
               <span class="cart-icon">🛒</span>
-              <span class="cart-count" *ngIf="cartItemCount > 0">{{
-                cartItemCount
-              }}</span>
+              <span class="cart-count" *ngIf="cartItemCount > 0" aria-live="polite">
+                {{ cartItemCount }}
+              </span>
             </button>
           </div>
         </div>
 
         <!-- Mobile Menu Toggle -->
-        <button class="menu-toggle" (click)="toggleMenu()">
+        <button 
+          class="menu-toggle" 
+          (click)="toggleMenu()"
+          [attr.aria-expanded]="isMenuOpen"
+          aria-label="Toggle navigation menu"
+        >
           <span class="menu-icon"></span>
         </button>
+      </div>
+
+      <!-- Mobile Search (Hidden by default) -->
+      <div class="mobile-search show-mobile">
+        <app-search-box></app-search-box>
       </div>
     </div>
   </div>
 
   <!-- Mobile Menu -->
-  <div class="mobile-menu" [class.open]="isMenuOpen">
+  <nav 
+    class="mobile-menu" 
+    [class.open]="isMenuOpen"
+    [attr.aria-hidden]="!isMenuOpen"
+    role="navigation"
+  >
     <div class="mobile-menu-content">
-      <button class="close-menu" (click)="closeMenu()">×</button>
+      <button 
+        class="close-menu" 
+        (click)="closeMenu()"
+        aria-label="Close navigation menu"
+      >
+        ×
+      </button>
+      
       <ul class="mobile-nav-list">
-        <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
-        <li *ngIf="currentUser">
-          <a routerLink="/my-account" (click)="closeMenu()">My Account</a>
+        <li>
+          <a routerLink="/" (click)="closeMenu()" routerLinkActive="active">
+            Home
+          </a>
         </li>
-        <li><a routerLink="/wishlist" (click)="closeMenu()">My Wishlist</a></li>
+        <li *ngIf="currentUser">
+          <a routerLink="/my-account" (click)="closeMenu()" routerLinkActive="active">
+            My Account
+          </a>
+        </li>
+        <li>
+          <a routerLink="/wishlist" (click)="closeMenu()" routerLinkActive="active">
+            My Wishlist
+          </a>
+        </li>
+        <li>
+          <a routerLink="/checkout" (click)="closeMenu()" routerLinkActive="active">
+            Shopping Cart ({{ cartItemCount }})
+          </a>
+        </li>
         <li *ngIf="!currentUser">
-          <a routerLink="/login" (click)="closeMenu()">Log In</a>
+          <a routerLink="/login" (click)="closeMenu()" routerLinkActive="active">
+            Log In
+          </a>
         </li>
         <li *ngIf="currentUser">
-          <a href="#" (click)="logout(); $event.preventDefault()">Logout</a>
+          <a href="#" (click)="logout(); $event.preventDefault()">
+            Logout
+          </a>
         </li>
       </ul>
     </div>
-  </div>
+  </nav>
 </header>
