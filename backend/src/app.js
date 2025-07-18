@@ -30,47 +30,34 @@ const app = express();
 // Security middleware
 app.use(helmet());
 
-// CORS configuration - FIXED FOR DEVELOPMENT
+// CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or Postman)
-    if (!origin) return callback(null, true);
-    
-    const allowedOrigins = [
-      'http://localhost:4200',
-      'http://localhost:3000',
-      'http://127.0.0.1:4200',
-      'http://127.0.0.1:3000'
-    ];
-    
-    // In production, use environment variable
-    if (process.env.ALLOWED_ORIGINS) {
-      const envOrigins = process.env.ALLOWED_ORIGINS.split(',');
-      allowedOrigins.push(...envOrigins);
-    }
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    // In development, allow all origins
+    if (process.env.NODE_ENV === 'development') {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      // In production, check against allowed origins
+      const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || ["http://localhost:3000"];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-session-id'],
-  exposedHeaders: ['x-session-id'],
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
 };
-
 app.use(cors(corsOptions));
 
-// Rate limiting
+// Rate limiting - with higher limits for development
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 1000,
   message: "Too many requests from this IP, please try again later.",
 });
-// app.use("/api", limiter);
+app.use("/api", limiter);
 
 // Body parsing middleware
 app.use(express.json());

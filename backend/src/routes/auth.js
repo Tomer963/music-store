@@ -11,6 +11,13 @@ import { registerValidation, loginValidation } from "../utils/validators.js";
 
 const router = Router();
 
+// Debug middleware
+router.use((req, res, next) => {
+  console.log(`Auth route: ${req.method} ${req.path}`);
+  console.log('Body:', req.body);
+  next();
+});
+
 // Public routes
 router.post(
   "/register",

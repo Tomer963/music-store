@@ -1,25 +1,14 @@
-/**
- * Authentication Service
- * Handles user authentication, registration, and session management
- */
-
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { BehaviorSubject, Observable, throwError, of } from "rxjs";
-import { tap, catchError, map } from "rxjs/operators";
-import { environment } from "../environments/environment";
-import {
-  User,
-  AuthResponse,
-  LoginCredentials,
-  RegistrationData,
-  TokenPayload,
-} from "../models/user.model";
-import { ApiResponse } from "../models/album.model";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
+import { tap, catchError, map } from 'rxjs/operators';
+import { environment } from '../environments/environment';
+import { User, AuthResponse, LoginCredentials, RegistrationData, TokenPayload } from '../models/user.model';
+import { ApiResponse } from '../models/album.model';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
@@ -35,8 +24,10 @@ export class AuthService {
   initializeAuth(): void {
     const token = this.getToken();
     if (token && !this.isTokenExpired(token)) {
+      // Only try to load profile if we have a valid token
       this.loadUserProfile();
     } else {
+      // Clear any invalid token
       this.clearAuth();
     }
   }
@@ -50,12 +41,7 @@ export class AuthService {
     return this.http
       .post<ApiResponse<AuthResponse>>(`${this.apiUrl}/register`, data)
       .pipe(
-        map((response) => {
-          if (!response.success || !response.data) {
-            throw new Error(response.message || 'Registration failed');
-          }
-          return response.data;
-        }),
+        map((response) => response.data!),
         tap((authData) => {
           this.setAuthData(authData);
         }),
@@ -72,12 +58,7 @@ export class AuthService {
     return this.http
       .post<ApiResponse<AuthResponse>>(`${this.apiUrl}/login`, credentials)
       .pipe(
-        map((response) => {
-          if (!response.success || !response.data) {
-            throw new Error(response.message || 'Invalid email or password');
-          }
-          return response.data;
-        }),
+        map((response) => response.data!),
         tap((authData) => {
           this.setAuthData(authData);
         }),
@@ -89,17 +70,18 @@ export class AuthService {
    * Logout user
    */
   logout(): void {
-    // Call logout endpoint
+    // Clear local auth first
+    this.clearAuth();
+    
+    // Then notify the server (but don't wait for response)
     this.http.get(`${this.apiUrl}/logout`).subscribe({
-      next: () => {
-        this.clearAuth();
-        this.router.navigate(["/"]);
+      complete: () => {
+        this.router.navigate(['/']);
       },
       error: () => {
-        // Even if logout fails, clear local auth
-        this.clearAuth();
-        this.router.navigate(["/"]);
-      },
+        // Still navigate even if logout endpoint fails
+        this.router.navigate(['/']);
+      }
     });
   }
 
@@ -109,16 +91,15 @@ export class AuthService {
    */
   getProfile(): Observable<User> {
     return this.http.get<ApiResponse<User>>(`${this.apiUrl}/profile`).pipe(
-      map((response) => {
-        if (!response.success || !response.data) {
-          throw new Error('Failed to load profile');
-        }
-        return response.data;
-      }),
+      map((response) => response.data!),
       tap((user) => {
         this.currentUserSubject.next(user);
       }),
-      catchError(this.handleError)
+      catchError((error) => {
+        // If profile fetch fails, clear auth
+        this.clearAuth();
+        return throwError(() => error);
+      })
     );
   }
 
@@ -161,7 +142,6 @@ export class AuthService {
    */
   private clearAuth(): void {
     localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(environment.sessionIdKey); // Clear session ID too
     this.currentUserSubject.next(null);
   }
 
@@ -173,9 +153,11 @@ export class AuthService {
       next: (user) => {
         this.currentUserSubject.next(user);
       },
-      error: () => {
-        this.clearAuth();
-      },
+      error: (error) => {
+        console.warn('Failed to load user profile:', error);
+        // Don't clear auth here - token might still be valid
+        // Let the error interceptor handle 401s
+      }
     });
   }
 
@@ -200,15 +182,19 @@ export class AuthService {
    * @returns Token payload
    */
   private decodeToken(token: string): TokenPayload {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      throw new Error('Invalid token format');
+    }
   }
 
   /**
@@ -217,27 +203,15 @@ export class AuthService {
    * @returns Observable error
    */
   private handleError(error: any): Observable<never> {
-    console.error("Auth error:", error);
+    console.error('Auth error:', error);
     
-    // Extract meaningful error message
-    let errorMessage = "An error occurred";
-    
-    if (error.error?.message) {
-      errorMessage = error.error.message;
-    } else if (error.error?.errors && Array.isArray(error.error.errors)) {
-      errorMessage = error.error.errors.map((e: any) => e.message || e.field || e).join(", ");
-    } else if (error.message) {
-      errorMessage = error.message;
-    } else if (error.status === 401) {
-      errorMessage = "Invalid email or password";
-    } else if (error.status === 0) {
-      errorMessage = "Cannot connect to server. Please make sure the backend is running.";
-    }
-    
-    return throwError(() => ({
+    // Extract error details
+    let errorDetails = {
       status: error.status,
-      message: errorMessage,
+      message: error.error?.message || error.message || 'An error occurred',
       error: error.error
-    }));
+    };
+    
+    return throwError(() => errorDetails);
   }
 }

@@ -34,12 +34,16 @@ export const paginate = async (query, page = 1, limit = 12) => {
  * @param {boolean} success - Success status
  * @param {string} message - Response message
  * @param {any} data - Response data
+ * @param {any} errors - Validation errors
  * @returns {Object} Formatted response
  */
-export const formatResponse = (success, message, data = null) => {
+export const formatResponse = (success, message, data = null, errors = null) => {
   const response = { success, message };
   if (data !== null) {
     response.data = data;
+  }
+  if (errors !== null) {
+    response.errors = errors;
   }
   return response;
 };

@@ -3,46 +3,50 @@
  * Handles user registration
  */
 
-import { Component, OnInit } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from "@angular/forms";
-import { RouterModule, Router } from "@angular/router";
-import { AuthService } from "../../../services/auth.service";
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { RegistrationData } from '../../../models/user.model';
 
 @Component({
-  selector: "app-register",
+  selector: 'app-register',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.css"],
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   isLoading = false;
-  error: string | null = null;
-  showPassword = false;
-  showConfirmPassword = false;
+  errorMessage = '';
+  validationErrors: any = {};
 
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Initialize form with validators
-    this.registerForm = this.formBuilder.group({
+    this.initializeForm();
+  }
+
+  /**
+   * Initialize registration form
+   */
+  private initializeForm(): void {
+    this.registerForm = this.fb.group({
       firstName: ['', [
         Validators.required,
         Validators.minLength(2),
-        Validators.maxLength(12),
-        Validators.pattern(/^[a-zA-Z\s]*$/)
+        Validators.maxLength(12)
       ]],
       lastName: ['', [
         Validators.required,
         Validators.minLength(2),
-        Validators.maxLength(12),
-        Validators.pattern(/^[a-zA-Z\s]*$/)
+        Validators.maxLength(12)
       ]],
       email: ['', [
         Validators.required,
@@ -51,37 +55,18 @@ export class RegisterComponent implements OnInit {
       password: ['', [
         Validators.required,
         Validators.minLength(6),
-        this.passwordValidator
+        Validators.pattern(/[A-Z]/) // At least one uppercase letter
       ]],
       confirmPassword: ['', [
         Validators.required
       ]]
-    }, {
-      validators: this.passwordMatchValidator
-    });
+    }, { validators: this.passwordMatchValidator });
   }
 
   /**
-   * Custom password validator
+   * Custom validator for password match
    */
-  passwordValidator(control: AbstractControl): ValidationErrors | null {
-    const value = control.value;
-    if (!value) {
-      return null;
-    }
-
-    const hasUpperCase = /[A-Z]/.test(value);
-    if (!hasUpperCase) {
-      return { uppercase: true };
-    }
-
-    return null;
-  }
-
-  /**
-   * Password match validator
-   */
-  passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
+  private passwordMatchValidator(group: FormGroup): {[key: string]: any} | null {
     const password = group.get('password');
     const confirmPassword = group.get('confirmPassword');
 
@@ -89,125 +74,140 @@ export class RegisterComponent implements OnInit {
       return null;
     }
 
-    if (password.value !== confirmPassword.value) {
-      confirmPassword.setErrors({ mismatch: true });
-      return { mismatch: true };
-    } else {
-      // Clear mismatch error if passwords match
-      const errors = confirmPassword.errors;
-      if (errors) {
-        delete errors['mismatch'];
-        confirmPassword.setErrors(Object.keys(errors).length ? errors : null);
-      }
-    }
-
-    return null;
+    return password.value === confirmPassword.value 
+      ? null 
+      : { passwordMismatch: true };
   }
 
   /**
    * Handle form submission
    */
   onSubmit(): void {
+    console.log('Form valid?', this.registerForm.valid);
+    console.log('Form errors:', this.registerForm.errors);
+    console.log('Form values:', this.registerForm.value);
+    
     if (this.registerForm.invalid) {
       this.markFormGroupTouched(this.registerForm);
       return;
     }
 
     this.isLoading = true;
-    this.error = null;
+    this.errorMessage = '';
+    this.validationErrors = {};
 
-    // Remove confirmPassword before sending to API
+    // Extract form values and remove confirmPassword
     const { confirmPassword, ...registrationData } = this.registerForm.value;
+    
+    console.log('Sending registration data:', registrationData);
+    console.log('Data being sent:', JSON.stringify(registrationData));
 
     this.authService.register(registrationData).subscribe({
       next: (response) => {
-        this.isLoading = false;
-        // Navigate to home after successful registration
+        console.log('Registration successful:', response);
+        // Navigate to home or redirect to intended page
         this.router.navigate(['/']);
       },
       error: (error) => {
+        console.error('Registration error:', error);
+        console.error('Error details:', {
+          status: error.status,
+          message: error.message,
+          error: error.error,
+          errors: error.error?.errors
+        });
         this.isLoading = false;
-        this.error = error.message || 'Registration failed. Please try again.';
+        
+        if (error.error?.errors && Array.isArray(error.error.errors)) {
+          // Handle validation errors from backend
+          console.log('Validation errors from backend:', error.error.errors);
+          this.validationErrors = {};
+          error.error.errors.forEach((err: any) => {
+            console.log('Validation error:', err);
+            this.validationErrors[err.field || err.param] = err.message || err.msg;
+          });
+        } else if (error.message) {
+          this.errorMessage = error.message;
+        } else {
+          this.errorMessage = 'Registration failed. Please try again.';
+        }
       }
     });
   }
 
   /**
-   * Toggle password visibility
-   */
-  togglePasswordVisibility(field: 'password' | 'confirmPassword'): void {
-    if (field === 'password') {
-      this.showPassword = !this.showPassword;
-    } else {
-      this.showConfirmPassword = !this.showConfirmPassword;
-    }
-  }
-
-  /**
-   * Mark all form fields as touched
+   * Mark all fields as touched to show validation errors
    */
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
       control?.markAsTouched();
-    });
-  }
 
-  /**
-   * Get form control
-   */
-  get f() {
-    return this.registerForm.controls;
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 
   /**
    * Check if field has error
    */
-  hasError(field: string): boolean {
-    const control = this.registerForm.get(field);
-    return !!(control && control.invalid && (control.dirty || control.touched));
+  hasError(fieldName: string): boolean {
+    const field = this.registerForm.get(fieldName);
+    return !!(field?.invalid && (field?.dirty || field?.touched)) || !!this.validationErrors[fieldName];
   }
 
   /**
    * Get error message for field
    */
-  getErrorMessage(field: string): string {
-    const control = this.registerForm.get(field);
-    if (control?.errors) {
-      if (control.errors['required']) {
-        return `${this.formatFieldName(field)} is required`;
-      }
-      if (control.errors['email']) {
-        return 'Please enter a valid email';
-      }
-      if (control.errors['minlength']) {
-        const minLength = control.errors['minlength'].requiredLength;
-        return `${this.formatFieldName(field)} must be at least ${minLength} characters`;
-      }
-      if (control.errors['maxlength']) {
-        const maxLength = control.errors['maxlength'].requiredLength;
-        return `${this.formatFieldName(field)} cannot exceed ${maxLength} characters`;
-      }
-      if (control.errors['pattern']) {
-        return `${this.formatFieldName(field)} can only contain letters`;
-      }
-      if (control.errors['uppercase']) {
-        return 'Password must contain at least one uppercase letter';
-      }
-      if (control.errors['mismatch']) {
-        return 'Passwords do not match';
-      }
+  getErrorMessage(fieldName: string): string {
+    if (this.validationErrors[fieldName]) {
+      return this.validationErrors[fieldName];
     }
-    return '';
+
+    const field = this.registerForm.get(fieldName);
+    if (!field || !field.errors) {
+      return '';
+    }
+
+    if (field.errors['required']) {
+      return `${this.getFieldLabel(fieldName)} is required`;
+    }
+    
+    if (field.errors['minlength']) {
+      return `${this.getFieldLabel(fieldName)} must be at least ${field.errors['minlength'].requiredLength} characters`;
+    }
+    
+    if (field.errors['maxlength']) {
+      return `${this.getFieldLabel(fieldName)} cannot exceed ${field.errors['maxlength'].requiredLength} characters`;
+    }
+    
+    if (field.errors['email']) {
+      return 'Please enter a valid email address';
+    }
+    
+    if (fieldName === 'password' && field.errors['pattern']) {
+      return 'Password must contain at least one uppercase letter';
+    }
+
+    if (fieldName === 'confirmPassword' && this.registerForm.errors?.['passwordMismatch']) {
+      return 'Passwords do not match';
+    }
+
+    return 'Invalid input';
   }
 
   /**
-   * Format field name for display
+   * Get field label for error messages
    */
-  private formatFieldName(field: string): string {
-    return field
-      .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, str => str.toUpperCase())
-      .trim();
+  private getFieldLabel(fieldName: string): string {
+    const labels: {[key: string]: string} = {
+      firstName: 'First name',
+      lastName: 'Last name',
+      email: 'Email',
+      password: 'Password',
+      confirmPassword: 'Confirm password'
+    };
+    return labels[fieldName] || fieldName;
   }
 }

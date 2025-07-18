@@ -3,33 +3,29 @@
  * Handles shopping cart operations and state management
  */
 
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { BehaviorSubject, Observable, throwError, interval } from "rxjs";
-import { tap, catchError, map, switchMap } from "rxjs/operators";
-import { environment } from "../environments/environment";
-import {
-  Cart,
-  CartItem,
-  AddToCartRequest,
-  UpdateCartItemRequest,
-  CartResponse,
-} from "../models/cart.model";
-import { ApiResponse } from "../models/album.model";
-import { AuthService } from "./auth.service";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError, interval, of } from 'rxjs';
+import { tap, catchError, map, switchMap } from 'rxjs/operators';
+import { environment } from '../environments/environment';
+import { Cart, CartItem, AddToCartRequest, UpdateCartItemRequest, CartResponse } from '../models/cart.model';
+import { ApiResponse } from '../models/album.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class CartService {
   private apiUrl = `${environment.apiUrl}/cart`;
   private cartSubject = new BehaviorSubject<Cart>({
     items: [],
     itemCount: 0,
-    total: 0,
+    total: 0
   });
   public cart$ = this.cartSubject.asObservable();
   private sessionId: string | null = null;
+  private lastLoadTime = 0;
+  private minLoadInterval = 5000; // Minimum 5 seconds between loads
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -40,20 +36,14 @@ export class CartService {
     // Get or create session ID
     this.sessionId = this.getOrCreateSessionId();
 
-    // Load cart
-    this.loadCart();
+    // Load cart once
+    this.loadCart().subscribe();
 
-    // Set up periodic cart updates
-    interval(environment.cartUpdateInterval)
-      .pipe(switchMap(() => this.getCart()))
-      .subscribe({
-        next: (cart) => {
-          this.cartSubject.next(cart);
-        },
-        error: (error) => {
-          console.error("Cart update error:", error);
-        }
-      });
+    // Set up periodic cart updates - but only if needed
+    // Commented out for now to prevent rate limiting
+    // interval(environment.cartUpdateInterval)
+    //   .pipe(switchMap(() => this.loadCart()))
+    //   .subscribe();
   }
 
   /**
@@ -64,17 +54,13 @@ export class CartService {
     const headers = this.getHeaders();
 
     return this.http.get<ApiResponse<Cart>>(this.apiUrl, { headers }).pipe(
-      map((response) => {
-        // Ensure proper typing
-        const cartData = response.data as Cart;
-        return {
-          items: cartData.items || [],
-          itemCount: cartData.itemCount || 0,
-          total: cartData.total || 0
-        };
-      }),
+      map((response) => response.data || { items: [], itemCount: 0, total: 0 }),
       tap((cart) => this.cartSubject.next(cart)),
-      catchError(this.handleError)
+      catchError((error) => {
+        console.error('Failed to load cart:', error);
+        // Return empty cart on error
+        return of({ items: [], itemCount: 0, total: 0 });
+      })
     );
   }
 
@@ -93,17 +79,14 @@ export class CartService {
         headers,
       })
       .pipe(
-        map((response) => {
-          const data = response.data as CartResponse;
-          return data;
-        }),
+        map((response) => response.data!),
         tap((response) => {
           // Update session ID if returned
           if (response.sessionId) {
             this.setSessionId(response.sessionId);
           }
-          // Reload cart
-          this.loadCart();
+          // Reload cart after a delay
+          setTimeout(() => this.loadCart().subscribe(), 1000);
         }),
         catchError(this.handleError)
       );
@@ -124,8 +107,11 @@ export class CartService {
         headers,
       })
       .pipe(
-        map((response) => response.data as CartItem),
-        tap(() => this.loadCart()),
+        map((response) => response.data!),
+        tap(() => {
+          // Reload cart after a delay
+          setTimeout(() => this.loadCart().subscribe(), 1000);
+        }),
         catchError(this.handleError)
       );
   }
@@ -142,7 +128,10 @@ export class CartService {
       .delete<ApiResponse<void>>(`${this.apiUrl}/items/${itemId}`, { headers })
       .pipe(
         map(() => undefined),
-        tap(() => this.loadCart()),
+        tap(() => {
+          // Reload cart after a delay
+          setTimeout(() => this.loadCart().subscribe(), 1000);
+        }),
         catchError(this.handleError)
       );
   }
@@ -182,17 +171,25 @@ export class CartService {
   /**
    * Load cart from server
    */
-  private loadCart(): void {
-    this.getCart().subscribe({
-      next: (cart) => {
+  private loadCart(): Observable<Cart> {
+    // Check if we're loading too frequently
+    const now = Date.now();
+    if (now - this.lastLoadTime < this.minLoadInterval) {
+      console.log('Skipping cart load - too frequent');
+      return of(this.cartSubject.value);
+    }
+    
+    this.lastLoadTime = now;
+    
+    return this.getCart().pipe(
+      tap((cart) => {
         this.cartSubject.next(cart);
-      },
-      error: (error) => {
-        console.error("Failed to load cart:", error);
-        // Set empty cart on error
-        this.cartSubject.next({ items: [], itemCount: 0, total: 0 });
-      },
-    });
+      }),
+      catchError((error) => {
+        console.error('Failed to load cart:', error);
+        return of({ items: [], itemCount: 0, total: 0 });
+      })
+    );
   }
 
   /**
@@ -236,7 +233,7 @@ export class CartService {
 
     // Add session ID for anonymous users
     if (!this.authService.isAuthenticated() && this.sessionId) {
-      headers = headers.set("x-session-id", this.sessionId);
+      headers = headers.set('x-session-id', this.sessionId);
     }
 
     return headers;
@@ -248,7 +245,7 @@ export class CartService {
    * @returns Observable error
    */
   private handleError(error: any): Observable<never> {
-    console.error("Cart service error:", error);
+    console.error('Cart service error:', error);
     return throwError(() => error);
   }
 }

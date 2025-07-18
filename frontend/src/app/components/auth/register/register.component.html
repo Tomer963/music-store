@@ -1,146 +1,123 @@
 <!-- Register Component -->
 <div class="register-page">
-  <div class="container">
-    <div class="register-wrapper">
-      <!-- Register Card -->
-      <div class="register-card">
-        <h1 class="register-title">Create Account</h1>
-        <p class="register-subtitle">Join us and start shopping for your favorite music!</p>
+  <div class="register-container">
+    <div class="register-box">
+      <!-- Header -->
+      <div class="register-header">
+        <h1>Create Account</h1>
+        <p>Join us to start shopping for your favorite music!</p>
+      </div>
 
-        <!-- Error Message -->
-        <div class="alert alert-error" *ngIf="error">
-          {{ error }}
-        </div>
+      <!-- Error Message -->
+      <div class="alert alert-error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
 
-        <!-- Register Form -->
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-          <!-- Name Fields Row -->
-          <div class="form-row">
-            <!-- First Name -->
-            <div class="form-group">
-              <label class="form-label" for="firstName">First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                class="form-control"
-                [class.error]="hasError('firstName')"
-                formControlName="firstName"
-                placeholder="John"
-                autocomplete="given-name"
-              />
-              <span class="form-error" *ngIf="hasError('firstName')">
-                {{ getErrorMessage('firstName') }}
-              </span>
-            </div>
-
-            <!-- Last Name -->
-            <div class="form-group">
-              <label class="form-label" for="lastName">Last Name</label>
-              <input
-                type="text"
-                id="lastName"
-                class="form-control"
-                [class.error]="hasError('lastName')"
-                formControlName="lastName"
-                placeholder="Doe"
-                autocomplete="family-name"
-              />
-              <span class="form-error" *ngIf="hasError('lastName')">
-                {{ getErrorMessage('lastName') }}
-              </span>
-            </div>
-          </div>
-
-          <!-- Email Field -->
+      <!-- Register Form -->
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <!-- Name Row -->
+        <div class="form-row">
+          <!-- First Name -->
           <div class="form-group">
-            <label class="form-label" for="email">Email</label>
+            <label for="firstName" class="form-label">First Name</label>
             <input
-              type="email"
-              id="email"
+              type="text"
+              id="firstName"
               class="form-control"
-              [class.error]="hasError('email')"
-              formControlName="email"
-              placeholder="john.doe@example.com"
-              autocomplete="email"
+              formControlName="firstName"
+              [class.error]="hasError('firstName')"
+              placeholder="John"
             />
-            <span class="form-error" *ngIf="hasError('email')">
-              {{ getErrorMessage('email') }}
+            <span class="form-error" *ngIf="hasError('firstName')">
+              {{ getErrorMessage('firstName') }}
             </span>
           </div>
 
-          <!-- Password Field -->
+          <!-- Last Name -->
           <div class="form-group">
-            <label class="form-label" for="password">Password</label>
-            <div class="password-input-wrapper">
-              <input
-                [type]="showPassword ? 'text' : 'password'"
-                id="password"
-                class="form-control"
-                [class.error]="hasError('password')"
-                formControlName="password"
-                placeholder="Enter password"
-                autocomplete="new-password"
-              />
-              <button
-                type="button"
-                class="password-toggle"
-                (click)="togglePasswordVisibility('password')"
-                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
-              >
-                <span class="icon">{{ showPassword ? '👁️' : '👁️‍🗨️' }}</span>
-              </button>
-            </div>
-            <span class="form-error" *ngIf="hasError('password')">
-              {{ getErrorMessage('password') }}
-            </span>
-            <div class="password-requirements">
-              <small>Password must be at least 6 characters and contain one uppercase letter</small>
-            </div>
-          </div>
-
-          <!-- Confirm Password Field -->
-          <div class="form-group">
-            <label class="form-label" for="confirmPassword">Confirm Password</label>
-            <div class="password-input-wrapper">
-              <input
-                [type]="showConfirmPassword ? 'text' : 'password'"
-                id="confirmPassword"
-                class="form-control"
-                [class.error]="hasError('confirmPassword')"
-                formControlName="confirmPassword"
-                placeholder="Confirm password"
-                autocomplete="new-password"
-              />
-              <button
-                type="button"
-                class="password-toggle"
-                (click)="togglePasswordVisibility('confirmPassword')"
-                [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'"
-              >
-                <span class="icon">{{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}</span>
-              </button>
-            </div>
-            <span class="form-error" *ngIf="hasError('confirmPassword')">
-              {{ getErrorMessage('confirmPassword') }}
+            <label for="lastName" class="form-label">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              class="form-control"
+              formControlName="lastName"
+              [class.error]="hasError('lastName')"
+              placeholder="Doe"
+            />
+            <span class="form-error" *ngIf="hasError('lastName')">
+              {{ getErrorMessage('lastName') }}
             </span>
           </div>
-
-          <!-- Submit Button -->
-          <button
-            type="submit"
-            class="btn btn-primary btn-block"
-            [disabled]="isLoading"
-          >
-            <span *ngIf="!isLoading">Create Account</span>
-            <span *ngIf="isLoading">Creating Account...</span>
-          </button>
-        </form>
-
-        <!-- Login Link -->
-        <div class="login-link">
-          <p>Already have an account?</p>
-          <a routerLink="/login" class="link">Login</a>
         </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            formControlName="email"
+            [class.error]="hasError('email')"
+            placeholder="john.doe@example.com"
+          />
+          <span class="form-error" *ngIf="hasError('email')">
+            {{ getErrorMessage('email') }}
+          </span>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            formControlName="password"
+            [class.error]="hasError('password')"
+            placeholder="••••••••"
+          />
+          <span class="form-error" *ngIf="hasError('password')">
+            {{ getErrorMessage('password') }}
+          </span>
+          <small class="form-hint">
+            Password must be at least 6 characters with one uppercase letter
+          </small>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            class="form-control"
+            formControlName="confirmPassword"
+            [class.error]="hasError('confirmPassword')"
+            placeholder="••••••••"
+          />
+          <span class="form-error" *ngIf="hasError('confirmPassword')">
+            {{ getErrorMessage('confirmPassword') }}
+          </span>
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          class="btn btn-primary btn-block"
+          [disabled]="isLoading"
+        >
+          <span *ngIf="!isLoading">Create Account</span>
+          <span *ngIf="isLoading">Creating Account...</span>
+        </button>
+      </form>
+
+      <!-- Login Link -->
+      <div class="auth-footer">
+        <p>
+          Already have an account? 
+          <a routerLink="/login">Sign in here</a>
+        </p>
       </div>
     </div>
   </div>

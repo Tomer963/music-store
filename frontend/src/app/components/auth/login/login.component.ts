@@ -3,43 +3,48 @@
  * Handles user authentication
  */
 
-import { Component, OnInit } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { RouterModule, Router, ActivatedRoute } from "@angular/router";
-import { AuthService } from "../../../services/auth.service";
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { LoginCredentials } from '../../../models/user.model';
 
 @Component({
-  selector: "app-login",
+  selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule],
-  templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.css"],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading = false;
-  error: string | null = null;
-  showPassword = false;
-  returnUrl: string = '/';
-  showRegisterHint = false;
+  errorMessage = '';
+  returnUrl = '/';
 
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    public route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    // Initialize form
-    this.loginForm = this.formBuilder.group({
+    this.initializeForm();
+    
+    // Get return URL from route parameters
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  }
+
+  /**
+   * Initialize login form
+   */
+  private initializeForm(): void {
+    this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
-
-    // Get return URL from query params
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   /**
@@ -52,72 +57,81 @@ export class LoginComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.error = null;
-    this.showRegisterHint = false;
+    this.errorMessage = '';
 
-    this.authService.login(this.loginForm.value).subscribe({
+    const credentials: LoginCredentials = this.loginForm.value;
+
+    this.authService.login(credentials).subscribe({
       next: (response) => {
-        this.isLoading = false;
-        // Navigate to return URL or home
+        console.log('Login successful:', response);
+        // Navigate to return URL
         this.router.navigate([this.returnUrl]);
       },
       error: (error) => {
+        console.error('Login error:', error);
         this.isLoading = false;
-        this.error = error.message || 'Login failed. Please try again.';
         
-        // Show register hint if it's an authentication error
-        if (error.status === 401 || error.message.includes('Invalid')) {
-          this.showRegisterHint = true;
+        if (error.status === 401) {
+          this.errorMessage = 'Invalid email or password';
+        } else if (error.message) {
+          this.errorMessage = error.message;
+        } else {
+          this.errorMessage = 'Login failed. Please try again.';
         }
       }
     });
   }
 
   /**
-   * Toggle password visibility
-   */
-  togglePasswordVisibility(): void {
-    this.showPassword = !this.showPassword;
-  }
-
-  /**
-   * Mark all form fields as touched
+   * Mark all fields as touched to show validation errors
    */
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.keys(formGroup.controls).forEach(key => {
       const control = formGroup.get(key);
       control?.markAsTouched();
-    });
-  }
 
-  /**
-   * Get form control
-   */
-  get f() {
-    return this.loginForm.controls;
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 
   /**
    * Check if field has error
    */
-  hasError(field: string): boolean {
-    const control = this.loginForm.get(field);
-    return !!(control && control.invalid && (control.dirty || control.touched));
+  hasError(fieldName: string): boolean {
+    const field = this.loginForm.get(fieldName);
+    return !!(field?.invalid && (field?.dirty || field?.touched));
   }
 
   /**
    * Get error message for field
    */
-  getErrorMessage(field: string): string {
-    const control = this.loginForm.get(field);
-    if (control?.errors) {
-      if (control.errors['required']) {
-        return `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
-      }
-      if (control.errors['email']) {
-        return 'Please enter a valid email';
-      }
+  getErrorMessage(fieldName: string): string {
+    const field = this.loginForm.get(fieldName);
+    if (!field || !field.errors) {
+      return '';
     }
-    return '';
+
+    if (field.errors['required']) {
+      return `${this.getFieldLabel(fieldName)} is required`;
+    }
+    
+    if (field.errors['email']) {
+      return 'Please enter a valid email address';
+    }
+
+    return 'Invalid input';
+  }
+
+  /**
+   * Get field label for error messages
+   */
+  private getFieldLabel(fieldName: string): string {
+    const labels: {[key: string]: string} = {
+      email: 'Email',
+      password: 'Password'
+    };
+    return labels[fieldName] || fieldName;
   }
 }

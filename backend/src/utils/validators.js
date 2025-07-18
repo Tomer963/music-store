@@ -41,10 +41,6 @@ export const registerValidation = [
     )
     .matches(/[A-Z]/)
     .withMessage("Password must contain at least one uppercase letter"),
-
-  body("confirmPassword")
-    .custom((value, { req }) => value === req.body.password)
-    .withMessage("Passwords do not match"),
 ];
 
 export const loginValidation = [
