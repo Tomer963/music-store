@@ -8,7 +8,7 @@ import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { importProvidersFrom } from "@angular/core";
 import { AppComponent } from "./app/app.component";
-import { routes } from "./app/app-routing.module";
+import { routes } from "./app/app.routes";
 import { authInterceptor } from "./app/interceptors/auth.interceptor";
 import { errorInterceptor } from "./app/interceptors/error.interceptor";
 

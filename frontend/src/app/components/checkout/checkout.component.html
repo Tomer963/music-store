@@ -5,204 +5,337 @@
     <app-spinner></app-spinner>
   </div>
 
-  <!-- Checkout Content -->
+  <!-- Main Content -->
   <div class="checkout-content" *ngIf="!isLoading">
     <div class="container">
       <h1 class="page-title">Checkout</h1>
 
-      <!-- Progress Indicator -->
-      <div class="checkout-progress">
-        <div class="progress-step" [class]="getStepClass(CheckoutStep.BILLING)" (click)="goToStep(CheckoutStep.BILLING)">
-          <div class="step-number">1</div>
-          <div class="step-label">Billing Info</div>
-        </div>
-        <div class="progress-line" [class.completed]="currentStep > CheckoutStep.BILLING"></div>
-        <div class="progress-step" [class]="getStepClass(CheckoutStep.PAYMENT)" (click)="goToStep(CheckoutStep.PAYMENT)">
-          <div class="step-number">2</div>
-          <div class="step-label">Payment</div>
-        </div>
-        <div class="progress-line" [class.completed]="currentStep > CheckoutStep.PAYMENT"></div>
-        <div class="progress-step" [class]="getStepClass(CheckoutStep.REVIEW)">
-          <div class="step-number">3</div>
-          <div class="step-label">Review</div>
+      <!-- Empty Cart Message -->
+      <div class="empty-cart-message" *ngIf="cart.items.length === 0">
+        <div class="empty-cart-content">
+          <span class="empty-icon">🛒</span>
+          <h2>Your cart is empty</h2>
+          <p>Add some albums to your cart before checking out.</p>
+          <button class="btn btn-primary" routerLink="/">Continue Shopping</button>
         </div>
       </div>
 
-      <div class="checkout-forms">
-        <!-- Step 1: Billing Information -->
-        <div class="checkout-step" *ngIf="currentStep === CheckoutStep.BILLING">
-          <h2>Billing Information</h2>
-          <form [formGroup]="billingForm" class="billing-form">
-            <div class="form-group">
-              <label class="form-label">Address *</label>
-              <input type="text" class="form-control" formControlName="address" placeholder="123 Main St">
-              <div class="form-error" *ngIf="billingForm.get('address')?.touched && billingForm.get('address')?.errors?.['required']">
-                Address is required
+      <!-- Checkout Form -->
+      <div class="checkout-form" *ngIf="cart.items.length > 0">
+        <div class="row">
+          <!-- Left Column - Forms -->
+          <div class="col-8">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+              <div class="step" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
+                <span class="step-number">1</span>
+                <span class="step-label">Billing Info</span>
               </div>
-              <div class="form-error" *ngIf="billingForm.get('address')?.touched && billingForm.get('address')?.errors?.['pattern']">
-                Address must contain at least 3 letters and a number
+              <div class="step" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">
+                <span class="step-number">2</span>
+                <span class="step-label">Payment</span>
               </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">City *</label>
-              <input type="text" class="form-control" formControlName="city" placeholder="New York">
-              <div class="form-error" *ngIf="billingForm.get('city')?.touched && billingForm.get('city')?.errors?.['required']">
-                City is required
-              </div>
-              <div class="form-error" *ngIf="billingForm.get('city')?.touched && billingForm.get('city')?.errors?.['pattern']">
-                City must contain only letters
+              <div class="step" [class.active]="currentStep >= 3">
+                <span class="step-number">3</span>
+                <span class="step-label">Review</span>
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label">Zip Code *</label>
-              <input type="text" class="form-control" formControlName="zipCode" placeholder="12345">
-              <div class="form-error" *ngIf="billingForm.get('zipCode')?.touched && billingForm.get('zipCode')?.errors?.['required']">
-                Zip code is required
-              </div>
-              <div class="form-error" *ngIf="billingForm.get('zipCode')?.touched && billingForm.get('zipCode')?.errors?.['pattern']">
-                Zip code must be 5 digits
-              </div>
+            <!-- Step 1: Billing Information -->
+            <div class="form-section" *ngIf="currentStep === 1">
+              <h2 class="section-title">Billing Information</h2>
+              <form [formGroup]="billingForm" (ngSubmit)="nextStep()">
+                <div class="form-group">
+                  <label class="form-label">Address *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    formControlName="address"
+                    [class.error]="billingForm.get('address')?.invalid && billingForm.get('address')?.touched"
+                    placeholder="123 Main Street"
+                  />
+                  <span class="form-error" *ngIf="billingForm.get('address')?.invalid && billingForm.get('address')?.touched">
+                    Address must contain at least 3 letters and a number
+                  </span>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-6">
+                    <label class="form-label">City *</label>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      formControlName="city"
+                      [class.error]="billingForm.get('city')?.invalid && billingForm.get('city')?.touched"
+                      placeholder="Tel Aviv"
+                    />
+                    <span class="form-error" *ngIf="billingForm.get('city')?.invalid && billingForm.get('city')?.touched">
+                      City must contain only letters (min 3 characters)
+                    </span>
+                  </div>
+
+                  <div class="form-group col-6">
+                    <label class="form-label">Zip Code *</label>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      formControlName="zipCode"
+                      [class.error]="billingForm.get('zipCode')?.invalid && billingForm.get('zipCode')?.touched"
+                      placeholder="12345"
+                    />
+                    <span class="form-error" *ngIf="billingForm.get('zipCode')?.invalid && billingForm.get('zipCode')?.touched">
+                      Zip code must be 5 digits
+                    </span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Phone *</label>
+                  <input 
+                    type="tel" 
+                    class="form-control" 
+                    formControlName="phone"
+                    [class.error]="billingForm.get('phone')?.invalid && billingForm.get('phone')?.touched"
+                    placeholder="03-1234567 or 050-1234567"
+                  />
+                  <span class="form-error" *ngIf="billingForm.get('phone')?.invalid && billingForm.get('phone')?.touched">
+                    Phone must be in format 03-1234567 or 050-1234567
+                  </span>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary" [disabled]="billingForm.invalid">
+                    Continue to Payment
+                  </button>
+                </div>
+              </form>
             </div>
 
-            <div class="form-group">
-              <label class="form-label">Phone *</label>
-              <input type="text" class="form-control" formControlName="phone" placeholder="03-1234567">
-              <div class="form-error" *ngIf="billingForm.get('phone')?.touched && billingForm.get('phone')?.errors?.['required']">
-                Phone is required
+            <!-- Step 2: Payment Information -->
+            <div class="form-section" *ngIf="currentStep === 2">
+              <h2 class="section-title">Payment Method</h2>
+              
+              <!-- Payment Method Selection -->
+              <div class="payment-methods">
+                <label class="payment-method" [class.selected]="paymentMethod === 'credit_card'">
+                  <input 
+                    type="radio" 
+                    name="paymentMethod" 
+                    value="credit_card"
+                    [(ngModel)]="paymentMethod"
+                    (change)="onPaymentMethodChange()"
+                  />
+                  <span class="method-icon">💳</span>
+                  <span class="method-label">Credit Card</span>
+                </label>
+
+                <label class="payment-method" [class.selected]="paymentMethod === 'check'">
+                  <input 
+                    type="radio" 
+                    name="paymentMethod" 
+                    value="check"
+                    [(ngModel)]="paymentMethod"
+                    (change)="onPaymentMethodChange()"
+                  />
+                  <span class="method-icon">📄</span>
+                  <span class="method-label">Check</span>
+                </label>
               </div>
-              <div class="form-error" *ngIf="billingForm.get('phone')?.touched && billingForm.get('phone')?.errors?.['pattern']">
-                Phone must be in format 03-1234567 or 050-1234567
-              </div>
+
+              <!-- Credit Card Form -->
+              <form [formGroup]="creditCardForm" *ngIf="paymentMethod === 'credit_card'" (ngSubmit)="nextStep()">
+                <div class="form-group">
+                  <label class="form-label">Card Type *</label>
+                  <select class="form-control" formControlName="cardType">
+                    <option value="">Select card type</option>
+                    <option value="visa">Visa</option>
+                    <option value="mastercard">Mastercard</option>
+                    <option value="direct">Direct</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Card Number *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    formControlName="cardNumber"
+                    placeholder="1234 5678 9012 3456"
+                    maxlength="16"
+                  />
+                  <span class="form-error" *ngIf="creditCardForm.get('cardNumber')?.invalid && creditCardForm.get('cardNumber')?.touched">
+                    Card number must be 16 digits
+                  </span>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Cardholder Name *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    formControlName="cardholderName"
+                    placeholder="John Doe"
+                  />
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-6">
+                    <label class="form-label">Expiry Date *</label>
+                    <div class="expiry-inputs">
+                      <select class="form-control" formControlName="expiryMonth">
+                        <option value="">MM</option>
+                        <option *ngFor="let month of months" [value]="month">{{ month.toString().padStart(2, '0') }}</option>
+                      </select>
+                      <select class="form-control" formControlName="expiryYear">
+                        <option value="">YYYY</option>
+                        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group col-6">
+                    <label class="form-label">CVV *</label>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      formControlName="cvv"
+                      placeholder="123"
+                      maxlength="3"
+                    />
+                    <span class="form-error" *ngIf="creditCardForm.get('cvv')?.invalid && creditCardForm.get('cvv')?.touched">
+                      CVV must be 3 digits
+                    </span>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="button" class="btn btn-outline" (click)="previousStep()">Back</button>
+                  <button type="submit" class="btn btn-primary" [disabled]="creditCardForm.invalid">
+                    Review Order
+                  </button>
+                </div>
+              </form>
+
+              <!-- Check Form -->
+              <form [formGroup]="checkForm" *ngIf="paymentMethod === 'check'" (ngSubmit)="nextStep()">
+                <div class="form-group">
+                  <label class="form-label">Check Number *</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    formControlName="checkNumber"
+                    placeholder="1234567"
+                  />
+                  <span class="form-error" *ngIf="checkForm.get('checkNumber')?.invalid && checkForm.get('checkNumber')?.touched">
+                    Check number is required
+                  </span>
+                </div>
+
+                <div class="form-actions">
+                  <button type="button" class="btn btn-outline" (click)="previousStep()">Back</button>
+                  <button type="submit" class="btn btn-primary" [disabled]="checkForm.invalid">
+                    Review Order
+                  </button>
+                </div>
+              </form>
             </div>
 
-            <div class="form-actions">
-              <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!billingForm.valid">
-                Continue to Payment
-              </button>
+            <!-- Step 3: Review Order -->
+            <div class="form-section" *ngIf="currentStep === 3">
+              <h2 class="section-title">Review Your Order</h2>
+
+              <!-- Order Items -->
+              <div class="review-section">
+                <h3>Order Items</h3>
+                <div class="review-items">
+                  <div class="review-item" *ngFor="let item of cart.items">
+                    <img [src]="getImageUrl(item)" [alt]="item.album.title" class="item-image" />
+                    <div class="item-info">
+                      <h4>{{ item.album.title }}</h4>
+                      <p>{{ item.album.artist }}</p>
+                    </div>
+                    <div class="item-quantity">Qty: {{ item.quantity }}</div>
+                    <div class="item-price">{{ formatPrice(item.album.price * item.quantity) }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Billing Info -->
+              <div class="review-section">
+                <h3>Billing Information</h3>
+                <div class="review-info">
+                  <p><strong>Address:</strong> {{ billingForm.value.address }}</p>
+                  <p><strong>City:</strong> {{ billingForm.value.city }}</p>
+                  <p><strong>Zip Code:</strong> {{ billingForm.value.zipCode }}</p>
+                  <p><strong>Phone:</strong> {{ billingForm.value.phone }}</p>
+                </div>
+              </div>
+
+              <!-- Payment Info -->
+              <div class="review-section">
+                <h3>Payment Information</h3>
+                <div class="review-info" *ngIf="paymentMethod === 'credit_card'">
+                  <p><strong>Payment Method:</strong> Credit Card</p>
+                  <p><strong>Card Type:</strong> {{ creditCardForm.value.cardType | titlecase }}</p>
+                  <p><strong>Card Number:</strong> **** **** **** {{ creditCardForm.value.cardNumber.slice(-4) }}</p>
+                </div>
+                <div class="review-info" *ngIf="paymentMethod === 'check'">
+                  <p><strong>Payment Method:</strong> Check</p>
+                  <p><strong>Check Number:</strong> {{ checkForm.value.checkNumber }}</p>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn btn-outline" (click)="previousStep()">Back</button>
+                <button type="button" class="btn btn-primary" (click)="placeOrder()" [disabled]="isProcessing">
+                  <span *ngIf="!isProcessing">Place Order</span>
+                  <span *ngIf="isProcessing">Processing...</span>
+                </button>
+              </div>
             </div>
-          </form>
+          </div>
+
+          <!-- Right Column - Order Summary -->
+          <div class="col-4">
+            <div class="order-summary">
+              <h3 class="summary-title">Order Summary</h3>
+
+              <!-- Cart Items -->
+              <div class="summary-items">
+                <div class="summary-item" *ngFor="let item of cart.items">
+                  <span class="item-name">{{ item.album.title }} (x{{ item.quantity }})</span>
+                  <span class="item-price">{{ formatPrice(item.album.price * item.quantity) }}</span>
+                </div>
+              </div>
+
+              <!-- Totals -->
+              <div class="summary-totals">
+                <div class="total-row">
+                  <span>Subtotal:</span>
+                  <span>{{ formatPrice(cart.total) }}</span>
+                </div>
+                <div class="total-row">
+                  <span>Shipping:</span>
+                  <span>Free</span>
+                </div>
+                <div class="total-row total">
+                  <span>Total:</span>
+                  <span>{{ formatPrice(cart.total) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <!-- Step 2: Payment Information -->
-        <div class="checkout-step" *ngIf="currentStep === CheckoutStep.PAYMENT">
-          <h2>Payment Information</h2>
-          <form [formGroup]="paymentForm" class="payment-form">
-            <div class="payment-methods">
-              <label class="payment-method">
-                <input type="radio" formControlName="paymentMethod" [value]="PaymentMethod.CREDIT_CARD">
-                <span>Credit Card</span>
-              </label>
-              <label class="payment-method">
-                <input type="radio" formControlName="paymentMethod" [value]="PaymentMethod.CHECK">
-                <span>Check</span>
-              </label>
-            </div>
-
-            <!-- Credit Card Fields -->
-            <div class="credit-card-fields" *ngIf="paymentForm.get('paymentMethod')?.value === PaymentMethod.CREDIT_CARD">
-              <div class="form-group">
-                <label class="form-label">Card Type *</label>
-                <select class="form-control" formControlName="cardType">
-                  <option value="">Select card type</option>
-                  <option value="visa">Visa</option>
-                  <option value="mastercard">Mastercard</option>
-                  <option value="direct">Direct</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Card Number *</label>
-                <input type="text" class="form-control" formControlName="cardNumber" placeholder="1234567812345678">
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">Cardholder Name *</label>
-                <input type="text" class="form-control" formControlName="cardholderName" placeholder="John Doe">
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label">Expiry Month *</label>
-                  <input type="number" class="form-control" formControlName="expiryMonth" placeholder="MM" min="1" max="12">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Expiry Year *</label>
-                  <input type="number" class="form-control" formControlName="expiryYear" placeholder="YYYY" [min]="2024">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">CVV *</label>
-                  <input type="text" class="form-control" formControlName="cvv" placeholder="123">
-                </div>
-              </div>
-            </div>
-
-            <!-- Check Field -->
-            <div class="check-fields" *ngIf="paymentForm.get('paymentMethod')?.value === PaymentMethod.CHECK">
-              <div class="form-group">
-                <label class="form-label">Check Number *</label>
-                <input type="text" class="form-control" formControlName="checkNumber" placeholder="123456">
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button type="button" class="btn btn-secondary" (click)="previousStep()">Back</button>
-              <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!paymentForm.valid">
-                Review Order
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Step 3: Review Order -->
-        <div class="checkout-step" *ngIf="currentStep === CheckoutStep.REVIEW">
-          <h2>Review Your Order</h2>
-          
-          <div class="order-summary">
-            <h3>Order Items</h3>
-            <div class="cart-items">
-              <div class="cart-item" *ngFor="let item of cart.items">
-                <div class="item-info">
-                  <span class="item-title">{{ item.album.title }}</span>
-                  <span class="item-artist">{{ item.album.artist }}</span>
-                </div>
-                <div class="item-quantity">Qty: {{ item.quantity }}</div>
-                <div class="item-price">{{ formatPrice(item.album.price * item.quantity) }}</div>
-              </div>
-            </div>
-            
-            <div class="order-total">
-              <span>Total:</span>
-              <span class="total-amount">{{ formatPrice(cart.total) }}</span>
-            </div>
-          </div>
-
-          <div class="billing-summary">
-            <h3>Billing Information</h3>
-            <p>{{ billingForm.value.address }}</p>
-            <p>{{ billingForm.value.city }}, {{ billingForm.value.zipCode }}</p>
-            <p>Phone: {{ billingForm.value.phone }}</p>
-          </div>
-
-          <div class="payment-summary">
-            <h3>Payment Method</h3>
-            <p *ngIf="paymentForm.value.paymentMethod === PaymentMethod.CREDIT_CARD">
-              {{ paymentForm.value.cardType | uppercase }} ending in 
-              {{ paymentForm.value.cardNumber.slice(-4) }}
-            </p>
-            <p *ngIf="paymentForm.value.paymentMethod === PaymentMethod.CHECK">
-              Check #{{ paymentForm.value.checkNumber }}
-            </p>
-          </div>
-
-          <div class="form-actions">
-            <button type="button" class="btn btn-secondary" (click)="previousStep()">Back</button>
-            <button type="button" class="btn btn-primary" (click)="placeOrder()" [disabled]="isProcessing">
-              <span *ngIf="!isProcessing">Place Order</span>
-              <app-spinner *ngIf="isProcessing" [size]="'small'" [color]="'white'"></app-spinner>
-            </button>
-          </div>
+      <!-- Success Message -->
+      <div class="success-message" *ngIf="orderSuccess">
+        <div class="success-content">
+          <span class="success-icon">✅</span>
+          <h2>Order Placed Successfully!</h2>
+          <p>Your order number is: <strong>{{ orderNumber }}</strong></p>
+          <p>Thank you for your purchase. You will receive a confirmation email shortly.</p>
+          <button class="btn btn-primary" routerLink="/">Continue Shopping</button>
         </div>
       </div>
     </div>

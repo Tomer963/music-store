@@ -69,6 +69,8 @@ const albumSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true }, // Include virtuals when converting to JSON
+    toObject: { virtuals: true }, // Include virtuals when converting to object
   }
 );
 
@@ -78,9 +80,9 @@ albumSchema.index({ category: 1 });
 albumSchema.index({ price: 1 });
 albumSchema.index({ createdAt: -1 });
 
-// Virtual for availability status
+// Virtual for availability status - true if stock > 0
 albumSchema.virtual("inStock").get(function () {
-  return this.stock > 0;
+  return this.stock > 0 && this.availability === true;
 });
 
 // Method to check if album can be purchased

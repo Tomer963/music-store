@@ -4,89 +4,90 @@
   [class.small]="size === 'small'"
   [class.medium]="size === 'medium'"
   [class.large]="size === 'large'"
+  [class.hovered]="isHovered"
   (click)="viewAlbum()"
+  (mouseenter)="isHovered = true"
+  (mouseleave)="isHovered = false"
 >
   <!-- Album Image -->
   <div class="album-image">
-    <img 
-      [src]="mainImageUrl" 
-      [alt]="album.title" 
-      loading="lazy"
-      (error)="onImageError($event)"
-    />
+    <img [src]="mainImageUrl" [alt]="album.title" loading="lazy" />
 
-    <!-- Hover Overlay for cards with showHover -->
-    <div class="hover-overlay" *ngIf="showHover">
-      <!-- Animated gray background -->
-      <div class="hover-background"></div>
-      
-      <!-- Hover content -->
+    <!-- Hover Overlay -->
+    <div class="hover-overlay" *ngIf="showHover && isHovered">
       <div class="hover-content">
-        <div class="album-details">
-          <h3 class="album-title-hover">{{ album.title }}</h3>
-          <p class="album-artist-hover">{{ album.artist }}</p>
-        </div>
-        
-        <div class="hover-actions">
-          <button
-            class="action-btn info-btn"
-            (click)="viewAlbum(); $event.stopPropagation()"
-            title="פרטים"
-          >
-            <span class="icon">ℹ️</span>
-          </button>
-          <button
-            class="action-btn cart-btn"
-            (click)="addToCart($event)"
-            [disabled]="isAddingToCart || !album.inStock"
-            title="הוסף לעגלה"
-          >
-            <span class="icon">🛒</span>
-          </button>
-        </div>
-        
-        <div class="price-tag" *ngIf="album.inStock">
-          {{ getFormattedPrice() }}
-        </div>
-        <div class="out-of-stock" *ngIf="!album.inStock">
-          אזל המלאי
-        </div>
+        <button
+          class="action-btn info-btn"
+          (click)="viewAlbum()"
+          title="View Details"
+        >
+          <span class="icon">ℹ️</span>
+        </button>
+        <button
+          class="action-btn cart-btn"
+          (click)="addToCart($event)"
+          [disabled]="isAddingToCart || !isInStock()"
+          title="Add to Cart"
+        >
+          <span class="icon">🛒</span>
+        </button>
       </div>
+      <div class="price-tag" *ngIf="isInStock()">
+        {{ getFormattedPrice() }}
+      </div>
+      <div class="out-of-stock" *ngIf="!isInStock()">Out of Stock</div>
     </div>
   </div>
 
-  <!-- Album Info (for cards with showInfo) -->
-  <div class="album-info" *ngIf="showInfo">
+  <!-- Album Info -->
+  <div class="album-info">
     <h3 class="album-title">{{ album.title }}</h3>
     <p class="album-artist">{{ album.artist }}</p>
 
-    <!-- Additional Info -->
-    <div class="additional-info">
-      <p class="album-description" *ngIf="size !== 'small'">
-        {{ getTruncatedDescription() }}
-      </p>
+    <!-- Additional Info for Medium/Large Cards -->
+    <div class="additional-info" *ngIf="showInfo && size !== 'small'">
+      <p class="album-description">{{ getTruncatedDescription() }}</p>
 
-      <!-- Price and Actions Bar (for cards with showPrice) -->
-      <div class="price-actions-bar" *ngIf="showPrice">
+      <!-- Actions for non-hover cards -->
+      <div class="card-actions" *ngIf="!showHover">
         <span class="price">{{ getFormattedPrice() }}</span>
-        <div class="action-buttons">
-          <button
-            class="icon-btn info-btn"
-            (click)="viewAlbum(); $event.stopPropagation()"
-            title="פרטים"
-          >
-            <span>ℹ️</span>
-          </button>
-          <button
-            class="icon-btn cart-btn"
-            (click)="addToCart($event)"
-            [disabled]="isAddingToCart || !album.inStock"
-            title="הוסף לעגלה"
-          >
-            <span>🛒</span>
-          </button>
-        </div>
+        <button
+          class="add-to-cart-btn"
+          (click)="addToCart($event)"
+          [disabled]="isAddingToCart || !isInStock()"
+        >
+          <span class="icon">🛒</span>
+        </button>
       </div>
+    </div>
+
+    <!-- Price for cards with showPrice -->
+    <div class="price-info" *ngIf="showPrice && !showInfo">
+      <span class="price">{{ getFormattedPrice() }}</span>
+      <div class="action-buttons">
+        <button
+          class="icon-btn"
+          (click)="viewAlbum(); $event.stopPropagation()"
+          title="View Details"
+        >
+          <span>ℹ️</span>
+        </button>
+        <button
+          class="icon-btn"
+          (click)="addToCart($event)"
+          [disabled]="isAddingToCart || !isInStock()"
+          title="Add to Cart"
+        >
+          <span>🛒</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Stock Status Display -->
+    <div class="stock-status" *ngIf="showInfo || showPrice">
+      <span class="stock-label" [class.in-stock]="isInStock()" [class.out-of-stock]="!isInStock()">
+        {{ getStockStatus() }}
+      </span>
     </div>
   </div>
 </div>

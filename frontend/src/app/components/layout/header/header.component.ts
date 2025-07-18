@@ -10,11 +10,12 @@ import { Subject, takeUntil } from "rxjs";
 import { AuthService } from "../../../services/auth.service";
 import { CartService } from "../../../services/cart.service";
 import { User } from "../../../models/user.model";
+import { SearchBoxComponent } from "../../shared/search-box/search-box.component";
 
 @Component({
   selector: "app-header",
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SearchBoxComponent],
   templateUrl: "./header.component.html",
   styleUrls: ["./header.component.css"],
 })
@@ -50,20 +51,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get user first name safely
-   */
-  getUserFirstName(): string {
-    return this.currentUser?.firstName || '';
-  }
-
-  /**
-   * Get cart count as string
-   */
-  getCartCount(): string {
-    return this.cartItemCount.toString();
-  }
-
-  /**
    * Toggle mobile menu
    */
   toggleMenu(): void {
@@ -80,10 +67,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /**
    * Handle logout
    */
-  logout(event?: Event): void {
-    if (event) {
-      event.preventDefault();
-    }
+  logout(): void {
     this.authService.logout();
     this.closeMenu();
   }

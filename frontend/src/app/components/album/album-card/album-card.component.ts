@@ -24,6 +24,7 @@ export class AlbumCardComponent implements OnInit {
   @Input() showInfo = false;
   @Input() showPrice = false;
 
+  isHovered = false;
   isAddingToCart = false;
   mainImageUrl = "";
 
@@ -51,7 +52,7 @@ export class AlbumCardComponent implements OnInit {
   addToCart(event: Event): void {
     event.stopPropagation();
 
-    if (this.isAddingToCart || !this.album.inStock) {
+    if (this.isAddingToCart || !this.isInStock()) {
       return;
     }
 
@@ -60,7 +61,7 @@ export class AlbumCardComponent implements OnInit {
     this.cartService.addToCart(this.album._id).subscribe({
       next: () => {
         this.isAddingToCart = false;
-        // Show success feedback
+        // Show success feedback (could use a toast service)
         this.showAddedFeedback();
       },
       error: (error) => {
@@ -71,20 +72,47 @@ export class AlbumCardComponent implements OnInit {
   }
 
   /**
-   * Show visual feedback when item is added to cart
+   * Check if album is in stock
+   * @returns true if in stock
    */
-  private showAddedFeedback(): void {
-    // Flash the cart icon or show a toast notification
-    // For now, just a simple console log
-    console.log(`${this.album.title} added to cart`);
+  isInStock(): boolean {
+    // Check both stock quantity and availability flag
+    return this.album.stock > 0 && this.album.availability === true;
   }
 
   /**
-   * Handle image load error
-   * @param event Error event
+   * Get stock status text
+   * @returns Stock status string
    */
-  onImageError(event: any): void {
-    event.target.src = '/assets/images/album-placeholder.jpg';
+  getStockStatus(): string {
+    if (!this.album.availability) {
+      return "Not Available";
+    }
+    
+    if (this.album.stock === 0) {
+      return "Out of Stock";
+    }
+    
+    if (this.album.stock <= 5) {
+      return `Only ${this.album.stock} left in stock`;
+    }
+    
+    return "In Stock";
+  }
+
+  /**
+   * Show visual feedback when item is added to cart
+   */
+  private showAddedFeedback(): void {
+    // Simple visual feedback - could be enhanced with animations
+    const originalText = this.isHovered;
+    this.isHovered = false;
+
+    setTimeout(() => {
+      if (originalText) {
+        this.isHovered = true;
+      }
+    }, 1000);
   }
 
   /**
@@ -100,10 +128,10 @@ export class AlbumCardComponent implements OnInit {
    * @returns Truncated description
    */
   getTruncatedDescription(): string {
-    const maxLength = this.size === 'medium' ? 100 : 150;
-    if (!this.album.description || this.album.description.length <= maxLength) {
-      return this.album.description || '';
+    const maxLength = 100;
+    if (this.album.description.length <= maxLength) {
+      return this.album.description;
     }
-    return this.album.description.substring(0, maxLength) + '...';
+    return this.album.description.substring(0, maxLength) + "...";
   }
 }
