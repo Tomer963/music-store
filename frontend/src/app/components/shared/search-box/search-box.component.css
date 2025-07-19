@@ -47,7 +47,9 @@
 }
 
 .search-icon {
-  font-size: 1.25rem;
+  width: 20px;
+  height: 20px;
+  color: var(--black);
 }
 
 /* Search Results Dropdown */

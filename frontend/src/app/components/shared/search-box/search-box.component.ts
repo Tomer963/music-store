@@ -16,7 +16,6 @@ import {
   takeUntil,
 } from "rxjs";
 import { SearchService } from "../../../services/search.service";
-import { AlbumService } from "../../../services/album.service";
 import { Album } from "../../../models/album.model";
 import { environment } from "../../../../environments/environment";
 import { SpinnerComponent } from "../spinner/spinner.component";
@@ -35,11 +34,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   showResults = false;
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private searchService: SearchService,
-    private albumService: AlbumService,
-    private router: Router
-  ) {}
+  constructor(private searchService: SearchService, private router: Router) {}
 
   ngOnInit(): void {
     // Set up search with debounce
@@ -131,14 +126,5 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
    */
   formatAlbumInfo(album: Album): string {
     return `${album.title} / ${album.artist}, Released on ${album.releaseYear}`;
-  }
-
-  /**
-   * Get album image URL with CORS handling
-   * @param album Album object
-   * @returns Safe image URL
-   */
-  getAlbumImageUrl(album: Album): string {
-    return this.albumService.getMainImageUrl(album);
   }
 }
