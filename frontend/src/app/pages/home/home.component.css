@@ -31,11 +31,12 @@
   position: relative;
 }
 
+
 .top-albums-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: var(--spacing-md);
+  gap: 0;
 }
 
 /* Bottom Section with Sidebar */
