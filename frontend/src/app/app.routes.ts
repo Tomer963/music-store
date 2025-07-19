@@ -6,6 +6,7 @@ import { Routes } from "@angular/router";
 import { HomeComponent } from "./pages/home/home.component";
 import { CategoryComponent } from "./pages/category/category.component";
 import { WishlistComponent } from "./pages/wishlist/wishlist.component";
+
 import { NotFoundComponent } from "./pages/not-found/not-found.component";
 import { AlbumDetailComponent } from "./components/album/album-detail/album-detail.component";
 import { LoginComponent } from "./components/auth/login/login.component";
@@ -31,6 +32,7 @@ export const routes: Routes = [
     path: "wishlist",
     component: WishlistComponent,
   },
+
   {
     path: "login",
     component: LoginComponent,

@@ -47,9 +47,6 @@
           <div class="welcome-text" *ngIf="!currentUser">
             Welcome to our<br />online store!
           </div>
-          <div class="welcome-text" *ngIf="currentUser">
-            Hello, {{ currentUser.firstName }}!
-          </div>
           <div class="cart-icon-wrapper">
             <button class="cart-button" routerLink="/checkout">
               <span class="cart-icon">🛒</span>
