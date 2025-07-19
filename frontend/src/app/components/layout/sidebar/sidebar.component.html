@@ -2,6 +2,10 @@
 <aside class="sidebar" *ngIf="showSidebar">
   <!-- Categories Section -->
   <section class="categories-section">
+    <div class="section-header">
+      <h2 class="section-title">Categories</h2>
+    </div>
+
     <!-- Loading State -->
     <div class="loading-state" *ngIf="isLoadingCategories">
       <app-spinner [size]="'small'"></app-spinner>
@@ -32,7 +36,7 @@
   </section>
 
   <!-- Cart Widget -->
-  <section class="cart-section">
+  <section class="cart-section" *ngIf="showCart">
     <app-cart-widget></app-cart-widget>
   </section>
 </aside>

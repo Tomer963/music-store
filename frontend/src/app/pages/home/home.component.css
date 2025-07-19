@@ -1,17 +1,7 @@
 /* Home Page Component Styles */
 
 .home-page {
-  position: relative;
   min-height: calc(100vh - 120px);
-}
-
-.home-wrapper {
-  display: flex;
-  flex-direction: row-reverse; /* Sidebar on the left */
-  gap: var(--spacing-lg);
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: var(--spacing-lg);
 }
 
 .loading-container {
@@ -22,19 +12,19 @@
 }
 
 .home-content {
-  padding: var(--spacing-lg) 0;
+  padding: 0;
 }
 
-/* Featured Section */
+/* Featured Section - Full Width */
 .featured-section {
-  margin-bottom: var(--spacing-xxl);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg) var(--spacing-lg) 0;
 }
 
 .featured-wrapper {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
 }
 
 .featured-album {
@@ -48,12 +38,33 @@
   gap: var(--spacing-md);
 }
 
+/* Bottom Content Layout */
+.bottom-content {
+  display: flex;
+  gap: var(--spacing-lg);
+  padding: 0 var(--spacing-lg) var(--spacing-lg);
+}
+
+/* Sidebar on Left */
+.sidebar-left {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Main Content Area on Right */
+.main-content-area {
+  flex: 1;
+  min-width: 0;
+}
+
 /* Side Albums */
 .side-albums {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-xl);
 }
 
 /* Albums Section */
@@ -82,9 +93,24 @@
 }
 
 /* Responsive Styles */
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .albums-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .bottom-content {
+    flex-direction: column;
+  }
+  
+  .sidebar-left {
+    width: 100%;
+    order: 2;
+  }
+  
+  .main-content-area {
+    order: 1;
   }
 }
 
@@ -94,20 +120,15 @@
   }
 
   .top-albums-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .side-albums {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .top-albums-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  .side-albums,
   .albums-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -121,8 +142,10 @@
 }
 
 @media (max-width: 576px) {
-  .top-albums-grid,
-  .side-albums,
+  .top-albums-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .albums-grid {
     grid-template-columns: 1fr;
   }
