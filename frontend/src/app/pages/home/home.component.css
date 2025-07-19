@@ -1,6 +1,8 @@
 /* Home Page Component Styles */
+/* File Path: frontend/src/app/pages/home/home.component.css */
 
 .home-page {
+  position: relative;
   min-height: calc(100vh - 120px);
 }
 
@@ -12,19 +14,19 @@
 }
 
 .home-content {
-  padding: 0;
+  padding: var(--spacing-lg) 0;
 }
 
-/* Featured Section - Full Width */
+/* Featured Section */
 .featured-section {
-  margin-bottom: var(--spacing-xl);
-  padding: var(--spacing-lg) var(--spacing-lg) 0;
+  margin-bottom: var(--spacing-xxl);
 }
 
 .featured-wrapper {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: 0;
+  gap: 0; /* No gap between featured album and top albums grid */
+  margin-bottom: var(--spacing-lg);
 }
 
 .featured-album {
@@ -35,36 +37,122 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 0;
+  gap: 0; /* No gap between albums */
 }
 
-/* Bottom Content Layout */
-.bottom-content {
-  display: flex;
-  gap: var(--spacing-lg);
-  padding: 0 var(--spacing-lg) var(--spacing-lg);
+/* Album Overlay Card - for all overlay albums including featured */
+.album-overlay-card {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  height: 100%;
+  min-height: 150px;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  border: none; /* Remove any border */
 }
 
-/* Sidebar on Left */
-.sidebar-left {
-  width: 280px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
+.album-overlay-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  z-index: 10; /* Ensure hovered card appears above others */
 }
 
-/* Main Content Area on Right */
-.main-content-area {
-  flex: 1;
-  min-width: 0;
+/* Featured Card - larger version */
+.featured-card {
+  min-height: 400px; /* Larger height for featured album */
+}
+
+.album-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+}
+
+.album-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-normal);
+}
+
+.album-overlay-card:hover .album-image {
+  transform: scale(1.05);
+}
+
+/* Text Overlay */
+.album-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    to top, 
+    rgba(0, 0, 0, 0.9) 0%, 
+    rgba(0, 0, 0, 0.7) 50%, 
+    transparent 100%
+  );
+  padding: var(--spacing-md) var(--spacing-sm) var(--spacing-sm);
+  color: var(--white);
+}
+
+/* Featured card gets larger text overlay padding */
+.featured-card .album-overlay {
+  padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-lg);
+}
+
+.album-text {
+  text-align: center;
+}
+
+.album-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 var(--spacing-xs) 0;
+  color: var(--white);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Featured card gets larger text */
+.featured-card .album-title {
+  font-size: 1.5rem;
+  margin: 0 0 var(--spacing-sm) 0;
+  white-space: normal; /* Allow text wrapping for longer titles */
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.album-artist {
+  font-size: 0.75rem;
+  margin: 0;
+  color: var(--primary-color); /* Red color for artist/band name */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  font-weight: 500; /* Slightly bolder for better visibility */
+}
+
+/* Featured card gets larger artist text */
+.featured-card .album-artist {
+  font-size: 1.1rem;
+  white-space: normal; /* Allow text wrapping for longer artist names */
+  overflow: visible;
+  text-overflow: unset;
+  color: var(--primary-color); /* Red color for featured artist/band name */
 }
 
 /* Side Albums */
 .side-albums {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
 }
 
 /* Albums Section */
@@ -93,57 +181,112 @@
 }
 
 /* Responsive Styles */
-@media (max-width: 1400px) {
+@media (max-width: 1200px) {
   .albums-grid {
     grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 1200px) {
-  .bottom-content {
-    flex-direction: column;
-  }
-  
-  .sidebar-left {
-    width: 100%;
-    order: 2;
-  }
-  
-  .main-content-area {
-    order: 1;
   }
 }
 
 @media (max-width: 992px) {
   .featured-wrapper {
     grid-template-columns: 1fr;
+    gap: 0; /* No gap in mobile view either */
   }
 
   .top-albums-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0; /* No gap between albums */
+  }
+
+  .side-albums {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Adjust featured card for medium screens */
+  .featured-card {
+    min-height: 300px;
+  }
+
+  .featured-card .album-title {
+    font-size: 1.3rem;
+  }
+
+  .featured-card .album-artist {
+    font-size: 1rem;
+    color: var(--primary-color); /* Keep red color */
+  }
+
+  /* Adjust text size for medium screens */
+  .album-title {
+    font-size: 0.85rem;
+  }
+
+  .album-artist {
+    font-size: 0.7rem;
+    color: var(--primary-color); /* Keep red color */
   }
 }
 
 @media (max-width: 768px) {
   .top-albums-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .albums-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0; /* No gap between albums */
   }
 
   .side-albums,
   .albums-grid {
-    gap: var(--spacing-sm);
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .featured-wrapper {
+    gap: 0; /* No gap */
+  }
+
+  .side-albums,
+  .albums-grid {
+    gap: var(--spacing-sm); /* Keep gap for other sections */
+  }
+
+  /* Adjust featured card for mobile */
+  .featured-card {
+    min-height: 250px;
+  }
+
+  .featured-card .album-title {
+    font-size: 1.1rem;
+  }
+
+  .featured-card .album-artist {
+    font-size: 0.9rem;
+    color: var(--primary-color); /* Keep red color */
+  }
+
+  .featured-card .album-overlay {
+    padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+  }
+
+  /* Adjust text size for mobile */
+  .album-title {
+    font-size: 0.8rem;
+  }
+
+  .album-artist {
+    font-size: 0.65rem;
+    color: var(--primary-color); /* Keep red color */
+  }
+
+  .album-overlay {
+    padding: var(--spacing-sm) var(--spacing-xs) var(--spacing-xs);
   }
 }
 
 @media (max-width: 576px) {
   .top-albums-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+    gap: 0; /* No gap between albums */
   }
 
+  .side-albums,
   .albums-grid {
     grid-template-columns: 1fr;
   }
@@ -155,6 +298,30 @@
   .featured-section,
   .albums-section {
     margin-bottom: var(--spacing-lg);
+  }
+
+  /* Adjust featured card for very small screens */
+  .featured-card {
+    min-height: 200px;
+  }
+
+  .featured-card .album-title {
+    font-size: 1rem;
+  }
+
+  .featured-card .album-artist {
+    font-size: 0.85rem;
+    color: var(--primary-color); /* Keep red color */
+  }
+
+  /* Text size for very small screens */
+  .album-title {
+    font-size: 0.75rem;
+  }
+
+  .album-artist {
+    font-size: 0.6rem;
+    color: var(--primary-color); /* Keep red color */
   }
 }
 
@@ -175,6 +342,24 @@
 .albums-grid app-album-card:nth-child(4) {
   animation-delay: 0.25s;
 }
+
+/* Animation for overlay cards */
+.album-overlay-card {
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.featured-card {
+  animation-delay: 0.05s; /* Featured card appears first */
+}
+
+.top-albums-grid .album-overlay-card:nth-child(1) { animation-delay: 0.1s; }
+.top-albums-grid .album-overlay-card:nth-child(2) { animation-delay: 0.15s; }
+.top-albums-grid .album-overlay-card:nth-child(3) { animation-delay: 0.2s; }
+.top-albums-grid .album-overlay-card:nth-child(4) { animation-delay: 0.25s; }
+.top-albums-grid .album-overlay-card:nth-child(5) { animation-delay: 0.3s; }
+.top-albums-grid .album-overlay-card:nth-child(6) { animation-delay: 0.35s; }
+.top-albums-grid .album-overlay-card:nth-child(7) { animation-delay: 0.4s; }
+.top-albums-grid .album-overlay-card:nth-child(8) { animation-delay: 0.45s; }
 
 @keyframes fadeInUp {
   from {
