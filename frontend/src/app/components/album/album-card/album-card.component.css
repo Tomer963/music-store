@@ -3,7 +3,7 @@
 .album-card {
   position: relative;
   background-color: var(--white);
-  border-radius: var(--radius-md);
+  border-radius: 0; /* No rounded corners */
   overflow: hidden;
   cursor: pointer;
   transition: transform var(--transition-normal),
@@ -31,6 +31,20 @@
   min-height: 400px;
 }
 
+/* Small card - image takes full space */
+.album-card.small .album-image {
+  height: 100%;
+  padding-bottom: 0;
+}
+
+.album-card.small .album-image img {
+  height: 100%;
+}
+
+.album-card.small .album-info {
+  display: none;
+}
+
 /* Album Image */
 .album-image {
   position: relative;
@@ -52,53 +66,6 @@
 
 .album-card:hover .album-image img {
   transform: scale(1.05);
-}
-
-/* Album Info Overlay */
-.album-info-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 50%, transparent 100%);
-  padding: var(--spacing-md);
-  color: var(--white);
-  pointer-events: none;
-}
-
-.overlay-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 var(--spacing-xs) 0;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-}
-
-.overlay-artist {
-  font-size: 0.875rem;
-  margin: 0;
-  opacity: 0.9;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-}
-
-/* Size-specific overlay styles */
-.album-card.small .overlay-title {
-  font-size: 0.75rem;
-}
-
-.album-card.small .overlay-artist {
-  font-size: 0.625rem;
-}
-
-.album-card.small .album-info-overlay {
-  padding: var(--spacing-xs);
-}
-
-.album-card.large .overlay-title {
-  font-size: 1.5rem;
-}
-
-.album-card.large .overlay-artist {
-  font-size: 1.125rem;
 }
 
 /* Hover Overlay */
@@ -306,6 +273,7 @@
 /* Size-specific styles */
 .album-card.small .album-info {
   padding: var(--spacing-sm);
+  display: none; /* Hide info for small cards */
 }
 
 .album-card.small .album-title {
