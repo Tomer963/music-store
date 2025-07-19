@@ -24,7 +24,7 @@
 .featured-wrapper {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  gap: var(--spacing-md);
+  gap: 0;
 }
 
 .featured-album {
@@ -35,7 +35,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: var(--spacing-md);
+  gap: 0;
 }
 
 /* Bottom Content Layout */
@@ -133,8 +133,6 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .featured-wrapper,
-  .top-albums-grid,
   .side-albums,
   .albums-grid {
     gap: var(--spacing-sm);
