@@ -2,20 +2,18 @@
 
 .sidebar {
   position: sticky;
-  top: 120px;
-  width: 280px;
-  max-width: 90vw;
+  top: 140px; /* Account for header height + spacing */
   height: fit-content;
-  max-height: calc(100vh - 140px);
-  background-color: var(--white);
+  max-height: calc(100vh - 160px);
+  width: 100%;
+  background-color: var(--background-color);
   overflow-y: auto;
-  padding: var(--spacing-lg);
-  z-index: 10;
+  padding: 0;
 }
 
 /* Categories Section */
 .categories-section {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 0;
 }
 
 /* Loading State */
@@ -30,6 +28,8 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
 .category-item {
@@ -37,12 +37,24 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-sm) var(--spacing-md);
-  margin-bottom: var(--spacing-xs);
+  margin-bottom: 0;
   background-color: var(--primary-color);
   color: var(--white);
   cursor: pointer;
   transition: all var(--transition-fast);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.category-item:first-child {
+  border-top-left-radius: var(--radius-sm);
+  border-top-right-radius: var(--radius-sm);
+}
+
+.category-item:last-child {
+  border-bottom: none;
+  border-bottom-left-radius: var(--radius-sm);
+  border-bottom-right-radius: var(--radius-sm);
 }
 
 .category-item:hover {
@@ -72,16 +84,6 @@
   color: var(--gray-medium);
 }
 
-/* Cart Section */
-.cart-section {
-  position: sticky;
-  bottom: 0;
-  background-color: var(--white);
-  margin: 0 calc(-1 * var(--spacing-lg));
-  padding: 0 var(--spacing-lg) var(--spacing-lg);
-  border-top: 1px solid var(--gray-light);
-}
-
 /* Custom Scrollbar */
 .sidebar::-webkit-scrollbar {
   width: 6px;
@@ -99,23 +101,16 @@
 /* Responsive */
 @media (max-width: 1200px) {
   .sidebar {
-    width: 250px;
+    width: 100%;
   }
 }
 
 @media (max-width: 992px) {
   .sidebar {
     position: static;
-    width: 100%;
-    max-width: none;
-    height: auto;
+    top: auto;
+    max-height: none;
     margin-top: var(--spacing-lg);
-    padding: var(--spacing-md);
-  }
-
-  .cart-section {
-    margin: 0 calc(-1 * var(--spacing-md));
-    padding: 0 var(--spacing-md) var(--spacing-md);
   }
 }
 
@@ -129,6 +124,7 @@
   .category-item {
     justify-content: center;
     text-align: center;
+    border-radius: var(--radius-sm);
   }
 
   .category-count {

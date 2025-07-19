@@ -1,6 +1,4 @@
-<!-- Home Page Component Template -->
-<!-- File Path: frontend/src/app/pages/home/home.component.html -->
-
+<!-- Home Page Component -->
 <div class="home-page">
   <!-- Loading State -->
   <div class="loading-container" *ngIf="isLoading">
@@ -10,96 +8,85 @@
   <!-- Main Content -->
   <div class="home-content" *ngIf="!isLoading">
     <div class="container">
-      <!-- Featured Section -->
+      <!-- Featured Section with 9 Albums -->
       <section class="featured-section" *ngIf="featuredAlbum">
         <div class="featured-wrapper">
-          <!-- Featured Album (Large) with text overlay -->
+          <!-- Featured Album (Large) on the left -->
           <div class="featured-album">
-            <div 
-              class="album-overlay-card featured-card"
-              (click)="navigateToAlbum(featuredAlbum._id)"
+            <app-album-card
+              [album]="featuredAlbum"
+              [size]="'large'"
+              [showHover]="true"
+              [showOverlayInfo]="true"
             >
-              <div class="album-image-container">
-                <img 
-                  [src]="getMainImageUrl(featuredAlbum)" 
-                  [alt]="featuredAlbum.title" 
-                  class="album-image"
-                  loading="lazy"
-                />
-                <div class="album-overlay">
-                  <div class="album-text">
-                    <h3 class="album-title">{{ featuredAlbum.title }}</h3>
-                    <p class="album-artist">{{ featuredAlbum.artist }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </app-album-card>
           </div>
 
-          <!-- Top Albums Grid with text overlay on images -->
+          <!-- Top 8 Albums Grid on the right -->
           <div class="top-albums-grid">
-            <div 
-              *ngFor="let album of topAlbums; trackBy: trackByAlbum" 
-              class="album-overlay-card"
-              (click)="navigateToAlbum(album._id)"
+            <app-album-card
+              *ngFor="let album of topAlbums; trackBy: trackByAlbum"
+              [album]="album"
+              [size]="'small'"
+              [showHover]="true"
+              [showOverlayInfo]="true"
             >
-              <div class="album-image-container">
-                <img 
-                  [src]="getMainImageUrl(album)" 
-                  [alt]="album.title" 
-                  class="album-image"
-                  loading="lazy"
-                />
-                <div class="album-overlay">
-                  <div class="album-text">
-                    <h3 class="album-title">{{ album.title }}</h3>
-                    <p class="album-artist">{{ album.artist }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </app-album-card>
           </div>
-        </div>
-
-        <!-- Side Albums -->
-        <div class="side-albums" *ngIf="sideAlbums.length > 0">
-          <app-album-card
-            *ngFor="let album of sideAlbums; trackBy: trackByAlbum"
-            [album]="album"
-            [size]="'medium'"
-            [showInfo]="true"
-          >
-          </app-album-card>
         </div>
       </section>
 
-      <!-- Remaining Albums Section -->
-      <section class="albums-section" *ngIf="remainingAlbums.length > 0">
-        <div class="albums-grid">
-          <app-album-card
-            *ngFor="let album of remainingAlbums; trackBy: trackByAlbum"
-            [album]="album"
-            [size]="'medium'"
-            [showInfo]="true"
-            [showPrice]="true"
-          >
-          </app-album-card>
-        </div>
+      <!-- Bottom Section with Sidebar -->
+      <section class="bottom-section">
+        <div class="bottom-wrapper">
+          <!-- Left Column with Sidebar and Side Albums -->
+          <div class="left-column">
+            <!-- Sidebar -->
+            <div class="sidebar-wrapper">
+              <app-sidebar></app-sidebar>
+            </div>
 
-        <!-- Load More Spinner -->
-        <div class="load-more" *ngIf="isLoadingMore">
-          <app-spinner [size]="'small'"></app-spinner>
-          <p>Loading more albums...</p>
-        </div>
+            <!-- Side Albums under Sidebar -->
+            <div class="side-albums" *ngIf="sideAlbums.length > 0">
+              <app-album-card
+                *ngFor="let album of sideAlbums; trackBy: trackByAlbum"
+                [album]="album"
+                [size]="'medium'"
+                [showInfo]="true"
+              >
+              </app-album-card>
+            </div>
+          </div>
 
-        <!-- No More Albums Message -->
-        <div class="no-more" *ngIf="!hasMore && !isLoadingMore">
-          <p>You've reached the end of our collection!</p>
+          <!-- Right Column with Remaining Albums -->
+          <div class="right-column">
+            <!-- Remaining Albums Section -->
+            <div class="albums-section" *ngIf="remainingAlbums.length > 0">
+              <div class="albums-grid">
+                <app-album-card
+                  *ngFor="let album of remainingAlbums; trackBy: trackByAlbum"
+                  [album]="album"
+                  [size]="'medium'"
+                  [showInfo]="true"
+                  [showPrice]="true"
+                >
+                </app-album-card>
+              </div>
+
+              <!-- Load More Spinner -->
+              <div class="load-more" *ngIf="isLoadingMore">
+                <app-spinner [size]="'small'"></app-spinner>
+                <p>Loading more albums...</p>
+              </div>
+
+              <!-- No More Albums Message -->
+              <div class="no-more" *ngIf="!hasMore && !isLoadingMore">
+                <p>You've reached the end of our collection!</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
   </div>
-
-  <!-- Sidebar -->
-  <app-sidebar></app-sidebar>
 </div>

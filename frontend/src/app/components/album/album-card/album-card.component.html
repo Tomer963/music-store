@@ -13,6 +13,12 @@
   <div class="album-image">
     <img [src]="mainImageUrl" [alt]="album.title" loading="lazy" />
 
+    <!-- Album Info Overlay (for featured albums) -->
+    <div class="album-info-overlay" *ngIf="showOverlayInfo">
+      <h3 class="overlay-title">{{ album.title }}</h3>
+      <p class="overlay-artist">{{ album.artist }}</p>
+    </div>
+
     <!-- Hover Overlay -->
     <div class="hover-overlay" *ngIf="showHover && isHovered">
       <div class="hover-content">
@@ -26,21 +32,21 @@
         <button
           class="action-btn cart-btn"
           (click)="addToCart($event)"
-          [disabled]="isAddingToCart || !isInStock()"
+          [disabled]="isAddingToCart || !album.inStock"
           title="Add to Cart"
         >
           <span class="icon">🛒</span>
         </button>
       </div>
-      <div class="price-tag" *ngIf="isInStock()">
+      <div class="price-tag" *ngIf="album.inStock">
         {{ getFormattedPrice() }}
       </div>
-      <div class="out-of-stock" *ngIf="!isInStock()">Out of Stock</div>
+      <div class="out-of-stock" *ngIf="!album.inStock">Out of Stock</div>
     </div>
   </div>
 
   <!-- Album Info -->
-  <div class="album-info">
+  <div class="album-info" *ngIf="!showOverlayInfo">
     <h3 class="album-title">{{ album.title }}</h3>
     <p class="album-artist">{{ album.artist }}</p>
 
@@ -54,7 +60,7 @@
         <button
           class="add-to-cart-btn"
           (click)="addToCart($event)"
-          [disabled]="isAddingToCart || !isInStock()"
+          [disabled]="isAddingToCart || !album.inStock"
         >
           <span class="icon">🛒</span>
         </button>
@@ -75,19 +81,12 @@
         <button
           class="icon-btn"
           (click)="addToCart($event)"
-          [disabled]="isAddingToCart || !isInStock()"
+          [disabled]="isAddingToCart || !album.inStock"
           title="Add to Cart"
         >
           <span>🛒</span>
         </button>
       </div>
-    </div>
-    
-    <!-- Stock Status Display -->
-    <div class="stock-status" *ngIf="showInfo || showPrice">
-      <span class="stock-label" [class.in-stock]="isInStock()" [class.out-of-stock]="!isInStock()">
-        {{ getStockStatus() }}
-      </span>
     </div>
   </div>
 </div>

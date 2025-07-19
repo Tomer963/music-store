@@ -23,6 +23,7 @@ export class AlbumCardComponent implements OnInit {
   @Input() showHover = false;
   @Input() showInfo = false;
   @Input() showPrice = false;
+  @Input() showOverlayInfo = false;
 
   isHovered = false;
   isAddingToCart = false;
@@ -52,7 +53,7 @@ export class AlbumCardComponent implements OnInit {
   addToCart(event: Event): void {
     event.stopPropagation();
 
-    if (this.isAddingToCart || !this.isInStock()) {
+    if (this.isAddingToCart || !this.album.inStock) {
       return;
     }
 
@@ -69,35 +70,6 @@ export class AlbumCardComponent implements OnInit {
         this.isAddingToCart = false;
       },
     });
-  }
-
-  /**
-   * Check if album is in stock
-   * @returns true if in stock
-   */
-  isInStock(): boolean {
-    // Check both stock quantity and availability flag
-    return this.album.stock > 0 && this.album.availability === true;
-  }
-
-  /**
-   * Get stock status text
-   * @returns Stock status string
-   */
-  getStockStatus(): string {
-    if (!this.album.availability) {
-      return "Not Available";
-    }
-    
-    if (this.album.stock === 0) {
-      return "Out of Stock";
-    }
-    
-    if (this.album.stock <= 5) {
-      return `Only ${this.album.stock} left in stock`;
-    }
-    
-    return "In Stock";
   }
 
   /**

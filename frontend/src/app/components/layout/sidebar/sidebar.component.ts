@@ -1,6 +1,6 @@
 /**
  * Sidebar Component
- * Displays categories and cart widget
+ * Displays categories
  */
 
 import { Component, OnInit, OnDestroy } from "@angular/core";
@@ -9,13 +9,12 @@ import { Router, NavigationEnd } from "@angular/router";
 import { Subject, filter, takeUntil } from "rxjs";
 import { CategoryService } from "../../../services/category.service";
 import { Category } from "../../../models/album.model";
-import { CartWidgetComponent } from "../../cart/cart-widget/cart-widget.component";
 import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 
 @Component({
   selector: "app-sidebar",
   standalone: true,
-  imports: [CommonModule, CartWidgetComponent, SpinnerComponent],
+  imports: [CommonModule, SpinnerComponent],
   templateUrl: "./sidebar.component.html",
   styleUrls: ["./sidebar.component.css"],
 })
@@ -24,7 +23,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   activeCategoryId: string | null = null;
   isLoadingCategories = true;
   showSidebar = true;
-  showCart = true;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -85,9 +83,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     // Show sidebar only on home, category, and album pages
     this.showSidebar =
       url === "/" || url.includes("/category/") || url.includes("/album/");
-
-    // Show cart only on category and album pages (not on home)
-    this.showCart = url.includes("/category/") || url.includes("/album/");
 
     // Extract category ID from URL if on category page
     const categoryMatch = url.match(/\/category\/([a-f0-9]{24})/);
