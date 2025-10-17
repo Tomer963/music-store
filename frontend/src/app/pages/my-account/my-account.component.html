@@ -1,0 +1,194 @@
+<div class="my-account-page">
+  <div class="loading-container" *ngIf="isLoadingProfile">
+    <app-spinner></app-spinner>
+  </div>
+
+  <div class="account-content" *ngIf="!isLoadingProfile">
+    <div class="container">
+      <div class="title-wrapper">
+        <h1 class="page-title">My Account</h1>
+      </div>
+
+      <div class="account-tabs">
+        <button
+          class="tab-button"
+          [class.active]="activeTab === 'orders'"
+          (click)="switchTab('orders')"
+        >
+          My Orders
+        </button>
+        <button
+          class="tab-button"
+          [class.active]="activeTab === 'profile'"
+          (click)="switchTab('profile')"
+        >
+          Account Information
+        </button>
+      </div>
+
+      <div class="tab-content">
+        <!-- Profile Section -->
+        <div class="profile-section" *ngIf="activeTab === 'profile' && user">
+          <div class="info-grid">
+            <div class="info-card">
+              <h3 class="info-title">Personal Information</h3>
+              <div class="info-content">
+                <div class="info-row">
+                  <span class="info-label">Name:</span>
+                  <span class="info-value"
+                    >{{ user.firstName }} {{ user.lastName }}</span
+                  >
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Email:</span>
+                  <span class="info-value">{{ user.email }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Member Since:</span>
+                  <span class="info-value">{{
+                    formatDate(user.createdAt)
+                  }}</span>
+                </div>
+                <div class="info-row" *ngIf="user.lastLogin">
+                  <span class="info-label">Last Login:</span>
+                  <span class="info-value">{{
+                    formatDate(user.lastLogin)
+                  }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card" *ngIf="user.billingInfo">
+              <h3 class="info-title">Billing Information</h3>
+              <div class="info-content">
+                <div class="info-row">
+                  <span class="info-label">Address:</span>
+                  <span class="info-value">{{ user.billingInfo.address }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">City:</span>
+                  <span class="info-value">{{ user.billingInfo.city }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Zip Code:</span>
+                  <span class="info-value">{{ user.billingInfo.zipCode }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Phone:</span>
+                  <span class="info-value">{{ user.billingInfo.phone }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div class="orders-section" *ngIf="activeTab === 'orders'">
+          <div class="orders-loading" *ngIf="isLoadingOrders">
+            <app-spinner [size]="'small'"></app-spinner>
+            <p>Loading your orders...</p>
+          </div>
+
+          <div
+            class="no-orders"
+            *ngIf="!isLoadingOrders && orders.length === 0"
+          >
+            <div class="empty-icon">📦</div>
+            <h3>No orders yet</h3>
+            <p>When you place your first order, it will appear here.</p>
+            <a routerLink="/" class="btn btn-primary">Start Shopping</a>
+          </div>
+
+          <div
+            class="orders-list"
+            *ngIf="!isLoadingOrders && orders.length > 0"
+          >
+            <div class="order-card" *ngFor="let order of orders">
+              <div class="order-header" (click)="toggleOrderDetails(order._id)">
+                <div class="order-info">
+                  <div class="order-number">
+                    <strong>Order #{{ order.orderNumber }}</strong>
+                  </div>
+                  <div class="order-date">
+                    {{ formatDate(order.createdAt) }}
+                  </div>
+                </div>
+                <div class="order-summary">
+                  <div class="order-items-count">
+                    {{ getTotalItems(order) }}
+                    {{ getTotalItems(order) === 1 ? "item" : "items" }}
+                  </div>
+                  <div class="order-total">
+                    {{ formatPrice(order.totalAmount) }}
+                  </div>
+                </div>
+                <div class="order-expand-icon" *ngIf="isOrderExpandable(order)">
+                  <span class="expand-icon">▼</span>
+                </div>
+              </div>
+
+              <div class="order-details" [id]="'order-details-' + order._id">
+                <div class="order-items">
+                  <h4 class="section-subtitle">Order Items</h4>
+                  <div class="items-table">
+                    <div class="item-row" *ngFor="let item of order.items">
+                      <img
+                        [src]="getAlbumImage(item)"
+                        [alt]="getItemDisplayName(item)"
+                        class="item-image"
+                      />
+                      <div class="item-info">
+                        <span class="item-name">{{
+                          getItemDisplayName(item)
+                        }}</span>
+                      </div>
+                      <div class="item-details">
+                        <span class="item-qty">Qty: {{ item.quantity }}</span>
+                        <span class="item-price"
+                          >{{ formatPrice(item.price) }} each</span
+                        >
+                        <span class="item-total">{{
+                          formatPrice(item.price * item.quantity)
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="payment-info">
+                  <h4 class="section-subtitle">Payment Information</h4>
+                  <div class="payment-details">
+                    <div class="detail-row">
+                      <span class="detail-label">Payment Method:</span>
+                      <span class="detail-value">{{
+                        getPaymentMethodText(order.paymentMethod)
+                      }}</span>
+                    </div>
+                    <div class="detail-row" *ngIf="order.paymentInfo?.cardType">
+                      <span class="detail-label">Card Type:</span>
+                      <span class="detail-value">{{
+                        order.paymentInfo.cardType | titlecase
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="billing-info" *ngIf="order.billingInfo">
+                  <h4 class="section-subtitle">Billing Address</h4>
+                  <div class="billing-details">
+                    <p>{{ order.billingInfo.address }}</p>
+                    <p>
+                      {{ order.billingInfo.city }},
+                      {{ order.billingInfo.zipCode }}
+                    </p>
+                    <p>Phone: {{ order.billingInfo.phone }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

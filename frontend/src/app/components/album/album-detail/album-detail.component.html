@@ -1,0 +1,142 @@
+<app-content-layout>
+  <div breadcrumb>
+    <a routerLink="/" class="breadcrumb-link">Home</a>
+    <span class="breadcrumb-separator"> > </span>
+    <a [routerLink]="['/category', getCategoryId()]" class="breadcrumb-link">{{
+      getCategoryName()
+    }}</a>
+    <span class="breadcrumb-separator"> > </span>
+    <span class="breadcrumb-current"
+      >{{ album?.title }} ({{ album?.releaseYear }})</span
+    >
+  </div>
+
+  <div main-content>
+    <div class="loading-container" *ngIf="isLoading">
+      <app-spinner></app-spinner>
+    </div>
+
+    <div class="album-detail-content-inner" *ngIf="!isLoading && album">
+      <div class="album-detail-wrapper">
+        <div class="album-images-section">
+          <div class="main-image-box">
+            <img
+              [src]="getSelectedImageUrl()"
+              [alt]="album.title"
+              class="album-image"
+            />
+          </div>
+
+          <div class="thumbnails-row">
+            <div
+              class="thumbnail-box"
+              *ngFor="let image of getThreeThumbnails(); let i = index"
+              [class.active]="selectedImageIndex === i"
+              (click)="selectImage(i)"
+            >
+              <img
+                [src]="image.url"
+                [alt]="album.title + ' image ' + (i + 1)"
+                class="album-image"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="album-info-section">
+          <div class="album-info">
+            <div class="title-section">
+              <h1 class="album-title">
+                {{ album.title }} ({{ album.releaseYear }})
+              </h1>
+            </div>
+
+            <div class="info-line">
+              <span class="info-label">Availability</span>
+              <span class="info-value" [class.in-stock]="album.stock > 0">
+                {{ album.stock > 0 ? "In Stock" : "Out of Stock" }}
+              </span>
+            </div>
+
+            <hr class="info-divider" />
+
+            <div class="info-line stock-line" *ngIf="album.stock > 0">
+              <span class="stock-text"
+                >Only
+                <span class="stock-number">{{ album.stock }}</span> left</span
+              >
+            </div>
+
+            <div class="price-line">{{ formatPrice(album.price) }}</div>
+
+            <div class="description-line">{{ album.description }}</div>
+
+            <div class="purchase-box">
+              <div class="price-section">
+                <span class="price-in-box">{{ formatPrice(album.price) }}</span>
+              </div>
+
+              <hr class="price-divider" />
+
+              <div class="purchase-controls">
+                <div class="qty-section">
+                  <label class="qty-label">Qty:</label>
+                  <input
+                    type="number"
+                    class="qty-input"
+                    [(ngModel)]="quantity"
+                    [min]="album.stock > 0 ? 1 : 0"
+                    [max]="album.stock"
+                    [disabled]="album.stock === 0"
+                  />
+                </div>
+
+                <button
+                  class="add-to-cart-btn"
+                  (click)="addToCart()"
+                  [disabled]="
+                    album.stock === 0 ||
+                    isAddingToCart ||
+                    quantity < 1 ||
+                    quantity > album.stock
+                  "
+                >
+                  Add to Cart
+                </button>
+              </div>
+
+              <hr class="wishlist-divider" />
+
+              <div class="wishlist-section">
+                <a
+                  href="#"
+                  class="wishlist-link"
+                  (click)="toggleWishlist(); $event.preventDefault()"
+                >
+                  <span class="heart-icon-inline">{{
+                    inWishlist ? "❤" : "♡"
+                  }}</span>
+                  {{ inWishlist ? "Remove from Wishlist" : "Add to Wishlist" }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="details-box">
+        <div class="details-header">
+          <h3 class="details-title">Details</h3>
+        </div>
+        <div class="details-content">
+          <p
+            *ngFor="let paragraph of getFormattedDescription()"
+            class="description-paragraph"
+          >
+            {{ paragraph }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-content-layout>

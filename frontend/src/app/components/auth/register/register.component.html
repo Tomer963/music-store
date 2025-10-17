@@ -1,0 +1,219 @@
+<div class="modal-overlay" *ngIf="isOpen">
+  <div
+    class="modal-content"
+    [class.loading]="isLoading"
+    [class.success]="showSuccess"
+  >
+    <div class="loading-overlay" *ngIf="isLoading">
+      <app-spinner [size]="'medium'"></app-spinner>
+    </div>
+
+    <div class="modal-header">
+      <h2 class="modal-title">Registration</h2>
+      <button
+        class="close-button"
+        [disabled]="isLoading"
+        (click)="closeModal()"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" *ngIf="showSuccess">
+      <div class="success-icon">✓</div>
+      <p class="success-text">Registration successful!</p>
+      <p class="redirect-text">Redirecting to login...</p>
+    </div>
+
+    <!-- Registration Form -->
+    <div
+      [formGroup]="registerForm"
+      class="registration-form"
+      *ngIf="!showSuccess"
+    >
+      <div class="section-title">Profile Informations</div>
+
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="firstName"
+          placeholder="First Name"
+          class="form-input no-toggle"
+          [class.error]="shouldShowError('firstName')"
+        />
+        <span class="form-error" *ngIf="shouldShowError('firstName')">
+          <span *ngIf="registerForm.get('firstName')?.errors?.['required']"
+            >First Name is required</span
+          >
+          <span *ngIf="registerForm.get('firstName')?.errors?.['minlength']"
+            >Must be at least 2 characters</span
+          >
+          <span *ngIf="registerForm.get('firstName')?.errors?.['maxlength']"
+            >Cannot exceed 12 characters</span
+          >
+        </span>
+      </div>
+
+      <div class="form-group">
+        <input
+          type="text"
+          formControlName="lastName"
+          placeholder="Last Name"
+          class="form-input no-toggle"
+          [class.error]="shouldShowError('lastName')"
+        />
+        <span class="form-error" *ngIf="shouldShowError('lastName')">
+          <span *ngIf="registerForm.get('lastName')?.errors?.['required']"
+            >Last Name is required</span
+          >
+          <span *ngIf="registerForm.get('lastName')?.errors?.['minlength']"
+            >Must be at least 2 characters</span
+          >
+          <span *ngIf="registerForm.get('lastName')?.errors?.['maxlength']"
+            >Cannot exceed 12 characters</span
+          >
+        </span>
+      </div>
+
+      <!-- Newsletter Checkbox -->
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            formControlName="newsletter"
+            class="checkbox-input"
+          />
+          <span class="checkbox-text">Subscribe to Newsletter</span>
+        </label>
+      </div>
+
+      <div class="section-title">Login Datas</div>
+
+      <div class="form-group">
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="E-mail address"
+          class="form-input no-toggle"
+          [class.error]="shouldShowError('email')"
+        />
+        <span class="form-error" *ngIf="shouldShowError('email')">
+          <span *ngIf="registerForm.get('email')?.errors?.['required']"
+            >Email address is required!</span
+          >
+          <span *ngIf="registerForm.get('email')?.errors?.['invalidEmail']"
+            >Please enter a valid email</span
+          >
+        </span>
+      </div>
+
+      <div class="form-group">
+        <div class="input-wrapper">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Password"
+            class="form-input"
+            [class.error]="shouldShowError('password')"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            (mousedown)="showPassword = true"
+            (mouseup)="showPassword = false"
+            (mouseleave)="showPassword = false"
+            (touchstart)="showPassword = true"
+            (touchend)="showPassword = false"
+            tabindex="-1"
+          >
+            {{ showPassword ? "👁️" : "👁️‍🗨️" }}
+          </button>
+        </div>
+        <span class="form-error" *ngIf="shouldShowError('password')">
+          <span *ngIf="registerForm.get('password')?.errors?.['required']"
+            >Password is required!</span
+          >
+          <span *ngIf="registerForm.get('password')?.errors?.['minlength']"
+            >Must be at least 6 characters</span
+          >
+          <span *ngIf="registerForm.get('password')?.errors?.['pattern']"
+            >Must contain uppercase letter</span
+          >
+        </span>
+      </div>
+
+      <div class="form-group">
+        <div class="input-wrapper">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            placeholder="Password confirmation"
+            class="form-input"
+            [class.error]="shouldShowError('confirmPassword')"
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            (mousedown)="showConfirmPassword = true"
+            (mouseup)="showConfirmPassword = false"
+            (mouseleave)="showConfirmPassword = false"
+            (touchstart)="showConfirmPassword = true"
+            (touchend)="showConfirmPassword = false"
+            tabindex="-1"
+          >
+            {{ showConfirmPassword ? "👁️" : "👁️‍🗨️" }}
+          </button>
+        </div>
+        <span class="form-error" *ngIf="shouldShowError('confirmPassword')">
+          <span
+            *ngIf="registerForm.get('confirmPassword')?.errors?.['required']"
+            >Confirmation is required</span
+          >
+          <span
+            *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']"
+            >Passwords must match</span
+          >
+        </span>
+      </div>
+
+      <!-- Terms and Conditions Checkbox -->
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            formControlName="acceptTerms"
+            class="checkbox-input"
+            [class.error]="shouldShowError('acceptTerms')"
+          />
+          <span class="checkbox-text">I accept the Terms and Conditions</span>
+        </label>
+        <span
+          class="form-error terms-error"
+          *ngIf="shouldShowError('acceptTerms')"
+        >
+          <span *ngIf="registerForm.get('acceptTerms')?.errors?.['required']"
+            >Terms and Conditions are required!</span
+          >
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="register-button"
+        [disabled]="isLoading"
+        (click)="onSubmit()"
+      >
+        Register
+      </button>
+
+      <div class="login-alternative">
+        <a class="login-link" (click)="goToLogin()">
+          <span class="or-text">or</span> login
+        </a>
+      </div>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+  </div>
+</div>

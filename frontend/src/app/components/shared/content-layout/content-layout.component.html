@@ -1,0 +1,21 @@
+<div class="content-layout-page">
+  <div class="content-layout-wrapper">
+    <div class="page-content">
+      <div class="breadcrumb-container">
+        <nav class="breadcrumb">
+          <ng-content select="[breadcrumb]"></ng-content>
+        </nav>
+      </div>
+
+      <div class="container-with-sidebar">
+        <div class="floating-sidebar">
+          <app-sidebar></app-sidebar>
+        </div>
+
+        <div class="main-content-area">
+          <ng-content select="[main-content]"></ng-content>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

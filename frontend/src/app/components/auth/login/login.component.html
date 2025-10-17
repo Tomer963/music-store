@@ -1,0 +1,156 @@
+<div class="login-page">
+  <div class="container">
+    <div class="title-wrapper">
+      <h1 class="page-title">Login or Create an Account</h1>
+    </div>
+
+    <div class="checkout-message" *ngIf="isCheckoutRedirect">
+      <div class="checkout-alert">
+        <span class="alert-icon">🛒</span>
+        <p>
+          Please login or register to complete your order. Your cart items will
+          be preserved.
+        </p>
+      </div>
+    </div>
+
+    <div class="login-wrapper">
+      <!-- New Customers -->
+      <div class="column new-customers-column">
+        <div class="column-header">
+          <h2 class="column-title">NEW CUSTOMERS</h2>
+        </div>
+        <div class="column-content">
+          <p class="description-text">
+            By creating an account with our store, you will be able to move
+            through the checkout<br />
+            process faster, store multiple shipping addresses, view and track
+            your orders in your<br />
+            account and more.
+          </p>
+          <button
+            type="button"
+            class="black-button"
+            (click)="showRegisterModal = true"
+          >
+            Create an Account
+          </button>
+          <app-register-modal
+            [isOpen]="showRegisterModal"
+            (closeModalEvent)="showRegisterModal = false"
+            (registerSuccess)="onRegisterSuccess($event)"
+          >
+          </app-register-modal>
+        </div>
+      </div>
+
+      <!-- Registered Customers -->
+      <div class="column registered-customers-column">
+        <div class="column-header">
+          <h2 class="column-title">REGISTERED CUSTOMERS</h2>
+        </div>
+        <div class="column-content">
+          <p class="description-text">
+            If you have an account with us, please log in.
+          </p>
+
+          <div class="error-message" *ngIf="loginError">{{ loginError }}</div>
+
+          <form
+            [formGroup]="loginForm"
+            (ngSubmit)="onLogin()"
+            class="login-form"
+          >
+            <!-- Email -->
+            <div class="form-field">
+              <label class="field-label"
+                >Email Address <span class="required-star">*</span></label
+              >
+              <input
+                type="email"
+                formControlName="email"
+                class="field-input"
+                [class.error]="
+                  loginForm.get('email')?.invalid &&
+                  (loginForm.get('email')?.touched || isSubmitted)
+                "
+                placeholder="Enter your email address"
+              />
+              <span
+                class="field-error"
+                *ngIf="
+                  loginForm.get('email')?.invalid &&
+                  (loginForm.get('email')?.touched || isSubmitted)
+                "
+              >
+                <span *ngIf="loginForm.get('email')?.errors?.['required']"
+                  >Email is required</span
+                >
+                <span *ngIf="loginForm.get('email')?.errors?.['email']"
+                  >Please enter a valid email</span
+                >
+              </span>
+            </div>
+
+            <!-- Password -->
+            <div class="form-field">
+              <label class="field-label"
+                >Password <span class="required-star">*</span></label
+              >
+              <div class="password-field-container">
+                <input
+                  #passwordInput
+                  [type]="showPassword ? 'text' : 'password'"
+                  formControlName="password"
+                  class="field-input with-toggle"
+                  [class.error]="
+                    loginForm.get('password')?.invalid &&
+                    (loginForm.get('password')?.touched || isSubmitted)
+                  "
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  (mousedown)="showPassword = true"
+                  (mouseup)="showPassword = false"
+                  (mouseleave)="showPassword = false"
+                  (touchstart)="showPassword = true"
+                  (touchend)="showPassword = false"
+                  tabindex="-1"
+                >
+                  {{ showPassword ? "👁️" : "👁️‍🗨️" }}
+                </button>
+              </div>
+              <span
+                class="field-error"
+                *ngIf="
+                  loginForm.get('password')?.invalid &&
+                  (loginForm.get('password')?.touched || isSubmitted)
+                "
+              >
+                <span *ngIf="loginForm.get('password')?.errors?.['required']"
+                  >Password is required</span
+                >
+                <span
+                  *ngIf="loginForm.get('password')?.errors?.['invalidPassword']"
+                  >Invalid password format</span
+                >
+              </span>
+            </div>
+
+            <p class="required-text">* Required Fields</p>
+
+            <button
+              type="submit"
+              class="black-button login-button"
+              [disabled]="isLoggingIn"
+            >
+              {{ isLoggingIn ? "Logging in..." : "Login" }}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

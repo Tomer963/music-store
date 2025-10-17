@@ -1,0 +1,476 @@
+<div class="checkout-page" [class.step-2]="currentStep === 2" [class.step-3]="currentStep === 3">
+  <div class="loading-container" *ngIf="isLoading">
+    <app-spinner></app-spinner>
+  </div>
+
+  <div class="empty-cart-container" *ngIf="!isLoading && !hasItems">
+    <div class="container">
+      <div class="empty-cart-content">
+        <div class="empty-cart-icon">🛒</div>
+        <h2>Your cart is empty</h2>
+        <p>Please add items to your cart before proceeding to checkout.</p>
+        <button class="btn btn-primary" (click)="goShopping()">
+          Continue Shopping
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="checkout-content" *ngIf="!isLoading && hasItems">
+    <div class="container">
+      <div class="checkout-grid">
+        <div class="checkout-form">
+          <div class="checkout-title-wrapper">
+            <h2 class="checkout-title">Checkout</h2>
+          </div>
+
+          <div class="checkout-steps-container">
+            <!-- Step 1: Billing -->
+            <div class="step-container">
+              <div
+                class="checkout-step"
+                [class.step-collapsed]="isStepCollapsed(1)"
+                [class.step-active]="isStepActive(1)"
+                [class.step-completed]="isStepCompleted(1)"
+                [class.step-disabled]="isStepDisabled(1)"
+              >
+                <div class="step-header-wrapper">
+                  <div class="step-number-wrapper">
+                    <span class="step-number">1</span>
+                  </div>
+                  <div class="step-title-wrapper">
+                    <span class="step-title">Billing Information</span>
+                  </div>
+                </div>
+
+                <div class="step-form-container" *ngIf="currentStep === 1">
+                  <form [formGroup]="billingForm" class="billing-form">
+                    <div class="form-field-container">
+                      <div class="form-group">
+                        <label class="form-label">Address <span class="required">*</span></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="address"
+                          [class.error]="shouldShowError(billingForm, 'address', billingFormSubmitted)"
+                          placeholder="Enter your address"
+                          autocomplete="nope"
+                        />
+                        <span
+                          class="form-error"
+                          *ngIf="shouldShowError(billingForm, 'address', billingFormSubmitted)"
+                        >
+                          {{ getErrorMessage(billingForm, "address") }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="form-row-container">
+                      <div class="form-group">
+                        <label class="form-label">City <span class="required">*</span></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="city"
+                          [class.error]="shouldShowError(billingForm, 'city', billingFormSubmitted)"
+                          placeholder="Enter your city"
+                          autocomplete="nope"
+                        />
+                        <span
+                          class="form-error"
+                          *ngIf="shouldShowError(billingForm, 'city', billingFormSubmitted)"
+                        >
+                          {{ getErrorMessage(billingForm, "city") }}
+                        </span>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="form-label">Zip/Postal Code <span class="required">*</span></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="zipCode"
+                          [class.error]="shouldShowError(billingForm, 'zipCode', billingFormSubmitted)"
+                          placeholder="12345"
+                          autocomplete="nope"
+                        />
+                        <span
+                          class="form-error"
+                          *ngIf="shouldShowError(billingForm, 'zipCode', billingFormSubmitted)"
+                        >
+                          {{ getErrorMessage(billingForm, "zipCode") }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="form-field-container">
+                      <div class="form-group">
+                        <label class="form-label">Telephone <span class="required">*</span></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          formControlName="phone"
+                          [class.error]="shouldShowError(billingForm, 'phone', billingFormSubmitted)"
+                          placeholder="03-1234567"
+                          autocomplete="nope"
+                        />
+                        <span
+                          class="form-error"
+                          *ngIf="shouldShowError(billingForm, 'phone', billingFormSubmitted)"
+                        >
+                          {{ getErrorMessage(billingForm, "phone") }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="form-note-container">
+                      <p class="required-note">* Required Fields</p>
+                    </div>
+
+                    <div class="form-button-container">
+                      <button type="button" class="btn continue-btn" (click)="continueToNextStep()">
+                        Continue
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Payment -->
+            <div class="step-container">
+              <div
+                class="checkout-step"
+                [class.step-disabled]="isStepDisabled(2)"
+                [class.step-collapsed]="isStepCollapsed(2)"
+                [class.step-active]="isStepActive(2)"
+                [class.step-completed]="isStepCompleted(2)"
+              >
+                <div class="step-header-wrapper">
+                  <div class="step-number-wrapper">
+                    <span class="step-number">2</span>
+                  </div>
+                  <div class="step-title-wrapper">
+                    <span class="step-title">Payment Information</span>
+                  </div>
+                </div>
+
+                <div class="step-form-container" *ngIf="currentStep === 2">
+                  <div class="payment-method-container">
+                    <div class="payment-method-selection">
+                      <label class="radio-option">
+                        <input
+                          type="radio"
+                          [checked]="paymentForm.get('paymentMethod')?.value === 'check'"
+                          (change)="onPaymentMethodChange('check')"
+                        />
+                        <span>Check / Money order</span>
+                      </label>
+
+                      <label class="radio-option">
+                        <input
+                          type="radio"
+                          [checked]="paymentForm.get('paymentMethod')?.value === 'credit_card'"
+                          (change)="onPaymentMethodChange('credit_card')"
+                        />
+                        <span>Credit Card (saved)</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="credit-card-container" *ngIf="paymentForm.get('paymentMethod')?.value === 'credit_card'">
+                    <div class="credit-card-fields">
+                      <div class="form-field-container cardholder-name-field">
+                        <div class="form-group">
+                          <label class="form-label">Name on Card <span class="required">*</span></label>
+                          <input
+                            type="search"
+                            class="form-control"
+                            [value]="paymentForm.get('cardholderName')?.value || ''"
+                            (input)="updateFormField('cardholderName', $event)"
+                            [class.error]="shouldShowError(paymentForm, 'cardholderName', paymentFormSubmitted)"
+                            placeholder="First and Last name"
+                            autocomplete="nope"
+                            role="presentation"
+                          />
+                          <span
+                            class="form-error"
+                            *ngIf="shouldShowError(paymentForm, 'cardholderName', paymentFormSubmitted)"
+                          >
+                            {{ getErrorMessage(paymentForm, "cardholderName") }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-field-container card-type-field">
+                        <div class="form-group">
+                          <label class="form-label">Credit Card Type <span class="required">*</span></label>
+                          <select
+                            class="form-control"
+                            [value]="paymentForm.get('cardType')?.value || ''"
+                            (change)="updateFormField('cardType', $event)"
+                            [class.error]="shouldShowError(paymentForm, 'cardType', paymentFormSubmitted)"
+                            autocomplete="nope"
+                          >
+                            <option value="">Please select a card</option>
+                            <option value="visa">Visa</option>
+                            <option value="mastercard">MasterCard</option>
+                            <option value="direct">Direct</option>
+                          </select>
+                          <span
+                            class="form-error"
+                            *ngIf="shouldShowError(paymentForm, 'cardType', paymentFormSubmitted)"
+                          >
+                            {{ getErrorMessage(paymentForm, "cardType") }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-field-container card-number-field">
+                        <div class="form-group">
+                          <label class="form-label">Credit Card Number <span class="required">*</span></label>
+                          <input
+                            type="search"
+                            class="form-control"
+                            [value]="paymentForm.get('cardNumber')?.value || ''"
+                            (input)="updateFormField('cardNumber', $event)"
+                            [class.error]="shouldShowError(paymentForm, 'cardNumber', paymentFormSubmitted)"
+                            maxlength="16"
+                            placeholder="16 digits"
+                            inputmode="numeric"
+                            autocomplete="nope"
+                            role="presentation"
+                          />
+                          <span
+                            class="form-error"
+                            *ngIf="shouldShowError(paymentForm, 'cardNumber', paymentFormSubmitted)"
+                          >
+                            {{ getErrorMessage(paymentForm, "cardNumber") }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-field-container expiry-date-field">
+                        <div class="form-group">
+                          <label class="form-label">Expiration Date <span class="required">*</span></label>
+                          <div class="expiry-inputs">
+                            <select
+                              class="form-control expiry-month"
+                              [value]="paymentForm.get('expiryMonth')?.value || ''"
+                              (change)="updateFormField('expiryMonth', $event)"
+                              [class.error]="shouldShowError(paymentForm, 'expiryMonth', paymentFormSubmitted)"
+                              autocomplete="nope"
+                            >
+                              <option value="">MM</option>
+                              <option *ngFor="let month of months" [value]="month.value">
+                                {{ month.label }}
+                              </option>
+                            </select>
+                            <span class="select-separator">-</span>
+                            <select
+                              class="form-control expiry-year"
+                              [value]="paymentForm.get('expiryYear')?.value || ''"
+                              (change)="updateFormField('expiryYear', $event)"
+                              [class.error]="shouldShowError(paymentForm, 'expiryYear', paymentFormSubmitted)"
+                              autocomplete="nope"
+                            >
+                              <option value="">YYYY</option>
+                              <option *ngFor="let year of years" [value]="year">
+                                {{ year }}
+                              </option>
+                            </select>
+                          </div>
+                          <span
+                            class="form-error"
+                            *ngIf="shouldShowError(paymentForm, 'expiryMonth', paymentFormSubmitted) || shouldShowError(paymentForm, 'expiryYear', paymentFormSubmitted)"
+                          >
+                            Please select a valid expiration date
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-field-container cvv-field">
+                        <div class="form-group">
+                          <label class="form-label">Card Verification Number <span class="required">*</span></label>
+                          <div class="cvv-row">
+                            <input
+                              type="search"
+                              class="form-control cvv-input"
+                              [value]="paymentForm.get('cvv')?.value || ''"
+                              (input)="updateFormField('cvv', $event)"
+                              [class.error]="shouldShowError(paymentForm, 'cvv', paymentFormSubmitted)"
+                              maxlength="3"
+                              placeholder="3 digits"
+                              inputmode="numeric"
+                              autocomplete="nope"
+                              role="presentation"
+                            />
+                            <span class="cvv-hint">What is this?</span>
+                          </div>
+                          <span
+                            class="form-error"
+                            *ngIf="shouldShowError(paymentForm, 'cvv', paymentFormSubmitted)"
+                          >
+                            {{ getErrorMessage(paymentForm, "cvv") }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-button-container">
+                    <button type="button" class="btn continue-btn" (click)="continueToNextStep()">
+                      Continue
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Order Review -->
+            <div class="step-container">
+              <div
+                class="checkout-step"
+                [class.step-disabled]="isStepDisabled(3)"
+                [class.step-active]="isStepActive(3)"
+                [class.step-completed]="isStepCompleted(3)"
+              >
+                <div class="step-header-wrapper">
+                  <div class="step-number-wrapper">
+                    <span class="step-number">3</span>
+                  </div>
+                  <div class="step-title-wrapper">
+                    <span class="step-title">Order Review</span>
+                  </div>
+                </div>
+
+                <div class="order-review-container" *ngIf="currentStep === 3">
+                  <div class="order-table-wrapper">
+                    <table class="order-table">
+                      <thead>
+                        <tr>
+                          <th>Product Name</th>
+                          <th class="price">Price</th>
+                          <th class="qty">Qty</th>
+                          <th class="subtotal">Subtotal</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of cart.items">
+                          <td class="product-name">
+                            {{ item.album.artist }} - {{ item.album.title }}
+                          </td>
+                          <td class="price">
+                            {{ formatPrice(item.album.price) }}
+                          </td>
+                          <td class="qty">{{ item.quantity }}</td>
+                          <td class="subtotal">
+                            {{ formatPrice(item.album.price * item.quantity) }}
+                          </td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr class="total-row">
+                          <td colspan="3" class="total-label-cell">Total</td>
+                          <td class="total-amount-cell">
+                            {{ formatPrice(cart.total) }}
+                          </td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+
+                  <div class="order-actions-wrapper">
+                    <div class="edit-cart-section">
+                      <span class="forgotten-item">Forgot an Item?</span>
+                      <a href="#" class="edit-cart-link" (click)="editCart($event)">Edit Your Cart</a>
+                    </div>
+
+                    <div class="place-order-wrapper">
+                      <div class="place-order-section">
+                        <button type="button" class="place-order-btn" (click)="submitOrder()" [disabled]="isProcessing">
+                          Place Order
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-summary-sidebar">
+          <div class="order-summary">
+            <div class="progress-title-wrapper">
+              <div class="progress-title-container">
+                <h3 class="progress-title-line1">Your Checkout</h3>
+                <h3 class="progress-title-line2">Progress</h3>
+              </div>
+            </div>
+
+            <div class="progress-section-wrapper">
+              <div class="progress-section">
+                <div class="progress-header">
+                  <span>Billing Information</span>
+                  <ng-container *ngIf="hasReachedStep(1) && hasBillingInfo()">
+                    <span class="progress-separator">|</span>
+                    <button type="button" class="change-btn" (click)="changeStep(1)">
+                      Change
+                    </button>
+                  </ng-container>
+                </div>
+                <div class="progress-content" *ngIf="hasBillingInfo()">
+                  <div class="progress-filled-content">
+                    <div class="info-item">{{ getUserFullName() }}</div>
+                    <div class="info-item">{{ billingInfo.address }}</div>
+                    <div class="info-item">{{ getCityZip() }}</div>
+                    <div class="info-item">{{ getPhoneFormatted() }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="progress-section-wrapper">
+              <div class="progress-section">
+                <div class="progress-header">
+                  <span>Payment Method</span>
+                  <!-- ✅ הוספת התנאי hasPaymentInfo() -->
+                  <ng-container *ngIf="hasReachedStep(2) && hasPaymentInfo()">
+                    <span class="progress-separator">|</span>
+                    <button type="button" class="change-btn" (click)="changeStep(2)">
+                      Change
+                    </button>
+                  </ng-container>
+                </div>
+                <!-- ✅ שינוי התנאי מ-paymentForm.get('paymentMethod')?.value ל-hasPaymentInfo() -->
+                <div class="progress-content" *ngIf="hasPaymentInfo()">
+                  <div class="progress-filled-content">
+                    <div class="info-item-wrapper">
+                      <div class="info-label">Payment Method:</div>
+                      <div class="info-value">{{ paymentForm.get("paymentMethod")?.value === "check" ? "Check / Money order" : "Credit Card (saved)" }}</div>
+                    </div>
+                    <div *ngIf="paymentForm.get('paymentMethod')?.value === 'credit_card' && paymentForm.get('cardType')?.value">
+                      <div class="info-item-wrapper">
+                        <div class="info-label">Card Type:</div>
+                        <div class="info-value">{{ getCardTypeName(paymentForm.get("cardType")?.value) }}</div>
+                      </div>
+                      <div class="info-item-wrapper" *ngIf="paymentForm.get('cardNumber')?.value">
+                        <div class="info-label">Card Number:</div>
+                        <div class="info-value">xxxx-{{ paymentForm.get("cardNumber")?.value.slice(-4) }}</div>
+                      </div>
+                      <div class="info-item-wrapper" *ngIf="paymentForm.get('cardholderName')?.value">
+                        <div class="info-label">Cardholder Name:</div>
+                        <div class="info-value">{{ paymentForm.get("cardholderName")?.value }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

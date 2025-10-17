@@ -1,0 +1,91 @@
+<div class="search-box">
+  <form class="search-form" (ngSubmit)="onSearch()">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search"
+      [formControl]="searchControl"
+      autocomplete="off"
+      (focus)="
+        showResults = searchResults.length > 0 || searchQuery.length >= 3
+      "
+    />
+    <button
+      type="button"
+      class="clear-button"
+      *ngIf="searchControl.value && searchControl.value.trim().length > 0"
+      (click)="clearSearch()"
+      title="Clear search"
+    >
+      ×
+    </button>
+    <button
+      type="submit"
+      class="search-button"
+      [disabled]="isSearching"
+      *ngIf="!searchControl.value || searchControl.value.trim().length === 0"
+    >
+      <svg
+        class="search-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
+        <path
+          d="M16.5 16.5L21 21"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
+  </form>
+
+  <div
+    class="search-results"
+    *ngIf="
+      showResults &&
+      (searchResults.length > 0 ||
+        isSearching ||
+        (searchQuery.length >= 3 && !isSearching))
+    "
+  >
+    <div class="search-loading" *ngIf="isSearching">
+      <app-spinner [size]="'small'"></app-spinner>
+      <span>Searching...</span>
+    </div>
+
+    <div class="results-list" *ngIf="!isSearching && searchResults.length > 0">
+      <div
+        class="result-item"
+        *ngFor="let album of searchResults"
+        (click)="selectAlbum(album._id)"
+      >
+        <img
+          [src]="
+            album.images && album.images[0]
+              ? album.images[0].url
+              : '/assets/images/placeholder-svg-full.svg'
+          "
+          [alt]="album.title"
+          class="result-image"
+        />
+        <div class="result-info">
+          <div class="result-title">{{ album.title }}</div>
+          <div class="result-artist">{{ album.artist }}</div>
+          <div class="result-year">Released {{ album.releaseYear }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="no-results"
+      *ngIf="
+        !isSearching && searchResults.length === 0 && searchQuery.length >= 3
+      "
+    >
+      No results found
+    </div>
+  </div>
+</div>

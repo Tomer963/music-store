@@ -1,0 +1,281 @@
+<div class="home-page">
+  <!-- Loading state -->
+  <div class="loading-container" *ngIf="isLoading">
+    <app-spinner></app-spinner>
+  </div>
+
+  <!-- Main content -->
+  <div class="home-content" *ngIf="!isLoading">
+    <div class="container">
+      <!-- Empty state -->
+      <div
+        class="no-albums-container"
+        *ngIf="!featuredAlbum && allAlbums.length === 0"
+      >
+        <div class="no-albums-message">
+          <i class="fas fa-music"></i>
+          <h2>No Albums Available</h2>
+          <p>There are no albums in the system yet. Please check back later.</p>
+        </div>
+      </div>
+
+      <!-- Featured section -->
+      <section class="featured-section" *ngIf="featuredAlbum">
+        <div class="featured-wrapper">
+          <!-- Featured album (large) -->
+          <div class="featured-album">
+            <app-album-card
+              [album]="featuredAlbum"
+              [albumIndex]="0"
+              [size]="'large'"
+              [showTextOverlay]="true"
+              [hasRedArtist]="true"
+              [showHover]="true"
+            >
+            </app-album-card>
+          </div>
+
+          <!-- Top 8 albums grid -->
+          <div class="top-albums-grid">
+            <app-album-card
+              *ngFor="
+                let album of topAlbums;
+                let i = index;
+                trackBy: trackByAlbum
+              "
+              [album]="album"
+              [albumIndex]="i + 1"
+              [size]="'small'"
+              [showTextOverlay]="true"
+              [hasRedArtist]="true"
+              [showHover]="true"
+              [showInfo]="false"
+            >
+            </app-album-card>
+          </div>
+        </div>
+
+        <!-- Content below featured -->
+        <div class="content-below-featured">
+          <div class="content-with-sidebar">
+            <!-- Sidebar column -->
+            <div class="sidebar-column">
+              <aside class="sidebar-container">
+                <app-sidebar></app-sidebar>
+              </aside>
+
+              <!-- Side albums (10-11) -->
+              <div
+                class="side-albums-vertical"
+                *ngIf="sideAlbum10 || sideAlbum11"
+              >
+                <app-album-card
+                  *ngIf="sideAlbum10"
+                  [album]="sideAlbum10"
+                  [albumIndex]="9"
+                  [size]="'medium'"
+                  [hasRedBackground]="true"
+                  [showHover]="true"
+                  [showDescription]="true"
+                >
+                </app-album-card>
+
+                <app-album-card
+                  *ngIf="sideAlbum11"
+                  [album]="sideAlbum11"
+                  [albumIndex]="10"
+                  [size]="'medium'"
+                  [hasRedBackground]="true"
+                  [showHover]="true"
+                  [showDescription]="true"
+                >
+                </app-album-card>
+              </div>
+
+              <!-- Cart widget -->
+              <div class="cart-widget-container">
+                <app-cart-widget></app-cart-widget>
+              </div>
+            </div>
+
+            <!-- Main albums wrapper -->
+            <div class="main-albums-wrapper">
+              <div class="new-products-title">
+                <h2>New Products</h2>
+              </div>
+
+              <!-- Albums 12+ grid -->
+              <section
+                class="albums-section"
+                *ngIf="remainingAlbums.length > 0"
+              >
+                <div class="albums-grid">
+                  <div
+                    *ngFor="
+                      let album of remainingAlbums;
+                      let i = index;
+                      trackBy: trackByAlbum
+                    "
+                    class="home-album-card"
+                    [attr.data-album-index]="i + 11"
+                  >
+                    <!-- Album image -->
+                    <div class="album-image-container">
+                      <img
+                        [src]="getMainImageUrl(album)"
+                        [alt]="album.title"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <!-- Album content -->
+                    <div class="album-content" [class.no-description]="i >= 0">
+                      <h3 class="album-title-line">
+                        {{ album.artist }} - {{ album.title }}
+                      </h3>
+
+                      <div class="album-bottom-section">
+                        <div class="album-price-icons-row">
+                          <!-- Price display -->
+                          <div class="price-display">
+                            <p class="album-price-text">
+                              {{ formatPrice(album.price) }}
+                            </p>
+                            <p
+                              class="original-price"
+                              *ngIf="
+                                album.originalPrice &&
+                                album.originalPrice > album.price
+                              "
+                            >
+                              {{ formatPrice(album.originalPrice) }}
+                            </p>
+                          </div>
+
+                          <!-- Action icons -->
+                          <div class="album-icons-group">
+                            <!-- Wishlist button -->
+                            <button
+                              class="album-icon-btn wishlist-btn"
+                              [disabled]="isWishlistLoadingMap[album._id]"
+                              (click)="toggleWishlist($event, album._id)"
+                              [title]="
+                                isInWishlist(album._id)
+                                  ? 'Remove from Wishlist'
+                                  : 'Add to Wishlist'
+                              "
+                            >
+                              <span
+                                *ngIf="!isWishlistLoadingMap[album._id]"
+                                class="wishlist-heart-icon"
+                              >
+                                {{ isInWishlist(album._id) ? "❤️" : "🤍" }}
+                              </span>
+                              <div
+                                *ngIf="isWishlistLoadingMap[album._id]"
+                                class="icon-spinner small"
+                              ></div>
+                            </button>
+
+                            <!-- Cart button or counter -->
+                            <button
+                              *ngIf="!showCartCounter[album._id]"
+                              class="album-icon-btn cart-btn gray-cart-btn"
+                              (click)="addToCart($event, album._id)"
+                              [disabled]="
+                                !album.inStock || isCartLoadingMap[album._id]
+                              "
+                              title="Add to Cart"
+                            >
+                              <svg
+                                *ngIf="!isCartLoadingMap[album._id]"
+                                viewBox="0 0 2000 1778"
+                                class="album-cart-icon"
+                              >
+                                <g
+                                  transform="translate(0,1778) scale(0.1,-0.1)"
+                                  fill="currentColor"
+                                  stroke="none"
+                                >
+                                  <path
+                                    d="M658 17760 c-318 -67 -574 -327 -640 -649 -18 -88 -19 -128 -15 -481 3 -330 6 -394 21 -445 59 -201 173 -366 328 -472 92 -64 132 -84 238 -119 l85 -29 1291 -3 1292 -2 5 -23 c3 -12 551 -2688 1217 -5947 666 -3259 1213 -5932 1216 -5941 3 -12 -17 -30 -72 -65 -380 -236 -685 -638 -818 -1077 -58 -190 -79 -343 -79 -562 -1 -218 21 -370 79 -562 110 -365 342 -710 633 -945 625 -504 1496 -578 2183 -186 738 421 1118 1259 947 2088 -68 333 -234 659 -455 900 -41 44 -74 82 -74 85 0 3 1634 5 3631 5 l3631 0 -66 -71 c-692 -748 -682 -1916 23 -2651 230 -240 489 -405 796 -507 521 -173 1097 -118 1567 151 615 351 988 993 988 1702 0 688 -384 1344 -986 1682 -57 33 -104 64 -104 70 0 6 46 211 101 455 99 431 102 447 102 564 -1 90 -6 140 -22 200 -45 170 -153 340 -286 448 -72 59 -234 139 -330 163 -67 18 -276 19 -4792 21 -2598 2 -4723 6 -4723 10 0 4 -49 249 -110 544 -60 296 -110 543 -110 548 0 8 1511 11 5134 11 4460 0 5144 2 5204 15 311 65 551 288 636 590 14 50 395 1717 848 3705 l822 3615 0 130 c0 229 -65 397 -218 562 -116 125 -237 198 -405 246 l-76 22 -6884 5 -6885 5 -156 767 c-87 422 -165 797 -174 834 -59 235 -254 457 -484 550 -159 64 18 59 -2072 61 -1805 2 -1899 1 -1982 -17z"
+                                  />
+                                </g>
+                              </svg>
+                              <div
+                                *ngIf="isCartLoadingMap[album._id]"
+                                class="icon-spinner small"
+                              ></div>
+                            </button>
+
+                            <!-- Cart counter (when in cart) -->
+                            <div
+                              *ngIf="
+                                album.inStock && showCartCounter[album._id]
+                              "
+                              class="bottom-cart-counter"
+                              (click)="$event.stopPropagation()"
+                            >
+                              <button
+                                class="bottom-counter-btn trash-btn"
+                                [disabled]="isUpdatingCart[album._id]"
+                                (click)="decrementCart($event, album._id)"
+                              >
+                                🗑️
+                              </button>
+                              <span class="bottom-counter-value">{{
+                                cartQuantities[album._id] || 1
+                              }}</span>
+                              <button
+                                class="bottom-counter-btn plus-btn"
+                                [disabled]="
+                                  isUpdatingCart[album._id] ||
+                                  (cartQuantities[album._id] || 1) >=
+                                    album.stock
+                                "
+                                (click)="incrementCart($event, album._id)"
+                              >
+                                +
+                              </button>
+                            </div>
+
+                            <!-- Info button -->
+                            <button
+                              class="album-icon-btn info-btn"
+                              (click)="
+                                viewAlbum($event, album._id);
+                                $event.stopPropagation();
+                                $event.preventDefault()
+                              "
+                              title="View Details"
+                            >
+                              <span class="album-info-icon">i</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Loading more indicator -->
+                <div class="load-more" *ngIf="isLoadingMore">
+                  <app-spinner [size]="'small'"></app-spinner>
+                  <p>Loading more albums...</p>
+                </div>
+
+                <!-- End of list message -->
+                <div
+                  class="no-more-plain"
+                  *ngIf="!hasMore && !isLoadingMore && allAlbums.length > 0"
+                >
+                  You've reached the end of our collection!
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="cart-widget-container" [class.in-album-page]="isInAlbumPage()">
+  <div class="cart-widget">
+    <div class="cart-header">
+      <h3 class="cart-title">My Cart</h3>
+    </div>
+
+    <div class="cart-loading" *ngIf="isLoading">
+      <app-spinner [size]="'small'"></app-spinner>
+    </div>
+
+    <div class="cart-content" *ngIf="!isLoading">
+      <div class="empty-cart" *ngIf="cart.itemCount === 0">
+        <p>You have no items in your shopping cart</p>
+      </div>
+
+      <div class="cart-items" *ngIf="cart.itemCount > 0">
+        <div class="cart-top-section">
+          <div class="item-count-section">
+            <p class="item-count">
+              There are <strong>{{ cart.itemCount }} items</strong> in your cart
+            </p>
+          </div>
+
+          <hr class="item-count-divider" />
+
+          <div class="cart-total-section">
+            <div class="cart-total">
+              <span class="total-label">Cart Subtotal:</span>
+              <span class="total-amount">{{ formatPrice(cart.total) }}</span>
+              <button class="checkout-btn" (click)="goToCheckout()">
+                CHECKOUT
+              </button>
+            </div>
+          </div>
+
+          <hr class="total-divider" />
+
+          <h4 class="recently-added-title">Recently Added Item(s)</h4>
+        </div>
+
+        <div
+          class="items-list-container"
+          [class.has-scroll]="shouldShowScroll()"
+          [class.has-one-item]="cart.items.length === 1"
+          [class.has-two-items]="cart.items.length === 2"
+          [class.has-three-or-more]="cart.items.length >= 3"
+          [class.in-album-page]="isInAlbumPage()"
+        >
+          <div class="items-list">
+            <div class="cart-item" *ngFor="let item of cart.items">
+              <button
+                class="remove-btn"
+                [disabled]="isRemovingItem[item._id]"
+                (click)="removeItem(item._id)"
+                title="Remove from cart"
+              >
+                <div
+                  class="icon-spinner"
+                  *ngIf="isRemovingItem[item._id]"
+                ></div>
+                <span *ngIf="!isRemovingItem[item._id]">×</span>
+              </button>
+
+              <img
+                [src]="getImageUrl(item)"
+                [alt]="item.album.title"
+                class="item-image clickable"
+                (click)="goToAlbum(item.album._id)"
+              />
+
+              <div class="item-details">
+                <h4
+                  class="item-title-artist clickable"
+                  (click)="goToAlbum(item.album._id)"
+                >
+                  {{ item.album.title }} - {{ item.album.artist }}
+                </h4>
+                <div class="item-price">
+                  <span class="quantity">{{ item.quantity }}</span>
+                  <span class="multiply">×</span>
+                  <span class="price">{{ formatPrice(item.album.price) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

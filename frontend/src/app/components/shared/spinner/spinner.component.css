@@ -1,0 +1,72 @@
+/* Spinner loading animation */
+.icon-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+.icon-spinner.small {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+/* Wishlist button spinner (red theme) */
+.album-icon-btn.wishlist-btn .icon-spinner {
+  border-color: rgba(255, 0, 0, 0.3);
+  border-top-color: var(--primary-color);
+}
+
+/* Cart button spinner (gray theme) */
+.album-icon-btn.cart-btn .icon-spinner {
+  border-color: rgba(115, 115, 115, 0.3);
+  border-top-color: #737373;
+}
+
+/* Center icon buttons (larger size) */
+.center-icon-btn .icon-spinner {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
+}
+
+.center-icon-btn.wishlist-icon .icon-spinner {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: var(--white);
+}
+
+.center-icon-btn.cart-icon .icon-spinner {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: var(--white);
+}
+
+/* Disabled state during loading */
+.album-icon-btn:disabled,
+.center-icon-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Center spinner in button */
+.album-icon-btn,
+.center-icon-btn {
+  position: relative;
+}
+
+.album-icon-btn .icon-spinner,
+.center-icon-btn .icon-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Music Store - Your Online Music Shop</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Browse and purchase your favorite music albums online. Wide selection of genres including Rock, Jazz, Classical, and more."
+    />
+    <meta
+      name="keywords"
+      content="music, albums, online store, rock, jazz, classical, pop"
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <app-root></app-root>
+
+    <!-- Initial loader -->
+    <div id="initial-loader">
+      <style>
+        #initial-loader {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+        }
+
+        .loader-content {
+          text-align: center;
+        }
+
+        .vinyl-container {
+          width: 120px;
+          height: 120px;
+          margin: 0 auto 30px;
+          position: relative;
+        }
+
+        .vinyl-record {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background: radial-gradient(
+            circle at center,
+            #ff0000 0%,
+            #ff0000 15%,
+            #1a1a1a 15%,
+            #1a1a1a 25%,
+            #333 25%,
+            #333 26%,
+            #1a1a1a 26%,
+            #1a1a1a 40%,
+            #333 40%,
+            #333 41%,
+            #1a1a1a 41%,
+            #1a1a1a 55%,
+            #333 55%,
+            #333 56%,
+            #1a1a1a 56%,
+            #1a1a1a 100%
+          );
+          animation: spin 2s linear infinite;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .vinyl-label {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 40px;
+          height: 40px;
+          background: #ff0000;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .vinyl-hole {
+          width: 8px;
+          height: 8px;
+          background: #1a1a1a;
+          border-radius: 50%;
+        }
+
+        .loader-text {
+          font-family: "Roboto", sans-serif;
+          font-size: 18px;
+          color: #333;
+          font-weight: 500;
+        }
+
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        #initial-loader.fade-out {
+          animation: fadeOut 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+          to {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+        }
+
+        @media (max-width: 576px) {
+          .vinyl-container {
+            width: 80px;
+            height: 80px;
+          }
+          .vinyl-label {
+            width: 30px;
+            height: 30px;
+          }
+          .loader-text {
+            font-size: 16px;
+          }
+        }
+      </style>
+
+      <div class="loader-content">
+        <div class="vinyl-container">
+          <div class="vinyl-record">
+            <div class="vinyl-label">
+              <div class="vinyl-hole"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="loader-text">Loading Music Store...</div>
+      </div>
+    </div>
+
+    <script>
+      // Remove loader after DOM loaded
+      window.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+          const loader = document.getElementById("initial-loader");
+          if (loader) {
+            loader.classList.add("fade-out");
+            setTimeout(() => loader.remove(), 400);
+          }
+        }, 500);
+      });
+
+      // Fallback removal after 3 seconds
+      setTimeout(function () {
+        const loader = document.getElementById("initial-loader");
+        if (loader && !loader.classList.contains("fade-out")) {
+          loader.classList.add("fade-out");
+          setTimeout(() => loader.remove(), 400);
+        }
+      }, 3000);
+    </script>
+  </body>
+</html>

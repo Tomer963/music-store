@@ -1,0 +1,36 @@
+<div class="not-found-page">
+  <div class="container">
+    <div class="not-found-content">
+      <div class="illustration">
+        <div class="record-player">
+          <div class="record">
+            <div class="record-label">
+              <span class="four">4</span>
+              <span class="zero">0</span>
+              <span class="four">4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="error-message">
+        <h1 class="error-title">Oops! The Beat Dropped</h1>
+        <p class="error-description">
+          Looks like this track has gone missing from our collection. The page
+          you're looking for doesn't exist or has been moved.
+        </p>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn btn-primary" (click)="goHome()">
+          <span class="icon">🏠</span>
+          Back to Home
+        </button>
+        <button class="btn btn-outline" (click)="goBack()">
+          <span class="icon">↩️</span>
+          Go Back
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

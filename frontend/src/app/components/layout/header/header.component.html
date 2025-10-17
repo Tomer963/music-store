@@ -1,0 +1,88 @@
+<header class="header">
+  <nav class="nav-top">
+    <div class="container">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Home
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="currentUser">
+          <a routerLink="/my-account" routerLinkActive="active">My Account</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/wishlist" routerLinkActive="active">My Wishlist</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/checkout" routerLinkActive="active">Checkout</a>
+        </li>
+        <li class="nav-item" *ngIf="!currentUser">
+          <a routerLink="/login" routerLinkActive="active">Log In</a>
+        </li>
+        <li class="nav-item" *ngIf="currentUser">
+          <a href="#" (click)="logout(); $event.preventDefault()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="header-main">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <a routerLink="/" class="logo-link">
+            <span class="logo-text">MUSIC</span>
+          </a>
+        </div>
+
+        <div class="search-wrapper">
+          <app-search-box></app-search-box>
+        </div>
+
+        <div class="cart-wrapper">
+          <div class="welcome-text">Welcome to our<br />online store!</div>
+          <div class="cart-icon-wrapper">
+            <button class="cart-button" (click)="navigateToCheckout()">
+              <img
+                src="/assets/images/cart-icon.svg"
+                alt="Cart"
+                class="cart-icon"
+              />
+              <span class="cart-count">{{ cartItemCount }}</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="menu-toggle" (click)="toggleMenu()">
+          <span class="menu-icon"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-menu" [class.open]="isMenuOpen">
+    <div class="mobile-menu-content">
+      <button class="close-menu" (click)="closeMenu()">&times;</button>
+      <ul class="mobile-nav-list">
+        <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
+        <li *ngIf="currentUser">
+          <a routerLink="/my-account" (click)="closeMenu()">My Account</a>
+        </li>
+        <li>
+          <a routerLink="/wishlist" (click)="closeMenu()">My Wishlist</a>
+        </li>
+        <li><a routerLink="/checkout" (click)="closeMenu()">Checkout</a></li>
+        <li *ngIf="!currentUser">
+          <a routerLink="/login" (click)="closeMenu()">Log In</a>
+        </li>
+        <li *ngIf="currentUser">
+          <a href="#" (click)="logout(); $event.preventDefault()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>

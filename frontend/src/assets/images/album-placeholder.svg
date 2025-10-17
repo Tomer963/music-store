@@ -1,0 +1,17 @@
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="300" fill="#f0f0f0"/>
+  
+  <!-- Vinyl Record -->
+  <circle cx="150" cy="150" r="120" fill="#1a1a1a"/>
+  <circle cx="150" cy="150" r="100" fill="none" stroke="#333333" stroke-width="1"/>
+  <circle cx="150" cy="150" r="80" fill="none" stroke="#333333" stroke-width="1"/>
+  <circle cx="150" cy="150" r="60" fill="none" stroke="#333333" stroke-width="1"/>
+  
+  <!-- Center Label -->
+  <circle cx="150" cy="150" r="40" fill="#ff0000"/>
+  <circle cx="150" cy="150" r="5" fill="#1a1a1a"/>
+  
+  <!-- Text -->
+  <text x="150" y="155" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white">MUSIC</text>
+</svg>
