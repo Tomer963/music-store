@@ -196,21 +196,20 @@
   cursor: default;
 }
 
+/* FIXED: Album description - truncation handled in TypeScript, CSS just displays it */
 .album-description {
   font-size: 0.813rem;
   line-height: 1.4;
   color: var(--gray-medium);
   margin: 0 0 12px 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word;
+  
+  /* Display with word wrapping */
+  word-wrap: break-word;
   overflow-wrap: break-word;
-  hyphens: none;
-  min-height: 2.6em;
+  white-space: normal;
+  
+  /* Height for 2 lines */
+  min-height: calc(1.4em * 2);
 }
 
 .album-bottom-section {

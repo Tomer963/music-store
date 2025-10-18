@@ -48,7 +48,7 @@
                   {{ album.artist }} - {{ album.title }}
                 </h3>
 
-                <p class="album-description">{{ album.description }}</p>
+                <p class="album-description">{{ getTruncatedDescription(album.description) }}</p>
 
                 <div class="album-bottom-section">
                   <div class="album-price-icons-row">
