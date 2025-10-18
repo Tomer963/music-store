@@ -443,24 +443,32 @@
                 </div>
                 <div class="progress-content" *ngIf="hasPaymentInfo()">
                   <div class="progress-filled-content">
+                    <!-- Payment Method -->
                     <div class="info-item-wrapper">
                       <div class="info-label">Payment Method:</div>
                       <div class="info-value">{{ paymentForm.get("paymentMethod")?.value === "check" ? "Check / Money order" : "Credit Card (saved)" }}</div>
                     </div>
-                    <div *ngIf="paymentForm.get('paymentMethod')?.value === 'credit_card' && paymentForm.get('cardType')?.value">
-                      <div class="info-item-wrapper">
-                        <div class="info-label">Card Type:</div>
+                    
+                    <!-- Credit Card Details (only if credit card selected) -->
+                    <ng-container *ngIf="paymentForm.get('paymentMethod')?.value === 'credit_card'">
+                      <!-- Card Type -->
+                      <div class="info-item-wrapper" *ngIf="paymentForm.get('cardType')?.value">
+                        <div class="info-label">Credit Card Type:</div>
                         <div class="info-value">{{ getCardTypeName(paymentForm.get("cardType")?.value) }}</div>
                       </div>
+                      
+                      <!-- Card Number -->
                       <div class="info-item-wrapper" *ngIf="paymentForm.get('cardNumber')?.value">
-                        <div class="info-label">Card Number:</div>
+                        <div class="info-label">Credit Card Number:</div>
                         <div class="info-value">xxxx-{{ paymentForm.get("cardNumber")?.value.slice(-4) }}</div>
                       </div>
+                      
+                      <!-- Cardholder Name -->
                       <div class="info-item-wrapper" *ngIf="paymentForm.get('cardholderName')?.value">
-                        <div class="info-label">Cardholder Name:</div>
+                        <div class="info-label">Name on the Card:</div>
                         <div class="info-value">{{ paymentForm.get("cardholderName")?.value }}</div>
                       </div>
-                    </div>
+                    </ng-container>
                   </div>
                 </div>
               </div>

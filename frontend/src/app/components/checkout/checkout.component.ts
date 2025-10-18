@@ -477,17 +477,46 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   /**
    * Custom Validators
    */
+  
+  /**
+   * ✅ Address Validator - מונע מילים מחוברות של אותיות ומספרים
+   * דוגמאות חוקיות: "הרצל 34", "123 Main Street"
+   * דוגמאות לא חוקיות: "הרצל34", "Main34Street"
+   */
   private addressValidator(
     control: AbstractControl
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
 
-    // ✅ תומך בכל השפות - Unicode letters
+    // בדיקה שיש לפחות מילה אחת עם 3 אותיות ומספר אחד
     const hasThreeLetterWord = /[\p{L}]{3,}/u.test(value);
     const hasDigit = /\d/.test(value);
 
-    return hasThreeLetterWord && hasDigit ? null : { invalidAddress: true };
+    if (!hasThreeLetterWord || !hasDigit) {
+      return { invalidAddress: true };
+    }
+
+    // ✅ בדיקה שאין מילים מחוברות של אותיות ומספרים
+    // מחפש דפוס של אות ואז מספר ללא רווח ביניהם, או להיפך
+    const hasConnectedLettersAndDigits = /[\p{L}]\d|\d[\p{L}]/u.test(value);
+    
+    if (hasConnectedLettersAndDigits) {
+      return { invalidAddress: true };
+    }
+
+    // ✅ בדיקה שהמספרים מופיעים אחרי האותיות
+    // מוצא את המיקום הראשון של ספרה
+    const firstDigitIndex = value.search(/\d/);
+    // מוצא את המיקום האחרון של אות
+    const lastLetterIndex = value.search(/[\p{L}](?!.*[\p{L}])/u);
+    
+    // אם יש ספרה לפני האות האחרונה, זה לא תקין
+    if (firstDigitIndex !== -1 && lastLetterIndex !== -1 && firstDigitIndex < lastLetterIndex) {
+      return { invalidAddress: true };
+    }
+
+    return null;
   }
 
   private cityValidator(
@@ -495,7 +524,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
-    // ✅ שינוי - רק אותיות באנגלית, מינימום 3 תווים
+    // ✅ רק אותיות באנגלית, מינימום 3 תווים
     return /^[a-zA-Z\s]{3,}$/.test(value) ? null : { invalidCity: true };
   }
 
@@ -886,7 +915,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (control.errors["required"]) return "This is a required field";
 
     const errorMessages: { [key: string]: string } = {
-      address: "Address must contain at least 3 letters and a number",
+      address: "Address must contain letters (min 3) followed by numbers, separated by space (e.g., 'Herzl 34')",
       city: "City must contain only letters in English and be at least 3 characters",
       zipCode: "Zip code must be 5 digits",
       phone: "Phone format: 03-1234567 or 050-1234567",
@@ -983,7 +1012,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ✅ NEW - בדוק אם יש מידע על Payment Method
+   * ✅ בדוק אם יש מידע על Payment Method
    */
   hasPaymentInfo(): boolean {
     const paymentMethod = this.paymentForm.get('paymentMethod')?.value;

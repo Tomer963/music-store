@@ -489,7 +489,7 @@
 
 .expiry-inputs {
   display: flex;
-  gap: 16px; /* ✅ שינוי: הגדלתי מ-10px ל-16px */
+  gap: 16px;
   align-items: center;
 }
 
@@ -507,12 +507,12 @@
   margin-bottom: 0;
 }
 
-/* ✅ שינוי: עיצוב חדש ל-CVV עם "What is this?" באותה שורה בחלק עליון */
+/* ✅ עיצוב חדש ל-CVV - מיישר את "What is this?" לחלק העליון */
 .cvv-row {
   display: flex;
-  flex-direction: row; /* ✅ שינוי: מ-column ל-row */
+  flex-direction: row;
   gap: 10px;
-  align-items: flex-start;
+  align-items: flex-start; /* ✅ מיישר לחלק העליון */
 }
 
 .cvv-hint {
@@ -520,16 +520,16 @@
   font-size: 0.75rem;
   cursor: default;
   text-decoration: none;
-  order: 2; /* ✅ שינוי: מציב את זה אחרי ה-input */
-  align-self: flex-start;
-  padding-top: 9px; /* ✅ שינוי: מיישר עם ה-input */
+  order: 2;
   white-space: nowrap;
+  line-height: 1; /* ✅ מקטין את גובה השורה */
+  padding-top: 2px; /* ✅ מיישר מדויק לחלק העליון */
 }
 
 .cvv-input {
   width: 115px;
   flex-shrink: 0;
-  order: 1; /* ✅ מציב את זה לפני ה-hint */
+  order: 1;
 }
 
 /* Order Table */
@@ -556,10 +556,9 @@
   border: 1px solid #ddd;
 }
 
-/* ✅ שינוי: כותרות bold */
 .order-table th {
   text-align: left;
-  font-weight: 700; /* ✅ שינוי מ-600 ל-700 */
+  font-weight: 700;
   color: var(--secondary-color);
 }
 
@@ -775,7 +774,7 @@
   font-style: italic;
 }
 
-/* ✅ שינוי: טקסט נטוי */
+/* ✅ טקסט נטוי */
 .progress-filled-content {
   display: flex;
   flex-direction: column;
@@ -789,7 +788,7 @@
   color: #333;
 }
 
-/* ✅ NEW - Wrapper for label + value in separate lines */
+/* ✅ Wrapper for label + value */
 .info-item-wrapper {
   margin-bottom: 8px;
   display: flex;
@@ -801,17 +800,21 @@
   margin-bottom: 0;
 }
 
-/* ✅ שינוי: הסרת Label */
+/* ✅ Labels - Bold and NOT italic */
 .info-label {
-  display: none; /* ✅ מסתיר את ה-label */
-}
-
-/* ✅ שינוי: ערך bold במקום italic */
-.info-value {
-  font-weight: 700; /* ✅ שינוי מ-400 ל-700 */
+  font-weight: 700;
   color: #333;
   font-size: 0.75rem;
-  font-style: normal; /* ✅ שינוי מ-italic ל-normal */
+  font-style: normal; /* ✅ לא נטוי */
+  line-height: 1.4;
+}
+
+/* ✅ Values - Italic and NOT bold */
+.info-value {
+  font-weight: 400; /* ✅ לא bold */
+  color: #333;
+  font-size: 0.75rem;
+  font-style: italic; /* ✅ נטוי */
   line-height: 1.4;
 }
 
@@ -1037,13 +1040,13 @@
 
   .cvv-row {
     gap: 7px;
-    flex-direction: column; /* ✅ שינוי למובייל - מחזיר עמודה */
+    flex-direction: column;
     align-items: flex-start;
   }
   
   .cvv-hint {
-    padding-top: 0; /* ✅ מאפס את ה-padding למובייל */
-    order: -1; /* ✅ מחזיר למעלה למובייל */
+    padding-top: 0;
+    order: -1;
   }
 
   .expiry-month,
@@ -1159,6 +1162,7 @@
     margin: 7px 0;
   }
   
+  .info-label,
   .info-value {
     font-size: 0.688rem;
   }
