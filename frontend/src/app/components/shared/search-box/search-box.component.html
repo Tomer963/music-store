@@ -59,7 +59,7 @@
     <div class="results-list" *ngIf="!isSearching && searchResults.length > 0">
       <div
         class="result-item"
-        *ngFor="let album of searchResults"
+        *ngFor="let album of searchResults; let i = index; let last = last"
         (click)="selectAlbum(album._id)"
       >
         <img
@@ -76,6 +76,9 @@
           <div class="result-artist">{{ album.artist }}</div>
           <div class="result-year">Released {{ album.releaseYear }}</div>
         </div>
+        
+        <!-- HR separator - not shown after last item -->
+        <hr class="result-separator" *ngIf="!last" />
       </div>
     </div>
 
