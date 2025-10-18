@@ -1,6 +1,6 @@
 <div class="spinner-container">
   <div
-    class="spinner"
+    class="vinyl-spinner"
     [class.small]="size === 'small'"
     [class.medium]="size === 'medium'"
     [class.large]="size === 'large'"
@@ -8,10 +8,11 @@
     [class.secondary]="color === 'secondary'"
     [class.white]="color === 'white'"
   >
-    <div class="spinner-circle"></div>
-    <div class="spinner-circle"></div>
-    <div class="spinner-circle"></div>
-    <div class="spinner-circle"></div>
+    <div class="vinyl-record">
+      <div class="vinyl-label">
+        <div class="vinyl-hole"></div>
+      </div>
+    </div>
   </div>
-  <p class="spinner-text" *ngIf="text">{{ text }}</p>
+  <p class="spinner-text" *ngIf="text" [class]="size">{{ text }}</p>
 </div>

@@ -1,72 +1,341 @@
-/* Spinner loading animation */
-.icon-spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: var(--white);
+/* Spinner Container */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+}
+
+/* Vinyl Record Spinner */
+.vinyl-spinner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Size Variants */
+.vinyl-spinner.small {
+  width: 60px;
+  height: 60px;
+}
+
+.vinyl-spinner.medium {
+  width: 100px;
+  height: 100px;
+}
+
+.vinyl-spinner.large {
+  width: 140px;
+  height: 140px;
+}
+
+/* Vinyl Record Disc */
+.vinyl-record {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  display: inline-block;
-}
-
-.icon-spinner.small {
-  width: 16px;
-  height: 16px;
-  border-width: 2px;
-}
-
-/* Wishlist button spinner (red theme) */
-.album-icon-btn.wishlist-btn .icon-spinner {
-  border-color: rgba(255, 0, 0, 0.3);
-  border-top-color: var(--primary-color);
-}
-
-/* Cart button spinner (gray theme) */
-.album-icon-btn.cart-btn .icon-spinner {
-  border-color: rgba(115, 115, 115, 0.3);
-  border-top-color: #737373;
-}
-
-/* Center icon buttons (larger size) */
-.center-icon-btn .icon-spinner {
-  width: 24px;
-  height: 24px;
-  border-width: 3px;
-}
-
-.center-icon-btn.wishlist-icon .icon-spinner {
-  border-color: rgba(255, 255, 255, 0.3);
-  border-top-color: var(--white);
-}
-
-.center-icon-btn.cart-icon .icon-spinner {
-  border-color: rgba(255, 255, 255, 0.3);
-  border-top-color: var(--white);
-}
-
-/* Disabled state during loading */
-.album-icon-btn:disabled,
-.center-icon-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-/* Center spinner in button */
-.album-icon-btn,
-.center-icon-btn {
+  background: radial-gradient(
+    circle at center,
+    var(--primary-color) 0%,
+    var(--primary-color) 18%,
+    #1a1a1a 18%,
+    #1a1a1a 28%,
+    #333 28%,
+    #333 29%,
+    #1a1a1a 29%,
+    #1a1a1a 43%,
+    #333 43%,
+    #333 44%,
+    #1a1a1a 44%,
+    #1a1a1a 58%,
+    #333 58%,
+    #333 59%,
+    #1a1a1a 59%,
+    #1a1a1a 100%
+  );
+  animation: vinylSpin 2s linear infinite;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.2);
   position: relative;
 }
 
-.album-icon-btn .icon-spinner,
-.center-icon-btn .icon-spinner {
+/* Grooves Effect Overlay */
+.vinyl-record::before {
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 92%;
+  height: 92%;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent 0px,
+    transparent 2px,
+    rgba(255, 255, 255, 0.02) 2px,
+    rgba(255, 255, 255, 0.02) 4px
+  );
+  pointer-events: none;
+  animation: groovesRotate 3s linear infinite reverse;
 }
 
-@keyframes spin {
+/* Center Label */
+.vinyl-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--primary-color);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.6), inset 0 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.vinyl-spinner.small .vinyl-label {
+  width: 20px;
+  height: 20px;
+}
+
+.vinyl-spinner.medium .vinyl-label {
+  width: 34px;
+  height: 34px;
+}
+
+.vinyl-spinner.large .vinyl-label {
+  width: 48px;
+  height: 48px;
+}
+
+/* Center Hole */
+.vinyl-hole {
+  border-radius: 50%;
+  background: #1a1a1a;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.vinyl-spinner.small .vinyl-hole {
+  width: 6px;
+  height: 6px;
+}
+
+.vinyl-spinner.medium .vinyl-hole {
+  width: 10px;
+  height: 10px;
+}
+
+.vinyl-spinner.large .vinyl-hole {
+  width: 14px;
+  height: 14px;
+}
+
+/* Music Note Icon - MUCH LARGER */
+.vinyl-label::after {
+  content: "♪";
+  position: absolute;
+  color: white;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  opacity: 0.95;
+  animation: noteFloat 1.5s ease-in-out infinite;
+  line-height: 1;
+}
+
+/* Size-specific music notes - SIGNIFICANTLY LARGER */
+.vinyl-spinner.small .vinyl-label::after {
+  font-size: 18px; /* Was 8px - now 18px */
+}
+
+.vinyl-spinner.medium .vinyl-label::after {
+  font-size: 28px; /* Was 12px - now 28px */
+}
+
+.vinyl-spinner.large .vinyl-label::after {
+  font-size: 38px; /* Was 16px - now 38px */
+}
+
+/* Spinner Text */
+.spinner-text {
+  margin-top: var(--spacing-sm);
+  color: var(--gray-dark);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  animation: textPulse 2s ease-in-out infinite;
+}
+
+.spinner-text.small {
+  font-size: 0.75rem;
+}
+
+.spinner-text.large {
+  font-size: 1rem;
+}
+
+/* Color Variants */
+.vinyl-spinner.primary .vinyl-record {
+  background: radial-gradient(
+    circle at center,
+    var(--primary-color) 0%,
+    var(--primary-color) 18%,
+    #1a1a1a 18%,
+    #1a1a1a 28%,
+    #333 28%,
+    #333 29%,
+    #1a1a1a 29%,
+    #1a1a1a 100%
+  );
+}
+
+.vinyl-spinner.primary .vinyl-label {
+  background: var(--primary-color);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+}
+
+.vinyl-spinner.secondary .vinyl-record {
+  background: radial-gradient(
+    circle at center,
+    var(--secondary-color) 0%,
+    var(--secondary-color) 18%,
+    #0a0a0a 18%,
+    #0a0a0a 28%,
+    #222 28%,
+    #222 29%,
+    #0a0a0a 29%,
+    #0a0a0a 100%
+  );
+}
+
+.vinyl-spinner.secondary .vinyl-label {
+  background: var(--secondary-color);
+  box-shadow: 0 0 15px rgba(26, 26, 26, 0.8);
+}
+
+.vinyl-spinner.white .vinyl-record {
+  background: radial-gradient(
+    circle at center,
+    #e0e0e0 0%,
+    #e0e0e0 18%,
+    #f5f5f5 18%,
+    #f5f5f5 28%,
+    #ddd 28%,
+    #ddd 29%,
+    #f5f5f5 29%,
+    #f5f5f5 100%
+  );
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.vinyl-spinner.white .vinyl-label {
+  background: #cccccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.vinyl-spinner.white .vinyl-hole {
+  background: #999;
+}
+
+.vinyl-spinner.white .vinyl-label::after {
+  color: #333;
+}
+
+/* Animations */
+@keyframes vinylSpin {
+  from {
+    transform: rotate(0deg);
+  }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes groovesRotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes noteFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+@keyframes textPulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .spinner-container {
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+  }
+
+  .spinner-text {
+    font-size: 0.813rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .spinner-container {
+    padding: var(--spacing-sm);
+  }
+
+  .vinyl-spinner.medium {
+    width: 80px;
+    height: 80px;
+  }
+
+  .vinyl-spinner.large {
+    width: 110px;
+    height: 110px;
+  }
+
+  .spinner-text {
+    font-size: 0.75rem;
+  }
+
+  /* Adjust music note size for small screens */
+  .vinyl-spinner.medium .vinyl-label::after {
+    font-size: 24px;
+  }
+
+  .vinyl-spinner.large .vinyl-label::after {
+    font-size: 32px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .vinyl-record,
+  .vinyl-record::before,
+  .vinyl-label::after {
+    animation: none;
+  }
+
+  .spinner-text {
+    animation: none;
+    opacity: 1;
   }
 }
