@@ -76,7 +76,7 @@
 .category-header {
   margin-bottom: var(--spacing-md);
   background-color: var(--white);
-  padding: var(--spacing-lg);
+  padding: 0 var(--spacing-lg);
   box-shadow: var(--shadow-sm);
   border-radius: 0;
   flex-shrink: 0;
@@ -173,23 +173,18 @@
   line-height: 1.4;
   color: var(--gray-medium);
   margin: 0 0 12px 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
   word-break: break-word;
   overflow-wrap: break-word;
   hyphens: none;
   min-height: 2.6em;
+  display: block;
 }
 
 .album-bottom-section {
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 0; /* ✅ שונה מ-var(--spacing-sm) ל-0 */
+  gap: 0;
 }
 
 .album-price-icons-row {
@@ -309,18 +304,17 @@
   }
 }
 
-/* ✅ עדכון: הסרת padding-top, margin-top והגדלת גודל טקסט */
 .album-action-links {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  margin-top: 0; /* ✅ שונה מ-6px ל-0 */
-  padding-top: 0; /* ✅ שונה מ-6px ל-0 */
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .action-link {
   color: var(--white);
-  font-size: 0.688rem; /* ✅ שונה חזרה מ-0.813rem ל-0.688rem */
+  font-size: 0.688rem;
   text-decoration: none;
   transition: color var(--transition-fast);
   cursor: pointer;
@@ -481,7 +475,7 @@
 
 @media (max-width: 768px) {
   .category-header {
-    padding: var(--spacing-md);
+    padding: 0 var(--spacing-md);
   }
   .category-title {
     font-size: 1rem;
@@ -508,7 +502,7 @@
     word-break: break-word;
   }
   .action-link {
-    font-size: 0.625rem; /* ✅ שונה חזרה מ-0.75rem ל-0.625rem */
+    font-size: 0.625rem;
   }
 }
 
@@ -551,6 +545,6 @@
     word-break: break-word;
   }
   .action-link {
-    font-size: 0.563rem; /* ✅ שונה חזרה מ-0.688rem ל-0.563rem */
+    font-size: 0.563rem;
   }
 }

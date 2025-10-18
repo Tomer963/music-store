@@ -22,7 +22,7 @@ import { ContentLayoutComponent } from "../../components/shared/content-layout/c
   imports: [CommonModule, RouterModule, ContentLayoutComponent],
   templateUrl: "./category.component.html",
   styleUrls: ["./category.component.css"],
-  changeDetection: ChangeDetectionStrategy.OnPush, // Optimize change detection
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryComponent implements OnInit, OnDestroy {
   category: Category | null = null;
@@ -83,7 +83,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((ids) => {
         this.wishlistIds = ids;
-        this.cdr.markForCheck(); // Manual change detection trigger
+        this.cdr.markForCheck();
       });
   }
 
@@ -341,6 +341,39 @@ export class CategoryComponent implements OnInit, OnDestroy {
    */
   formatPrice(price: number): string {
     return this.albumService.formatPrice(price);
+  }
+
+  /**
+   * getTruncatedDescription
+   * Truncate description without breaking words
+   * @param description Full description text
+   * @return string Truncated description
+   */
+  getTruncatedDescription(description: string): string {
+    if (!description) return "";
+
+    const maxLength = 100;
+
+    // If description is short enough, return as is
+    if (description.length <= maxLength) {
+      return description;
+    }
+
+    // Find the last space before maxLength
+    let truncateAt = description.lastIndexOf(" ", maxLength);
+
+    // If no space found or it's too early, just cut at maxLength
+    if (truncateAt === -1 || truncateAt < maxLength * 0.7) {
+      truncateAt = maxLength;
+    }
+
+    // Get the truncated text
+    let truncated = description.substring(0, truncateAt).trim();
+
+    // Add ellipsis
+    truncated += "...";
+
+    return truncated;
   }
 
   /**
