@@ -20,12 +20,13 @@
 
     <!-- Text overlay for albums 1-9 with HOVER EXPANSION -->
     <div class="text-overlay" *ngIf="showTextOverlay && !hasRedBackground">
+      <!-- Static content - album name and artist (always visible) -->
       <div class="overlay-static-content">
         <h4 class="overlay-title">{{ album.title }}</h4>
         <p class="overlay-artist">{{ album.artist }}</p>
       </div>
 
-      <!-- Hover content - price and icons -->
+      <!-- Hover content - price and icons (shown on hover) -->
       <div class="hover-content">
         <p class="overlay-price">{{ getFormattedPrice() }}</p>
 
