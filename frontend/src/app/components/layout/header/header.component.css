@@ -44,8 +44,10 @@
 /* Main header */
 .header-main {
   background-color: var(--primary-color);
-  padding: var(--spacing-md) 0;
+  padding: 8px 0;
   height: 80px;
+  display: flex;
+  align-items: center;
 }
 
 /* Container with consistent padding */
@@ -112,22 +114,26 @@
   }
 }
 
-/* Logo */
+/* Logo - FIXED STYLING */
 .logo {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .logo-link {
-  display: block;
+  display: flex;
+  align-items: center;
   text-decoration: none;
+  height: 100%;
 }
 
-.logo-text {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--white);
-  letter-spacing: -2px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+.logo-image {
+  height: 100%;
+  width: auto;
+  display: block;
+  object-fit: contain;
 }
 
 /* Search */
@@ -279,11 +285,8 @@
     display: none;
   }
   .header-main {
-    padding: var(--spacing-sm) 0;
+    padding: 6px 0;
     height: 70px;
-  }
-  .logo-text {
-    font-size: 2rem;
   }
   .search-wrapper {
     max-width: 350px;
@@ -302,11 +305,8 @@
 
 @media (max-width: 576px) {
   .header-main {
-    padding: var(--spacing-sm) 0;
+    padding: 5px 0;
     height: 65px;
-  }
-  .logo-text {
-    font-size: 1.75rem;
   }
   .search-wrapper,
   .welcome-text {
@@ -329,16 +329,12 @@
 
 @media (max-width: 429px) {
   .header-main {
-    padding: 6px 0;
+    padding: 4px 0;
     height: 56px;
   }
   .header-content {
     gap: var(--spacing-xs);
     padding: 0 var(--spacing-sm);
-  }
-  .logo-text {
-    font-size: 1.5rem;
-    letter-spacing: -1px;
   }
   .menu-toggle {
     padding: var(--spacing-xs);
