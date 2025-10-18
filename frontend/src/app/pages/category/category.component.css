@@ -168,28 +168,19 @@
   cursor: default;
 }
 
-/* FIXED: Album description with proper ellipsis handling */
+/* FIXED: Album description - truncation handled in TypeScript, CSS just displays it */
 .album-description {
   font-size: 0.813rem;
   line-height: 1.4;
   color: var(--gray-medium);
   margin: 0 0 12px 0;
   
-  /* Two lines max with ellipsis */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2; /* Standard property for compatibility */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Display with word wrapping */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
   
-  /* CRITICAL: Prevent word breaking - only break at word boundaries */
-  word-break: normal;
-  overflow-wrap: normal;
-  hyphens: none;
-  
-  /* Fixed height for exactly 2 lines */
-  max-height: calc(1.4em * 2);
+  /* Height for 2 lines */
   min-height: calc(1.4em * 2);
 }
 

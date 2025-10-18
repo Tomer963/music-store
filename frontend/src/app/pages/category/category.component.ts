@@ -345,13 +345,38 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * getTruncatedDescription
-   * Returns the full description - CSS handles truncation with line-clamp
+   * FIXED: Smart truncation that respects word boundaries
+   * Truncates to approximately 2 lines (~80-90 chars) and ensures no word breaking
    * @param description Full description text
-   * @return string Full description (CSS will truncate)
+   * @return string Truncated description with ellipsis if needed
    */
   getTruncatedDescription(description: string): string {
-    // Return full description - CSS will handle truncation
-    return description || "";
+    if (!description) return "";
+    
+    // Approximate character limit for 2 lines (considering font size 0.813rem, line-height 1.4)
+    // This is roughly 40-45 characters per line = ~85 chars total
+    const maxLength = 85;
+    
+    // If description is shorter than limit, return as-is
+    if (description.length <= maxLength) {
+      return description;
+    }
+    
+    // Find the last complete word before the limit
+    let truncated = description.substring(0, maxLength);
+    
+    // Find the last space to avoid cutting mid-word
+    const lastSpace = truncated.lastIndexOf(' ');
+    
+    if (lastSpace > 0) {
+      // Cut at the last space and add ellipsis
+      truncated = truncated.substring(0, lastSpace);
+    }
+    
+    // Remove trailing punctuation before adding ellipsis
+    truncated = truncated.replace(/[.,;:!?-]+$/, '');
+    
+    return truncated + '...';
   }
 
   /**
