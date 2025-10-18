@@ -443,11 +443,8 @@
                 </div>
                 <div class="progress-content" *ngIf="hasPaymentInfo()">
                   <div class="progress-filled-content">
-                    <!-- Payment Method -->
-                    <div class="info-item-wrapper">
-                      <div class="info-label">Payment Method:</div>
-                      <div class="info-value">{{ paymentForm.get("paymentMethod")?.value === "check" ? "Check / Money order" : "Credit Card (saved)" }}</div>
-                    </div>
+                    <!-- ✅ בלי הכותרת "Payment Method:" - רק הערך -->
+                    <div class="info-item">{{ paymentForm.get("paymentMethod")?.value === "check" ? "Check / Money order" : "Credit Card (saved)" }}</div>
                     
                     <!-- Credit Card Details (only if credit card selected) -->
                     <ng-container *ngIf="paymentForm.get('paymentMethod')?.value === 'credit_card'">

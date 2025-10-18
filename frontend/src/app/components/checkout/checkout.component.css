@@ -800,12 +800,12 @@
   margin-bottom: 0;
 }
 
-/* ✅ Labels - Bold and NOT italic */
+/* ✅ Labels - Bold and ITALIC */
 .info-label {
   font-weight: 700;
   color: #333;
   font-size: 0.75rem;
-  font-style: normal; /* ✅ לא נטוי */
+  font-style: italic; /* ✅ נטוי גם לכותרות */
   line-height: 1.4;
 }
 

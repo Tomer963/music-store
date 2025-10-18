@@ -479,9 +479,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
    */
   
   /**
-   * ✅ Address Validator - מונע מילים מחוברות של אותיות ומספרים
-   * דוגמאות חוקיות: "הרצל 34", "123 Main Street"
-   * דוגמאות לא חוקיות: "הרצל34", "Main34Street"
+   * ✅ Address Validator - משופר
+   * דוגמאות חוקיות: "הרצל 34", "123 Main Street", "King George 5"
+   * דוגמאות לא חוקיות: "הרצל34", "Main34Street", "הרצkל 45" (עירוב שפות)
    */
   private addressValidator(
     control: AbstractControl
@@ -498,7 +498,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
 
     // ✅ בדיקה שאין מילים מחוברות של אותיות ומספרים
-    // מחפש דפוס של אות ואז מספר ללא רווח ביניהם, או להיפך
     const hasConnectedLettersAndDigits = /[\p{L}]\d|\d[\p{L}]/u.test(value);
     
     if (hasConnectedLettersAndDigits) {
@@ -506,14 +505,27 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
 
     // ✅ בדיקה שהמספרים מופיעים אחרי האותיות
-    // מוצא את המיקום הראשון של ספרה
     const firstDigitIndex = value.search(/\d/);
-    // מוצא את המיקום האחרון של אות
     const lastLetterIndex = value.search(/[\p{L}](?!.*[\p{L}])/u);
     
-    // אם יש ספרה לפני האות האחרונה, זה לא תקין
     if (firstDigitIndex !== -1 && lastLetterIndex !== -1 && firstDigitIndex < lastLetterIndex) {
       return { invalidAddress: true };
+    }
+
+    // ✅ בדיקה שאין עירוב של אותיות מעברית ואנגלית באותה מילה
+    const words = value.split(/\s+/);
+    for (const word of words) {
+      // בדוק אם המילה מכילה אותיות
+      const hasLetters = /[\p{L}]/u.test(word);
+      if (!hasLetters) continue; // דלג על מילים שהן רק מספרים או סימנים
+      
+      const hasHebrew = /[\u0590-\u05FF]/.test(word);
+      const hasEnglish = /[a-zA-Z]/.test(word);
+      
+      // אם יש גם עברית וגם אנגלית באותה מילה - זה לא תקין
+      if (hasHebrew && hasEnglish) {
+        return { invalidAddress: true };
+      }
     }
 
     return null;
@@ -915,7 +927,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (control.errors["required"]) return "This is a required field";
 
     const errorMessages: { [key: string]: string } = {
-      address: "Address must contain letters (min 3) followed by numbers, separated by space (e.g., 'Herzl 34')",
+      address: "Address must contain letters (min 3) followed by numbers, separated by space. Mixed Hebrew and English in the same word is not allowed (e.g., 'Herzl 34' ✓, 'הרצל 45' ✓, 'הרצל34' ✗, 'הרצkל 45' ✗)",
       city: "City must contain only letters in English and be at least 3 characters",
       zipCode: "Zip code must be 5 digits",
       phone: "Phone format: 03-1234567 or 050-1234567",
