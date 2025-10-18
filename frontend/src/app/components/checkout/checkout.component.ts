@@ -483,7 +483,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const value = control.value;
     if (!value) return null;
 
-    const hasThreeLetterWord = /[a-zA-Z]{3,}/.test(value);
+    // ✅ תומך בכל השפות - Unicode letters
+    const hasThreeLetterWord = /[\p{L}]{3,}/u.test(value);
     const hasDigit = /\d/.test(value);
 
     return hasThreeLetterWord && hasDigit ? null : { invalidAddress: true };
@@ -494,7 +495,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
-    return /^[a-zA-Z\s]{3,}$/.test(value) ? null : { invalidCity: true };
+    // ✅ תומך בכל השפות - Unicode letters, minimum 3 characters
+    return /^[\p{L}\s]{3,}$/u.test(value) ? null : { invalidCity: true };
   }
 
   private zipCodeValidator(
@@ -523,7 +525,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (words.length < 2) return { invalidCardholderName: true };
 
     for (const word of words) {
-      if (!/^[a-zA-Z]{2,}$/.test(word)) {
+      // ✅ תומך בכל השפות - Unicode letters, minimum 2 letters per word
+      if (!/^[\p{L}]{2,}$/u.test(word)) {
         return { invalidCardholderName: true };
       }
     }
@@ -884,7 +887,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     const errorMessages: { [key: string]: string } = {
       address: "Address must contain at least 3 letters and a number",
-      city: "City must contain only English letters and be at least 3 characters",
+      city: "City must contain only letters and be at least 3 characters",
       zipCode: "Zip code must be 5 digits",
       phone: "Phone format: 03-1234567 or 050-1234567",
       cardType: "Please select a card type",

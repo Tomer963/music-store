@@ -489,7 +489,7 @@
 
 .expiry-inputs {
   display: flex;
-  gap: var(--spacing-sm);
+  gap: 10px; /* ✅ שינוי: הגדלתי את הרווח מ-var(--spacing-sm) ל-10px */
   align-items: center;
 }
 
@@ -507,6 +507,7 @@
   margin-bottom: 0;
 }
 
+/* ✅ שינוי: עיצוב חדש ל-CVV עם "What is this?" באותה שורה אבל למעלה */
 .cvv-row {
   display: flex;
   flex-direction: column;
@@ -519,13 +520,14 @@
   font-size: 0.75rem;
   cursor: default;
   text-decoration: none;
-  order: -1;
+  order: -1; /* ✅ מציב את זה למעלה */
+  align-self: flex-start;
 }
 
 .cvv-input {
   width: 115px;
   flex-shrink: 0;
-  order: 1;
+  order: 1; /* ✅ מציב את זה למטה */
 }
 
 /* Order Table */
@@ -552,9 +554,10 @@
   border: 1px solid #ddd;
 }
 
+/* ✅ שינוי: כותרות bold */
 .order-table th {
   text-align: left;
-  font-weight: 600;
+  font-weight: 700; /* ✅ שינוי מ-600 ל-700 */
   color: var(--secondary-color);
 }
 
@@ -770,10 +773,12 @@
   font-style: italic;
 }
 
+/* ✅ שינוי: טקסט נטוי */
 .progress-filled-content {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  font-style: italic; /* ✅ הוספתי נטוי */
 }
 
 .info-item {
