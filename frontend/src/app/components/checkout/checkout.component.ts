@@ -978,11 +978,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return types[type] || "";
   }
 
+  /**
+   * ✅ שונה: מחזיר עיר + Zip בפורמט "City, ZipCode"
+   */
   getCityZip(): string {
-    if (this.billingInfo.city && this.billingInfo.zipCode) {
-      return `${this.billingInfo.city}, ${this.billingInfo.zipCode}`;
+    const parts: string[] = [];
+    
+    if (this.billingInfo.city) {
+      parts.push(this.billingInfo.city);
     }
-    return "";
+    
+    if (this.billingInfo.zipCode) {
+      parts.push(this.billingInfo.zipCode);
+    }
+    
+    return parts.join(', ');
   }
 
   getPhoneFormatted(): string {

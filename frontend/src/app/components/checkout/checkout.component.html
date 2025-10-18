@@ -423,7 +423,8 @@
                   <div class="progress-filled-content">
                     <div class="info-item">{{ getUserFullName() }}</div>
                     <div class="info-item">{{ billingInfo.address }}</div>
-                    <div class="info-item">{{ getCityZip() }}</div>
+                    <!-- ✅ שינוי כאן: מציג City + Zip באותה שורה -->
+                    <div class="info-item" *ngIf="billingInfo.city || billingInfo.zipCode">{{ getCityZip() }}</div>
                     <div class="info-item">{{ getPhoneFormatted() }}</div>
                   </div>
                 </div>
