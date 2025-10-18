@@ -176,7 +176,10 @@
   position: relative;
 }
 
-/* Text Overlay */
+/* ============================
+   TEXT OVERLAY WITH HOVER EXPANSION
+   ============================ */
+
 .text-overlay {
   position: absolute;
   bottom: 0;
@@ -197,6 +200,32 @@
   padding: var(--spacing-md);
   padding-top: var(--spacing-xl);
   z-index: 2;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Hover state - expand upward */
+.album-card:hover .text-overlay {
+  height: 180px;
+  padding-top: 60px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.98) 0%,
+    rgba(0, 0, 0, 0.96) 30%,
+    rgba(0, 0, 0, 0.92) 50%,
+    rgba(0, 0, 0, 0.85) 70%,
+    rgba(0, 0, 0, 0.7) 85%,
+    transparent 100%
+  );
+}
+
+/* Static content (always visible) */
+.overlay-static-content {
+  position: relative;
+  z-index: 3;
 }
 
 .overlay-title,
@@ -242,7 +271,171 @@
   opacity: 1 !important;
 }
 
-/* Center Icons Overlay */
+/* Hover content (price + icons) - initially hidden */
+.hover-content {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  pointer-events: none;
+}
+
+.album-card:hover .hover-content {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Price in overlay */
+.overlay-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0 0 var(--spacing-xs) 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+}
+
+/* Icons row in overlay */
+.overlay-icons {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.overlay-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  position: relative;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  outline: none;
+}
+
+.overlay-icon-btn:hover:not(:disabled) {
+  transform: scale(1.15);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+}
+
+.overlay-icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.overlay-icon-btn.wishlist-icon {
+  background: rgba(255, 0, 0, 0.85);
+  font-size: 20px;
+  color: var(--white);
+}
+
+.overlay-icon-btn.wishlist-icon:hover {
+  background: rgba(255, 0, 0, 0.95);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.overlay-icon-btn.cart-icon {
+  padding: 6px;
+  background: rgba(76, 175, 80, 0.85);
+}
+
+.overlay-icon-btn.cart-icon:hover {
+  background: rgba(76, 175, 80, 0.95);
+}
+
+.overlay-icon-btn.info-icon {
+  background: rgba(115, 115, 115, 0.9);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.overlay-icon-btn.info-icon:hover {
+  background: rgba(140, 140, 140, 0.95);
+}
+
+.overlay-icon-btn.out-of-stock {
+  background: rgba(156, 156, 156, 0.8);
+  cursor: not-allowed;
+  padding: 6px;
+}
+
+.cart-icon-svg {
+  width: 24px;
+  height: 24px;
+  color: var(--white);
+}
+
+/* Overlay Cart Counter */
+.overlay-cart-counter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(76, 175, 80, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 0;
+  min-width: 90px;
+  height: 40px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.overlay-cart-counter .counter-btn {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0 10px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast);
+  min-width: 30px;
+}
+
+.overlay-cart-counter .counter-btn.trash-btn {
+  font-size: 14px;
+  order: 1;
+}
+
+.overlay-cart-counter .counter-btn.plus-btn {
+  font-size: 20px;
+  order: -1;
+}
+
+.overlay-cart-counter .counter-value {
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 24px;
+  text-align: center;
+  user-select: none;
+  order: 0;
+}
+
+/* ============================
+   CENTER ICONS OVERLAY (for albums 10-11)
+   ============================ */
+
 .center-icons-overlay {
   position: absolute;
   top: 50%;
@@ -642,6 +835,32 @@ button.center-icon-btn {
   .album-card.small:not(.large) .overlay-artist {
     font-size: 0.75rem;
   }
+
+  /* Show hover content on mobile */
+  .text-overlay {
+    height: 180px;
+    padding-top: 60px;
+  }
+
+  .hover-content {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .overlay-price {
+    font-size: 1.25rem;
+  }
+
+  .overlay-icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .cart-icon-svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -669,5 +888,18 @@ button.center-icon-btn {
 
   .album-card.small:not(.large) .overlay-artist {
     font-size: 0.7rem;
+  }
+
+  .overlay-price {
+    font-size: 1.125rem;
+  }
+
+  .overlay-icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .overlay-icons {
+    gap: 6px;
   }
 }
