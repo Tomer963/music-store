@@ -168,16 +168,29 @@
   cursor: default;
 }
 
+/* FIXED: Album description with proper ellipsis handling */
 .album-description {
   font-size: 0.813rem;
   line-height: 1.4;
   color: var(--gray-medium);
   margin: 0 0 12px 0;
-  word-break: break-word;
-  overflow-wrap: break-word;
+  
+  /* Two lines max with ellipsis */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2; /* Standard property for compatibility */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  /* CRITICAL: Prevent word breaking - only break at word boundaries */
+  word-break: normal;
+  overflow-wrap: normal;
   hyphens: none;
-  min-height: 2.6em;
-  display: block;
+  
+  /* Fixed height for exactly 2 lines */
+  max-height: calc(1.4em * 2);
+  min-height: calc(1.4em * 2);
 }
 
 .album-bottom-section {
@@ -449,7 +462,6 @@
   }
   .album-description {
     font-size: 0.75rem;
-    word-break: break-word;
   }
 }
 
@@ -469,7 +481,6 @@
   }
   .album-description {
     font-size: 0.75rem;
-    word-break: break-word;
   }
 }
 
@@ -499,7 +510,6 @@
   }
   .album-description {
     font-size: 0.688rem;
-    word-break: break-word;
   }
   .action-link {
     font-size: 0.625rem;
@@ -542,7 +552,6 @@
   }
   .album-description {
     font-size: 0.688rem;
-    word-break: break-word;
   }
   .action-link {
     font-size: 0.563rem;

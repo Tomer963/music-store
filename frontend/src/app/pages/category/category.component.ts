@@ -345,35 +345,13 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * getTruncatedDescription
-   * Truncate description without breaking words
+   * Returns the full description - CSS handles truncation with line-clamp
    * @param description Full description text
-   * @return string Truncated description
+   * @return string Full description (CSS will truncate)
    */
   getTruncatedDescription(description: string): string {
-    if (!description) return "";
-
-    const maxLength = 100;
-
-    // If description is short enough, return as is
-    if (description.length <= maxLength) {
-      return description;
-    }
-
-    // Find the last space before maxLength
-    let truncateAt = description.lastIndexOf(" ", maxLength);
-
-    // If no space found or it's too early, just cut at maxLength
-    if (truncateAt === -1 || truncateAt < maxLength * 0.7) {
-      truncateAt = maxLength;
-    }
-
-    // Get the truncated text
-    let truncated = description.substring(0, truncateAt).trim();
-
-    // Add ellipsis
-    truncated += "...";
-
-    return truncated;
+    // Return full description - CSS will handle truncation
+    return description || "";
   }
 
   /**
