@@ -18,12 +18,16 @@ export class CategoryService {
    * Fetch all active categories from the API
    * @return Observable<Category[]> Array of categories
    */
-  getCategories(): Observable<Category[]> {
-    return this.http.get<ApiResponse<Category[]>>(this.apiUrl).pipe(
-      map((response) => response.data || []),
-      catchError(this.handleError)
-    );
-  }
+ getCategories(): Observable<Category[]> {
+  return this.http.get<ApiResponse<Category[]>>(this.apiUrl).pipe(
+    map((response) => {
+      const categories = response.data || [];
+      // ✅ מיון אלפביתי לפי שם הקטגוריה
+      return categories.sort((a, b) => a.name.localeCompare(b.name, 'he'));
+    }),
+    catchError(this.handleError)
+  );
+}
 
   /**
    * Get Category
