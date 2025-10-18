@@ -114,13 +114,13 @@
   }
 }
 
-/* Logo - ALIGNED EXACTLY UNDER "Home" IN TOP NAV */
+/* Logo - SHIFTED 40PX LEFT */
 .logo {
   flex-shrink: 0;
   display: flex;
   align-items: center;
   height: 100%;
-  margin-left: 0;
+  margin-left: -40px;
   margin-right: auto;
 }
 
@@ -309,6 +309,10 @@
     width: 160px;
     height: 40px;
   }
+  /* Reset logo margin on mobile */
+  .logo {
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 576px) {
@@ -336,6 +340,10 @@
   .logo-image {
     width: 140px;
     height: 35px;
+  }
+  /* Reset logo margin on mobile */
+  .logo {
+    margin-left: 0;
   }
 }
 
@@ -370,5 +378,9 @@
   .logo-image {
     width: 120px;
     height: 30px;
+  }
+  /* Reset logo margin on mobile */
+  .logo {
+    margin-left: 0;
   }
 }
