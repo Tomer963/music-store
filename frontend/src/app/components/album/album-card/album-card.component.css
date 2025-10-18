@@ -177,7 +177,7 @@
 }
 
 /* ============================
-   TEXT OVERLAY WITH HOVER EXPANSION
+   TEXT OVERLAY WITH HOVER EXPANSION - FIXED VERSION
    ============================ */
 
 .text-overlay {
@@ -187,21 +187,15 @@
   right: 0;
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.98) 0%,
-    rgba(0, 0, 0, 0.95) 20%,
-    rgba(0, 0, 0, 0.9) 35%,
-    rgba(0, 0, 0, 0.8) 50%,
-    rgba(0, 0, 0, 0.65) 65%,
-    rgba(0, 0, 0, 0.45) 80%,
-    rgba(0, 0, 0, 0.25) 90%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.75) 50%,
     transparent 100%
   );
   color: white;
-  padding: var(--spacing-md);
-  padding-top: var(--spacing-xl);
+  padding: 12px var(--spacing-md);
   z-index: 2;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  height: 80px; /* Initial height showing title and artist */
+  height: 70px; /* גובה קטן - רק לטקסט */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -209,8 +203,9 @@
 
 /* Hover state - expand upward */
 .album-card:hover .text-overlay {
-  height: 180px;
-  padding-top: 60px;
+  height: 200px; /* גובה מורחב */
+  padding: var(--spacing-md);
+  padding-top: 70px;
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.98) 0%,
@@ -230,11 +225,12 @@
 
 .overlay-title,
 .overlay-artist {
-  margin: 0 0 var(--spacing-xs) 0;
+  margin: 0 0 4px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  line-height: 1.2;
 }
 
 .overlay-title {
@@ -245,6 +241,7 @@
 .overlay-artist {
   font-size: 0.875rem;
   opacity: 0.95;
+  margin-bottom: 0;
 }
 
 .album-card.small:not(.large) .overlay-title {
@@ -838,8 +835,9 @@ button.center-icon-btn {
 
   /* Show hover content on mobile */
   .text-overlay {
-    height: 180px;
-    padding-top: 60px;
+    height: 200px;
+    padding: var(--spacing-md);
+    padding-top: 70px;
   }
 
   .hover-content {
