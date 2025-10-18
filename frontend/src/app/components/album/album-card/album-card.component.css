@@ -201,7 +201,7 @@
   padding-top: var(--spacing-xl);
   z-index: 2;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  height: 80px;
+  height: 80px; /* Initial height showing title and artist */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
