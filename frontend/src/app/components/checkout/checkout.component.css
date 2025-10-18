@@ -489,7 +489,7 @@
 
 .expiry-inputs {
   display: flex;
-  gap: 10px; /* ✅ שינוי: הגדלתי את הרווח מ-var(--spacing-sm) ל-10px */
+  gap: 16px; /* ✅ שינוי: הגדלתי מ-10px ל-16px */
   align-items: center;
 }
 
@@ -507,11 +507,11 @@
   margin-bottom: 0;
 }
 
-/* ✅ שינוי: עיצוב חדש ל-CVV עם "What is this?" באותה שורה אבל למעלה */
+/* ✅ שינוי: עיצוב חדש ל-CVV עם "What is this?" באותה שורה בחלק עליון */
 .cvv-row {
   display: flex;
-  flex-direction: column;
-  gap: 7px;
+  flex-direction: row; /* ✅ שינוי: מ-column ל-row */
+  gap: 10px;
   align-items: flex-start;
 }
 
@@ -520,14 +520,16 @@
   font-size: 0.75rem;
   cursor: default;
   text-decoration: none;
-  order: -1; /* ✅ מציב את זה למעלה */
+  order: 2; /* ✅ שינוי: מציב את זה אחרי ה-input */
   align-self: flex-start;
+  padding-top: 9px; /* ✅ שינוי: מיישר עם ה-input */
+  white-space: nowrap;
 }
 
 .cvv-input {
   width: 115px;
   flex-shrink: 0;
-  order: 1; /* ✅ מציב את זה למטה */
+  order: 1; /* ✅ מציב את זה לפני ה-hint */
 }
 
 /* Order Table */
@@ -778,7 +780,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-style: italic; /* ✅ הוספתי נטוי */
+  font-style: italic;
 }
 
 .info-item {
@@ -799,20 +801,17 @@
   margin-bottom: 0;
 }
 
-/* ✅ NEW - Bold labels for Payment Method section */
+/* ✅ שינוי: הסרת Label */
 .info-label {
-  font-weight: 700;
-  color: #333;
-  font-size: 0.75rem;
-  line-height: 1.4;
+  display: none; /* ✅ מסתיר את ה-label */
 }
 
-/* ✅ NEW - Italic values for Payment Method section */
+/* ✅ שינוי: ערך bold במקום italic */
 .info-value {
-  font-weight: 400;
+  font-weight: 700; /* ✅ שינוי מ-400 ל-700 */
   color: #333;
   font-size: 0.75rem;
-  font-style: italic;
+  font-style: normal; /* ✅ שינוי מ-italic ל-normal */
   line-height: 1.4;
 }
 
@@ -1038,6 +1037,13 @@
 
   .cvv-row {
     gap: 7px;
+    flex-direction: column; /* ✅ שינוי למובייל - מחזיר עמודה */
+    align-items: flex-start;
+  }
+  
+  .cvv-hint {
+    padding-top: 0; /* ✅ מאפס את ה-padding למובייל */
+    order: -1; /* ✅ מחזיר למעלה למובייל */
   }
 
   .expiry-month,
@@ -1153,7 +1159,6 @@
     margin: 7px 0;
   }
   
-  .info-label,
   .info-value {
     font-size: 0.688rem;
   }

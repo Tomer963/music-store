@@ -495,8 +495,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
-    // ✅ תומך בכל השפות - Unicode letters, minimum 3 characters
-    return /^[\p{L}\s]{3,}$/u.test(value) ? null : { invalidCity: true };
+    // ✅ שינוי - רק אותיות באנגלית, מינימום 3 תווים
+    return /^[a-zA-Z\s]{3,}$/.test(value) ? null : { invalidCity: true };
   }
 
   private zipCodeValidator(
@@ -887,7 +887,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     const errorMessages: { [key: string]: string } = {
       address: "Address must contain at least 3 letters and a number",
-      city: "City must contain only letters and be at least 3 characters",
+      city: "City must contain only letters in English and be at least 3 characters",
       zipCode: "Zip code must be 5 digits",
       phone: "Phone format: 03-1234567 or 050-1234567",
       cardType: "Please select a card type",
