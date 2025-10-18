@@ -4,8 +4,14 @@
     [class.loading]="isLoading"
     [class.success]="showSuccess"
   >
+    <!-- Custom Preloader - Wave Animation -->
     <div class="loading-overlay" *ngIf="isLoading">
-      <app-spinner [size]="'medium'"></app-spinner>
+      <div class="custom-preloader">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
     </div>
 
     <div class="modal-header">

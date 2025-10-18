@@ -36,6 +36,7 @@
   animation: shrinkHeight 0.3s ease forwards;
 }
 
+/* Custom Preloader Overlay */
 .loading-overlay {
   position: absolute;
   top: 50%;
@@ -45,6 +46,68 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Custom Preloader - 4 Bars Wave Animation */
+.custom-preloader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  height: 50px;
+}
+
+.custom-preloader .bar {
+  width: 8px;
+  height: 15px; /* גובה התחלתי זהה לכולם */
+  background: linear-gradient(
+    to bottom,
+    #333333 0%,
+    #1a1a1a 50%,
+    #000000 100%
+  );
+  border-radius: 2px;
+  animation: waveAnimation 1.2s ease-in-out infinite;
+}
+
+/* עיכובים שונים ליצירת אפקט גל */
+.custom-preloader .bar:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.custom-preloader .bar:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.custom-preloader .bar:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.custom-preloader .bar:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+/* Wave Animation - גל עולה ויורד */
+@keyframes waveAnimation {
+  0% {
+    height: 15px;
+    opacity: 0.5;
+  }
+  
+  25% {
+    height: 45px;
+    opacity: 1;
+  }
+  
+  50% {
+    height: 15px;
+    opacity: 0.5;
+  }
+  
+  100% {
+    height: 15px;
+    opacity: 0.5;
+  }
 }
 
 @keyframes shrinkHeight {

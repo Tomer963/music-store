@@ -11,12 +11,11 @@ import {
 import { Router } from "@angular/router";
 import { AuthService } from "../../../services/auth.service";
 import { RegistrationData } from "../../../models/user.model";
-import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 
 @Component({
   selector: "app-register-modal",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.css"],
 })
@@ -234,7 +233,7 @@ export class RegisterModalComponent {
         this.isLoading = false;
         this.showSuccess = true;
 
-        // Show success animation then emit event
+        // ✅ 5 שניות כמו שנדרש בדרישות
         setTimeout(() => {
           this.registerSuccess.emit({
             email: formData.email,
@@ -242,7 +241,7 @@ export class RegisterModalComponent {
 
           this.resetForm();
           this.closeModalEvent.emit();
-        }, 1500);
+        }, 5000);
       },
       error: (error) => {
         this.isLoading = false;
