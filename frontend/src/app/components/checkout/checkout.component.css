@@ -3,15 +3,8 @@
   background-color: var(--background-color);
   padding: 40px 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* ✅ שינוי מ-center ל-flex-start */
   justify-content: center;
-}
-
-/* When on step 2 or 3, remove vertical centering and move to top */
-.checkout-page.step-2,
-.checkout-page.step-3 {
-  align-items: flex-start;
-  padding-top: 40px;
 }
 
 /* Container with consistent padding - matches header exactly */
@@ -507,12 +500,12 @@
   margin-bottom: 0;
 }
 
-/* ✅ עיצוב חדש ל-CVV - מיישר את "What is this?" לחלק העליון */
+/* CVV Row */
 .cvv-row {
   display: flex;
   flex-direction: row;
   gap: 10px;
-  align-items: flex-start; /* ✅ מיישר לחלק העליון */
+  align-items: flex-start;
 }
 
 .cvv-hint {
@@ -522,8 +515,8 @@
   text-decoration: none;
   order: 2;
   white-space: nowrap;
-  line-height: 1; /* ✅ מקטין את גובה השורה */
-  padding-top: 2px; /* ✅ מיישר מדויק לחלק העליון */
+  line-height: 1;
+  padding-top: 2px;
 }
 
 .cvv-input {
@@ -774,7 +767,6 @@
   font-style: italic;
 }
 
-/* ✅ טקסט נטוי */
 .progress-filled-content {
   display: flex;
   flex-direction: column;
@@ -788,7 +780,6 @@
   color: #333;
 }
 
-/* ✅ Wrapper for label + value */
 .info-item-wrapper {
   margin-bottom: 8px;
   display: flex;
@@ -800,21 +791,19 @@
   margin-bottom: 0;
 }
 
-/* ✅ Labels - Bold and ITALIC */
 .info-label {
   font-weight: 700;
   color: #333;
   font-size: 0.75rem;
-  font-style: italic; /* ✅ נטוי גם לכותרות */
+  font-style: italic;
   line-height: 1.4;
 }
 
-/* ✅ Values - Italic and NOT bold */
 .info-value {
-  font-weight: 400; /* ✅ לא bold */
+  font-weight: 400;
   color: #333;
   font-size: 0.75rem;
-  font-style: italic; /* ✅ נטוי */
+  font-style: italic;
   line-height: 1.4;
 }
 
@@ -848,12 +837,6 @@
 /* Tablet and Below */
 @media (max-width: 991px) {
   .checkout-page {
-    align-items: flex-start;
-    padding-top: 40px;
-  }
-
-  .checkout-page.step-2,
-  .checkout-page.step-3 {
     padding-top: 40px;
   }
 
@@ -901,11 +884,6 @@
   .checkout-page {
     min-height: calc(100vh - 80px);
     padding: 24px 0;
-  }
-
-  .checkout-page.step-2,
-  .checkout-page.step-3 {
-    padding-top: 24px;
   }
 
   .container {
@@ -962,11 +940,6 @@
 @media (max-width: 576px) {
   .checkout-page {
     padding: 18px 0;
-  }
-
-  .checkout-page.step-2,
-  .checkout-page.step-3 {
-    padding-top: 18px;
   }
 
   .container {
