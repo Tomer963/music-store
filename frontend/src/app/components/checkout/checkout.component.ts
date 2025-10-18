@@ -984,7 +984,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
    */
   hasPaymentInfo(): boolean {
     const paymentMethod = this.paymentForm.get('paymentMethod')?.value;
-    // בדוק אם המשתמש הגיע לפחות לשלב 2 והזין payment method
     return this.highestStepReached >= 2 && !!paymentMethod;
   }
 }

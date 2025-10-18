@@ -266,7 +266,6 @@
                                 {{ month.label }}
                               </option>
                             </select>
-                            <span class="select-separator">-</span>
                             <select
                               class="form-control expiry-year"
                               [value]="paymentForm.get('expiryYear')?.value || ''"
@@ -293,6 +292,7 @@
                         <div class="form-group">
                           <label class="form-label">Card Verification Number <span class="required">*</span></label>
                           <div class="cvv-row">
+                            <span class="cvv-hint">What is this?</span>
                             <input
                               type="search"
                               class="form-control cvv-input"
@@ -305,7 +305,6 @@
                               autocomplete="nope"
                               role="presentation"
                             />
-                            <span class="cvv-hint">What is this?</span>
                           </div>
                           <span
                             class="form-error"
@@ -435,7 +434,6 @@
               <div class="progress-section">
                 <div class="progress-header">
                   <span>Payment Method</span>
-                  <!-- ✅ הוספת התנאי hasPaymentInfo() -->
                   <ng-container *ngIf="hasReachedStep(2) && hasPaymentInfo()">
                     <span class="progress-separator">|</span>
                     <button type="button" class="change-btn" (click)="changeStep(2)">
@@ -443,7 +441,6 @@
                     </button>
                   </ng-container>
                 </div>
-                <!-- ✅ שינוי התנאי מ-paymentForm.get('paymentMethod')?.value ל-hasPaymentInfo() -->
                 <div class="progress-content" *ngIf="hasPaymentInfo()">
                   <div class="progress-filled-content">
                     <div class="info-item-wrapper">
