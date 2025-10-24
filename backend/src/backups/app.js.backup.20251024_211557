@@ -13,9 +13,6 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
-// Trust proxy - CRITICAL for rate limiting to work
-app.set('trust proxy', 1);
-
 // Security headers
 app.use(helmet());
 
@@ -26,6 +23,8 @@ const corsOptions = {
       "http://localhost:4200",
       "http://localhost:3000",
     ];
+
+    // Allow requests with no origin (mobile apps, Postman)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -40,38 +39,40 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Rate limiting - FIXED VERSION
+// Rate limiting - ✅ תיקון מלא
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 900000, // 15 minutes
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
   standardHeaders: true,
   legacyHeaders: false,
   skipSuccessfulRequests: false,
   skipFailedRequests: false,
-  // Custom key generator to properly identify clients
+  // ✅ CRITICAL: Proper IP-based key generation
   keyGenerator: (req) => {
-    return req.ip || 
-           req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
-           req.headers['x-real-ip'] ||
-           req.connection.remoteAddress ||
-           'unknown';
+    // Try multiple sources for client IP
+    return (
+      req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
+      req.headers['x-real-ip'] ||
+      req.connection.remoteAddress ||
+      req.socket.remoteAddress ||
+      req.ip ||
+      'unknown'
+    );
   },
-  // Custom handler for rate limit exceeded
+  // ✅ Custom handler for rate limit responses
   handler: (req, res) => {
-    console.log(`Rate limit exceeded for IP: ${req.ip}`);
     res.status(429).json({
       success: false,
       message: "Too many requests, please try again later.",
-      error: "Rate limit exceeded"
+      error: "Rate limit exceeded",
     });
   },
-  // Skip health checks
+  // ✅ Skip rate limiting for health checks
   skip: (req) => {
     return req.path === '/health' || req.path === '/health/detailed';
   }
 });
 
-// Apply rate limiter to all /api routes
 app.use("/api", limiter);
 
 // Body parsing middleware
@@ -149,7 +150,7 @@ app.get("/health", async (req, res) => {
   });
 });
 
-// Detailed health check endpoint
+// Detailed health check endpoint (for monitoring)
 app.get("/health/detailed", async (req, res) => {
   const dbState = mongoose.connection.readyState;
   const isConnected = dbState === 1;
@@ -183,7 +184,7 @@ app.get("/health/detailed", async (req, res) => {
   });
 });
 
-// 404 handler - MUST be before error handler
+// ✅ תיקון: 404 handler - חייב להיות לפני errorHandler
 app.use((req, res, next) => {
   res.status(404).json({
     success: false,
@@ -192,7 +193,7 @@ app.use((req, res, next) => {
   });
 });
 
-// Global error handler - MUST be last
+// Global error handler - חייב להיות אחרון
 app.use(errorHandler);
 
 export default app;

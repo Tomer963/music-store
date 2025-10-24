@@ -1,3 +1,45 @@
+#!/bin/bash
+
+# Backend Fixes Script
+# This script will fix all the failing tests
+
+echo "🔧 Starting Backend Fixes..."
+echo "================================"
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Function to check if command succeeded
+check_status() {
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✅ $1${NC}"
+    else
+        echo -e "${RED}❌ $1 failed${NC}"
+        exit 1
+    fi
+}
+
+# Check if backend directory exists
+if [ ! -d "backend/src" ]; then
+    echo -e "${RED}❌ Error: backend/src directory not found${NC}"
+    echo "Please run this script from the project root directory"
+    exit 1
+fi
+
+echo -e "${YELLOW}📁 Creating backups...${NC}"
+mkdir -p backend/src/backups
+cp backend/src/app.js backend/src/backups/app.js.backup.$(date +%Y%m%d_%H%M%S) 2>/dev/null
+cp backend/src/middleware/auth.js backend/src/backups/auth.js.backup.$(date +%Y%m%d_%H%M%S) 2>/dev/null
+cp backend/src/middleware/errorHandler.js backend/src/backups/errorHandler.js.backup.$(date +%Y%m%d_%H%M%S) 2>/dev/null
+check_status "Backups created"
+
+# Fix 1: app.js - Rate Limiting + 404 Handler
+echo -e "\n${YELLOW}🔧 Fixing app.js (Rate Limiting + 404)...${NC}"
+
+cat > backend/src/app.js << 'ENDOFFILE'
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -196,3 +238,167 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 export default app;
+ENDOFFILE
+
+check_status "app.js fixed"
+
+# Fix 2: middleware/auth.js
+echo -e "\n${YELLOW}🔧 Fixing middleware/auth.js...${NC}"
+
+cat > backend/src/middleware/auth.js << 'ENDOFFILE'
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
+import { MESSAGES } from "../config/constants.js";
+
+export const authenticate = async (req, res, next) => {
+  try {
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: MESSAGES.ERROR.UNAUTHORIZED,
+        error: "No authentication token provided",
+      });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password");
+
+    if (!user || !user.isActive) {
+      return res.status(401).json({
+        success: false,
+        message: MESSAGES.ERROR.UNAUTHORIZED,
+        error: "Invalid or expired token",
+      });
+    }
+
+    req.user = user;
+    req.token = token;
+    next();
+  } catch (error) {
+    const message =
+      error.name === "TokenExpiredError"
+        ? "Token expired"
+        : MESSAGES.ERROR.UNAUTHORIZED;
+
+    return res.status(401).json({
+      success: false,
+      message,
+      error: error.message,
+    });
+  }
+};
+
+export const isAdmin = (req, res, next) => {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      message: "Access denied. Admin only.",
+      error: "Insufficient permissions",
+    });
+  }
+  next();
+};
+
+export const optionalAuth = async (req, res, next) => {
+  try {
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+
+    if (token) {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findById(decoded.id).select("-password");
+
+      if (user?.isActive) {
+        req.user = user;
+        req.token = token;
+      }
+    }
+    next();
+  } catch {
+    next();
+  }
+};
+ENDOFFILE
+
+check_status "auth.js fixed"
+
+# Fix 3: middleware/errorHandler.js
+echo -e "\n${YELLOW}🔧 Fixing middleware/errorHandler.js...${NC}"
+
+cat > backend/src/middleware/errorHandler.js << 'ENDOFFILE'
+import { MESSAGES } from "../config/constants.js";
+
+export const errorHandler = (err, req, res, next) => {
+  console.error("Error:", err);
+
+  if (err.name === "ValidationError") {
+    const errors = Object.values(err.errors).map((e) => e.message);
+    return res.status(400).json({
+      success: false,
+      message: MESSAGES.ERROR.VALIDATION_ERROR,
+      errors,
+      error: "Validation failed"
+    });
+  }
+
+  if (err.code === 11000) {
+    const field = Object.keys(err.keyValue)[0];
+    return res.status(400).json({
+      success: false,
+      message: `${field} already exists`,
+      error: "Duplicate key error",
+    });
+  }
+
+  if (err.name === "CastError") {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid ID format",
+      error: err.message,
+    });
+  }
+
+  if (err.name === "JsonWebTokenError") {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid token",
+      error: err.message,
+    });
+  }
+
+  if (err.name === "TokenExpiredError") {
+    return res.status(401).json({
+      success: false,
+      message: "Token expired",
+      error: err.message,
+    });
+  }
+
+  res.status(err.statusCode || 500).json({
+    success: false,
+    message: err.message || MESSAGES.ERROR.SERVER_ERROR,
+    error: err.message || "Internal server error",
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
+  });
+};
+ENDOFFILE
+
+check_status "errorHandler.js fixed"
+
+echo -e "\n${GREEN}================================${NC}"
+echo -e "${GREEN}✅ All fixes applied successfully!${NC}"
+echo -e "${GREEN}================================${NC}"
+echo ""
+echo -e "${YELLOW}Next steps:${NC}"
+echo "1. Restart your backend server:"
+echo "   cd backend && npm start"
+echo ""
+echo "2. Run tests:"
+echo "   node tester.js"
+echo ""
+echo -e "${GREEN}Expected results:${NC}"
+echo "✅ Rate limiting exists (some requests blocked)"
+echo "✅ 404 for nonexistent endpoints"
+echo "✅ Unauthorized POST rejected"
+echo "✅ Invalid request body handled"
