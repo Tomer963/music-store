@@ -2,25 +2,13 @@ import { Router } from "express";
 import * as categoryController from "../controllers/categoryController.js";
 import { authenticate, isAdmin } from "../middleware/auth.js";
 import { validateRequest } from "../middleware/validation.js";
-import { mongoIdValidation } from "../utils/validators.js";
-import { body } from "express-validator";
+import { 
+  categoryValidation, 
+  categoryUpdateValidation, // ✅ ייבוא הולידטור החדש לעדכון
+  mongoIdValidation 
+} from "../utils/validators.js";
 
 const router = Router();
-
-const categoryValidation = [
-  body("name")
-    .trim()
-    .notEmpty()
-    .withMessage("Category name is required")
-    .isLength({ max: 50 })
-    .withMessage("Category name cannot exceed 50 characters"),
-
-  body("description")
-    .optional()
-    .trim()
-    .isLength({ max: 200 })
-    .withMessage("Description cannot exceed 200 characters"),
-];
 
 // Public routes
 router.get("/", categoryController.getCategories);
@@ -38,6 +26,8 @@ router.get(
 );
 
 // Admin routes
+
+// ✅ יצירת קטגוריה - משתמש ב-categoryValidation (כל השדות חובה)
 router.post(
   "/",
   authenticate,
@@ -46,15 +36,18 @@ router.post(
   validateRequest,
   categoryController.createCategory
 );
+
+// ✅ עדכון קטגוריה - משתמש ב-categoryUpdateValidation (שדות אופציונליים)
 router.put(
   "/:id",
   authenticate,
   isAdmin,
   mongoIdValidation,
-  categoryValidation,
+  categoryUpdateValidation, // ✅ שינוי מ-categoryValidation
   validateRequest,
   categoryController.updateCategory
 );
+
 router.delete(
   "/:id",
   authenticate,

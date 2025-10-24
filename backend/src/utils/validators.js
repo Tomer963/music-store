@@ -61,6 +61,7 @@ export const loginValidation = [
     .withMessage("SessionId must be a string"),
 ];
 
+// ✅ ולידטור ליצירת אלבום - כל השדות חובה
 export const albumValidation = [
   body("title")
     .trim()
@@ -98,7 +99,87 @@ export const albumValidation = [
     .withMessage("Description cannot exceed 500 characters"),
 ];
 
-// ✅ תיקון: cartItemValidation - דחייה חזקה של שדות לא חוקיים
+// ✅ ולידטור לעדכון אלבום - כל השדות אופציונליים
+export const albumUpdateValidation = [
+  body("title")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage("Album title cannot be empty")
+    .isLength({ max: 100 })
+    .withMessage("Album title cannot exceed 100 characters"),
+
+  body("artist")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage("Artist name cannot be empty")
+    .isLength({ max: 100 })
+    .withMessage("Artist name cannot exceed 100 characters"),
+
+  body("category")
+    .optional()
+    .isMongoId()
+    .withMessage("Invalid category ID"),
+
+  body("releaseYear")
+    .optional()
+    .isInt({ min: 1900, max: new Date().getFullYear() })
+    .withMessage("Invalid release year"),
+
+  body("price")
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage("Price must be a positive number"),
+
+  body("stock")
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage("Stock must be a non-negative integer"),
+
+  body("description")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage("Description cannot be empty")
+    .isLength({ max: 500 })
+    .withMessage("Description cannot exceed 500 characters"),
+];
+
+// ✅ ולידטור ליצירת קטגוריה - כל השדות חובה
+export const categoryValidation = [
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("Category name is required")
+    .isLength({ max: 50 })
+    .withMessage("Category name cannot exceed 50 characters"),
+
+  body("description")
+    .optional()
+    .trim()
+    .isLength({ max: 200 })
+    .withMessage("Description cannot exceed 200 characters"),
+];
+
+// ✅ ולידטור לעדכון קטגוריה - כל השדות אופציונליים
+export const categoryUpdateValidation = [
+  body("name")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage("Category name cannot be empty")
+    .isLength({ max: 50 })
+    .withMessage("Category name cannot exceed 50 characters"),
+
+  body("description")
+    .optional()
+    .trim()
+    .isLength({ max: 200 })
+    .withMessage("Description cannot exceed 200 characters"),
+];
+
+// ✅ ולידטור להוספה לעגלה
 export const cartItemValidation = [
   body("albumId")
     .exists()
@@ -117,7 +198,7 @@ export const cartItemValidation = [
     .isString()
     .withMessage("SessionId must be a string"),
 
-  // ✅ תיקון: דחה כל שדה נוסף שלא מוכר
+  // ✅ דחה כל שדה נוסף שלא מוכר
   body()
     .custom((value, { req }) => {
       const allowedFields = ['albumId', 'quantity', 'sessionId'];

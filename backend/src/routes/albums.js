@@ -2,7 +2,11 @@ import { Router } from "express";
 import * as albumController from "../controllers/albumController.js";
 import { authenticate, isAdmin } from "../middleware/auth.js";
 import { validateRequest } from "../middleware/validation.js";
-import { albumValidation, mongoIdValidation } from "../utils/validators.js";
+import { 
+  albumValidation, 
+  albumUpdateValidation, // ✅ ייבוא הולידטור החדש לעדכון
+  mongoIdValidation 
+} from "../utils/validators.js";
 
 const router = Router();
 
@@ -17,7 +21,9 @@ router.get(
   albumController.getAlbum
 );
 
-// Admin routes - ✅ תיקון: הוספת authenticate ו-isAdmin
+// Admin routes
+
+// ✅ יצירת אלבום - משתמש ב-albumValidation (כל השדות חובה)
 router.post(
   "/",
   authenticate,
@@ -27,12 +33,13 @@ router.post(
   albumController.createAlbum
 );
 
+// ✅ עדכון אלבום - משתמש ב-albumUpdateValidation (שדות אופציונליים)
 router.put(
   "/:id",
   authenticate,
   isAdmin,
   mongoIdValidation,
-  albumValidation,
+  albumUpdateValidation, // ✅ שינוי מ-albumValidation
   validateRequest,
   albumController.updateAlbum
 );
