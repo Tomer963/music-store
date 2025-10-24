@@ -52,17 +52,21 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
-// 6. ✅ IMPROVED: Development-friendly rate limiting
+// 6. ✅ FIXED: Rate limiting with draft-7 headers
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   
-  // 🎯 KEY IMPROVEMENT: Different limits for dev vs production
+  // Different limits for dev vs production
   max: process.env.NODE_ENV === "production" ? 100 : 1000,
   
-  standardHeaders: true, // Return rate limit info in headers
-  legacyHeaders: false, // Disable X-RateLimit-* headers
+  // ✅ CRITICAL: Use 'draft-7' (string, not boolean)
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
   
-  // ✅ Proper IP extraction
+  // ✅ Add this to ensure headers are sent
+  requestWasSuccessful: (req, res) => res.statusCode < 400,
+  
+  // Proper IP extraction
   keyGenerator: (req) => {
     const forwarded = req.headers["x-forwarded-for"];
     const realIp = req.headers["x-real-ip"];
@@ -75,10 +79,8 @@ const limiter = rateLimit({
       clientIp = realIp;
     }
     
-    // Clean up IPv6 format
     clientIp = clientIp.replace(/^::ffff:/, "");
     
-    // Log in development mode only
     if (process.env.NODE_ENV === "development") {
       console.log(`🔍 Rate limit key: ${clientIp}`);
     }
@@ -86,7 +88,7 @@ const limiter = rateLimit({
     return clientIp;
   },
   
-  // ✅ Handler for rate limit exceeded
+  // Handler for rate limit exceeded
   handler: (req, res) => {
     const clientIp = req.ip?.replace(/^::ffff:/, "") || "unknown";
     const env = process.env.NODE_ENV || "development";
@@ -99,18 +101,15 @@ const limiter = rateLimit({
       message: "Too many requests, please try again later.",
       error: "Rate limit exceeded",
       limit: limit,
-      windowMs: 900, // 15 minutes in seconds
+      windowMs: 900,
       retryAfter: Math.ceil((req.rateLimit?.resetTime - Date.now()) / 1000) || 900,
     });
   },
   
-  // ✅ Skip rate limiting for health endpoints
+  // Skip rate limiting for health endpoints
   skip: (req) => {
     return req.path === "/health" || req.path === "/health/detailed";
   },
-  
-  // Store (in-memory for development, use Redis in production)
-  // For production: use rate-limit-redis
 });
 
 // 7. Apply rate limiter to ALL /api routes
@@ -118,6 +117,7 @@ app.use("/api", limiter);
 
 // Log rate limiting configuration on startup
 console.log(`🛡️  Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`);
+console.log(`🛡️  Rate Limit Headers: draft-7 standard`);
 
 // 8. Database connection check
 app.use((req, res, next) => {
@@ -141,7 +141,7 @@ app.get("/", (req, res) => {
     rateLimit: {
       enabled: true,
       max: process.env.NODE_ENV === "production" ? 100 : 1000,
-      windowMs: 900, // seconds
+      windowMs: 900,
     },
     endpoints: {
       health: "/health",
@@ -226,7 +226,7 @@ app.use(`${API_PREFIX}/cart`, cartRoutes);
 app.use(`${API_PREFIX}/orders`, orderRoutes);
 app.use(`${API_PREFIX}/wishlist`, wishlistRoutes);
 
-// 12. ✅ CRITICAL: 404 handler MUST be BEFORE errorHandler
+// 12. 404 handler MUST be BEFORE errorHandler
 app.use((req, res, next) => {
   res.status(404).json({
     success: false,
@@ -235,7 +235,7 @@ app.use((req, res, next) => {
   });
 });
 
-// 13. ✅ CRITICAL: Global error handler - MUST be LAST
+// 13. Global error handler - MUST be LAST
 app.use(errorHandler);
 
 export default app;
