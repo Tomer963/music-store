@@ -1,7 +1,7 @@
 import Order from "../models/Order.js";
 import CartItem from "../models/CartItem.js";
 import { MESSAGES, ORDER_STATUS } from "../config/constants.js";
-import { formatResponse, sanitizeCardNumber } from "../utils/helpers.js";
+import { formatResponse } from "../utils/helpers.js";
 
 /**
  * getOrders
@@ -97,6 +97,7 @@ export const getOrder = async (req, res, next) => {
 /**
  * createOrder
  * Creates a new order from cart items
+ * ✅ תיקון: לא שומר פרטי כרטיס אשראי במאגר
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware
@@ -108,7 +109,7 @@ export const createOrder = async (req, res, next) => {
     console.log('🔵 Request body:', JSON.stringify(req.body, null, 2));
     console.log('🔵 User ID:', req.user?._id);
     
-    const { paymentMethod, paymentInfo, billingInfo, totalAmount } = req.body;
+    const { paymentMethod, billingInfo, totalAmount } = req.body;
 
     // Validation checks with detailed logging
     if (!totalAmount) {
@@ -179,7 +180,7 @@ export const createOrder = async (req, res, next) => {
     console.log('💰 Calculated total:', calculatedTotal);
     console.log('💰 Sent total:', totalAmount);
 
-    // ✅ לא שומרים פרטי כרטיס אשראי
+    // ✅ לא שומרים פרטי כרטיס אשראי - רק את שיטת התשלום
     const paymentData = {};
 
     console.log('📝 Creating order...');
@@ -190,7 +191,7 @@ export const createOrder = async (req, res, next) => {
       items: orderItems,
       totalAmount: calculatedTotal,
       paymentMethod,
-      paymentInfo: paymentData,
+      paymentInfo: paymentData, // ✅ ריק - אין פרטי כרטיס
       billingInfo,
     });
 

@@ -57,12 +57,5 @@ export const generateSessionId = () => {
   return `sess_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 };
 
-/**
- * sanitizeCardNumber
- * Returns only last 4 digits of credit card
- * @param {string} cardNumber - Full credit card number
- * @return {string}
- */
-export const sanitizeCardNumber = (cardNumber) => {
-  return cardNumber.slice(-4);
-};
+// ✅ הסרנו את sanitizeCardNumber - לא צריך יותר
+// אין צורך בפונקציה זו כי לא שומרים פרטי כרטיס אשראי

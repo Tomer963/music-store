@@ -6,6 +6,8 @@ import {
   ReactiveFormsModule,
   Validators,
   AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
@@ -73,8 +75,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   // ✅ רשימות דינמיות
   months: typeof ALL_MONTHS = [...ALL_MONTHS];
   years: number[] = [];
-  private readonly CURRENT_YEAR = new Date().getFullYear();
-  private readonly CURRENT_MONTH = new Date().getMonth() + 1;
+  readonly CURRENT_YEAR = new Date().getFullYear();
+  readonly CURRENT_MONTH = new Date().getMonth() + 1;
 
   constructor(
     private fb: FormBuilder,
@@ -82,27 +84,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private orderService: OrderService,
     private router: Router
-  ) {
-    console.log("🔍 CURRENT_YEAR:", this.CURRENT_YEAR);
-    console.log("🔍 CURRENT_MONTH:", this.CURRENT_MONTH);
-  }
+  ) {}
 
   ngOnInit(): void {
-    console.log("Checkout ngOnInit - checking auth");
-
     setTimeout(() => {
       this.isAuthenticated = this.authService.isAuthenticated();
       this.currentUser = this.authService.getCurrentUser();
       this.currentUserId = this.currentUser?._id || '';
 
-      console.log("Auth status:", {
-        isAuthenticated: this.isAuthenticated,
-        hasUser: !!this.currentUser,
-        userId: this.currentUserId,
-      });
-
       if (!this.isAuthenticated) {
-        console.log("Not authenticated - redirecting to login");
         this.authService.saveReturnUrl("/checkout");
         this.router.navigate(["/login"], {
           queryParams: { returnUrl: "/checkout" },
@@ -136,7 +126,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           }
           
           if (this.isAuthenticated && previousUserId && this.currentUserId && previousUserId !== this.currentUserId) {
-            console.log('🔄 User changed - clearing checkout data');
             this.clearAllCheckoutData();
             this.resetToStep1();
           }
@@ -157,7 +146,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const savedUserId = sessionStorage.getItem(this.CHECKOUT_USER_KEY);
     
     if (savedUserId && this.currentUserId && savedUserId !== this.currentUserId) {
-      console.log('🔄 Different user detected - clearing old checkout data');
       this.clearAllCheckoutData();
     }
     
@@ -242,10 +230,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   initializeForms(): void {
     this.initializeYears();
 
-    console.log("🔍 Years array:", this.years);
-    console.log("🔍 First year:", this.years[0]);
-    console.log("🔍 Last year:", this.years[this.years.length - 1]);
-
     this.billingForm = this.fb.group({
       address: ["", [Validators.required, this.addressValidator]],
       city: ["", [Validators.required, this.cityValidator]],
@@ -279,18 +263,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ✅ אתחול רשימת שנים - מ-2025 ל-20 שנים קדימה
+   * ✅ אתחול רשימת שנים
    */
   private initializeYears(): void {
     const startYear = this.CURRENT_YEAR;
     const yearCount = 20;
-
     this.years = Array.from({ length: yearCount }, (_, i) => startYear + i);
-
-    console.log("✅ initializeYears() called");
-    console.log("   Start year:", startYear);
-    console.log("   Years generated:", this.years.length);
-    console.log("   First 3 years:", this.years.slice(0, 3));
   }
 
   /**
@@ -300,38 +278,28 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.paymentForm
       .get("expiryMonth")
       ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((month) => {
-        console.log("🔄 Month changed to:", month);
+      .subscribe(() => {
         this.updateAvailableMonthsAndYears();
       });
 
     this.paymentForm
       .get("expiryYear")
       ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((year) => {
-        console.log("🔄 Year changed to:", year);
+      .subscribe(() => {
         this.updateAvailableMonthsAndYears();
       });
   }
 
   /**
-   * ✅ עדכון חודשים ושנים זמינות בהתאם לבחירה הנוכחית
+   * ✅ עדכון חודשים ושנים זמינות
    */
   private updateAvailableMonthsAndYears(): void {
     const selectedMonth = this.paymentForm.get("expiryMonth")?.value;
     const selectedYear = this.paymentForm.get("expiryYear")?.value;
 
-    console.log(
-      "📅 updateAvailableMonthsAndYears - month:",
-      selectedMonth,
-      "year:",
-      selectedYear
-    );
-
     if (!selectedMonth && !selectedYear) {
       this.months = [...ALL_MONTHS];
       this.initializeYears();
-      console.log("   → No selection - showing all options");
       return;
     }
 
@@ -343,14 +311,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           const monthNum = parseInt(m.value, 10);
           return monthNum >= this.CURRENT_MONTH;
         });
-        console.log(
-          `   → Year ${yearNum} selected - showing months from ${this.CURRENT_MONTH}`
-        );
       } else {
         this.months = [...ALL_MONTHS];
-        console.log(
-          `   → Future year ${yearNum} selected - showing all months`
-        );
       }
       return;
     }
@@ -363,16 +325,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           { length: 20 },
           (_, i) => this.CURRENT_YEAR + 1 + i
         );
-        console.log(
-          `   → Past month ${monthNum} selected - years from ${
-            this.CURRENT_YEAR + 1
-          }`
-        );
       } else {
         this.initializeYears();
-        console.log(
-          `   → Future month ${monthNum} selected - including year ${this.CURRENT_YEAR}`
-        );
       }
       return;
     }
@@ -381,15 +335,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       const monthNum = parseInt(selectedMonth, 10);
       const yearNum = parseInt(selectedYear, 10);
 
-      console.log("✔️ Validating combination:", {
-        month: monthNum,
-        year: yearNum,
-      });
-
       if (yearNum === this.CURRENT_YEAR && monthNum < this.CURRENT_MONTH) {
-        console.log("   → ❌ Invalid: past month in current year");
-        console.log("   → Clearing invalid selections");
-
         this.paymentForm.patchValue(
           { expiryMonth: "", expiryYear: "" },
           { emitEvent: false }
@@ -398,8 +344,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         this.months = [...ALL_MONTHS];
         this.initializeYears();
       } else {
-        console.log("   → ✅ Valid combination");
-
         if (yearNum === this.CURRENT_YEAR) {
           this.months = ALL_MONTHS.filter((m) => {
             const mNum = parseInt(m.value, 10);
@@ -475,13 +419,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Custom Validators
-   */
-  
-  /**
-   * ✅ Address Validator - משופר
-   * דוגמאות חוקיות: "הרצל 34", "123 Main Street", "King George 5"
-   * דוגמאות לא חוקיות: "הרצל34", "Main34Street", "הרצkל 45" (עירוב שפות)
+   * ✅ Address Validator - מתוקן
    */
   private addressValidator(
     control: AbstractControl
@@ -490,42 +428,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (!value) return null;
 
     // בדיקה שיש לפחות מילה אחת עם 3 אותיות ומספר אחד
-    const hasThreeLetterWord = /[\p{L}]{3,}/u.test(value);
+    const hasThreeLetters = /[a-zA-Zא-ת]{3,}/.test(value);
     const hasDigit = /\d/.test(value);
 
-    if (!hasThreeLetterWord || !hasDigit) {
+    if (!hasThreeLetters || !hasDigit) {
       return { invalidAddress: true };
-    }
-
-    // ✅ בדיקה שאין מילים מחוברות של אותיות ומספרים
-    const hasConnectedLettersAndDigits = /[\p{L}]\d|\d[\p{L}]/u.test(value);
-    
-    if (hasConnectedLettersAndDigits) {
-      return { invalidAddress: true };
-    }
-
-    // ✅ בדיקה שהמספרים מופיעים אחרי האותיות
-    const firstDigitIndex = value.search(/\d/);
-    const lastLetterIndex = value.search(/[\p{L}](?!.*[\p{L}])/u);
-    
-    if (firstDigitIndex !== -1 && lastLetterIndex !== -1 && firstDigitIndex < lastLetterIndex) {
-      return { invalidAddress: true };
-    }
-
-    // ✅ בדיקה שאין עירוב של אותיות מעברית ואנגלית באותה מילה
-    const words = value.split(/\s+/);
-    for (const word of words) {
-      // בדוק אם המילה מכילה אותיות
-      const hasLetters = /[\p{L}]/u.test(word);
-      if (!hasLetters) continue; // דלג על מילים שהן רק מספרים או סימנים
-      
-      const hasHebrew = /[\u0590-\u05FF]/.test(word);
-      const hasEnglish = /[a-zA-Z]/.test(word);
-      
-      // אם יש גם עברית וגם אנגלית באותה מילה - זה לא תקין
-      if (hasHebrew && hasEnglish) {
-        return { invalidAddress: true };
-      }
     }
 
     return null;
@@ -536,16 +443,19 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
-    // ✅ רק אותיות באנגלית, מינימום 3 תווים
     return /^[a-zA-Z\s]{3,}$/.test(value) ? null : { invalidCity: true };
   }
 
+  /**
+   * ✅ Zip Code Validator - מתוקן
+   */
   private zipCodeValidator(
     control: AbstractControl
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
-    return /^\d{5}$/.test(value) ? null : { invalidZipCode: true };
+    // מאפשר 5 או 7 ספרות
+    return /^\d{5}$|^\d{7}$/.test(value) ? null : { invalidZipCode: true };
   }
 
   private phoneValidator(
@@ -566,7 +476,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (words.length < 2) return { invalidCardholderName: true };
 
     for (const word of words) {
-      // ✅ תומך בכל השפות - Unicode letters, minimum 2 letters per word
       if (!/^[\p{L}]{2,}$/u.test(word)) {
         return { invalidCardholderName: true };
       }
@@ -656,7 +565,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         const formData = JSON.parse(savedData);
         
         if (formData.userId && this.currentUserId && formData.userId !== this.currentUserId) {
-          console.log('🔄 User mismatch in saved data - clearing');
           this.clearSavedFormData();
           return;
         }
@@ -847,12 +755,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   submitOrder(): void {
     if (!this.hasItems) {
-      console.log('❌ No items in cart');
       return;
     }
 
     if (!this.billingForm.valid || !this.paymentForm.valid) {
-      console.log('❌ Form invalid');
       return;
     }
 
@@ -863,15 +769,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const orderData: any = {
       billingInfo: this.billingForm.value,
       paymentMethod: paymentMethod,
-      paymentInfo: {},
       totalAmount: this.cart.total,
     };
 
-    console.log('📦 Order Data to send:', JSON.stringify(orderData, null, 2));
-
     this.orderService.createOrder(orderData).subscribe({
-      next: (order) => {
-        console.log('✅ Order created successfully:', order);
+      next: () => {
         this.isProcessing = false;
         
         this.clearAllCheckoutData();
@@ -881,18 +783,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         this.isProcessing = false;
-        console.error('❌ Full error object:', error);
-        console.error('❌ Error status:', error.status);
-        console.error('❌ Error message:', error.error?.message);
-        console.error('❌ Error details:', error.error);
-        console.error('❌ Validation errors:', error.error?.errors);
-        
-        if (error.error?.errors && Array.isArray(error.error.errors)) {
-          console.error('📋 Detailed validation errors:');
-          error.error.errors.forEach((err: any, index: number) => {
-            console.error(`  ${index + 1}. Field: ${err.field}, Message: ${err.message}`);
-          });
-        }
+        console.error('Order creation error:', error);
         
         const errorMessage = error.error?.message || 'Failed to create order. Please try again.';
         alert(errorMessage);
@@ -927,10 +818,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (control.errors["required"]) return "This is a required field";
 
     const errorMessages: { [key: string]: string } = {
-      address: "Address must contain letters (min 3) followed by numbers, separated by space. Mixed Hebrew and English in the same word is not allowed (e.g., 'Herzl 34' ✓, 'הרצל 45' ✓, 'הרצל34' ✗, 'הרצkל 45' ✗)",
+      address: "Address must contain at least one word with 3 letters and at least one digit (e.g., 'Herzl 34', 'King George 5')",
       city: "City must contain only letters in English and be at least 3 characters",
-      zipCode: "Zip code must be 5 digits",
-      phone: "Phone format: 03-1234567 or 050-1234567",
+      zipCode: "Zip code must be 5 or 7 digits",
+      phone: "Phone format: 03-6381414 or 050-1112222",
       cardType: "Please select a card type",
       cardNumber: "Card number must be exactly 16 digits",
       cardholderName:
@@ -978,9 +869,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return types[type] || "";
   }
 
-  /**
-   * ✅ שונה: מחזיר עיר + Zip בפורמט "City, ZipCode"
-   */
   getCityZip(): string {
     const parts: string[] = [];
     
@@ -1033,9 +921,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return !!this.billingInfo.address;
   }
 
-  /**
-   * ✅ בדוק אם יש מידע על Payment Method
-   */
   hasPaymentInfo(): boolean {
     const paymentMethod = this.paymentForm.get('paymentMethod')?.value;
     return this.highestStepReached >= 2 && !!paymentMethod;

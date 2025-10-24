@@ -42,10 +42,11 @@ const orderSchema = new mongoose.Schema(
       enum: Object.values(PAYMENT_METHODS),
       required: true,
     },
+    // ✅ תיקון: הסרת שדות פרטי כרטיס אשראי
+    // אין צורך לשמור פרטי כרטיס במאגר
     paymentInfo: {
-      cardType: String,
-      lastFourDigits: String,
-      checkNumber: String,
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
     },
     billingInfo: {
       address: {

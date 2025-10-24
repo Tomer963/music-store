@@ -127,8 +127,8 @@ export const orderValidation = [
 
   body("billingInfo.zipCode")
     .trim()
-    .matches(/^\d{5}$/)
-    .withMessage("Zip code must be 5 digits"),
+    .matches(/^\d{5}$|^\d{7}$/)
+    .withMessage("Zip code must be 5 or 7 digits"),
 
   body("billingInfo.phone")
     .trim()
@@ -136,32 +136,8 @@ export const orderValidation = [
     .withMessage("Phone must be in format 03-1234567 or 050-1234567"),
 ];
 
-export const creditCardValidation = [
-  body("paymentInfo.cardType")
-    .if(body("paymentMethod").equals("credit_card"))
-    .isIn(["visa", "mastercard", "direct"])
-    .withMessage("Invalid card type"),
-
-  body("paymentInfo.cardNumber")
-    .if(body("paymentMethod").equals("credit_card"))
-    .matches(/^\d{16}$/)
-    .withMessage("Card number must be 16 digits"),
-
-  body("paymentInfo.expiryMonth")
-    .if(body("paymentMethod").equals("credit_card"))
-    .isInt({ min: 1, max: 12 })
-    .withMessage("Invalid expiry month"),
-
-  body("paymentInfo.expiryYear")
-    .if(body("paymentMethod").equals("credit_card"))
-    .isInt({ min: new Date().getFullYear() })
-    .withMessage("Card has expired"),
-
-  body("paymentInfo.cvv")
-    .if(body("paymentMethod").equals("credit_card"))
-    .matches(/^\d{3}$/)
-    .withMessage("CVV must be 3 digits"),
-];
+// ✅ הסרנו את creditCardValidation - לא צריך יותר
+// אין צורך לולדאר פרטי כרטיס אשראי כי לא שומרים אותם
 
 export const mongoIdValidation = [
   param("id").isMongoId().withMessage("Invalid ID format"),
