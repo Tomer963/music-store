@@ -4,7 +4,6 @@ import { authenticate, isAdmin } from "../middleware/auth.js";
 import { validateRequest } from "../middleware/validation.js";
 import {
   orderValidation,
-  creditCardValidation,
   mongoIdValidation,
 } from "../utils/validators.js";
 import { body } from "express-validator";
@@ -30,7 +29,7 @@ router.get(
 );
 router.post(
   "/",
-  orderValidation,        // ✅ רק את זה
+  orderValidation,
   validateRequest,
   orderController.createOrder
 );
