@@ -177,7 +177,7 @@
 }
 
 /* ============================
-   TEXT OVERLAY WITH HOVER EXPANSION - FIXED VERSION
+   TEXT OVERLAY WITH HOVER EXPANSION - ALBUMS 1-9
    ============================ */
 
 .text-overlay {
@@ -195,7 +195,7 @@
   padding: 12px var(--spacing-md);
   z-index: 2;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  height: 70px; /* גובה קטן - רק לטקסט */
+  height: 70px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -203,7 +203,7 @@
 
 /* Hover state - expand upward */
 .album-card:hover .text-overlay {
-  height: 200px; /* גובה מורחב */
+  height: 200px;
   padding: var(--spacing-md);
   padding-top: 70px;
   background: linear-gradient(
@@ -217,10 +217,21 @@
   );
 }
 
-/* Static content (always visible) */
+/* Static content positioning - CHANGED */
 .overlay-static-content {
-  position: relative;
+  position: absolute;
+  bottom: 12px;
+  left: var(--spacing-md);
+  right: var(--spacing-md);
   z-index: 3;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Move static content on hover */
+.album-card:hover .overlay-static-content {
+  bottom: auto;
+  top: 0;
+  position: relative;
 }
 
 .overlay-title,
@@ -838,6 +849,12 @@ button.center-icon-btn {
     height: 200px;
     padding: var(--spacing-md);
     padding-top: 70px;
+  }
+  
+  .overlay-static-content {
+    bottom: auto;
+    top: 0;
+    position: relative;
   }
 
   .hover-content {
