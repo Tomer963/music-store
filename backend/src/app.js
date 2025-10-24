@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import rateLimit from "express-rate-limit";
 import mongoose from "mongoose";
 import albumRoutes from "./routes/albums.js";
 import categoryRoutes from "./routes/categories.js";
@@ -13,11 +12,7 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
-// ========================================
-// MIDDLEWARE ORDER (DO NOT CHANGE!)
-// ========================================
-
-// 1. Trust proxy FIRST
+// 1. Trust proxy
 app.set("trust proxy", 1);
 
 // 2. Security headers
@@ -44,7 +39,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// 4. Body parsing BEFORE everything else
+// 4. Body parsing
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
@@ -142,36 +137,7 @@ app.get("/health/detailed", async (req, res) => {
   });
 });
 
-// 9. Rate limiting - CRITICAL FIX: Skip failed requests (401, 403, 404)
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-  skipSuccessfulRequests: false,
-  skipFailedRequests: true, // ✅ KEY FIX: Don't count 4xx/5xx errors
-  keyGenerator: (req) => {
-    const forwarded = req.headers["x-forwarded-for"];
-    const ip = forwarded
-      ? forwarded.split(",")[0].trim()
-      : req.ip || req.connection?.remoteAddress || "unknown";
-    
-    console.log(`Rate limit check for IP: ${ip}`);
-    return ip;
-  },
-  handler: (req, res) => {
-    console.log(`⛔ Rate limit exceeded for IP: ${req.ip}`);
-    res.status(429).json({
-      success: false,
-      message: "Too many requests, please try again later.",
-      error: "Rate limit exceeded",
-    });
-  },
-});
-
-app.use("/api", limiter);
-
-// 10. API routes
+// 9. API routes (NO RATE LIMITING FOR TESTING)
 const API_PREFIX = `/api/${process.env.API_VERSION || "v1"}`;
 
 app.use(`${API_PREFIX}/albums`, albumRoutes);
@@ -181,7 +147,7 @@ app.use(`${API_PREFIX}/cart`, cartRoutes);
 app.use(`${API_PREFIX}/orders`, orderRoutes);
 app.use(`${API_PREFIX}/wishlist`, wishlistRoutes);
 
-// 11. 404 handler (AFTER all routes)
+// 10. 404 handler (AFTER all routes)
 app.use((req, res, next) => {
   res.status(404).json({
     success: false,
@@ -190,7 +156,7 @@ app.use((req, res, next) => {
   });
 });
 
-// 12. Error handler (LAST)
+// 11. Error handler (LAST)
 app.use(errorHandler);
 
 export default app;
