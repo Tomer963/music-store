@@ -217,7 +217,7 @@
   );
 }
 
-/* Static content positioning - CHANGED */
+/* Static content positioning */
 .overlay-static-content {
   position: absolute;
   bottom: 12px;
@@ -287,7 +287,6 @@
   margin-top: var(--spacing-md);
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: var(--spacing-sm);
   pointer-events: none;
 }
@@ -298,22 +297,33 @@
   pointer-events: auto;
 }
 
-/* Price in overlay */
+/* ✅ NEW: Price and Icons in same row - Price LEFT, Icons RIGHT */
+.overlay-price-icons-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: var(--spacing-sm);
+}
+
+/* Price in overlay - aligned to LEFT */
 .overlay-price {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary-color);
-  margin: 0 0 var(--spacing-xs) 0;
+  margin: 0;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+  flex-shrink: 0;
 }
 
-/* Icons row in overlay */
+/* Icons row in overlay - aligned to RIGHT */
 .overlay-icons {
   display: flex;
   gap: var(--spacing-sm);
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .overlay-icon-btn {
@@ -334,6 +344,7 @@
   font: inherit;
   color: inherit;
   outline: none;
+  flex-shrink: 0;
 }
 
 .overlay-icon-btn:hover:not(:disabled) {
@@ -402,6 +413,7 @@
   height: 40px;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
 }
 
 .overlay-cart-counter .counter-btn {
