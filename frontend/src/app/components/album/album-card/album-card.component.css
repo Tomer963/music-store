@@ -91,11 +91,10 @@
   padding-bottom: 100%;
   overflow: hidden;
   background-color: var(--gray-light);
-  cursor: pointer; /* ✅ הוספה */
-  transition: transform var(--transition-fast); /* ✅ הוספה */
+  cursor: pointer;
+  transition: transform var(--transition-fast);
 }
 
-/* ✅ אפקט hover על התמונה */
 .album-image:hover {
   transform: scale(1.01);
 }
@@ -106,7 +105,7 @@
   padding-bottom: 100%;
   overflow: hidden;
   background-color: var(--gray-light);
-  cursor: pointer; /* ✅ הוספה */
+  cursor: pointer;
 }
 
 .album-card.small.with-text-overlay .album-image,
@@ -117,7 +116,7 @@
   height: 100%;
   width: 100%;
   flex: 1;
-  cursor: pointer; /* ✅ הוספה */
+  cursor: pointer;
 }
 
 .album-card.small:not(.with-text-overlay) .album-image {
@@ -125,7 +124,7 @@
   height: calc(100% - 60px);
   width: 100%;
   flex: 1;
-  cursor: pointer; /* ✅ הוספה */
+  cursor: pointer;
 }
 
 /* Red background cards (albums 10-11) */
@@ -140,7 +139,7 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  cursor: pointer; /* ✅ הוספה */
+  cursor: pointer;
 }
 
 .album-card.black-background .album-image {
@@ -149,7 +148,7 @@
   width: 100%;
   flex-shrink: 0;
   position: relative;
-  cursor: pointer; /* ✅ הוספה */
+  cursor: pointer;
 }
 
 .album-card.black-background:hover .album-image {
@@ -163,10 +162,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--transition-fast); /* ✅ הוספה */
+  transition: transform var(--transition-fast);
 }
 
-/* ✅ אפקט על התמונה עצמה */
 .album-image:hover img {
   transform: scale(1.03);
 }
@@ -219,7 +217,6 @@
   justify-content: flex-end;
 }
 
-/* ✅ FIXED: Hover state - expand upward */
 .album-card:hover .text-overlay {
   height: 140px;
   padding: var(--spacing-md);
@@ -234,7 +231,6 @@
   );
 }
 
-/* ✅ FIXED: Static content - מיקום בתחתית, מעבר למעלה ממש מעל המחיר */
 .overlay-static-content {
   display: flex;
   flex-direction: column;
@@ -247,7 +243,6 @@
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ✅ FIXED: On hover - ממוקם ממש מעל המחיר עם רווח מינימלי */
 .album-card:hover .overlay-static-content {
   bottom: 58px;
   top: auto;
@@ -301,7 +296,6 @@
   opacity: 1 !important;
 }
 
-/* ✅ FIXED: Hover content - מחיר ואייקונים בתחתית */
 .hover-content {
   opacity: 0;
   transform: translateY(15px);
@@ -323,7 +317,6 @@
   pointer-events: auto;
 }
 
-/* שורה אחת - מחיר משמאל, אייקונים מימין */
 .overlay-price-icons-row {
   display: flex;
   justify-content: space-between;
@@ -332,7 +325,6 @@
   gap: var(--spacing-md);
 }
 
-/* Price on the LEFT */
 .overlay-price {
   font-size: 1.5rem;
   font-weight: 700;
@@ -342,7 +334,6 @@
   flex-shrink: 0;
 }
 
-/* Icons on the RIGHT */
 .overlay-icons-group {
   display: flex;
   gap: var(--spacing-sm);
@@ -426,7 +417,6 @@
   color: var(--white);
 }
 
-/* Overlay Cart Counter */
 .overlay-cart-counter {
   display: flex;
   align-items: center;
@@ -479,153 +469,209 @@
 }
 
 /* ============================
-   CENTER ICONS OVERLAY (for albums 10-11)
+   RED BACKGROUND OVERLAY - ALBUMS 10-11 WITH HOVER EXPANSION
    ============================ */
 
-.center-icons-overlay {
+.red-background-overlay {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.75) 50%,
+    transparent 100%
+  );
+  color: white;
+  padding: 12px var(--spacing-md);
+  z-index: 2;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 70px;
   display: flex;
-  gap: var(--spacing-md);
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity var(--transition-normal);
-  z-index: 10;
-  pointer-events: none;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
-.album-card:hover .center-icons-overlay {
+.album-card.red-background:hover .red-background-overlay {
+  height: 140px;
+  padding: var(--spacing-md);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.98) 0%,
+    rgba(0, 0, 0, 0.96) 30%,
+    rgba(0, 0, 0, 0.92) 50%,
+    rgba(0, 0, 0, 0.85) 70%,
+    rgba(0, 0, 0, 0.7) 85%,
+    transparent 100%
+  );
+}
+
+.red-overlay-static-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: absolute;
+  bottom: 12px;
+  left: var(--spacing-md);
+  right: var(--spacing-md);
+  z-index: 3;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.album-card.red-background:hover .red-overlay-static-content {
+  bottom: 58px;
+  top: auto;
+  left: var(--spacing-md);
+  right: var(--spacing-md);
+}
+
+.red-overlay-title,
+.red-overlay-artist {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+  line-height: 1.2;
+}
+
+.red-overlay-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0;
+  color: var(--white);
+}
+
+.red-overlay-artist {
+  font-size: 0.875rem;
+  opacity: 0.95;
+  margin-bottom: 0;
+  color: var(--white);
+}
+
+.red-hover-content {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  pointer-events: none;
+  position: absolute;
+  bottom: 12px;
+  left: var(--spacing-md);
+  right: var(--spacing-md);
+}
+
+.album-card.red-background:hover .red-hover-content {
   opacity: 1;
+  transform: translateY(0);
   pointer-events: auto;
 }
 
-.center-icon-btn,
-button.center-icon-btn {
-  width: 48px;
-  height: 48px;
+.red-overlay-price-icons-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: var(--spacing-md);
+}
+
+.red-overlay-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+  flex-shrink: 0;
+}
+
+.red-overlay-icons-group {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+.red-overlay-icon-btn {
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-full);
   border: 2px solid rgba(255, 255, 255, 0.3);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   background: none;
   padding: 0;
   font: inherit;
   color: inherit;
   outline: none;
+  flex-shrink: 0;
 }
 
-.center-icon-btn:hover:not(:disabled) {
-  transform: scale(1.15);
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+.red-overlay-icon-btn:hover:not(:disabled) {
+  transform: scale(1.2);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
 }
 
-.center-icon-btn:disabled {
+.red-overlay-icon-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.center-icon-btn.wishlist-icon {
-  background: rgba(255, 0, 0, 0.8);
-  font-size: 24px;
+.red-overlay-icon-btn.wishlist-icon {
+  background: rgba(255, 0, 0, 0.85);
+  font-size: 20px;
   color: var(--white);
 }
 
-.center-icon-btn.wishlist-icon:hover {
+.red-overlay-icon-btn.wishlist-icon:hover {
   background: rgba(255, 0, 0, 0.95);
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-.center-icon-btn.cart-icon {
-  padding: 8px;
-  background: rgba(76, 175, 80, 0.8);
+.red-overlay-icon-btn.cart-icon {
+  padding: 6px;
+  background: rgba(76, 175, 80, 0.85);
 }
 
-.center-icon-btn.info-icon {
+.red-overlay-icon-btn.cart-icon:hover {
+  background: rgba(76, 175, 80, 0.95);
+}
+
+.red-overlay-icon-btn.info-icon {
   background: rgba(115, 115, 115, 0.9);
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--white);
 }
 
-.center-icon-btn.info-icon:hover {
+.red-overlay-icon-btn.info-icon:hover {
   background: rgba(140, 140, 140, 0.95);
 }
 
-.center-icon-btn.out-of-stock {
+.red-overlay-icon-btn.out-of-stock {
   background: rgba(156, 156, 156, 0.8);
   cursor: not-allowed;
-  padding: 8px;
+  padding: 6px;
 }
 
-.center-cart-icon-svg,
-.cart-icon-svg {
-  width: 28px;
-  height: 28px;
+.red-cart-icon-svg {
+  width: 24px;
+  height: 24px;
   color: var(--white);
 }
 
-/* Cart Counter */
-.cart-counter {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(76, 175, 80, 0.9);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 24px;
-  padding: 0;
-  min-width: 100px;
-  height: 48px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.counter-btn {
-  background: none;
-  border: none;
-  color: var(--white);
-  font-size: 20px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0 12px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color var(--transition-fast);
-  min-width: 36px;
-}
-
-.counter-btn.trash-btn {
-  font-size: 18px;
-  order: 1;
-}
-
-.counter-btn.plus-btn {
-  font-size: 24px;
-  order: -1;
-}
-
-.counter-value {
-  color: var(--white);
-  font-size: 18px;
-  font-weight: 600;
-  min-width: 28px;
-  text-align: center;
-  user-select: none;
-  order: 0;
-}
-
-/* Bottom Cart Counter */
-.bottom-cart-counter {
+.red-overlay-cart-counter {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -640,7 +686,7 @@ button.center-icon-btn {
   flex-shrink: 0;
 }
 
-.bottom-counter-btn {
+.red-overlay-cart-counter .counter-btn {
   background: none;
   border: none;
   color: var(--white);
@@ -656,17 +702,17 @@ button.center-icon-btn {
   min-width: 30px;
 }
 
-.bottom-counter-btn.trash-btn {
+.red-overlay-cart-counter .counter-btn.trash-btn {
   font-size: 14px;
   order: 1;
 }
 
-.bottom-counter-btn.plus-btn {
+.red-overlay-cart-counter .counter-btn.plus-btn {
   font-size: 20px;
   order: -1;
 }
 
-.bottom-counter-value {
+.red-overlay-cart-counter .counter-value {
   color: var(--white);
   font-size: 16px;
   font-weight: 600;
@@ -854,26 +900,40 @@ button.center-icon-btn {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .center-icons-overlay {
+  .red-background-overlay,
+  .text-overlay {
+    height: 140px;
+    padding: var(--spacing-md);
+  }
+
+  .red-overlay-static-content,
+  .overlay-static-content {
+    bottom: 58px;
+    top: auto;
+  }
+
+  .red-hover-content,
+  .hover-content {
     opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
-  .center-icon-btn {
-    width: 40px;
-    height: 40px;
+  .red-overlay-price,
+  .overlay-price {
+    font-size: 1.25rem;
   }
 
-  .cart-counter {
-    min-width: 90px;
-    height: 40px;
+  .red-overlay-icon-btn,
+  .overlay-icon-btn {
+    width: 36px;
+    height: 36px;
   }
 
-  .album-card.red-background .album-title {
-    font-size: 1.5rem !important;
-  }
-
-  .album-card.red-background .album-artist {
-    font-size: 1.125rem !important;
+  .red-cart-icon-svg,
+  .cart-icon-svg {
+    width: 20px;
+    height: 20px;
   }
 
   .album-card.small:not(.large) .overlay-title {
@@ -883,56 +943,23 @@ button.center-icon-btn {
   .album-card.small:not(.large) .overlay-artist {
     font-size: 0.75rem;
   }
-
-  /* Show hover content on mobile */
-  .text-overlay {
-    height: 140px;
-    padding: var(--spacing-md);
-  }
-
-  .overlay-static-content {
-    bottom: 58px;
-    top: auto;
-  }
-
-  .hover-content {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .overlay-price {
-    font-size: 1.25rem;
-  }
-
-  .overlay-icon-btn {
-    width: 36px;
-    height: 36px;
-  }
-
-  .cart-icon-svg {
-    width: 20px;
-    height: 20px;
-  }
 }
 
 @media (max-width: 576px) {
-  .center-icon-btn {
-    width: 36px;
-    height: 36px;
+  .red-overlay-price,
+  .overlay-price {
+    font-size: 1.125rem;
   }
 
-  .cart-counter {
-    min-width: 80px;
-    height: 36px;
+  .red-overlay-icon-btn,
+  .overlay-icon-btn {
+    width: 32px;
+    height: 32px;
   }
 
-  .album-card.red-background .album-title {
-    font-size: 1.375rem !important;
-  }
-
-  .album-card.red-background .album-artist {
-    font-size: 1rem !important;
+  .red-overlay-icons-group,
+  .overlay-icons-group {
+    gap: 6px;
   }
 
   .album-card.small:not(.large) .overlay-title {
@@ -941,18 +968,5 @@ button.center-icon-btn {
 
   .album-card.small:not(.large) .overlay-artist {
     font-size: 0.7rem;
-  }
-
-  .overlay-price {
-    font-size: 1.125rem;
-  }
-
-  .overlay-icon-btn {
-    width: 32px;
-    height: 32px;
-  }
-
-  .overlay-icons-group {
-    gap: 6px;
   }
 }
