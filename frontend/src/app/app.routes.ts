@@ -24,7 +24,7 @@ export const routes: Routes = [
   {
     path: "checkout",
     loadComponent: () =>
-      import("./components/checkout/checkout.component").then(
+      import("./pages/checkout/checkout.component").then(
         (m) => m.CheckoutComponent
       ),
     canActivate: [authGuard],
@@ -60,6 +60,6 @@ export const routes: Routes = [
   },
   {
     path: "**",
-    redirectTo: "404", // ✅ שינוי כאן!
+    redirectTo: "404",
   },
 ];

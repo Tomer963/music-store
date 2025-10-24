@@ -6,8 +6,6 @@ import {
   ReactiveFormsModule,
   Validators,
   AbstractControl,
-  ValidationErrors,
-  ValidatorFn,
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
@@ -16,7 +14,7 @@ import { CartService } from "../../services/cart.service";
 import { OrderService } from "../../services/order.service";
 import { Cart } from "../../models/cart.model";
 import { User } from "../../models/user.model";
-import { SpinnerComponent } from "../shared/spinner/spinner.component";
+import { SpinnerComponent } from "../../components/shared/spinner/spinner.component";
 
 // ✅ קבוע - כל החודשים
 const ALL_MONTHS = [
