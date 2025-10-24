@@ -98,7 +98,7 @@ export const albumValidation = [
     .withMessage("Description cannot exceed 500 characters"),
 ];
 
-// ✅ תיקון: ודא שזה דוחה נתונים לא תקינים
+// ✅ תיקון: cartItemValidation - דחייה חזקה של שדות לא חוקיים
 export const cartItemValidation = [
   body("albumId")
     .exists()
@@ -117,16 +117,19 @@ export const cartItemValidation = [
     .isString()
     .withMessage("SessionId must be a string"),
 
-  // ✅ תוספת: דחה כל שדה שאינו מוכר
+  // ✅ תיקון: דחה כל שדה נוסף שלא מוכר
   body()
     .custom((value, { req }) => {
       const allowedFields = ['albumId', 'quantity', 'sessionId'];
-      const extraFields = Object.keys(req.body).filter(
-        key => !allowedFields.includes(key)
+      const receivedFields = Object.keys(req.body);
+      const extraFields = receivedFields.filter(
+        field => !allowedFields.includes(field)
       );
+      
       if (extraFields.length > 0) {
         throw new Error(`Unexpected fields: ${extraFields.join(', ')}`);
       }
+      
       return true;
     }),
 ];

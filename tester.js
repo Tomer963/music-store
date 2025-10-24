@@ -511,6 +511,7 @@ async function testSecurityAndValidation() {
   try {
     const response = await makeRequest(`${BASE_URL}/cart/items`, {
       method: 'POST',
+      headers: { 'x-session-id': testSessionId },
       body: { albumId: 'invalid', quantity: -1 }
     });
     logTest('Invalid cart data rejected', response.status === 400);
@@ -550,21 +551,26 @@ async function testSecurityAndValidation() {
 async function testRateLimiting() {
   console.log('\n⏱️ Testing Rate Limiting...');
   
-  let requestCount = 0;
-  const requests = [];
+  // ✅ תיקון: שולח בקשות ברצף (לא במקביל) עם delay קצר
+  let blockedCount = 0;
+  
+  console.log('   Sending 105 sequential requests...');
   
   for (let i = 0; i < 105; i++) {
-    requests.push(
-      makeRequest(`${BASE_URL}/albums?page=1&limit=1`)
-        .then(() => requestCount++)
-        .catch(() => {})
-    );
+    try {
+      const response = await makeRequest(`${BASE_URL}/albums?page=1&limit=1`);
+      if (response.status === 429) {
+        blockedCount++;
+      }
+      // Delay קצר בין בקשות
+      await new Promise(resolve => setTimeout(resolve, 10));
+    } catch (error) {
+      // Ignore errors
+    }
   }
   
-  await Promise.all(requests);
-  
-  logTest('Rate limiting exists', requestCount < 105, 
-    `Expected some requests to be blocked, but ${requestCount}/105 succeeded`
+  logTest('Rate limiting blocks requests', blockedCount > 0, 
+    `${blockedCount} requests were blocked out of 105`
   );
 }
 
@@ -574,13 +580,18 @@ async function testErrorHandling() {
   try {
     const response = await makeRequest(`${BASE_URL}/nonexistent-endpoint`);
     logTest('404 for nonexistent endpoints', response.status === 404);
+    logTest('404 response has error message', 
+      response.data.success === false && 
+      response.data.message !== undefined
+    );
   } catch (error) {
     logTest('404 handling', false, error.message);
   }
 
   try {
     const response = await makeRequest(`${BASE_URL}/albums`, {
-      method: 'POST'
+      method: 'POST',
+      body: { title: 'Test' }
     });
     logTest('Unauthorized POST rejected', response.status === 401);
   } catch (error) {
@@ -590,9 +601,14 @@ async function testErrorHandling() {
   try {
     const response = await makeRequest(`${BASE_URL}/cart/items`, {
       method: 'POST',
+      headers: { 'x-session-id': testSessionId },
       body: { invalid: 'data' }
     });
     logTest('Invalid request body handled', response.status === 400);
+    logTest('Validation error message provided', 
+      response.data.success === false &&
+      (response.data.errors !== undefined || response.data.message !== undefined)
+    );
   } catch (error) {
     logTest('Invalid body handling', false, error.message);
   }
@@ -667,6 +683,10 @@ async function runAllTests() {
   }
   
   console.log('\n' + '='.repeat(60));
+  
+  if (testResults.passed === testResults.total) {
+    console.log('🎉 ALL TESTS PASSED! 🎉');
+  }
   
   process.exit(testResults.failed > 0 ? 1 : 0);
 }

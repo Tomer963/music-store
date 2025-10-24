@@ -74,7 +74,7 @@ const limiter = rateLimit({
   },
 });
 
-// ✅ Apply to ALL /api routes
+// ✅ Apply rate limiting to ALL /api routes
 app.use("/api", limiter);
 
 // Request logging (development only)
