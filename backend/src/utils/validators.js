@@ -146,7 +146,7 @@ export const albumUpdateValidation = [
     .withMessage("Description cannot exceed 500 characters"),
 ];
 
-// ✅ ולידטור ליצירת קטגוריה - כל השדות חובה
+// ✅ ולידטור ליצירת קטגוריה - רק שם חובה
 export const categoryValidation = [
   body("name")
     .trim()
@@ -154,15 +154,9 @@ export const categoryValidation = [
     .withMessage("Category name is required")
     .isLength({ max: 50 })
     .withMessage("Category name cannot exceed 50 characters"),
-
-  body("description")
-    .optional()
-    .trim()
-    .isLength({ max: 200 })
-    .withMessage("Description cannot exceed 200 characters"),
 ];
 
-// ✅ ולידטור לעדכון קטגוריה - כל השדות אופציונליים
+// ✅ ולידטור לעדכון קטגוריה - רק שם אופציונלי
 export const categoryUpdateValidation = [
   body("name")
     .optional()
@@ -171,12 +165,6 @@ export const categoryUpdateValidation = [
     .withMessage("Category name cannot be empty")
     .isLength({ max: 50 })
     .withMessage("Category name cannot exceed 50 characters"),
-
-  body("description")
-    .optional()
-    .trim()
-    .isLength({ max: 200 })
-    .withMessage("Description cannot exceed 200 characters"),
 ];
 
 // ✅ ולידטור להוספה לעגלה
