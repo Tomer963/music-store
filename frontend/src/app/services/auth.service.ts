@@ -132,16 +132,16 @@ export class AuthService {
       try {
         const payload = this.decodeToken(token);
         
-        // Set user data from token
+        // ✅ תיקון: Set user data from token
         const user: User = {
           _id: payload.id,
           email: payload.email,
-          firstName: "", // Will be loaded from profile
+          firstName: "",
           lastName: "",
-          role: payload.role as "user" | "admin", // ✅ Fixed: Cast role to correct type
+          role: payload.role as "user" | "admin",
           wishlist: [],
-          createdAt: new Date().toISOString(), // ✅ Fixed: Convert to ISO string
-          updatedAt: new Date().toISOString(), // ✅ Fixed: Convert to ISO string
+          createdAt: new Date().toISOString(), // ✅ תיקון
+          updatedAt: new Date().toISOString(), // ✅ תיקון
         };
 
         this.currentUserSubject.next(user);
@@ -266,13 +266,6 @@ export class AuthService {
   isAuthenticated(): boolean {
     const token = this.getToken();
     const isValid = token !== null && !this.isTokenExpired(token);
-    
-    // Debug log
-    console.log("Auth check:", {
-      hasToken: !!token,
-      isValid,
-      hasUser: !!this.currentUserSubject.value
-    });
     
     return isValid;
   }
