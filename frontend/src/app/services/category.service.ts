@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
-import { map, catchError, tap } from "rxjs/operators";
+import { map, catchError } from "rxjs/operators";
 import { environment } from "../../environments/environment";
 import { Category, ApiResponse } from "../models/album.model";
 
@@ -16,36 +16,23 @@ export class CategoryService {
   /**
    * Get Categories
    * Fetch all active categories from the API
-   * @return Observable<Category[]> Array of categories
+   * Returns only categories that have albums (albumCount > 0)
+   * @return Observable<Category[]> Array of categories with albums
    */
   getCategories(): Observable<Category[]> {
     return this.http.get<ApiResponse<Category[]>>(this.apiUrl).pipe(
-      tap((response) => {
-        // ✅ Log response for debugging
-        console.log('🔍 Categories API Response:', response);
-        console.log('🔍 Categories data:', response.data);
-        console.log('🔍 Number of categories:', response.data?.length || 0);
-      }),
       map((response) => {
         const categories = response.data || [];
         
-        // ✅ Log each category
-        categories.forEach(cat => {
-          console.log(`📁 ${cat.name} - Active: ${cat.isActive}, Albums: ${cat.albumCount || 0}`);
-        });
-        
-        // ✅ Filter only active categories (backend should do this, but double-check)
-        const activeCategories = categories.filter(cat => cat.isActive !== false);
-        console.log(`✅ Active categories: ${activeCategories.length}/${categories.length}`);
-        
-        // ✅ Sort alphabetically
-        const sorted = activeCategories.sort((a, b) => 
-          a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })
+        // Filter active categories with albums
+        const categoriesWithAlbums = categories.filter(
+          cat => cat.isActive !== false && (cat.albumCount || 0) > 0
         );
         
-        console.log('📊 Final sorted categories:', sorted.map(c => c.name));
-        
-        return sorted;
+        // Sort alphabetically
+        return categoriesWithAlbums.sort((a, b) => 
+          a.name.localeCompare(b.name, 'en', { sensitivity: 'base' })
+        );
       }),
       catchError(this.handleError)
     );

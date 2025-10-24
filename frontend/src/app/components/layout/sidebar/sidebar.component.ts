@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { Router, NavigationEnd } from "@angular/router";
 import { Subject, filter, takeUntil } from "rxjs";
 import { StateService } from "../../../services/state.service";
-import { Category, Album } from "../../../models/album.model";
+import { Category } from "../../../models/album.model";
 import { CartWidgetComponent } from "../../cart/cart-widget/cart-widget.component";
 import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 
@@ -40,7 +40,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Load Categories
-   * Load categories from state service and filter those with albums
+   * Load categories from state service
+   * Categories are already filtered by albumCount in the backend
    * @return void
    */
   private loadCategories(): void {
@@ -52,8 +53,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (state: any) => {
-          if (state.categories && state.albums) {
-            this.processCategories(state.categories, state.albums);
+          if (state.categories) {
+            // Use categories directly - they're already filtered by the backend
+            this.categoriesWithAlbums = state.categories;
             this.isLoadingCategories = false;
           }
         },
@@ -67,49 +69,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
     const currentState = this.stateService.getCurrentState();
 
     if (currentState.categories?.length > 0) {
-      if (currentState.albums?.length > 0) {
-        this.processCategories(currentState.categories, currentState.albums);
-        this.isLoadingCategories = false;
-      }
+      this.categoriesWithAlbums = currentState.categories;
+      this.isLoadingCategories = false;
     } else {
       // Load initial data if not available
       this.stateService.loadInitialData().subscribe({
         next: (state: any) => {
-          this.processCategories(state.categories, state.albums);
+          this.categoriesWithAlbums = state.categories;
           this.isLoadingCategories = false;
         },
         error: () => (this.isLoadingCategories = false),
       });
-    }
-  }
-
-  /**
-   * Process Categories
-   * Filter categories that have at least one album
-   * @param categories Array of all categories
-   * @param albums Array of all albums
-   * @return void
-   */
-  private processCategories(categories: Category[], albums: Album[]): void {
-    if (!albums || albums.length === 0) {
-      this.categoriesWithAlbums = categories || [];
-      return;
-    }
-
-    // Filter categories with albums
-    this.categoriesWithAlbums = categories.filter((category) =>
-      albums.some((album) => {
-        const albumCategory =
-          typeof album.category === "string"
-            ? album.category
-            : album.category?._id;
-        return albumCategory === category._id;
-      })
-    );
-
-    // Fallback to all categories if none have albums
-    if (this.categoriesWithAlbums.length === 0) {
-      this.categoriesWithAlbums = categories;
     }
   }
 
