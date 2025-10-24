@@ -98,15 +98,37 @@ export const albumValidation = [
     .withMessage("Description cannot exceed 500 characters"),
 ];
 
+// ✅ תיקון: ודא שזה דוחה נתונים לא תקינים
 export const cartItemValidation = [
-  body("albumId").isMongoId().withMessage("Invalid album ID"),
+  body("albumId")
+    .exists()
+    .withMessage("Album ID is required")
+    .isMongoId()
+    .withMessage("Invalid album ID"),
 
-  body("quantity").isInt({ min: 1 }).withMessage("Quantity must be at least 1"),
+  body("quantity")
+    .exists()
+    .withMessage("Quantity is required")
+    .isInt({ min: 1 })
+    .withMessage("Quantity must be at least 1"),
 
   body("sessionId")
     .optional()
     .isString()
     .withMessage("SessionId must be a string"),
+
+  // ✅ תוספת: דחה כל שדה שאינו מוכר
+  body()
+    .custom((value, { req }) => {
+      const allowedFields = ['albumId', 'quantity', 'sessionId'];
+      const extraFields = Object.keys(req.body).filter(
+        key => !allowedFields.includes(key)
+      );
+      if (extraFields.length > 0) {
+        throw new Error(`Unexpected fields: ${extraFields.join(', ')}`);
+      }
+      return true;
+    }),
 ];
 
 export const orderValidation = [
@@ -135,9 +157,6 @@ export const orderValidation = [
     .matches(/^0\d{1,2}-\d{7}$/)
     .withMessage("Phone must be in format 03-1234567 or 050-1234567"),
 ];
-
-// ✅ הסרנו את creditCardValidation - לא צריך יותר
-// אין צורך לולדאר פרטי כרטיס אשראי כי לא שומרים אותם
 
 export const mongoIdValidation = [
   param("id").isMongoId().withMessage("Invalid ID format"),

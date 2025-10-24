@@ -17,7 +17,7 @@ router.get(
   albumController.getAlbum
 );
 
-// Admin routes
+// ✅ תיקון: Admin routes - ודא שיש authenticate ו-isAdmin
 router.post(
   "/",
   authenticate,

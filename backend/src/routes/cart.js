@@ -15,12 +15,15 @@ const quantityValidation = [
 router.use(optionalAuth);
 
 router.get("/", cartController.getCart);
+
+// ✅ תיקון: ודא ש-cartItemValidation ו-validateRequest פועלים
 router.post(
   "/items",
   cartItemValidation,
   validateRequest,
   cartController.addToCart
 );
+
 router.put(
   "/items/:id",
   mongoIdValidation,
@@ -28,12 +31,14 @@ router.put(
   validateRequest,
   cartController.updateCartItem
 );
+
 router.delete(
   "/items/:id",
   mongoIdValidation,
   validateRequest,
   cartController.removeFromCart
 );
+
 router.delete("/", cartController.clearCart);
 
 export default router;

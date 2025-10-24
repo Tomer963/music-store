@@ -39,13 +39,15 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Rate limiting
+// Rate limiting - ✅ תיקון: הגדרות נכונות
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 900000, // 15 minutes
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
   message: "Too many requests, please try again later.",
   standardHeaders: true,
   legacyHeaders: false,
+  skipSuccessfulRequests: false, // ✅ חשוב: לא לדלג על בקשות מוצלחות
+  skipFailedRequests: false, // ✅ חשוב: לא לדלג על בקשות כושלות
 });
 
 app.use("/api", limiter);
@@ -159,8 +161,8 @@ app.get("/health/detailed", async (req, res) => {
   });
 });
 
-// 404 handler
-app.use((req, res) => {
+// ✅ תיקון: 404 handler - חייב להיות לפני errorHandler
+app.use((req, res, next) => {
   res.status(404).json({
     success: false,
     message: "Resource not found",
@@ -168,7 +170,7 @@ app.use((req, res) => {
   });
 });
 
-// Global error handler
+// Global error handler - חייב להיות אחרון
 app.use(errorHandler);
 
 export default app;
