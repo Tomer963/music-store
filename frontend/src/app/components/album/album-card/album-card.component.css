@@ -194,7 +194,7 @@
   color: white;
   padding: 12px var(--spacing-md);
   z-index: 2;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   height: 70px;
   display: flex;
   flex-direction: column;
@@ -217,26 +217,19 @@
   );
 }
 
-/* Static content positioning */
+/* Static content in column layout */
 .overlay-static-content {
-  position: absolute;
-  bottom: 12px;
-  left: var(--spacing-md);
-  right: var(--spacing-md);
-  z-index: 3;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Move static content on hover */
-.album-card:hover .overlay-static-content {
-  bottom: auto;
-  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   position: relative;
+  z-index: 3;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .overlay-title,
 .overlay-artist {
-  margin: 0 0 4px 0;
+  margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -279,11 +272,11 @@
   opacity: 1 !important;
 }
 
-/* Hover content (price + icons) - initially hidden */
+/* Hover content with stacked layout */
 .hover-content {
   opacity: 0;
   transform: translateY(15px);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   margin-top: var(--spacing-md);
   display: flex;
   flex-direction: column;
@@ -297,33 +290,31 @@
   pointer-events: auto;
 }
 
-/* ✅ NEW: Price and Icons in same row - Price LEFT, Icons RIGHT */
-.overlay-price-icons-row {
+/* Price in its own row (stacked vertically) */
+.overlay-price-row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+  flex-direction: column;
   gap: var(--spacing-sm);
+  width: 100%;
 }
 
-/* Price in overlay - aligned to LEFT */
+/* Price display */
 .overlay-price {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary-color);
   margin: 0;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
-  flex-shrink: 0;
 }
 
-/* Icons row in overlay - aligned to RIGHT */
-.overlay-icons {
+/* Icons in separate row below price */
+.overlay-icons-row {
   display: flex;
   gap: var(--spacing-sm);
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   flex-wrap: nowrap;
-  flex-shrink: 0;
+  width: 100%;
 }
 
 .overlay-icon-btn {
@@ -335,7 +326,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
@@ -348,7 +339,7 @@
 }
 
 .overlay-icon-btn:hover:not(:disabled) {
-  transform: scale(1.15);
+  transform: scale(1.2);
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -862,12 +853,6 @@ button.center-icon-btn {
     padding: var(--spacing-md);
     padding-top: 70px;
   }
-  
-  .overlay-static-content {
-    bottom: auto;
-    top: 0;
-    position: relative;
-  }
 
   .hover-content {
     opacity: 1;
@@ -926,7 +911,7 @@ button.center-icon-btn {
     height: 32px;
   }
 
-  .overlay-icons {
+  .overlay-icons-row {
     gap: 6px;
   }
 }
