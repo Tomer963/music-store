@@ -201,11 +201,11 @@
   justify-content: flex-end;
 }
 
-/* Hover state - expand upward */
+/* ✅ FIXED: Hover state - expand upward */
 .album-card:hover .text-overlay {
-  height: 200px;
+  height: 180px;
   padding: var(--spacing-md);
-  padding-top: 70px;
+  padding-top: 50px;
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.98) 0%,
@@ -217,14 +217,25 @@
   );
 }
 
-/* Static content in column layout */
+/* ✅ FIXED: Static content - positioned at bottom initially, centered on hover */
 .overlay-static-content {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  position: relative;
+  gap: 2px;
+  position: absolute;
+  bottom: 12px;
+  left: var(--spacing-md);
+  right: var(--spacing-md);
   z-index: 3;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ✅ FIXED: On hover - center the content */
+.album-card:hover .overlay-static-content {
+  bottom: auto;
+  top: 50px;
+  left: var(--spacing-md);
+  right: var(--spacing-md);
 }
 
 .overlay-title,
@@ -240,6 +251,7 @@
 .overlay-title {
   font-size: 1rem;
   font-weight: 600;
+  margin-bottom: 0;
 }
 
 .overlay-artist {
@@ -272,15 +284,15 @@
   opacity: 1 !important;
 }
 
-/* ✅ FIXED: Hover content - מחיר ואייקונים באותה השורה */
+/* ✅ Hover content - מחיר ואייקונים */
 .hover-content {
   opacity: 0;
   transform: translateY(15px);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-top: var(--spacing-md);
+  margin-top: 6px;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: 0;
   pointer-events: none;
 }
 
@@ -290,7 +302,7 @@
   pointer-events: auto;
 }
 
-/* ✅ NEW: שורה אחת - מחיר משמאל, אייקונים מימין */
+/* שורה אחת - מחיר משמאל, אייקונים מימין */
 .overlay-price-icons-row {
   display: flex;
   justify-content: space-between;
@@ -299,7 +311,7 @@
   gap: var(--spacing-md);
 }
 
-/* ✅ Price on the LEFT */
+/* Price on the LEFT */
 .overlay-price {
   font-size: 1.5rem;
   font-weight: 700;
@@ -309,7 +321,7 @@
   flex-shrink: 0;
 }
 
-/* ✅ Icons on the RIGHT */
+/* Icons on the RIGHT */
 .overlay-icons-group {
   display: flex;
   gap: var(--spacing-sm);
@@ -851,9 +863,14 @@ button.center-icon-btn {
 
   /* Show hover content on mobile */
   .text-overlay {
-    height: 200px;
+    height: 180px;
     padding: var(--spacing-md);
-    padding-top: 70px;
+    padding-top: 50px;
+  }
+
+  .overlay-static-content {
+    bottom: auto;
+    top: 50px;
   }
 
   .hover-content {
