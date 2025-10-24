@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import mongoose from "mongoose";
 import albumRoutes from "./routes/albums.js";
 import categoryRoutes from "./routes/categories.js";
@@ -12,13 +13,13 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
-// 1. Trust proxy
+// 1. CRITICAL: Trust proxy MUST be set FIRST
 app.set("trust proxy", 1);
 
 // 2. Security headers
 app.use(helmet());
 
-// 3. CORS
+// 3. CORS configuration
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
@@ -39,11 +40,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// 4. Body parsing
+// 4. Body parsing (BEFORE rate limiting)
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// 5. Development logging
+// 5. Request logging (development only)
 if (process.env.NODE_ENV === "development") {
   app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
@@ -51,7 +52,74 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
-// 6. Database connection check
+// 6. ✅ IMPROVED: Development-friendly rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  
+  // 🎯 KEY IMPROVEMENT: Different limits for dev vs production
+  max: process.env.NODE_ENV === "production" ? 100 : 1000,
+  
+  standardHeaders: true, // Return rate limit info in headers
+  legacyHeaders: false, // Disable X-RateLimit-* headers
+  
+  // ✅ Proper IP extraction
+  keyGenerator: (req) => {
+    const forwarded = req.headers["x-forwarded-for"];
+    const realIp = req.headers["x-real-ip"];
+    const ip = req.ip || req.connection?.remoteAddress || "unknown";
+    
+    let clientIp = ip;
+    if (forwarded) {
+      clientIp = forwarded.split(",")[0].trim();
+    } else if (realIp) {
+      clientIp = realIp;
+    }
+    
+    // Clean up IPv6 format
+    clientIp = clientIp.replace(/^::ffff:/, "");
+    
+    // Log in development mode only
+    if (process.env.NODE_ENV === "development") {
+      console.log(`🔍 Rate limit key: ${clientIp}`);
+    }
+    
+    return clientIp;
+  },
+  
+  // ✅ Handler for rate limit exceeded
+  handler: (req, res) => {
+    const clientIp = req.ip?.replace(/^::ffff:/, "") || "unknown";
+    const env = process.env.NODE_ENV || "development";
+    const limit = env === "production" ? 100 : 1000;
+    
+    console.log(`⛔ Rate limit exceeded for IP: ${clientIp} (${env} mode: ${limit} req/15min)`);
+    
+    res.status(429).json({
+      success: false,
+      message: "Too many requests, please try again later.",
+      error: "Rate limit exceeded",
+      limit: limit,
+      windowMs: 900, // 15 minutes in seconds
+      retryAfter: Math.ceil((req.rateLimit?.resetTime - Date.now()) / 1000) || 900,
+    });
+  },
+  
+  // ✅ Skip rate limiting for health endpoints
+  skip: (req) => {
+    return req.path === "/health" || req.path === "/health/detailed";
+  },
+  
+  // Store (in-memory for development, use Redis in production)
+  // For production: use rate-limit-redis
+});
+
+// 7. Apply rate limiter to ALL /api routes
+app.use("/api", limiter);
+
+// Log rate limiting configuration on startup
+console.log(`🛡️  Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`);
+
+// 8. Database connection check
 app.use((req, res, next) => {
   if (mongoose.connection.readyState !== 1) {
     return res.status(503).json({
@@ -63,12 +131,18 @@ app.use((req, res, next) => {
   next();
 });
 
-// 7. Root endpoint
+// 9. Root endpoint
 app.get("/", (req, res) => {
   res.json({
     success: true,
     message: "Music Store API",
     version: process.env.API_VERSION || "v1",
+    environment: process.env.NODE_ENV || "development",
+    rateLimit: {
+      enabled: true,
+      max: process.env.NODE_ENV === "production" ? 100 : 1000,
+      windowMs: 900, // seconds
+    },
     endpoints: {
       health: "/health",
       api: `/api/${process.env.API_VERSION || "v1"}`,
@@ -76,7 +150,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// 8. Health endpoints
+// 10. Health check endpoints
 app.get("/health", async (req, res) => {
   const dbState = mongoose.connection.readyState;
   const isConnected = dbState === 1;
@@ -133,11 +207,16 @@ app.get("/health/detailed", async (req, res) => {
       name: mongoose.connection.name || "N/A",
       models: Object.keys(mongoose.models),
     },
+    rateLimit: {
+      enabled: true,
+      max: process.env.NODE_ENV === "production" ? 100 : 1000,
+      windowMs: "15 minutes",
+    },
     environment: process.env.NODE_ENV || "development",
   });
 });
 
-// 9. API routes (NO RATE LIMITING FOR TESTING)
+// 11. API routes
 const API_PREFIX = `/api/${process.env.API_VERSION || "v1"}`;
 
 app.use(`${API_PREFIX}/albums`, albumRoutes);
@@ -147,7 +226,7 @@ app.use(`${API_PREFIX}/cart`, cartRoutes);
 app.use(`${API_PREFIX}/orders`, orderRoutes);
 app.use(`${API_PREFIX}/wishlist`, wishlistRoutes);
 
-// 10. 404 handler (AFTER all routes)
+// 12. ✅ CRITICAL: 404 handler MUST be BEFORE errorHandler
 app.use((req, res, next) => {
   res.status(404).json({
     success: false,
@@ -156,7 +235,7 @@ app.use((req, res, next) => {
   });
 });
 
-// 11. Error handler (LAST)
+// 13. ✅ CRITICAL: Global error handler - MUST be LAST
 app.use(errorHandler);
 
 export default app;
