@@ -26,96 +26,97 @@
         <p class="overlay-artist">{{ album.artist }}</p>
       </div>
 
-      <!-- ✅ Hover content - price and icons in SEPARATE ROWS (stacked vertically) -->
+      <!-- ✅ FIXED: Hover content - מחיר ואייקונים באותה שורה -->
       <div class="hover-content">
-        <!-- ✅ NEW: Price in its own row -->
-        <div class="overlay-price-row">
+        <!-- ✅ שורה אחת: מחיר משמאל, אייקונים מימין -->
+        <div class="overlay-price-icons-row">
+          <!-- ✅ Price on the LEFT -->
           <p class="overlay-price">{{ getFormattedPrice() }}</p>
-        </div>
 
-        <!-- ✅ NEW: Icons in their own row below price -->
-        <div class="overlay-icons-row">
-          <!-- Cart button or counter -->
-          <button
-            *ngIf="album.inStock && !showCartCounter"
-            class="overlay-icon-btn cart-icon"
-            [disabled]="isCartLoading || isAddingToCart"
-            (click)="addToCart($event)"
-            title="Add to Cart"
-          >
-            <div class="icon-spinner" *ngIf="isCartLoading"></div>
-            <svg
-              *ngIf="!isCartLoading"
-              viewBox="0 0 2000 1778"
-              class="cart-icon-svg"
+          <!-- ✅ Icons on the RIGHT -->
+          <div class="overlay-icons-group">
+            <!-- Cart button or counter -->
+            <button
+              *ngIf="album.inStock && !showCartCounter"
+              class="overlay-icon-btn cart-icon"
+              [disabled]="isCartLoading || isAddingToCart"
+              (click)="addToCart($event)"
+              title="Add to Cart"
             >
-              <g
-                transform="translate(0,1778) scale(0.1,-0.1)"
-                fill="currentColor"
-                stroke="none"
+              <div class="icon-spinner" *ngIf="isCartLoading"></div>
+              <svg
+                *ngIf="!isCartLoading"
+                viewBox="0 0 2000 1778"
+                class="cart-icon-svg"
               >
-                <path
-                  d="M658 17760 c-318 -67 -574 -327 -640 -649 -18 -88 -19 -128 -15 -481 3 -330 6 -394 21 -445 59 -201 173 -366 328 -472 92 -64 132 -84 238 -119 l85 -29 1291 -3 1292 -2 5 -23 c3 -12 551 -2688 1217 -5947 666 -3259 1213 -5932 1216 -5941 3 -12 -17 -30 -72 -65 -380 -236 -685 -638 -818 -1077 -58 -190 -79 -343 -79 -562 -1 -218 21 -370 79 -562 110 -365 342 -710 633 -945 625 -504 1496 -578 2183 -186 738 421 1118 1259 947 2088 -68 333 -234 659 -455 900 -41 44 -74 82 -74 85 0 3 1634 5 3631 5 l3631 0 -66 -71 c-692 -748 -682 -1916 23 -2651 230 -240 489 -405 796 -507 521 -173 1097 -118 1567 151 615 351 988 993 988 1702 0 688 -384 1344 -986 1682 -57 33 -104 64 -104 70 0 6 46 211 101 455 99 431 102 447 102 564 -1 90 -6 140 -22 200 -45 170 -153 340 -286 448 -72 59 -234 139 -330 163 -67 18 -276 19 -4792 21 -2598 2 -4723 6 -4723 10 0 4 -49 249 -110 544 -60 296 -110 543 -110 548 0 8 1511 11 5134 11 4460 0 5144 2 5204 15 311 65 551 288 636 590 14 50 395 1717 848 3705 l822 3615 0 130 c0 229 -65 397 -218 562 -116 125 -237 198 -405 246 l-76 22 -6884 5 -6885 5 -156 767 c-87 422 -165 797 -174 834 -59 235 -254 457 -484 550 -159 64 18 59 -2072 61 -1805 2 -1899 1 -1982 -17z"
-                />
-              </g>
-            </svg>
-          </button>
-
-          <!-- Cart counter (when in cart) -->
-          <div
-            *ngIf="album.inStock && showCartCounter"
-            class="overlay-cart-counter"
-            (click)="$event.stopPropagation()"
-          >
-            <button
-              class="counter-btn trash-btn"
-              [disabled]="isUpdatingCart"
-              (click)="decrementCart($event)"
-            >
-              🗑️
+                <g
+                  transform="translate(0,1778) scale(0.1,-0.1)"
+                  fill="currentColor"
+                  stroke="none"
+                >
+                  <path
+                    d="M658 17760 c-318 -67 -574 -327 -640 -649 -18 -88 -19 -128 -15 -481 3 -330 6 -394 21 -445 59 -201 173 -366 328 -472 92 -64 132 -84 238 -119 l85 -29 1291 -3 1292 -2 5 -23 c3 -12 551 -2688 1217 -5947 666 -3259 1213 -5932 1216 -5941 3 -12 -17 -30 -72 -65 -380 -236 -685 -638 -818 -1077 -58 -190 -79 -343 -79 -562 -1 -218 21 -370 79 -562 110 -365 342 -710 633 -945 625 -504 1496 -578 2183 -186 738 421 1118 1259 947 2088 -68 333 -234 659 -455 900 -41 44 -74 82 -74 85 0 3 1634 5 3631 5 l3631 0 -66 -71 c-692 -748 -682 -1916 23 -2651 230 -240 489 -405 796 -507 521 -173 1097 -118 1567 151 615 351 988 993 988 1702 0 688 -384 1344 -986 1682 -57 33 -104 64 -104 70 0 6 46 211 101 455 99 431 102 447 102 564 -1 90 -6 140 -22 200 -45 170 -153 340 -286 448 -72 59 -234 139 -330 163 -67 18 -276 19 -4792 21 -2598 2 -4723 6 -4723 10 0 4 -49 249 -110 544 -60 296 -110 543 -110 548 0 8 1511 11 5134 11 4460 0 5144 2 5204 15 311 65 551 288 636 590 14 50 395 1717 848 3705 l822 3615 0 130 c0 229 -65 397 -218 562 -116 125 -237 198 -405 246 l-76 22 -6884 5 -6885 5 -156 767 c-87 422 -165 797 -174 834 -59 235 -254 457 -484 550 -159 64 18 59 -2072 61 -1805 2 -1899 1 -1982 -17z"
+                  />
+                </g>
+              </svg>
             </button>
-            <span class="counter-value">{{ cartQuantity }}</span>
-            <button
-              class="counter-btn plus-btn"
-              [disabled]="isUpdatingCart || cartQuantity >= album.stock"
-              (click)="incrementCart($event)"
+
+            <!-- Cart counter (when in cart) -->
+            <div
+              *ngIf="album.inStock && showCartCounter"
+              class="overlay-cart-counter"
+              (click)="$event.stopPropagation()"
             >
-              +
+              <button
+                class="counter-btn trash-btn"
+                [disabled]="isUpdatingCart"
+                (click)="decrementCart($event)"
+              >
+                🗑️
+              </button>
+              <span class="counter-value">{{ cartQuantity }}</span>
+              <button
+                class="counter-btn plus-btn"
+                [disabled]="isUpdatingCart || cartQuantity >= album.stock"
+                (click)="incrementCart($event)"
+              >
+                +
+              </button>
+            </div>
+
+            <!-- Out of stock indicator -->
+            <div
+              *ngIf="!album.inStock"
+              class="overlay-icon-btn out-of-stock"
+              title="Out of Stock"
+            >
+              <span>🚫</span>
+            </div>
+
+            <!-- Info button -->
+            <button
+              class="overlay-icon-btn info-icon"
+              (click)="viewAlbum($event)"
+              title="View Album Details"
+            >
+              <span>ℹ</span>
+            </button>
+
+            <!-- Wishlist button -->
+            <button
+              class="overlay-icon-btn wishlist-icon"
+              [class.loading]="isWishlistLoading"
+              [class.active]="isInWishlist"
+              [disabled]="isWishlistLoading"
+              (click)="toggleWishlist($event)"
+              [title]="isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'"
+            >
+              <div class="icon-spinner" *ngIf="isWishlistLoading"></div>
+              <span *ngIf="!isWishlistLoading">{{
+                isInWishlist ? "❤️" : "🤍"
+              }}</span>
             </button>
           </div>
-
-          <!-- Out of stock indicator -->
-          <div
-            *ngIf="!album.inStock"
-            class="overlay-icon-btn out-of-stock"
-            title="Out of Stock"
-          >
-            <span>🚫</span>
-          </div>
-
-          <!-- Info button -->
-          <button
-            class="overlay-icon-btn info-icon"
-            (click)="viewAlbum($event)"
-            title="View Album Details"
-          >
-            <span>ℹ</span>
-          </button>
-
-          <!-- Wishlist button -->
-          <button
-            class="overlay-icon-btn wishlist-icon"
-            [class.loading]="isWishlistLoading"
-            [class.active]="isInWishlist"
-            [disabled]="isWishlistLoading"
-            (click)="toggleWishlist($event)"
-            [title]="isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'"
-          >
-            <div class="icon-spinner" *ngIf="isWishlistLoading"></div>
-            <span *ngIf="!isWishlistLoading">{{
-              isInWishlist ? "❤️" : "🤍"
-            }}</span>
-          </button>
         </div>
       </div>
     </div>

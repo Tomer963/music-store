@@ -272,7 +272,7 @@
   opacity: 1 !important;
 }
 
-/* Hover content with stacked layout */
+/* ✅ FIXED: Hover content - מחיר ואייקונים באותה השורה */
 .hover-content {
   opacity: 0;
   transform: translateY(15px);
@@ -290,31 +290,33 @@
   pointer-events: auto;
 }
 
-/* Price in its own row (stacked vertically) */
-.overlay-price-row {
+/* ✅ NEW: שורה אחת - מחיר משמאל, אייקונים מימין */
+.overlay-price-icons-row {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
+  gap: var(--spacing-md);
 }
 
-/* Price display */
+/* ✅ Price on the LEFT */
 .overlay-price {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary-color);
   margin: 0;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+  flex-shrink: 0;
 }
 
-/* Icons in separate row below price */
-.overlay-icons-row {
+/* ✅ Icons on the RIGHT */
+.overlay-icons-group {
   display: flex;
   gap: var(--spacing-sm);
   align-items: center;
-  justify-content: flex-start;
+  justify-content: flex-end;
   flex-wrap: nowrap;
-  width: 100%;
+  flex-shrink: 0;
 }
 
 .overlay-icon-btn {
@@ -911,7 +913,7 @@ button.center-icon-btn {
     height: 32px;
   }
 
-  .overlay-icons-row {
+  .overlay-icons-group {
     gap: 6px;
   }
 }
