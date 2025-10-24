@@ -55,9 +55,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * ngOnInit
-   *
    * Initialize component, load album image and check wishlist/cart status
-   *
    * @return void
    */
   ngOnInit(): void {
@@ -77,9 +75,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * ngOnDestroy
-   *
    * Cleanup subscriptions on component destruction
-   *
    * @return void
    */
   ngOnDestroy(): void {
@@ -89,9 +85,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * shouldHideContent
-   *
    * Determine if content section should be hidden based on album index
-   *
    * @return boolean - True if content should be hidden
    */
   shouldHideContent(): boolean {
@@ -100,37 +94,48 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * shouldPreventImageClick
-   *
    * Check if image click navigation should be prevented
-   *
    * @return boolean - True if click should be prevented
    */
   shouldPreventImageClick(): boolean {
-    return (
-      this.albumIndex !== undefined && this.showHover && this.albumIndex <= 10
-    );
+    return false; // ✅ תמיד נאפשר לחיצה על תמונה
+  }
+
+  /**
+   * ✅ handleImageClick - NEW METHOD
+   * Handle click on album image - navigate to album detail
+   * @param (Event) event - Click event
+   * @return void
+   */
+  handleImageClick(event: Event): void {
+    // Don't navigate if clicking on buttons inside the overlay
+    const target = event.target as HTMLElement;
+    if (
+      target.closest('.overlay-icon-btn') || 
+      target.closest('.center-icon-btn') ||
+      target.closest('.cart-counter') ||
+      target.closest('.overlay-cart-counter')
+    ) {
+      return;
+    }
+
+    // Navigate to album detail
+    this.viewAlbum(event);
   }
 
   /**
    * handleCardClick
-   *
-   * Handle card click event - navigate to album detail if allowed
-   *
+   * Handle card click event - deprecated, kept for compatibility
    * @param (Event) event - Click event
    * @return void
    */
   handleCardClick(event: Event): void {
-    if (this.shouldPreventImageClick()) return;
-    if (!this.showCartCounter && !this.shouldPreventImageClick()) {
-      this.viewAlbum(event);
-    }
+    // This method is no longer used but kept for backward compatibility
   }
 
   /**
    * checkCartStatus
-   *
    * Monitor cart changes and update local cart state
-   *
    * @return void
    */
   private checkCartStatus(): void {
@@ -151,9 +156,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * viewAlbum
-   *
    * Navigate to album detail page
-   *
    * @param (Event) event - Click event
    * @return void
    */
@@ -169,9 +172,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * addToCart
-   *
    * Add album to cart and show counter for hover cards
-   *
    * @param (Event) event - Click event
    * @return void
    */
@@ -219,9 +220,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * incrementCart
-   *
    * Increase cart quantity by 1
-   *
    * @param (Event) event - Click event
    * @return void
    */
@@ -254,9 +253,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * decrementCart
-   *
    * Remove item from cart
-   *
    * @param (Event) event - Click event
    * @return void
    */
@@ -285,9 +282,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * toggleWishlist
-   *
    * Add or remove album from wishlist
-   *
    * @param (Event) event - Click event
    * @return void
    */
@@ -304,9 +299,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * getFormattedPrice
-   *
    * Format album price for display
-   *
    * @return string - Formatted price
    */
   getFormattedPrice(): string {
@@ -315,9 +308,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * formatOriginalPrice
-   *
    * Format original price for display
-   *
    * @return string - Formatted original price
    */
   formatOriginalPrice(): string {
@@ -328,9 +319,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * getTruncatedDescription
-   *
    * Get truncated version of album description
-   *
    * @return string - Truncated description
    */
   getTruncatedDescription(): string {

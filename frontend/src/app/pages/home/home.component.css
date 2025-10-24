@@ -319,6 +319,7 @@
   box-shadow: var(--shadow-lg);
 }
 
+/* ✅ Album image container - עם אפקטים על hover */
 .album-image-container {
   width: 100%;
   height: 280px;
@@ -330,6 +331,13 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  cursor: pointer; /* ✅ הוספה */
+  transition: transform var(--transition-fast); /* ✅ הוספה */
+}
+
+/* ✅ אפקט hover על התמונה */
+.album-image-container:hover {
+  transform: scale(1.02);
 }
 
 .album-image-container img {
@@ -337,6 +345,12 @@
   height: 100%;
   object-fit: fill;
   display: block;
+  transition: transform var(--transition-fast); /* ✅ הוספה */
+}
+
+/* ✅ אפקט נוסף על התמונה עצמה */
+.album-image-container:hover img {
+  transform: scale(1.05);
 }
 
 .album-content {
@@ -648,6 +662,11 @@
   }
   .album-content.red-background .album-artist-line.large-artist {
     font-size: 1.125rem;
+  }
+  
+  /* ✅ שמירה על אפקט hover גם במובייל */
+  .album-image-container {
+    cursor: pointer;
   }
 }
 

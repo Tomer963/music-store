@@ -119,8 +119,11 @@
                     class="home-album-card"
                     [attr.data-album-index]="i + 11"
                   >
-                    <!-- Album image -->
-                    <div class="album-image-container">
+                    <!-- ✅ Album image - עם לחיצה לעמוד המוצר -->
+                    <div 
+                      class="album-image-container"
+                      (click)="viewAlbum($event, album._id)"
+                    >
                       <img
                         [src]="getMainImageUrl(album)"
                         [alt]="album.title"

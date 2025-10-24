@@ -11,11 +11,14 @@
   [class.with-text-overlay]="hasTextOverlay"
   [class.no-content]="shouldHideContent()"
   [class.clickable-info-only]="shouldPreventImageClick()"
-  (click)="handleCardClick($event)"
   (mouseenter)="isHovered = true"
   (mouseleave)="isHovered = false"
 >
-  <div class="album-image">
+  <!-- ✅ Album image - עם לחיצה לעמוד המוצר -->
+  <div 
+    class="album-image"
+    (click)="handleImageClick($event)"
+  >
     <img [src]="mainImageUrl" [alt]="album.title" loading="lazy" />
 
     <!-- Text overlay for albums 1-9 with HOVER EXPANSION -->

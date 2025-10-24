@@ -91,6 +91,13 @@
   padding-bottom: 100%;
   overflow: hidden;
   background-color: var(--gray-light);
+  cursor: pointer; /* ✅ הוספה */
+  transition: transform var(--transition-fast); /* ✅ הוספה */
+}
+
+/* ✅ אפקט hover על התמונה */
+.album-image:hover {
+  transform: scale(1.01);
 }
 
 .album-card.small .album-image,
@@ -99,6 +106,7 @@
   padding-bottom: 100%;
   overflow: hidden;
   background-color: var(--gray-light);
+  cursor: pointer; /* ✅ הוספה */
 }
 
 .album-card.small.with-text-overlay .album-image,
@@ -109,6 +117,7 @@
   height: 100%;
   width: 100%;
   flex: 1;
+  cursor: pointer; /* ✅ הוספה */
 }
 
 .album-card.small:not(.with-text-overlay) .album-image {
@@ -116,6 +125,7 @@
   height: calc(100% - 60px);
   width: 100%;
   flex: 1;
+  cursor: pointer; /* ✅ הוספה */
 }
 
 /* Red background cards (albums 10-11) */
@@ -130,6 +140,7 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  cursor: pointer; /* ✅ הוספה */
 }
 
 .album-card.black-background .album-image {
@@ -138,6 +149,7 @@
   width: 100%;
   flex-shrink: 0;
   position: relative;
+  cursor: pointer; /* ✅ הוספה */
 }
 
 .album-card.black-background:hover .album-image {
@@ -151,6 +163,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform var(--transition-fast); /* ✅ הוספה */
+}
+
+/* ✅ אפקט על התמונה עצמה */
+.album-image:hover img {
+  transform: scale(1.03);
 }
 
 /* Full image display for text overlay cards */
