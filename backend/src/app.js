@@ -13,13 +13,17 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
-// ✅ CRITICAL: Trust proxy MUST be set FIRST
+// ========================================
+// MIDDLEWARE ORDER (DO NOT CHANGE!)
+// ========================================
+
+// 1. Trust proxy FIRST
 app.set("trust proxy", 1);
 
-// Security headers
+// 2. Security headers
 app.use(helmet());
 
-// CORS configuration
+// 3. CORS
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
@@ -40,44 +44,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// ✅ CRITICAL: Body parsing BEFORE rate limiting
+// 4. Body parsing BEFORE everything else
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// ✅ Rate limiting - AFTER body parsing
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  standardHeaders: true,
-  legacyHeaders: false,
-  skipSuccessfulRequests: false,
-  skipFailedRequests: false,
-  keyGenerator: (req) => {
-    const forwarded = req.headers["x-forwarded-for"];
-    const ip = forwarded
-      ? forwarded.split(",")[0].trim()
-      : req.ip || req.connection?.remoteAddress || "unknown";
-    
-    console.log(`Rate limit check for IP: ${ip}`);
-    return ip;
-  },
-  handler: (req, res) => {
-    console.log(`⛔ Rate limit exceeded for IP: ${req.ip}`);
-    res.status(429).json({
-      success: false,
-      message: "Too many requests, please try again later.",
-      error: "Rate limit exceeded",
-    });
-  },
-  skip: (req) => {
-    return req.path === "/health" || req.path === "/health/detailed";
-  },
-});
-
-// ✅ Apply rate limiting to ALL /api routes
-app.use("/api", limiter);
-
-// Request logging (development only)
+// 5. Development logging
 if (process.env.NODE_ENV === "development") {
   app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
@@ -85,7 +56,7 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
-// Database connection check
+// 6. Database connection check
 app.use((req, res, next) => {
   if (mongoose.connection.readyState !== 1) {
     return res.status(503).json({
@@ -97,17 +68,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// API routes
-const API_PREFIX = `/api/${process.env.API_VERSION || "v1"}`;
-
-app.use(`${API_PREFIX}/albums`, albumRoutes);
-app.use(`${API_PREFIX}/categories`, categoryRoutes);
-app.use(`${API_PREFIX}/auth`, authRoutes);
-app.use(`${API_PREFIX}/cart`, cartRoutes);
-app.use(`${API_PREFIX}/orders`, orderRoutes);
-app.use(`${API_PREFIX}/wishlist`, wishlistRoutes);
-
-// Root endpoint
+// 7. Root endpoint
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -115,12 +76,12 @@ app.get("/", (req, res) => {
     version: process.env.API_VERSION || "v1",
     endpoints: {
       health: "/health",
-      api: API_PREFIX,
+      api: `/api/${process.env.API_VERSION || "v1"}`,
     },
   });
 });
 
-// Health check endpoint
+// 8. Health endpoints
 app.get("/health", async (req, res) => {
   const dbState = mongoose.connection.readyState;
   const isConnected = dbState === 1;
@@ -148,7 +109,6 @@ app.get("/health", async (req, res) => {
   });
 });
 
-// Detailed health check
 app.get("/health/detailed", async (req, res) => {
   const dbState = mongoose.connection.readyState;
   const isConnected = dbState === 1;
@@ -182,7 +142,46 @@ app.get("/health/detailed", async (req, res) => {
   });
 });
 
-// ✅ CRITICAL: 404 handler MUST be BEFORE errorHandler
+// 9. Rate limiting - CRITICAL FIX: Skip failed requests (401, 403, 404)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipSuccessfulRequests: false,
+  skipFailedRequests: true, // ✅ KEY FIX: Don't count 4xx/5xx errors
+  keyGenerator: (req) => {
+    const forwarded = req.headers["x-forwarded-for"];
+    const ip = forwarded
+      ? forwarded.split(",")[0].trim()
+      : req.ip || req.connection?.remoteAddress || "unknown";
+    
+    console.log(`Rate limit check for IP: ${ip}`);
+    return ip;
+  },
+  handler: (req, res) => {
+    console.log(`⛔ Rate limit exceeded for IP: ${req.ip}`);
+    res.status(429).json({
+      success: false,
+      message: "Too many requests, please try again later.",
+      error: "Rate limit exceeded",
+    });
+  },
+});
+
+app.use("/api", limiter);
+
+// 10. API routes
+const API_PREFIX = `/api/${process.env.API_VERSION || "v1"}`;
+
+app.use(`${API_PREFIX}/albums`, albumRoutes);
+app.use(`${API_PREFIX}/categories`, categoryRoutes);
+app.use(`${API_PREFIX}/auth`, authRoutes);
+app.use(`${API_PREFIX}/cart`, cartRoutes);
+app.use(`${API_PREFIX}/orders`, orderRoutes);
+app.use(`${API_PREFIX}/wishlist`, wishlistRoutes);
+
+// 11. 404 handler (AFTER all routes)
 app.use((req, res, next) => {
   res.status(404).json({
     success: false,
@@ -191,7 +190,7 @@ app.use((req, res, next) => {
   });
 });
 
-// ✅ CRITICAL: Global error handler - MUST be LAST
+// 12. Error handler (LAST)
 app.use(errorHandler);
 
 export default app;
