@@ -469,7 +469,7 @@
 }
 
 /* ============================
-   RED BACKGROUND OVERLAY - ALBUMS 10-11 WITH HOVER EXPANSION
+   RED BACKGROUND OVERLAY - ALBUMS 10-11 - ONLY PRICE AND ICONS ON HOVER
    ============================ */
 
 .red-background-overlay {
@@ -477,78 +477,30 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(0, 0, 0, 0.75) 50%,
-    transparent 100%
-  );
+  background: transparent; /* ✅ שקוף במצב רגיל */
   color: white;
-  padding: 12px var(--spacing-md);
+  padding: 0;
   z-index: 2;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  height: 70px;
+  height: 0; /* ✅ גובה 0 במצב רגיל */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  overflow: hidden;
 }
 
 .album-card.red-background:hover .red-background-overlay {
-  height: 140px;
-  padding: var(--spacing-md);
+  height: 70px; /* ✅ גובה קטן יותר - רק למחיר ואייקונים */
+  padding: 12px var(--spacing-md);
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.98) 0%,
-    rgba(0, 0, 0, 0.96) 30%,
     rgba(0, 0, 0, 0.92) 50%,
-    rgba(0, 0, 0, 0.85) 70%,
-    rgba(0, 0, 0, 0.7) 85%,
     transparent 100%
   );
 }
 
-.red-overlay-static-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  position: absolute;
-  bottom: 12px;
-  left: var(--spacing-md);
-  right: var(--spacing-md);
-  z-index: 3;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.album-card.red-background:hover .red-overlay-static-content {
-  bottom: 58px;
-  top: auto;
-  left: var(--spacing-md);
-  right: var(--spacing-md);
-}
-
-.red-overlay-title,
-.red-overlay-artist {
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
-  line-height: 1.2;
-}
-
-.red-overlay-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0;
-  color: var(--white);
-}
-
-.red-overlay-artist {
-  font-size: 0.875rem;
-  opacity: 0.95;
-  margin-bottom: 0;
-  color: var(--white);
-}
+/* ✅ הוסרו לגמרי red-overlay-static-content, red-overlay-title, red-overlay-artist */
 
 .red-hover-content {
   opacity: 0;
@@ -906,7 +858,10 @@
     padding: var(--spacing-md);
   }
 
-  .red-overlay-static-content,
+  .album-card.red-background:hover .red-background-overlay {
+    height: 70px; /* ✅ שמירה על גובה קטן למובייל */
+  }
+
   .overlay-static-content {
     bottom: 58px;
     top: auto;
