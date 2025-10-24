@@ -3,14 +3,6 @@ export const USER_ROLES = {
   USER: "user",
 };
 
-export const ORDER_STATUS = {
-  PENDING: "pending",
-  PROCESSING: "processing",
-  SHIPPED: "shipped",
-  DELIVERED: "delivered",
-  CANCELLED: "cancelled",
-};
-
 export const PAYMENT_METHODS = {
   CREDIT_CARD: "credit_card",
   CHECK: "check",

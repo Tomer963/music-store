@@ -6,15 +6,8 @@ import {
   orderValidation,
   mongoIdValidation,
 } from "../utils/validators.js";
-import { body } from "express-validator";
 
 const router = Router();
-
-const statusValidation = [
-  body("status")
-    .isIn(["pending", "processing", "shipped", "delivered", "cancelled"])
-    .withMessage("Invalid order status"),
-];
 
 // All order routes require authentication
 router.use(authenticate);
@@ -33,24 +26,10 @@ router.post(
   validateRequest,
   orderController.createOrder
 );
-router.put(
-  "/:id/cancel",
-  mongoIdValidation,
-  validateRequest,
-  orderController.cancelOrder
-);
 
 // Admin routes
 router.get("/admin/all", isAdmin, orderController.getAllOrders);
 router.get("/admin/statistics", isAdmin, orderController.getOrderStatistics);
-router.put(
-  "/:id/status",
-  isAdmin,
-  mongoIdValidation,
-  statusValidation,
-  validateRequest,
-  orderController.updateOrderStatus
-);
 router.put(
   "/:id",
   isAdmin,

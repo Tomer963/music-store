@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ORDER_STATUS, PAYMENT_METHODS } from "../config/constants.js";
+import { PAYMENT_METHODS } from "../config/constants.js";
 
 const orderItemSchema = new mongoose.Schema({
   album: {
@@ -32,18 +32,11 @@ const orderSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
-    status: {
-      type: String,
-      enum: Object.values(ORDER_STATUS),
-      default: ORDER_STATUS.PENDING,
-    },
     paymentMethod: {
       type: String,
       enum: Object.values(PAYMENT_METHODS),
       required: true,
     },
-    // ✅ תיקון: הסרת שדות פרטי כרטיס אשראי
-    // אין צורך לשמור פרטי כרטיס במאגר
     paymentInfo: {
       type: mongoose.Schema.Types.Mixed,
       default: {},

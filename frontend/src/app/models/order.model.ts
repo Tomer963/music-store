@@ -12,21 +12,12 @@ export interface Order {
   user: User | string;
   items: OrderItem[];
   totalAmount: number;
-  status: OrderStatus;
   paymentMethod: PaymentMethod;
   paymentInfo: PaymentInfo;
   billingInfo: BillingInfo;
   orderNumber: string;
   createdAt?: string;
   updatedAt?: string;
-}
-
-export enum OrderStatus {
-  PENDING = "pending",
-  PROCESSING = "processing",
-  SHIPPED = "shipped",
-  DELIVERED = "delivered",
-  CANCELLED = "cancelled",
 }
 
 export enum PaymentMethod {
