@@ -177,6 +177,7 @@ img {
 .breadcrumb .breadcrumb-link {
   color: #000000 !important;
   text-decoration: none !important;
+  font-weight: 400 !important;
 }
 
 .breadcrumb a:visited,
@@ -193,6 +194,7 @@ img {
   color: #000000 !important;
   display: inline !important;
   margin: 0 8px !important;
+  font-weight: 400 !important;
 }
 
 .breadcrumb .breadcrumb-separator:last-of-type {
@@ -203,6 +205,7 @@ img {
 .breadcrumb .breadcrumb-current {
   color: #999999 !important;
   display: inline !important;
+  font-weight: 400 !important;
 }
 
 /* Responsive Typography */
