@@ -1,5 +1,3 @@
-/* Uses shared: .loading-container, .empty-state, .btn, .form-control, .form-error, .form-label, .required, .page-container */
-
 .checkout-page {
   min-height: calc(100vh - 120px);
   background-color: var(--background-color);
@@ -9,10 +7,7 @@
   justify-content: center;
 }
 
-/* Container inherits from shared .page-container */
-
-/* Loading and Empty States use shared styles */
-
+/* Empty cart state */
 .empty-cart-content {
   text-align: center;
   max-width: 500px;
@@ -37,7 +32,7 @@
   line-height: 1.6;
 }
 
-/* Checkout Layout */
+/* Checkout layout */
 .checkout-content {
   width: 100%;
 }
@@ -48,7 +43,7 @@
   gap: var(--spacing-xl);
 }
 
-/* Checkout Form */
+/* Checkout form */
 .checkout-form {
   background-color: transparent;
   padding: 0;
@@ -83,7 +78,7 @@
   margin-top: 16px;
 }
 
-/* Step Styling */
+/* Step styling */
 .checkout-step {
   background-color: var(--white);
   border-radius: 0;
@@ -180,7 +175,7 @@
   opacity: 0.8;
 }
 
-/* Form Containers */
+/* Form containers */
 .step-form-container {
   padding: 0;
   margin: 0;
@@ -199,7 +194,7 @@
   margin-top: 6px;
 }
 
-/* Billing Form */
+/* Billing form */
 .billing-form {
   padding: 14px;
   border: 1px solid #e0e0e0;
@@ -213,8 +208,7 @@
   padding: 0;
 }
 
-/* Form Fields - uses shared .form-control, .form-label, .form-error, .required */
-
+/* Form fields */
 .form-field-container {
   margin-bottom: 12px;
 }
@@ -267,7 +261,7 @@
   cursor: not-allowed;
 }
 
-/* Payment Method */
+/* Payment method */
 .payment-method-container {
   margin: 0;
   padding: 0;
@@ -304,7 +298,7 @@
   font-size: 0.875rem;
 }
 
-/* Credit Card Fields - Compact */
+/* Credit card fields */
 .credit-card-container {
   margin-top: 0;
 }
@@ -365,7 +359,7 @@
   margin-bottom: 0;
 }
 
-/* CVV Row */
+/* CVV row */
 .cvv-row {
   display: flex;
   flex-direction: row;
@@ -390,7 +384,7 @@
   order: 1;
 }
 
-/* Order Table */
+/* Order table */
 .order-table-wrapper {
   margin-bottom: 14px;
   overflow-x: auto;
@@ -440,7 +434,7 @@
   text-align: center;
 }
 
-/* Total Row */
+/* Total row */
 .order-table tfoot .total-row td {
   border: 1px solid #ddd;
   background-color: #f5f5f5;
@@ -461,7 +455,7 @@
   font-size: 0.875rem;
 }
 
-/* Order Actions */
+/* Order actions */
 .order-actions-wrapper {
   display: flex;
   justify-content: space-between;
@@ -513,7 +507,7 @@
   cursor: not-allowed;
 }
 
-/* Order Summary Sidebar */
+/* Order summary sidebar */
 .order-summary-sidebar {
   position: sticky;
   top: var(--spacing-lg);
@@ -613,7 +607,7 @@
   color: #333;
 }
 
-/* Gray text for "Not filled yet" */
+/* Empty state styling */
 .progress-content.empty {
   color: #c7c7c7;
   font-style: italic;
@@ -672,9 +666,9 @@
   line-height: 1.4;
 }
 
-/* Responsive Design */
+/* Responsive design */
 
-/* Tablet and Below */
+/* Tablet and below */
 @media (max-width: 991px) {
   .checkout-page {
     padding-top: 40px;
@@ -870,7 +864,7 @@
   }
 }
 
-/* Extra Small Mobile */
+/* Extra small mobile */
 @media (max-width: 430px) {
   .checkout-title-wrapper {
     padding: 12px 14px;

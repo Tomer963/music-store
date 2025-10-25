@@ -86,7 +86,7 @@
       <!-- Content below featured -->
       <div class="content-below-featured">
         <div class="content-with-sidebar">
-          <!-- Sidebar column (desktop position) - ONLY ONE -->
+          <!-- Sidebar column (desktop position) -->
           <div class="sidebar-column">
             <aside class="sidebar-container">
               <app-sidebar></app-sidebar>
@@ -183,9 +183,9 @@
                           </p>
                         </div>
 
-                        <!-- Action icons - זהה ל-wishlist page -->
+                        <!-- Action icons -->
                         <div class="album-icons-group">
-                          <!-- Wishlist button - ראשון -->
+                          <!-- Wishlist button -->
                           <button
                             class="album-icon-btn wishlist-btn"
                             [disabled]="isWishlistLoadingMap[album._id]"
@@ -208,7 +208,7 @@
                             ></div>
                           </button>
 
-                          <!-- Out of stock - שני (אם אין במלאי) -->
+                          <!-- Out of stock -->
                           <div
                             *ngIf="!album.inStock"
                             class="album-icon-btn out-of-stock"
@@ -217,7 +217,7 @@
                             <span>🚫</span>
                           </div>
 
-                          <!-- Cart button or counter - שלישי -->
+                          <!-- Cart button or counter -->
                           <button
                             *ngIf="album.inStock && !showCartCounter[album._id]"
                             class="album-icon-btn cart-btn gray-cart-btn"
@@ -248,7 +248,7 @@
                             ></div>
                           </button>
 
-                          <!-- Cart counter - שלישי -->
+                          <!-- Cart counter -->
                           <div
                             *ngIf="
                               album.inStock && showCartCounter[album._id]
@@ -279,7 +279,7 @@
                             </button>
                           </div>
 
-                          <!-- Info button - רביעי -->
+                          <!-- Info button -->
                           <button
                             class="album-icon-btn info-btn"
                             (click)="
@@ -307,7 +307,7 @@
           </div>
         </div>
 
-        <!-- Sidebar - mobile position (after albums 12+) - ONLY FOR MOBILE -->
+        <!-- Sidebar - mobile position -->
         <div class="sidebar-mobile-section mobile-only">
           <aside class="sidebar-container">
             <app-sidebar></app-sidebar>
@@ -319,7 +319,7 @@
           </div>
         </div>
 
-        <!-- End message - always at the very end -->
+        <!-- End message -->
         <div
           class="no-more-plain"
           *ngIf="!hasMore && !isLoadingMore && allAlbums.length > 0"

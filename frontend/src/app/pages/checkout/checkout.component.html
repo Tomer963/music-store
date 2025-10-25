@@ -610,7 +610,6 @@
                   <div class="progress-filled-content">
                     <div class="info-item">{{ getUserFullName() }}</div>
                     <div class="info-item">{{ billingInfo.address }}</div>
-                    <!-- ✅ שינוי כאן: מציג City + Zip באותה שורה -->
                     <div
                       class="info-item"
                       *ngIf="billingInfo.city || billingInfo.zipCode"
@@ -640,7 +639,6 @@
                 </div>
                 <div class="progress-content" *ngIf="hasPaymentInfo()">
                   <div class="progress-filled-content">
-                    <!-- ✅ בלי הכותרת "Payment Method:" - רק הערך -->
                     <div class="info-item">
                       {{
                         paymentForm.get("paymentMethod")?.value === "check"
@@ -649,14 +647,12 @@
                       }}
                     </div>
 
-                    <!-- Credit Card Details (only if credit card selected) -->
                     <ng-container
                       *ngIf="
                         paymentForm.get('paymentMethod')?.value ===
                         'credit_card'
                       "
                     >
-                      <!-- Card Type -->
                       <div
                         class="info-item-wrapper"
                         *ngIf="paymentForm.get('cardType')?.value"
@@ -669,7 +665,6 @@
                         </div>
                       </div>
 
-                      <!-- Card Number -->
                       <div
                         class="info-item-wrapper"
                         *ngIf="paymentForm.get('cardNumber')?.value"
@@ -682,7 +677,6 @@
                         </div>
                       </div>
 
-                      <!-- Cardholder Name -->
                       <div
                         class="info-item-wrapper"
                         *ngIf="paymentForm.get('cardholderName')?.value"

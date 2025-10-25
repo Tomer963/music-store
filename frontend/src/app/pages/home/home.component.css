@@ -1,7 +1,3 @@
-/* Loading State - uses shared .loading-container and .vinyl-loader */
-
-/* Error Container - uses shared .error-container */
-
 .home-page {
   position: relative;
   min-height: calc(100vh - 120px);
@@ -25,7 +21,7 @@
   width: 100%;
 }
 
-/* No Albums Container - uses shared .empty-state */
+/* Empty state */
 .no-albums-container {
   display: flex;
   justify-content: center;
@@ -59,7 +55,7 @@
   line-height: 1.5;
 }
 
-/* Featured section - NO MARGIN BOTTOM */
+/* Featured section */
 .featured-section {
   display: flex;
   flex-direction: column;
@@ -100,7 +96,7 @@
   width: 100%;
 }
 
-/* Side albums 10-11 - hidden on desktop, shown on mobile */
+/* Side albums mobile section */
 .side-albums-mobile-section {
   display: none;
 }
@@ -193,9 +189,7 @@
   margin-bottom: var(--spacing-xl);
 }
 
-/* Album card - uses shared .home-album-card */
-
-/* Album image container - uses shared .album-image-container */
+/* Album image container */
 .album-image-container {
   height: 280px;
   cursor: pointer;
@@ -214,7 +208,7 @@
   transform: scale(1.05);
 }
 
-/* Album content - uses shared .album-content */
+/* Album content variants */
 .album-content.no-description {
   padding: var(--spacing-sm) var(--spacing-md);
   min-height: auto;
@@ -249,10 +243,7 @@
   line-height: 1.4;
 }
 
-/* ========================================
-   ICONS GROUP - אייקונים באלבומים 12 והלאה - זהה ל-wishlist
-   ======================================== */
-
+/* Action icons group */
 .album-icons-group {
   display: flex;
   gap: var(--spacing-sm);
@@ -262,7 +253,7 @@
   flex-shrink: 0;
 }
 
-/* Wishlist button - זהה ל-wishlist page */
+/* Wishlist button */
 .album-icon-btn.wishlist-btn {
   background-color: transparent;
   padding: 5px;
@@ -287,7 +278,7 @@
   color: var(--primary-dark);
 }
 
-/* Out of stock button - זהה ל-wishlist page */
+/* Out of stock button */
 .album-icon-btn.out-of-stock {
   background-color: transparent;
   cursor: not-allowed;
@@ -304,7 +295,7 @@
   font-size: 20px;
 }
 
-/* Cart button - זהה ל-wishlist page (gray variant) */
+/* Cart button */
 .album-icon-btn.cart-btn.gray-cart-btn {
   background-color: transparent !important;
   padding: 5px;
@@ -333,7 +324,7 @@
   color: #555555;
 }
 
-/* Info button - זהה ל-wishlist page */
+/* Info button */
 .album-icon-btn.info-btn {
   background-color: #737373;
   width: 34px;
@@ -356,7 +347,7 @@
   color: var(--black);
 }
 
-/* Cart counter - זהה ל-wishlist page */
+/* Cart counter */
 .bottom-cart-counter {
   display: flex;
   align-items: center;
@@ -425,7 +416,7 @@
   margin-top: var(--spacing-xl);
 }
 
-/* Animations - uses shared fadeInUp */
+/* Animations */
 .albums-grid .home-album-card,
 .side-albums-vertical .home-album-card {
   animation: fadeInUp 0.5s ease-out backwards;
@@ -436,7 +427,7 @@
   display: none;
 }
 
-/* Responsive */
+/* Responsive breakpoints */
 @media (min-width: 1400px) {
   .featured-wrapper {
     min-height: 600px;
@@ -457,7 +448,6 @@
   }
 }
 
-/* CRITICAL FIX: Tablet and small desktop breakpoints */
 @media (min-width: 1024px) and (max-width: 1399px) {
   .sidebar-column {
     flex: 0 0 350px;
@@ -470,7 +460,7 @@
   }
 }
 
-/* ===== CRITICAL: Order fix for medium screens (768px-1023px) ===== */
+/* Medium screens */
 @media (min-width: 768px) and (max-width: 1023px) {
   .featured-wrapper {
     grid-template-columns: 1fr;
@@ -487,7 +477,7 @@
     grid-template-rows: auto;
   }
 
-  /* Show side albums in mobile section AFTER top albums */
+  /* Show side albums after top albums on mobile */
   .side-albums-mobile-section {
     display: block;
     margin-bottom: var(--spacing-xl);
@@ -505,7 +495,7 @@
     display: none !important;
   }
 
-  /* Main content area with proper ordering */
+  /* Main content ordering */
   .content-below-featured {
     display: flex;
     flex-direction: column;
@@ -595,7 +585,6 @@
     grid-template-rows: auto;
   }
 
-  /* Show side albums in mobile section AFTER top albums */
   .side-albums-mobile-section {
     display: block;
     margin-bottom: var(--spacing-xl);
@@ -608,12 +597,10 @@
     gap: var(--spacing-lg);
   }
 
-  /* Hide desktop side albums */
   .side-albums-vertical.desktop-only {
     display: none !important;
   }
 
-  /* Main content area with proper ordering */
   .content-below-featured {
     display: flex;
     flex-direction: column;

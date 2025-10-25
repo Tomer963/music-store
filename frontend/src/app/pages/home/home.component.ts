@@ -64,8 +64,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * ngOnInit
-   * Initialize component and load data
+   * Initialize component
+   * 
+   * Loads initial albums and sets up subscriptions
+   *
    * @return void
    */
   ngOnInit(): void {
@@ -76,8 +78,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ngOnDestroy
-   * Cleanup subscriptions
+   * Cleanup on destroy
+   * 
+   * Unsubscribes from all observables
+   *
    * @return void
    */
   ngOnDestroy(): void {
@@ -86,8 +90,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * setupWishlistSubscription
-   * Subscribe to wishlist changes
+   * Setup wishlist subscription
+   * 
+   * Monitors wishlist changes and loading states
+   *
    * @return void
    */
   private setupWishlistSubscription(): void {
@@ -105,18 +111,20 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * setupCartSubscription
-   * Subscribe to cart changes to update UI counters
+   * Setup cart subscription
+   * 
+   * Updates UI counters based on cart changes
+   *
    * @return void
    */
   private setupCartSubscription(): void {
     this.cartService.cart$.pipe(takeUntil(this.destroy$)).subscribe((cart) => {
-      // Reset states
+      // Reset all cart-related states
       this.showCartCounter = {};
       this.cartQuantities = {};
       this.cartItemIds = {};
 
-      // Update for each cart item
+      // Update states for each item in cart
       cart.items.forEach((item) => {
         const albumId = item.album._id;
         this.showCartCounter[albumId] = true;
@@ -127,8 +135,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * setupScrollListener
-   * Setup infinite scroll with debounce
+   * Setup scroll listener
+   * 
+   * Configures infinite scroll with debounce for performance
+   *
    * @return void
    */
   private setupScrollListener(): void {
@@ -138,8 +148,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * onWindowScroll
-   * Handle window scroll event (HostListener backup)
+   * Handle window scroll
+   * 
+   * HostListener backup for scroll detection
+   *
    * @return void
    */
   @HostListener("window:scroll", ["$event"])
@@ -148,8 +160,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * onScroll
-   * Check if user scrolled near bottom and trigger load
+   * Handle scroll event
+   * 
+   * Checks if user scrolled near bottom and triggers next page load
+   *
    * @return void
    */
   private onScroll(): void {
@@ -158,15 +172,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     const scrollPosition = window.pageYOffset + window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
 
-    // Trigger when within threshold of bottom
+    // Trigger load when within threshold of bottom
     if (scrollPosition >= documentHeight - this.scrollThreshold) {
       this.loadMoreAlbums();
     }
   }
 
   /**
-   * loadInitialAlbums
-   * Load first page of albums for home layout
+   * Load initial albums
+   * 
+   * Fetches first page of albums for home layout
+   *
    * @return void
    */
   private loadInitialAlbums(): void {
@@ -198,8 +214,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * loadMoreAlbums
-   * Load next page for infinite scroll
+   * Load more albums
+   * 
+   * Fetches next page for infinite scroll
+   *
    * @return void
    */
   private loadMoreAlbums(): void {
@@ -234,9 +252,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * processInitialAlbums
-   * Organize first page albums into layout groups
-   * Layout: [0]=featured, [1-8]=top grid, [9-10]=sidebar, [11+]=main grid
+   * Process initial albums
+   * 
+   * Organizes first page albums into layout groups:
+   * [0]=featured, [1-8]=top grid, [9-10]=sidebar, [11+]=main grid
+   *
    * @param (Album[]) albums - Albums to process
    * @return void
    */
@@ -253,8 +273,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * processAdditionalAlbums
-   * Add new albums from pagination to main grid
+   * Process additional albums
+   * 
+   * Appends new albums from pagination to main grid
+   *
    * @param (Album[]) albums - New albums to append
    * @return void
    */
@@ -266,18 +288,21 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.allAlbums = [...this.allAlbums, ...albums];
 
-    // If initial layout incomplete, reorganize
+    // If initial layout incomplete, reorganize all albums
     if (!this.featuredAlbum && albums.length > 0) {
       this.processInitialAlbums(this.allAlbums);
     } else {
+      // Otherwise just append to remaining albums
       this.remainingAlbums = [...this.remainingAlbums, ...albums];
     }
   }
 
   /**
-   * updatePaginationInfo
-   * Update pagination state from API response
-   * @param (any) pagination - Pagination data
+   * Update pagination info
+   * 
+   * Updates pagination state from API response
+   *
+   * @param (any) pagination - Pagination data from API
    * @return void
    */
   private updatePaginationInfo(pagination: any): void {
@@ -287,10 +312,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * viewAlbum
-   * Navigate to album detail page
+   * View album details
+   * 
+   * Navigates to album detail page
+   *
    * @param (Event) event - Click event
-   * @param (string) albumId - Album ID
+   * @param (string) albumId - Album ID to view
    * @return void
    */
   viewAlbum(event: Event, albumId: string): void {
@@ -300,17 +327,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * addToCart
-   * Add album to cart and show quantity counter
+   * Add album to cart
+   * 
+   * Adds album to cart and shows quantity counter with optimistic UI update
+   *
    * @param (Event) event - Click event
-   * @param (string) albumId - Album ID
+   * @param (string) albumId - Album ID to add
    * @return void
    */
   addToCart(event: Event, albumId: string): void {
     event.stopPropagation();
 
     this.isCartLoadingMap[albumId] = true;
-    this.showCartCounter[albumId] = true; // Optimistic UI
+    this.showCartCounter[albumId] = true; // Optimistic UI update
     this.cartQuantities[albumId] = 1;
 
     this.cartService.addToCart(albumId, 1).subscribe({
@@ -321,7 +350,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       },
       error: () => {
-        // Revert optimistic update
+        // Revert optimistic update on error
         this.isCartLoadingMap[albumId] = false;
         this.showCartCounter[albumId] = false;
       },
@@ -329,10 +358,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * incrementCart
-   * Increase quantity of item in cart
+   * Increment cart quantity
+   * 
+   * Increases quantity of album in cart, respects stock limit
+   *
    * @param (Event) event - Click event
-   * @param (string) albumId - Album ID
+   * @param (string) albumId - Album ID to increment
    * @return void
    */
   incrementCart(event: Event, albumId: string): void {
@@ -343,7 +374,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     const currentQty = this.cartQuantities[albumId] || 1;
 
-    // Check stock limit
+    // Check if already at stock limit or currently updating
     if (this.isUpdatingCart[albumId] || currentQty >= album.stock) return;
 
     this.isUpdatingCart[albumId] = true;
@@ -364,10 +395,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * decrementCart
-   * Remove item from cart completely
+   * Decrement cart (remove item)
+   * 
+   * Removes item completely from cart
+   *
    * @param (Event) event - Click event
-   * @param (string) albumId - Album ID
+   * @param (string) albumId - Album ID to remove
    * @return void
    */
   decrementCart(event: Event, albumId: string): void {
@@ -392,7 +425,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         },
       });
     } else {
-      // Fallback
+      // Fallback if no item ID found
       this.showCartCounter[albumId] = false;
       this.cartQuantities[albumId] = 1;
       this.isUpdatingCart[albumId] = false;
@@ -400,10 +433,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * toggleWishlist
-   * Add or remove album from wishlist
+   * Toggle wishlist
+   * 
+   * Adds or removes album from wishlist
+   *
    * @param (Event) event - Click event
-   * @param (string) albumId - Album ID
+   * @param (string) albumId - Album ID to toggle
    * @return void
    */
   toggleWishlist(event: Event, albumId: string): void {
@@ -413,18 +448,22 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * isInWishlist
-   * Check if album is in user's wishlist
-   * @param (string) albumId - Album ID
-   * @return (boolean) True if in wishlist
+   * Check if in wishlist
+   * 
+   * Checks if album is in user's wishlist
+   *
+   * @param (string) albumId - Album ID to check
+   * @return (boolean) True if album is in wishlist
    */
   isInWishlist(albumId: string): boolean {
     return this.wishlistIds.has(albumId);
   }
 
   /**
-   * getMainImageUrl
-   * Get primary image URL with fallback
+   * Get main image URL
+   * 
+   * Gets primary image URL with fallback
+   *
    * @param (Album) album - Album object
    * @return (string) Image URL
    */
@@ -433,8 +472,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * formatPrice
-   * Format price as currency string
+   * Format price
+   * 
+   * Formats price as currency string
+   *
    * @param (number) price - Price value
    * @return (string) Formatted price
    */
@@ -443,8 +484,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * trackByAlbum
-   * TrackBy function for ngFor optimization
+   * Track by album
+   * 
+   * TrackBy function for ngFor performance optimization
+   *
    * @param (number) index - Item index
    * @param (Album) album - Album object
    * @return (string) Unique identifier
