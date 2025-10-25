@@ -1,9 +1,9 @@
 import { MESSAGES } from "../config/constants.js";
 
 /**
- * Custom Application Error Class
+ * AppError
  *
- * Extended error class for application-specific errors
+ * Custom application error class for operational errors
  */
 export class AppError extends Error {
   constructor(message, statusCode = 500, errors = null) {
@@ -16,7 +16,9 @@ export class AppError extends Error {
 }
 
 /**
- * NotFoundError - Resource not found
+ * NotFoundError
+ *
+ * Error for resource not found (404)
  */
 export class NotFoundError extends AppError {
   constructor(resource = "Resource") {
@@ -25,7 +27,9 @@ export class NotFoundError extends AppError {
 }
 
 /**
- * UnauthorizedError - Authentication required
+ * UnauthorizedError
+ *
+ * Error for authentication required (401)
  */
 export class UnauthorizedError extends AppError {
   constructor(message = MESSAGES.ERROR.UNAUTHORIZED) {
@@ -34,7 +38,9 @@ export class UnauthorizedError extends AppError {
 }
 
 /**
- * ForbiddenError - Insufficient permissions
+ * ForbiddenError
+ *
+ * Error for insufficient permissions (403)
  */
 export class ForbiddenError extends AppError {
   constructor(message = "Access denied") {
@@ -43,7 +49,9 @@ export class ForbiddenError extends AppError {
 }
 
 /**
- * ValidationError - Input validation failed
+ * ValidationError
+ *
+ * Error for input validation failure (400)
  */
 export class ValidationError extends AppError {
   constructor(errors) {
@@ -52,7 +60,9 @@ export class ValidationError extends AppError {
 }
 
 /**
- * ConflictError - Resource conflict (e.g., duplicate)
+ * ConflictError
+ *
+ * Error for resource conflict like duplicates (409)
  */
 export class ConflictError extends AppError {
   constructor(message) {
@@ -61,7 +71,9 @@ export class ConflictError extends AppError {
 }
 
 /**
- * BadRequestError - Invalid request
+ * BadRequestError
+ *
+ * Error for invalid request (400)
  */
 export class BadRequestError extends AppError {
   constructor(message) {
@@ -70,12 +82,12 @@ export class BadRequestError extends AppError {
 }
 
 /**
- * Error Response Builder
+ * buildErrorResponse
  *
- * Creates standardized error response object
+ * Create standardized error response object
  *
  * @param {Error} err - Error object
- * @param {boolean} includeStack - Include stack trace in response
+ * @param {boolean} includeStack - Whether to include stack trace
  * @return {Object} Formatted error response
  */
 const buildErrorResponse = (err, includeStack = false) => {
@@ -89,6 +101,7 @@ const buildErrorResponse = (err, includeStack = false) => {
     response.errors = err.errors;
   }
 
+  // Include stack trace only in development
   if (includeStack && process.env.NODE_ENV === "development") {
     response.stack = err.stack;
   }
@@ -97,7 +110,9 @@ const buildErrorResponse = (err, includeStack = false) => {
 };
 
 /**
- * Handle Mongoose Validation Error
+ * handleValidationError
+ *
+ * Handle Mongoose validation errors
  *
  * @param {Error} err - Mongoose validation error
  * @return {AppError} Formatted application error
@@ -108,9 +123,11 @@ const handleValidationError = (err) => {
 };
 
 /**
- * Handle Mongoose Duplicate Key Error
+ * handleDuplicateKeyError
  *
- * @param {Error} err - Mongoose duplicate key error
+ * Handle MongoDB duplicate key errors
+ *
+ * @param {Error} err - MongoDB duplicate key error
  * @return {AppError} Formatted application error
  */
 const handleDuplicateKeyError = (err) => {
@@ -120,7 +137,9 @@ const handleDuplicateKeyError = (err) => {
 };
 
 /**
- * Handle Mongoose Cast Error
+ * handleCastError
+ *
+ * Handle Mongoose cast errors (invalid ObjectId, etc.)
  *
  * @param {Error} err - Mongoose cast error
  * @return {AppError} Formatted application error
@@ -130,7 +149,9 @@ const handleCastError = (err) => {
 };
 
 /**
- * Handle JWT Errors
+ * handleJWTError
+ *
+ * Handle JWT authentication errors
  *
  * @param {Error} err - JWT error
  * @return {AppError} Formatted application error
@@ -143,9 +164,9 @@ const handleJWTError = (err) => {
 };
 
 /**
- * Log Error
+ * logError
  *
- * Logs error details for debugging and monitoring
+ * Log error details for debugging
  *
  * @param {Error} err - Error object
  * @param {Object} req - Express request object
@@ -161,6 +182,7 @@ const logError = (err, req) => {
     userId: req.user?._id,
   };
 
+  // Include additional details in development
   if (process.env.NODE_ENV === "development") {
     errorLog.stack = err.stack;
     errorLog.body = req.body;
@@ -172,16 +194,14 @@ const logError = (err, req) => {
 /**
  * errorHandler
  *
- * Global error handling middleware for Express application
+ * Global error handling middleware
  *
  * @param {Error} err - Error object
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {void}
+ * @param {Function} next - Express next function
  */
 export const errorHandler = (err, req, res, next) => {
-  // Log error
   logError(err, req);
 
   let error = err;
@@ -193,13 +213,16 @@ export const errorHandler = (err, req, res, next) => {
     error = handleDuplicateKeyError(err);
   } else if (err.name === "CastError") {
     error = handleCastError(err);
-  } else if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
+  } else if (
+    err.name === "JsonWebTokenError" ||
+    err.name === "TokenExpiredError"
+  ) {
     error = handleJWTError(err);
   } else if (!err.isOperational) {
-    // Unknown error - convert to AppError
+    // Unknown error - convert to generic AppError
     error = new AppError(
-      process.env.NODE_ENV === "production" 
-        ? MESSAGES.ERROR.SERVER_ERROR 
+      process.env.NODE_ENV === "production"
+        ? MESSAGES.ERROR.SERVER_ERROR
         : err.message,
       err.statusCode || 500
     );
@@ -221,7 +244,7 @@ export const errorHandler = (err, req, res, next) => {
  * Wrapper for async route handlers to catch errors
  *
  * @param {Function} fn - Async function to wrap
- * @return {Function} Wrapped function
+ * @return {Function} Wrapped function that catches errors
  */
 export const asyncHandler = (fn) => {
   return (req, res, next) => {
@@ -232,11 +255,10 @@ export const asyncHandler = (fn) => {
 /**
  * notFoundHandler
  *
- * Handler for undefined routes
+ * Handler for undefined routes (404)
  *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @return {void}
  */
 export const notFoundHandler = (req, res) => {
   res.status(404).json({
@@ -249,10 +271,10 @@ export const notFoundHandler = (req, res) => {
 /**
  * assertFound
  *
- * Throws NotFoundError if resource is null/undefined
+ * Throw NotFoundError if resource is null or undefined
  *
  * @param {*} resource - Resource to check
- * @param {string} resourceName - Name of the resource for error message
+ * @param {string} resourceName - Name for error message
  * @throws {NotFoundError}
  */
 export const assertFound = (resource, resourceName = "Resource") => {
@@ -264,7 +286,7 @@ export const assertFound = (resource, resourceName = "Resource") => {
 /**
  * assertAuthorized
  *
- * Throws ForbiddenError if condition is false
+ * Throw ForbiddenError if condition is false
  *
  * @param {boolean} condition - Authorization condition
  * @param {string} message - Error message

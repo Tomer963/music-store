@@ -69,13 +69,18 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-// Indexes
+// Indexes for query optimization
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ orderNumber: 1 });
 
-// Hooks
+/**
+ * Pre-save hook
+ *
+ * Generate unique order number for new orders
+ */
 orderSchema.pre("save", async function (next) {
   if (this.isNew) {
+    // Generate unique order number: ORD-timestamp-randomString
     this.orderNumber = `ORD-${Date.now()}-${Math.random()
       .toString(36)
       .substr(2, 9)
@@ -84,7 +89,13 @@ orderSchema.pre("save", async function (next) {
   next();
 });
 
-// Methods
+/**
+ * calculateTotal
+ *
+ * Recalculate order total based on items
+ *
+ * @return {number} Calculated total amount
+ */
 orderSchema.methods.calculateTotal = function () {
   this.totalAmount = this.items.reduce(
     (sum, item) => sum + item.price * item.quantity,

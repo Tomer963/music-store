@@ -6,7 +6,11 @@ import { asyncHandler, assertFound } from "../middleware/errorHandler.js";
 /**
  * getWishlist
  *
- * Retrieves the user's wishlist with populated album details
+ * Retrieve user's wishlist with populated album details
+ *
+ * @param {Object} req - Express request object with authenticated user
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getWishlist = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).populate({
@@ -20,15 +24,20 @@ export const getWishlist = asyncHandler(async (req, res) => {
 /**
  * addToWishlist
  *
- * Adds an album to the user's wishlist
+ * Add album to user's wishlist
+ *
+ * @param {Object} req - Express request object with authenticated user
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const addToWishlist = asyncHandler(async (req, res) => {
   const { albumId } = req.params;
 
-  // Verify album exists
+  // Verify album exists before adding to wishlist
   const album = await Album.findById(albumId);
   assertFound(album, "Album");
 
+  // Add album to user's wishlist (model method handles duplicates)
   const wishlist = await req.user.addToWishlist(albumId);
 
   res.json(formatResponse(true, "Album added to wishlist", { wishlist }));
@@ -37,11 +46,16 @@ export const addToWishlist = asyncHandler(async (req, res) => {
 /**
  * removeFromWishlist
  *
- * Removes an album from the user's wishlist
+ * Remove album from user's wishlist
+ *
+ * @param {Object} req - Express request object with authenticated user
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const removeFromWishlist = asyncHandler(async (req, res) => {
   const { albumId } = req.params;
 
+  // Remove album from wishlist
   const wishlist = await req.user.removeFromWishlist(albumId);
 
   res.json(formatResponse(true, "Album removed from wishlist", { wishlist }));

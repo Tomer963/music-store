@@ -2,22 +2,23 @@ import Category from "../models/Category.js";
 import Album from "../models/Album.js";
 import { MESSAGES } from "../config/constants.js";
 import { formatResponse } from "../utils/helpers.js";
-import { 
-  asyncHandler, 
-  NotFoundError, 
+import {
+  asyncHandler,
   BadRequestError,
-  assertFound 
+  assertFound,
 } from "../middleware/errorHandler.js";
 
 /**
  * getCategories
  *
- * Retrieves all categories with album count
+ * Retrieve all categories with album count
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getCategories = asyncHandler(async (req, res) => {
-  const categories = await Category.find()
-    .sort("name")
-    .populate("albumCount");
+  const categories = await Category.find().sort("name").populate("albumCount");
 
   res.json(formatResponse(true, "Categories retrieved", categories));
 });
@@ -25,7 +26,11 @@ export const getCategories = asyncHandler(async (req, res) => {
 /**
  * getCategory
  *
- * Retrieves a single category by ID
+ * Retrieve single category by ID
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getCategory = asyncHandler(async (req, res) => {
   const category = await Category.findById(req.params.id);
@@ -37,12 +42,17 @@ export const getCategory = asyncHandler(async (req, res) => {
 /**
  * getAlbumsByCategory
  *
- * Retrieves all albums in a specific category
+ * Retrieve all albums belonging to specific category
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getAlbumsByCategory = asyncHandler(async (req, res) => {
   const category = await Category.findById(req.params.id);
   assertFound(category, "Category");
 
+  // Get all albums in this category
   const albums = await Album.find({ category: req.params.id })
     .populate("category", "name")
     .sort("-createdAt");
@@ -59,27 +69,34 @@ export const getAlbumsByCategory = asyncHandler(async (req, res) => {
 /**
  * createCategory
  *
- * Creates a new category (Admin only)
+ * Create new category (Admin only)
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const createCategory = asyncHandler(async (req, res) => {
   const category = await Category.create(req.body);
 
-  res.status(201).json(
-    formatResponse(true, MESSAGES.SUCCESS.CREATED, category)
-  );
+  res
+    .status(201)
+    .json(formatResponse(true, MESSAGES.SUCCESS.CREATED, category));
 });
 
 /**
  * updateCategory
  *
- * Updates an existing category (Admin only)
+ * Update existing category (Admin only)
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const updateCategory = asyncHandler(async (req, res) => {
-  const category = await Category.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true, runValidators: true }
-  );
+  const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
   assertFound(category, "Category");
 
@@ -89,9 +106,14 @@ export const updateCategory = asyncHandler(async (req, res) => {
 /**
  * deleteCategory
  *
- * Deletes a category if it has no albums (Admin only)
+ * Delete category only if no albums are assigned to it (Admin only)
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const deleteCategory = asyncHandler(async (req, res) => {
+  // Check if category has any albums
   const albumCount = await Album.countDocuments({ category: req.params.id });
 
   if (albumCount > 0) {

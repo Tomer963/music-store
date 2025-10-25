@@ -69,17 +69,30 @@ const albumSchema = new mongoose.Schema(
   }
 );
 
-// Indexes
+// Indexes for improved query performance
 albumSchema.index({ title: 1 });
 albumSchema.index({ artist: 1 });
 albumSchema.index({ category: 1 });
 albumSchema.index({ createdAt: -1 });
 
-// Virtuals
+/**
+ * Virtual: inStock
+ *
+ * Check if album is available for purchase
+ *
+ * @return {boolean} True if in stock and available
+ */
 albumSchema.virtual("inStock").get(function () {
   return this.stock > 0 && this.availability === true;
 });
 
+/**
+ * Virtual: discountPercentage
+ *
+ * Calculate discount percentage if original price exists
+ *
+ * @return {number} Discount percentage (0-100)
+ */
 albumSchema.virtual("discountPercentage").get(function () {
   if (!this.originalPrice || this.originalPrice <= this.price) {
     return 0;
@@ -89,15 +102,38 @@ albumSchema.virtual("discountPercentage").get(function () {
   );
 });
 
+/**
+ * Virtual: hasDiscount
+ *
+ * Check if album has an active discount
+ *
+ * @return {boolean} True if discounted
+ */
 albumSchema.virtual("hasDiscount").get(function () {
   return this.originalPrice && this.originalPrice > this.price;
 });
 
-// Methods
+/**
+ * canPurchase
+ *
+ * Check if requested quantity can be purchased
+ *
+ * @param {number} quantity - Requested quantity
+ * @return {boolean} True if purchase is possible
+ */
 albumSchema.methods.canPurchase = function (quantity) {
   return this.stock >= quantity && this.availability;
 };
 
+/**
+ * updateStock
+ *
+ * Reduce stock after purchase and update availability
+ *
+ * @param {number} quantity - Quantity to deduct
+ * @return {Promise<Album>} Updated album document
+ * @throws {ValidationError} If insufficient stock
+ */
 albumSchema.methods.updateStock = async function (quantity) {
   if (quantity > this.stock) {
     throw new ValidationError(["Insufficient stock available"]);
@@ -105,6 +141,7 @@ albumSchema.methods.updateStock = async function (quantity) {
 
   this.stock -= quantity;
 
+  // Mark as unavailable if out of stock
   if (this.stock === 0) {
     this.availability = false;
   }
@@ -112,16 +149,22 @@ albumSchema.methods.updateStock = async function (quantity) {
   return await this.save();
 };
 
-// Hooks
+/**
+ * Pre-save hook
+ *
+ * Ensure proper image configuration before saving
+ */
 albumSchema.pre("save", function (next) {
   if (this.images?.length > 0) {
     const hasMainImage = this.images.some((img) => img.isMain);
 
+    // Set first image as main if none specified
     if (!hasMainImage) {
       this.images[0].isMain = true;
     }
   }
 
+  // Limit maximum images
   if (this.images?.length > 3) {
     return next(new ValidationError(["Maximum 3 images allowed"]));
   }

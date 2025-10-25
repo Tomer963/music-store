@@ -1,23 +1,35 @@
 /**
- * Application-wide constants
+ * Application-wide constants and enums
  */
 
+/**
+ * User role types
+ */
 export const USER_ROLES = {
   ADMIN: "admin",
   USER: "user",
 };
 
+/**
+ * Supported payment methods
+ */
 export const PAYMENT_METHODS = {
   CREDIT_CARD: "credit_card",
   CHECK: "check",
 };
 
+/**
+ * Pagination default values
+ */
 export const PAGINATION = {
   DEFAULT_PAGE: 1,
   DEFAULT_LIMIT: 12,
   MAX_LIMIT: 100,
 };
 
+/**
+ * Validation constraints
+ */
 export const VALIDATION = {
   MIN_PASSWORD_LENGTH: 6,
   MIN_NAME_LENGTH: 2,
@@ -25,6 +37,9 @@ export const VALIDATION = {
   MIN_SEARCH_LENGTH: 3,
 };
 
+/**
+ * Standard response messages
+ */
 export const MESSAGES = {
   SUCCESS: {
     CREATED: "Resource created successfully",
@@ -54,6 +69,9 @@ export const MESSAGES = {
   },
 };
 
+/**
+ * HTTP status codes
+ */
 export const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,
@@ -68,6 +86,9 @@ export const HTTP_STATUS = {
   SERVICE_UNAVAILABLE: 503,
 };
 
+/**
+ * Database connection states
+ */
 export const DATABASE_STATES = {
   DISCONNECTED: 0,
   CONNECTED: 1,

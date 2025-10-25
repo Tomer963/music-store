@@ -6,7 +6,11 @@ import { asyncHandler, AppError } from "../middleware/errorHandler.js";
 /**
  * getAlbums
  *
- * Retrieves all albums with pagination and optional category filter
+ * Retrieve paginated list of albums with optional category filter
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getAlbums = asyncHandler(async (req, res) => {
   const {
@@ -16,11 +20,13 @@ export const getAlbums = asyncHandler(async (req, res) => {
     category = null,
   } = req.query;
 
+  // Build query filter
   const queryFilter = category ? { category } : {};
-  const query = Album.find(queryFilter)
-    .populate("category", "name")
-    .sort(sort);
 
+  // Create query with population and sorting
+  const query = Album.find(queryFilter).populate("category", "name").sort(sort);
+
+  // Execute paginated query
   const result = await paginate(query, page, limit);
 
   res.json(formatResponse(true, "Albums retrieved successfully", result));
@@ -29,10 +35,17 @@ export const getAlbums = asyncHandler(async (req, res) => {
 /**
  * getAlbum
  *
- * Retrieves a single album by ID with populated category
+ * Retrieve single album by ID with populated category
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getAlbum = asyncHandler(async (req, res) => {
-  const album = await Album.findById(req.params.id).populate("category", "name");
+  const album = await Album.findById(req.params.id).populate(
+    "category",
+    "name"
+  );
 
   if (!album) {
     throw new AppError(MESSAGES.ERROR.NOT_FOUND, 404);
@@ -44,11 +57,16 @@ export const getAlbum = asyncHandler(async (req, res) => {
 /**
  * searchAlbums
  *
- * Searches albums by title, artist or description using regex matching
+ * Search albums by title, artist, or description using regex
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const searchAlbums = asyncHandler(async (req, res) => {
   const { q } = req.query;
 
+  // Validate search query length
   if (!q || q.trim().length < 3) {
     return res.json(formatResponse(true, "Search results", []));
   }
@@ -56,6 +74,7 @@ export const searchAlbums = asyncHandler(async (req, res) => {
   const searchQuery = q.trim();
   const searchRegex = new RegExp(searchQuery, "i");
 
+  // Search across multiple fields
   const albums = await Album.find({
     $or: [
       { title: searchRegex },
@@ -64,7 +83,7 @@ export const searchAlbums = asyncHandler(async (req, res) => {
     ],
   })
     .populate("category", "name")
-    .limit(10);
+    .limit(10); // Limit search results for performance
 
   res.json(formatResponse(true, "Search results", albums));
 });
@@ -72,7 +91,11 @@ export const searchAlbums = asyncHandler(async (req, res) => {
 /**
  * getNewAlbums
  *
- * Retrieves newest albums sorted by creation date
+ * Retrieve newest albums sorted by creation date
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getNewAlbums = asyncHandler(async (req, res) => {
   const { page = 1, limit = 23 } = req.query;
@@ -86,10 +109,16 @@ export const getNewAlbums = asyncHandler(async (req, res) => {
 /**
  * createAlbum
  *
- * Creates a new album (Admin only)
+ * Create new album (Admin only)
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const createAlbum = asyncHandler(async (req, res) => {
   const album = await Album.create(req.body);
+
+  // Populate category before returning
   await album.populate("category", "name");
 
   res.status(201).json(formatResponse(true, MESSAGES.SUCCESS.CREATED, album));
@@ -98,12 +127,16 @@ export const createAlbum = asyncHandler(async (req, res) => {
 /**
  * updateAlbum
  *
- * Updates an existing album (Admin only)
+ * Update existing album (Admin only)
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const updateAlbum = asyncHandler(async (req, res) => {
   const album = await Album.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
+    new: true, // Return updated document
+    runValidators: true, // Run schema validators
   }).populate("category", "name");
 
   if (!album) {
@@ -116,7 +149,11 @@ export const updateAlbum = asyncHandler(async (req, res) => {
 /**
  * deleteAlbum
  *
- * Deletes an album (Admin only)
+ * Delete album by ID (Admin only)
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const deleteAlbum = asyncHandler(async (req, res) => {
   const album = await Album.findByIdAndDelete(req.params.id);

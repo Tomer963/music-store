@@ -1,29 +1,27 @@
 import Order from "../models/Order.js";
 import CartItem from "../models/CartItem.js";
 import { MESSAGES } from "../config/constants.js";
-import { 
-  formatResponse, 
+import {
+  formatResponse,
   calculateTotal,
   validateRequiredFields,
   sanitizeObject,
-  parseQueryParams
+  parseQueryParams,
 } from "../utils/helpers.js";
-import { 
-  asyncHandler, 
-  NotFoundError, 
+import {
+  asyncHandler,
   BadRequestError,
-  ForbiddenError,
   assertFound,
-  assertAuthorized 
+  assertAuthorized,
 } from "../middleware/errorHandler.js";
 
 /**
  * validateBillingInfo
  *
- * Validates billing information completeness
+ * Validate billing information completeness
  *
  * @param {Object} billingInfo - Billing information object
- * @throws {BadRequestError} If billing info is incomplete
+ * @throws {BadRequestError} If required fields are missing
  */
 const validateBillingInfo = (billingInfo) => {
   const requiredFields = ["address", "city", "zipCode", "phone"];
@@ -39,9 +37,9 @@ const validateBillingInfo = (billingInfo) => {
 /**
  * validateCartItems
  *
- * Validates cart items stock availability and prepares order items
+ * Validate cart items and prepare order data
  *
- * @param {Array} cartItems - Cart items array
+ * @param {Array} cartItems - Array of cart items with populated albums
  * @return {Object} Order items and calculated total
  * @throws {BadRequestError} If cart is empty or stock unavailable
  */
@@ -53,6 +51,7 @@ const validateCartItems = async (cartItems) => {
   const orderItems = [];
   let calculatedTotal = 0;
 
+  // Validate each item and build order items array
   for (const cartItem of cartItems) {
     if (!cartItem.album.canPurchase(cartItem.quantity)) {
       throw new BadRequestError(
@@ -75,9 +74,10 @@ const validateCartItems = async (cartItems) => {
 /**
  * updateAlbumStocks
  *
- * Updates stock for all albums in order
+ * Reduce stock for all albums in order
  *
  * @param {Array} cartItems - Cart items to update stock for
+ * @return {Promise<void>}
  */
 const updateAlbumStocks = async (cartItems) => {
   await Promise.all(
@@ -88,17 +88,21 @@ const updateAlbumStocks = async (cartItems) => {
 /**
  * restoreAlbumStocks
  *
- * Restores stock for all items in order (used when deleting order)
+ * Restore stock when order is deleted
  *
- * @param {Array} orderItems - Order items to restore stock for
+ * @param {Array} orderItems - Order items with populated albums
+ * @return {Promise<void>}
  */
 const restoreAlbumStocks = async (orderItems) => {
   for (const item of orderItems) {
     if (item.album) {
       item.album.stock += item.quantity;
+
+      // Re-enable availability if stock is restored
       if (!item.album.availability && item.album.stock > 0) {
         item.album.availability = true;
       }
+
       await item.album.save();
     }
   }
@@ -107,11 +111,11 @@ const restoreAlbumStocks = async (orderItems) => {
 /**
  * checkOrderOwnership
  *
- * Checks if user owns order or is admin
+ * Verify user owns order or is admin
  *
- * @param {Object} order - Order object
- * @param {Object} user - User object
- * @throws {ForbiddenError} If user doesn't own order and isn't admin
+ * @param {Object} order - Order document
+ * @param {Object} user - User document
+ * @throws {ForbiddenError} If unauthorized
  */
 const checkOrderOwnership = (order, user) => {
   const isOwner = order.user.equals(user._id);
@@ -126,7 +130,11 @@ const checkOrderOwnership = (order, user) => {
 /**
  * getOrders
  *
- * Retrieves all orders for the authenticated user
+ * Retrieve all orders for authenticated user
+ *
+ * @param {Object} req - Express request object with authenticated user
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id })
@@ -139,12 +147,17 @@ export const getOrders = asyncHandler(async (req, res) => {
 /**
  * getAllOrders
  *
- * Retrieves all orders in the system with pagination (Admin only)
+ * Retrieve all orders in system with pagination (Admin only)
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getAllOrders = asyncHandler(async (req, res) => {
   const { page, limit } = parseQueryParams(req.query, { limit: 20 });
   const skip = (page - 1) * limit;
 
+  // Execute both queries in parallel
   const [orders, total] = await Promise.all([
     Order.find()
       .populate("items.album")
@@ -171,7 +184,11 @@ export const getAllOrders = asyncHandler(async (req, res) => {
 /**
  * getOrder
  *
- * Retrieves a single order by ID with authorization check
+ * Retrieve single order by ID with authorization check
+ *
+ * @param {Object} req - Express request object with authenticated user
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getOrder = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id)
@@ -187,25 +204,31 @@ export const getOrder = asyncHandler(async (req, res) => {
 /**
  * createOrder
  *
- * Creates a new order from cart items with validation and stock updates
+ * Create new order from cart items
+ *
+ * @param {Object} req - Express request object with authenticated user
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const createOrder = asyncHandler(async (req, res) => {
   const { paymentMethod, billingInfo, totalAmount } = req.body;
 
   // Validate required fields
-  validateRequiredFields(
-    { paymentMethod, billingInfo, totalAmount },
-    ["paymentMethod", "billingInfo", "totalAmount"]
-  );
+  validateRequiredFields({ paymentMethod, billingInfo, totalAmount }, [
+    "paymentMethod",
+    "billingInfo",
+    "totalAmount",
+  ]);
 
-  // Validate billing information
   validateBillingInfo(billingInfo);
 
-  // Get and validate cart items
-  const cartItems = await CartItem.find({ user: req.user._id }).populate("album");
+  // Get cart items with album data
+  const cartItems = await CartItem.find({ user: req.user._id }).populate(
+    "album"
+  );
   const { orderItems, calculatedTotal } = await validateCartItems(cartItems);
 
-  // Create the order
+  // Create order
   const order = await Order.create({
     user: req.user._id,
     items: orderItems,
@@ -215,7 +238,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     billingInfo,
   });
 
-  // Update stock and clear cart
+  // Update stock and clear cart in parallel
   await Promise.all([
     updateAlbumStocks(cartItems),
     CartItem.deleteMany({ user: req.user._id }),
@@ -223,28 +246,32 @@ export const createOrder = asyncHandler(async (req, res) => {
 
   await order.populate("items.album");
 
-  res.status(201).json(
-    formatResponse(true, "Order created successfully", order)
-  );
+  res
+    .status(201)
+    .json(formatResponse(true, "Order created successfully", order));
 });
 
 /**
  * updateOrder
  *
- * Updates order details with protection for critical fields (Admin only)
+ * Update order details (Admin only)
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const updateOrder = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
   assertFound(order, "Order");
 
-  // Remove protected fields
+  // Remove protected fields that shouldn't be updated
   const updates = sanitizeObject(req.body, [
     "user",
     "orderNumber",
     "createdAt",
   ]);
 
-  // Recalculate total if items are updated
+  // Recalculate total if items are modified
   if (updates.items) {
     updates.totalAmount = calculateTotal(updates.items);
   }
@@ -264,13 +291,17 @@ export const updateOrder = asyncHandler(async (req, res) => {
 /**
  * deleteOrder
  *
- * Permanently deletes an order and restores stock (Admin only)
+ * Permanently delete order and restore stock (Admin only)
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const deleteOrder = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id).populate("items.album");
   assertFound(order, "Order");
 
-  // Restore stock before deleting
+  // Restore album stocks before deletion
   await restoreAlbumStocks(order.items);
   await order.deleteOne();
 
@@ -280,7 +311,11 @@ export const deleteOrder = asyncHandler(async (req, res) => {
 /**
  * getOrderStatistics
  *
- * Retrieves order statistics including total count and revenue (Admin only)
+ * Retrieve order statistics (Admin only)
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getOrderStatistics = asyncHandler(async (req, res) => {
   const [totalOrders, revenueResult] = await Promise.all([

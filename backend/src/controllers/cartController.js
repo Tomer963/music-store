@@ -5,15 +5,26 @@ import { formatResponse, generateSessionId } from "../utils/helpers.js";
 import { asyncHandler, AppError } from "../middleware/errorHandler.js";
 
 /**
- * Build cart query based on authentication
+ * buildCartQuery
+ *
+ * Build query filter based on user authentication status
+ *
+ * @param {Object} req - Express request object
+ * @return {Object} MongoDB query filter
  */
 const buildCartQuery = (req) => {
   const sessionId = req.headers["x-session-id"];
+  // Use user ID if authenticated, otherwise use session ID
   return req.user ? { user: req.user._id } : { sessionId };
 };
 
 /**
- * Calculate cart total
+ * calculateCartTotal
+ *
+ * Calculate total price for all cart items
+ *
+ * @param {Array} cartItems - Array of cart items with populated albums
+ * @return {number} Total cart price
  */
 const calculateCartTotal = (cartItems) => {
   return cartItems.reduce(
@@ -25,7 +36,11 @@ const calculateCartTotal = (cartItems) => {
 /**
  * getCart
  *
- * Retrieves the user's cart items with calculated total
+ * Retrieve user's cart items with calculated total
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const getCart = asyncHandler(async (req, res) => {
   const query = buildCartQuery(req);
@@ -44,25 +59,33 @@ export const getCart = asyncHandler(async (req, res) => {
 /**
  * addToCart
  *
- * Adds an album to the cart or updates quantity if already exists
+ * Add album to cart or update quantity if already exists
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const addToCart = asyncHandler(async (req, res) => {
   const { albumId, quantity = 1 } = req.body;
 
+  // Verify album exists
   const album = await Album.findById(albumId);
   if (!album) {
     throw new AppError("Album not found", 404);
   }
 
+  // Check stock availability
   if (!album.canPurchase(quantity)) {
     throw new AppError(MESSAGES.ERROR.OUT_OF_STOCK, 400);
   }
 
+  // Get or generate session ID for guest users
   let sessionId = req.headers["x-session-id"];
   if (!req.user && !sessionId) {
     sessionId = generateSessionId();
   }
 
+  // Prepare cart item data based on authentication
   const cartData = {
     album: albumId,
     quantity,
@@ -74,12 +97,15 @@ export const addToCart = asyncHandler(async (req, res) => {
     ...(req.user ? { user: req.user._id } : { sessionId }),
   };
 
+  // Find existing cart item or create new one
   let cartItem = await CartItem.findOne(searchCriteria);
 
   if (cartItem) {
+    // Item already in cart - increase quantity
     cartItem.quantity += quantity;
     await cartItem.save();
   } else {
+    // New item - create cart entry
     cartItem = await CartItem.create(cartData);
   }
 
@@ -88,7 +114,7 @@ export const addToCart = asyncHandler(async (req, res) => {
   res.json(
     formatResponse(true, "Item added to cart", {
       item: cartItem,
-      sessionId: !req.user ? sessionId : undefined,
+      sessionId: !req.user ? sessionId : undefined, // Return session ID for guests
     })
   );
 });
@@ -96,7 +122,11 @@ export const addToCart = asyncHandler(async (req, res) => {
 /**
  * updateCartItem
  *
- * Updates the quantity of a cart item
+ * Update quantity of specific cart item
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const updateCartItem = asyncHandler(async (req, res) => {
   const { quantity } = req.body;
@@ -107,7 +137,7 @@ export const updateCartItem = asyncHandler(async (req, res) => {
     throw new AppError("Cart item not found", 404);
   }
 
-  // Check authorization
+  // Verify ownership - check user ID for authenticated or session ID for guests
   const isAuthorized = req.user
     ? cartItem.user && cartItem.user.equals(req.user._id)
     : cartItem.sessionId === req.headers["x-session-id"];
@@ -116,6 +146,7 @@ export const updateCartItem = asyncHandler(async (req, res) => {
     throw new AppError(MESSAGES.ERROR.UNAUTHORIZED, 403);
   }
 
+  // Verify stock availability for new quantity
   if (!cartItem.album.canPurchase(quantity)) {
     throw new AppError(MESSAGES.ERROR.OUT_OF_STOCK, 400);
   }
@@ -128,7 +159,11 @@ export const updateCartItem = asyncHandler(async (req, res) => {
 /**
  * removeFromCart
  *
- * Removes an item from the cart
+ * Remove specific item from cart
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const removeFromCart = asyncHandler(async (req, res) => {
   const cartItem = await CartItem.findById(req.params.id);
@@ -137,6 +172,7 @@ export const removeFromCart = asyncHandler(async (req, res) => {
     throw new AppError("Cart item not found", 404);
   }
 
+  // Verify ownership
   const isAuthorized = req.user
     ? cartItem.user && cartItem.user.equals(req.user._id)
     : cartItem.sessionId === req.headers["x-session-id"];
@@ -153,7 +189,11 @@ export const removeFromCart = asyncHandler(async (req, res) => {
 /**
  * clearCart
  *
- * Removes all items from the cart
+ * Remove all items from user's cart
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @return {Promise<void>}
  */
 export const clearCart = asyncHandler(async (req, res) => {
   const query = buildCartQuery(req);

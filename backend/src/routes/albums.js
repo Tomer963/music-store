@@ -14,7 +14,12 @@ const router = Router();
 router.get("/", albumController.getAlbums);
 router.get("/search", albumController.searchAlbums);
 router.get("/new", albumController.getNewAlbums);
-router.get("/:id", mongoIdValidation, validateRequest, albumController.getAlbum);
+router.get(
+  "/:id",
+  mongoIdValidation,
+  validateRequest,
+  albumController.getAlbum
+);
 
 // Admin routes
 router.post(

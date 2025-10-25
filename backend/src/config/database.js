@@ -24,62 +24,66 @@ const connectionOptions = {
 /**
  * setupConnectionHandlers
  *
- * Sets up all mongoose connection event handlers
+ * Setup all mongoose connection event handlers
  */
 const setupConnectionHandlers = () => {
   mongoose.connection.on("connected", () => {
     isConnected = true;
     reconnectAttempts = 0;
-    console.log("✓ Database connected successfully");
-    console.log(`  Host: ${mongoose.connection.host}`);
-    console.log(`  Database: ${mongoose.connection.name}`);
+    console.log("Database connected successfully");
+    console.log(`Host: ${mongoose.connection.host}`);
+    console.log(`Database: ${mongoose.connection.name}`);
   });
 
   mongoose.connection.on("error", (error) => {
-    console.error("✗ Database error:", error.message);
+    console.error("Database error:", error.message);
     isConnected = false;
   });
 
   mongoose.connection.on("disconnected", () => {
     isConnected = false;
-    console.log("⚠ Database disconnected");
+    console.log("Database disconnected");
 
+    // Attempt reconnection if under max attempts
     if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
       attemptReconnection();
     } else {
       console.error(
-        `✗ Maximum reconnection attempts (${MAX_RECONNECT_ATTEMPTS}) reached`
+        `Maximum reconnection attempts (${MAX_RECONNECT_ATTEMPTS}) reached`
       );
-      console.error("  Please check database connection and restart the server");
+      console.error("Please check database connection and restart the server");
     }
   });
 
   mongoose.connection.on("reconnected", () => {
     isConnected = true;
     reconnectAttempts = 0;
-    console.log("✓ Database reconnected successfully");
+    console.log("Database reconnected successfully");
   });
 };
 
 /**
  * attemptReconnection
  *
- * Attempts to reconnect to database with exponential backoff
+ * Attempt to reconnect to database with exponential backoff
  */
 const attemptReconnection = () => {
   reconnectAttempts++;
   const delay = RECONNECT_INTERVAL * reconnectAttempts;
 
   console.log(
-    `⟳ Attempting to reconnect... (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})`
+    `Attempting to reconnect... (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})`
   );
-  console.log(`  Waiting ${delay / 1000} seconds before retry...`);
+  console.log(`Waiting ${delay / 1000} seconds before retry...`);
 
   setTimeout(() => {
     mongoose
       .connect(process.env.MONGODB_URI, connectionOptions)
       .catch((error) => {
-        console.error(`✗ Reconnection attempt ${reconnectAttempts} failed:`, error.message);
+        console.error(
+          `Reconnection attempt ${reconnectAttempts} failed:`,
+          error.message
+        );
       });
   }, delay);
 };
@@ -87,7 +91,7 @@ const attemptReconnection = () => {
 /**
  * validateConnectionString
  *
- * Validates MongoDB connection string
+ * Validate MongoDB connection string
  *
  * @throws {Error} If connection string is invalid
  */
@@ -104,16 +108,18 @@ const validateConnectionString = () => {
 /**
  * connectDatabase
  *
- * Establishes connection to MongoDB database with automatic reconnection and error handling
+ * Establish connection to MongoDB with automatic reconnection
+ *
+ * @return {Promise<void>}
  */
 export const connectDatabase = async () => {
   try {
     // Validate configuration
     validateConnectionString();
 
-    // Prevent multiple simultaneous connection attempts
+    // Prevent duplicate connections
     if (isConnected && mongoose.connection.readyState === 1) {
-      console.log("⚠ Using existing database connection");
+      console.log("Using existing database connection");
       return;
     }
 
@@ -124,10 +130,10 @@ export const connectDatabase = async () => {
     mongoose.set("strictQuery", false);
 
     // Establish connection
-    console.log("⟳ Connecting to database...");
+    console.log("Connecting to database...");
     await mongoose.connect(process.env.MONGODB_URI, connectionOptions);
   } catch (error) {
-    console.error("✗ Database connection failed:", error.message);
+    console.error("Database connection failed:", error.message);
     isConnected = false;
     throw error;
   }
@@ -136,18 +142,20 @@ export const connectDatabase = async () => {
 /**
  * closeDatabaseConnection
  *
- * Closes the MongoDB connection gracefully
+ * Close MongoDB connection gracefully
+ *
+ * @return {Promise<void>}
  */
 export const closeDatabaseConnection = async () => {
   try {
     if (mongoose.connection.readyState !== 0) {
-      console.log("⟳ Closing database connection...");
+      console.log("Closing database connection...");
       await mongoose.connection.close();
       isConnected = false;
-      console.log("✓ Database connection closed");
+      console.log("Database connection closed");
     }
   } catch (error) {
-    console.error("✗ Error closing database:", error.message);
+    console.error("Error closing database:", error.message);
     throw error;
   }
 };
@@ -155,9 +163,9 @@ export const closeDatabaseConnection = async () => {
 /**
  * checkDatabaseConnection
  *
- * Checks if database is currently connected
+ * Check if database is currently connected
  *
- * @return {boolean} True if connected, false otherwise
+ * @return {boolean} True if connected
  */
 export const checkDatabaseConnection = () => {
   return mongoose.connection.readyState === 1;
@@ -166,9 +174,9 @@ export const checkDatabaseConnection = () => {
 /**
  * getDatabaseStatus
  *
- * Gets detailed database connection status
+ * Get detailed database connection status
  *
- * @return {Object} Database status object
+ * @return {Object} Database status information
  */
 export const getDatabaseStatus = () => {
   const stateMap = {

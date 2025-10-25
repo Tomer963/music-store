@@ -12,12 +12,44 @@ const router = Router();
 
 // Public routes
 router.get("/", categoryController.getCategories);
-router.get("/:id", mongoIdValidation, validateRequest, categoryController.getCategory);
-router.get("/:id/albums", mongoIdValidation, validateRequest, categoryController.getAlbumsByCategory);
+router.get(
+  "/:id",
+  mongoIdValidation,
+  validateRequest,
+  categoryController.getCategory
+);
+router.get(
+  "/:id/albums",
+  mongoIdValidation,
+  validateRequest,
+  categoryController.getAlbumsByCategory
+);
 
 // Admin routes
-router.post("/", authenticate, isAdmin, categoryValidation, validateRequest, categoryController.createCategory);
-router.put("/:id", authenticate, isAdmin, mongoIdValidation, categoryUpdateValidation, validateRequest, categoryController.updateCategory);
-router.delete("/:id", authenticate, isAdmin, mongoIdValidation, validateRequest, categoryController.deleteCategory);
+router.post(
+  "/",
+  authenticate,
+  isAdmin,
+  categoryValidation,
+  validateRequest,
+  categoryController.createCategory
+);
+router.put(
+  "/:id",
+  authenticate,
+  isAdmin,
+  mongoIdValidation,
+  categoryUpdateValidation,
+  validateRequest,
+  categoryController.updateCategory
+);
+router.delete(
+  "/:id",
+  authenticate,
+  isAdmin,
+  mongoIdValidation,
+  validateRequest,
+  categoryController.deleteCategory
+);
 
 export default router;

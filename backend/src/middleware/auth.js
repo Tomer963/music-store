@@ -9,11 +9,12 @@ import { MESSAGES } from "../config/constants.js";
  *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {Function} next - Express next function
  * @return {Promise<void>}
  */
 export const authenticate = async (req, res, next) => {
   try {
+    // Extract token from Authorization header
     const token = req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
@@ -24,7 +25,10 @@ export const authenticate = async (req, res, next) => {
       });
     }
 
+    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Find user by decoded ID (exclude password)
     const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
@@ -35,6 +39,7 @@ export const authenticate = async (req, res, next) => {
       });
     }
 
+    // Attach user and token to request object
     req.user = user;
     req.token = token;
     next();
@@ -59,8 +64,7 @@ export const authenticate = async (req, res, next) => {
  *
  * @param {Object} req - Express request object with authenticated user
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {void}
+ * @param {Function} next - Express next function
  */
 export const isAdmin = (req, res, next) => {
   if (req.user.role !== "admin") {
@@ -76,11 +80,12 @@ export const isAdmin = (req, res, next) => {
 /**
  * optionalAuth
  *
- * Middleware for optional authentication (doesn't fail if no token provided)
+ * Middleware for optional authentication (doesn't fail if no token)
+ * Used for endpoints that work for both authenticated and guest users
  *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
+ * @param {Function} next - Express next function
  * @return {Promise<void>}
  */
 export const optionalAuth = async (req, res, next) => {
@@ -92,13 +97,16 @@ export const optionalAuth = async (req, res, next) => {
       const user = await User.findById(decoded.id).select("-password");
 
       if (user) {
+        // Attach user if valid token found
         req.user = user;
         req.token = token;
       }
     }
+
+    // Continue regardless of authentication status
     next();
   } catch {
-    // Silently fail for optional auth
+    // Silently continue on authentication failure
     next();
   }
 };

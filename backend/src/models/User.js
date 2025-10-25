@@ -55,22 +55,27 @@ const userSchema = new mongoose.Schema(
     },
     lastLogin: Date,
   },
-  { 
+  {
     timestamps: true,
-    toJSON: { 
+    toJSON: {
       transform: (doc, ret) => {
+        // Remove sensitive fields from JSON output
         delete ret.password;
         delete ret.__v;
         return ret;
-      }
-    }
+      },
+    },
   }
 );
 
-// Index
+// Index for faster email lookups
 userSchema.index({ email: 1 });
 
-// Hooks
+/**
+ * Pre-save hook
+ *
+ * Hash password before saving to database if it was modified
+ */
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
@@ -85,11 +90,25 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-// Methods
+/**
+ * comparePassword
+ *
+ * Compare provided password with hashed password in database
+ *
+ * @param {string} candidatePassword - Plain text password to compare
+ * @return {Promise<boolean>} True if passwords match
+ */
 userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
+/**
+ * generateAuthToken
+ *
+ * Generate JWT authentication token for user
+ *
+ * @return {string} JWT token
+ */
 userSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     {
@@ -104,6 +123,14 @@ userSchema.methods.generateAuthToken = function () {
   );
 };
 
+/**
+ * addToWishlist
+ *
+ * Add album to user's wishlist if not already present
+ *
+ * @param {ObjectId} albumId - Album ID to add
+ * @return {Promise<Array>} Updated wishlist array
+ */
 userSchema.methods.addToWishlist = async function (albumId) {
   if (!this.wishlist.includes(albumId)) {
     this.wishlist.push(albumId);
@@ -112,6 +139,14 @@ userSchema.methods.addToWishlist = async function (albumId) {
   return this.wishlist;
 };
 
+/**
+ * removeFromWishlist
+ *
+ * Remove album from user's wishlist
+ *
+ * @param {ObjectId} albumId - Album ID to remove
+ * @return {Promise<Array>} Updated wishlist array
+ */
 userSchema.methods.removeFromWishlist = async function (albumId) {
   this.wishlist = this.wishlist.filter((id) => !id.equals(albumId));
   await this.save();

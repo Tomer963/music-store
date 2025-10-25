@@ -17,7 +17,11 @@ const categorySchema = new mongoose.Schema(
   }
 );
 
-// Virtual
+/**
+ * Virtual: albumCount
+ *
+ * Count number of albums in this category
+ */
 categorySchema.virtual("albumCount", {
   ref: "Album",
   localField: "_id",

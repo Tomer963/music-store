@@ -30,7 +30,7 @@ const cartItemSchema = new mongoose.Schema(
   }
 );
 
-// Indexes
+// Compound indexes to ensure unique cart items per user/session
 cartItemSchema.index(
   { user: 1, album: 1 },
   {
@@ -49,15 +49,29 @@ cartItemSchema.index(
   }
 );
 
+// Indexes for efficient queries
 cartItemSchema.index({ user: 1 });
 cartItemSchema.index({ sessionId: 1 });
 
-// Virtual
+/**
+ * Virtual: totalPrice
+ *
+ * Calculate total price for this cart item
+ *
+ * @return {number} Item quantity * album price
+ */
 cartItemSchema.virtual("totalPrice").get(function () {
   return this.album?.price ? this.album.price * this.quantity : 0;
 });
 
-// Methods
+/**
+ * updateQuantity
+ *
+ * Update cart item quantity
+ *
+ * @param {number} newQuantity - New quantity value
+ * @return {Promise<CartItem>} Updated cart item
+ */
 cartItemSchema.methods.updateQuantity = async function (newQuantity) {
   this.quantity = newQuantity;
   return await this.save();

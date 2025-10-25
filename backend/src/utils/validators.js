@@ -1,15 +1,32 @@
 import { body, param } from "express-validator";
 import { VALIDATION, PAYMENT_METHODS } from "../config/constants.js";
 
-// Reusable validation components
+/**
+ * nameValidation
+ *
+ * Reusable name field validation
+ *
+ * @param {string} field - Field name to validate
+ * @return {ValidationChain} Express-validator chain
+ */
 const nameValidation = (field) =>
   body(field)
     .trim()
-    .isLength({ min: VALIDATION.MIN_NAME_LENGTH, max: VALIDATION.MAX_NAME_LENGTH })
+    .isLength({
+      min: VALIDATION.MIN_NAME_LENGTH,
+      max: VALIDATION.MAX_NAME_LENGTH,
+    })
     .withMessage(
       `${field} must be between ${VALIDATION.MIN_NAME_LENGTH} and ${VALIDATION.MAX_NAME_LENGTH} characters`
     );
 
+/**
+ * emailValidation
+ *
+ * Email field validation
+ *
+ * @return {ValidationChain} Express-validator chain
+ */
 const emailValidation = () =>
   body("email")
     .trim()
@@ -17,20 +34,38 @@ const emailValidation = () =>
     .normalizeEmail()
     .withMessage("Please provide a valid email");
 
+/**
+ * passwordValidation
+ *
+ * Password field validation with strength requirements
+ *
+ * @return {ValidationChain} Express-validator chain
+ */
 const passwordValidation = () =>
   body("password")
     .isLength({ min: VALIDATION.MIN_PASSWORD_LENGTH })
-    .withMessage(`Password must be at least ${VALIDATION.MIN_PASSWORD_LENGTH} characters`)
+    .withMessage(
+      `Password must be at least ${VALIDATION.MIN_PASSWORD_LENGTH} characters`
+    )
     .matches(/[A-Z]/)
     .withMessage("Password must contain at least one uppercase letter");
 
+/**
+ * sessionIdValidation
+ *
+ * Optional session ID validation
+ *
+ * @return {ValidationChain} Express-validator chain
+ */
 const sessionIdValidation = () =>
   body("sessionId")
     .optional()
     .isString()
     .withMessage("SessionId must be a string");
 
-// Auth validations
+/**
+ * Auth validation rules
+ */
 export const registerValidation = [
   nameValidation("firstName"),
   nameValidation("lastName"),
@@ -48,7 +83,9 @@ export const loginValidation = [
   sessionIdValidation(),
 ];
 
-// Album validations
+/**
+ * Album field validations
+ */
 const albumFieldValidations = {
   title: () =>
     body("title")
@@ -87,19 +124,27 @@ const albumFieldValidations = {
       .withMessage("Description cannot exceed 500 characters"),
 };
 
-export const albumValidation = Object.values(albumFieldValidations).map((fn) => fn());
+// Apply all album validations for create
+export const albumValidation = Object.values(albumFieldValidations).map((fn) =>
+  fn()
+);
 
+// Optional validations for update
 export const albumUpdateValidation = [
   body("title").optional().trim().notEmpty().isLength({ max: 100 }),
   body("artist").optional().trim().notEmpty().isLength({ max: 100 }),
   body("category").optional().isMongoId(),
-  body("releaseYear").optional().isInt({ min: 1900, max: new Date().getFullYear() }),
+  body("releaseYear")
+    .optional()
+    .isInt({ min: 1900, max: new Date().getFullYear() }),
   body("price").optional().isFloat({ min: 0 }),
   body("stock").optional().isInt({ min: 0 }),
   body("description").optional().trim().notEmpty().isLength({ max: 500 }),
 ];
 
-// Category validations
+/**
+ * Category validation rules
+ */
 export const categoryValidation = [
   body("name")
     .trim()
@@ -110,14 +155,12 @@ export const categoryValidation = [
 ];
 
 export const categoryUpdateValidation = [
-  body("name")
-    .optional()
-    .trim()
-    .notEmpty()
-    .isLength({ max: 50 }),
+  body("name").optional().trim().notEmpty().isLength({ max: 50 }),
 ];
 
-// Cart validations
+/**
+ * Cart validation rules
+ */
 export const cartItemValidation = [
   body("albumId")
     .exists()
@@ -130,10 +173,13 @@ export const cartItemValidation = [
     .isInt({ min: 1 })
     .withMessage("Quantity must be at least 1"),
   sessionIdValidation(),
+  // Reject unexpected fields
   body().custom((value, { req }) => {
     const allowedFields = ["albumId", "quantity", "sessionId"];
     const receivedFields = Object.keys(req.body);
-    const extraFields = receivedFields.filter((field) => !allowedFields.includes(field));
+    const extraFields = receivedFields.filter(
+      (field) => !allowedFields.includes(field)
+    );
 
     if (extraFields.length > 0) {
       throw new Error(`Unexpected fields: ${extraFields.join(", ")}`);
@@ -143,12 +189,12 @@ export const cartItemValidation = [
 ];
 
 export const quantityValidation = [
-  body("quantity")
-    .isInt({ min: 1 })
-    .withMessage("Quantity must be at least 1"),
+  body("quantity").isInt({ min: 1 }).withMessage("Quantity must be at least 1"),
 ];
 
-// Order validations
+/**
+ * Order validation rules
+ */
 export const orderValidation = [
   body("paymentMethod")
     .isIn(Object.values(PAYMENT_METHODS))
@@ -172,7 +218,9 @@ export const orderValidation = [
     .withMessage("Phone must be in format 03-1234567 or 050-1234567"),
 ];
 
-// ID validations
+/**
+ * ID validation rules
+ */
 export const mongoIdValidation = [
   param("id").isMongoId().withMessage("Invalid ID format"),
 ];

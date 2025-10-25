@@ -15,10 +15,16 @@ import { getDatabaseStatus } from "./config/database.js";
 
 const app = express();
 
+// Trust proxy for accurate client IP detection
 app.set("trust proxy", 1);
+
+// Security headers
 app.use(helmet());
 
-// CORS configuration
+/**
+ * CORS configuration
+ * Allow requests from specified origins with credentials
+ */
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
@@ -26,6 +32,7 @@ const corsOptions = {
       "http://localhost:3000",
     ];
 
+    // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -39,10 +46,14 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Body parsing middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Request logging in development mode
+/**
+ * Request logging in development mode
+ */
 if (process.env.NODE_ENV === "development") {
   app.use((req, res, next) => {
     const timestamp = new Date().toISOString();
@@ -53,7 +64,11 @@ if (process.env.NODE_ENV === "development") {
 }
 
 /**
+ * createRateLimiter
+ *
  * Configure rate limiter based on environment
+ *
+ * @return {Function} Rate limiter middleware
  */
 const createRateLimiter = () => {
   const isProduction = process.env.NODE_ENV === "production";
@@ -69,10 +84,11 @@ const createRateLimiter = () => {
     keyGenerator: (req) => getClientIp(req),
     handler: (req, res) => {
       const clientIp = getClientIp(req);
-      const retryAfter = Math.ceil((req.rateLimit?.resetTime - Date.now()) / 1000) || 900;
+      const retryAfter =
+        Math.ceil((req.rateLimit?.resetTime - Date.now()) / 1000) || 900;
 
       console.log(
-        `⚠ Rate limit exceeded for IP: ${clientIp} (${process.env.NODE_ENV || "development"} mode: ${maxRequests} req/15min)`
+        `Rate limit exceeded for IP: ${clientIp} (${process.env.NODE_ENV || "development"} mode: ${maxRequests} req/15min)`
       );
 
       res.status(429).json({
@@ -84,6 +100,7 @@ const createRateLimiter = () => {
         retryAfter,
       });
     },
+    // Skip rate limiting for health check endpoints
     skip: (req) => {
       return req.path === "/health" || req.path === "/health/detailed";
     },
@@ -93,11 +110,12 @@ const createRateLimiter = () => {
 app.use("/api", createRateLimiter());
 
 console.log(
-  `⚡ Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`
+  `Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`
 );
 
 /**
  * Database connection check middleware
+ * Return 503 if database is unavailable
  */
 app.use((req, res, next) => {
   if (mongoose.connection.readyState !== 1) {
@@ -112,6 +130,7 @@ app.use((req, res, next) => {
 
 /**
  * Root endpoint
+ * Provides API information and available endpoints
  */
 app.get("/", (req, res) => {
   res.json({
@@ -133,7 +152,7 @@ app.get("/", (req, res) => {
 });
 
 /**
- * Health check endpoints
+ * Basic health check endpoint
  */
 app.get("/health", (req, res) => {
   const dbStatus = getDatabaseStatus();
@@ -152,6 +171,10 @@ app.get("/health", (req, res) => {
   });
 });
 
+/**
+ * Detailed health check endpoint
+ * Includes memory usage and detailed database info
+ */
 app.get("/health/detailed", (req, res) => {
   const dbStatus = getDatabaseStatus();
   const memoryUsage = process.memoryUsage();
