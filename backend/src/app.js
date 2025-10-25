@@ -9,14 +9,11 @@ import authRoutes from "./routes/auth.js";
 import cartRoutes from "./routes/cart.js";
 import orderRoutes from "./routes/orders.js";
 import wishlistRoutes from "./routes/wishlist.js";
-import { errorHandler } from "./middleware/errorHandler.js";
+import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
-// Trust proxy for proper IP detection behind reverse proxies
 app.set("trust proxy", 1);
-
-// Security headers middleware
 app.use(helmet());
 
 // CORS configuration
@@ -27,7 +24,6 @@ const corsOptions = {
       "http://localhost:3000",
     ];
 
-    // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -41,8 +37,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-// Body parsing middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
@@ -54,15 +48,13 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
-// Rate limiting configuration
+// Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: process.env.NODE_ENV === "production" ? 100 : 1000,
   standardHeaders: "draft-7",
   legacyHeaders: false,
   requestWasSuccessful: (req, res) => res.statusCode < 400,
-
-  // Extract client IP from various headers
   keyGenerator: (req) => {
     const forwarded = req.headers["x-forwarded-for"];
     const realIp = req.headers["x-real-ip"];
@@ -75,7 +67,6 @@ const limiter = rateLimit({
       clientIp = realIp;
     }
 
-    // Remove IPv6 prefix
     clientIp = clientIp.replace(/^::ffff:/, "");
 
     if (process.env.NODE_ENV === "development") {
@@ -84,15 +75,13 @@ const limiter = rateLimit({
 
     return clientIp;
   },
-
-  // Handler for rate limit exceeded
   handler: (req, res) => {
     const clientIp = req.ip?.replace(/^::ffff:/, "") || "unknown";
     const env = process.env.NODE_ENV || "development";
     const limit = env === "production" ? 100 : 1000;
 
     console.log(
-      `Rate limit exceeded for IP: ${clientIp} (${env} mode: ${limit} req/15min)`,
+      `Rate limit exceeded for IP: ${clientIp} (${env} mode: ${limit} req/15min)`
     );
 
     res.status(429).json({
@@ -105,20 +94,16 @@ const limiter = rateLimit({
         Math.ceil((req.rateLimit?.resetTime - Date.now()) / 1000) || 900,
     });
   },
-
-  // Skip rate limiting for health check endpoints
   skip: (req) => {
     return req.path === "/health" || req.path === "/health/detailed";
   },
 });
 
-// Apply rate limiter to all API routes
 app.use("/api", limiter);
 
 console.log(
-  `Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`,
+  `Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`
 );
-console.log(`Rate Limit Headers: draft-7 standard`);
 
 // Database connection check middleware
 app.use((req, res, next) => {
@@ -151,7 +136,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// Basic health check endpoint
+// Health check endpoints
 app.get("/health", async (req, res) => {
   const dbState = mongoose.connection.readyState;
   const isConnected = dbState === 1;
@@ -179,7 +164,6 @@ app.get("/health", async (req, res) => {
   });
 });
 
-// Detailed health check endpoint
 app.get("/health/detailed", async (req, res) => {
   const dbState = mongoose.connection.readyState;
   const isConnected = dbState === 1;
@@ -229,13 +213,7 @@ app.use(`${API_PREFIX}/orders`, orderRoutes);
 app.use(`${API_PREFIX}/wishlist`, wishlistRoutes);
 
 // 404 handler for undefined routes
-app.use((req, res, next) => {
-  res.status(404).json({
-    success: false,
-    message: "Resource not found",
-    error: `Cannot ${req.method} ${req.originalUrl}`,
-  });
-});
+app.use(notFoundHandler);
 
 // Global error handler (must be last)
 app.use(errorHandler);

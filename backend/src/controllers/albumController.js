@@ -1,202 +1,129 @@
 import Album from "../models/Album.js";
 import { MESSAGES, PAGINATION } from "../config/constants.js";
 import { paginate, formatResponse } from "../utils/helpers.js";
+import { asyncHandler, AppError } from "../middleware/errorHandler.js";
 
 /**
  * getAlbums
  *
  * Retrieves all albums with pagination and optional category filter
- *
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const getAlbums = async (req, res, next) => {
-  try {
-    const {
-      page = PAGINATION.DEFAULT_PAGE,
-      limit = PAGINATION.DEFAULT_LIMIT,
-      sort = "-createdAt",
-      category = null,
-    } = req.query;
+export const getAlbums = asyncHandler(async (req, res) => {
+  const {
+    page = PAGINATION.DEFAULT_PAGE,
+    limit = PAGINATION.DEFAULT_LIMIT,
+    sort = "-createdAt",
+    category = null,
+  } = req.query;
 
-    // Build query filter for category if specified
-    const queryFilter = category ? { category } : {};
-    const query = Album.find(queryFilter)
-      .populate("category", "name")
-      .sort(sort);
-    const result = await paginate(query, page, limit);
+  const queryFilter = category ? { category } : {};
+  const query = Album.find(queryFilter)
+    .populate("category", "name")
+    .sort(sort);
 
-    res.json(formatResponse(true, "Albums retrieved successfully", result));
-  } catch (error) {
-    next(error);
-  }
-};
+  const result = await paginate(query, page, limit);
+
+  res.json(formatResponse(true, "Albums retrieved successfully", result));
+});
 
 /**
  * getAlbum
  *
  * Retrieves a single album by ID with populated category
- *
- * @param {Object} req - Express request object with album ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const getAlbum = async (req, res, next) => {
-  try {
-    const album = await Album.findById(req.params.id).populate(
-      "category",
-      "name",
-    );
+export const getAlbum = asyncHandler(async (req, res) => {
+  const album = await Album.findById(req.params.id).populate("category", "name");
 
-    if (!album) {
-      return res
-        .status(404)
-        .json(formatResponse(false, MESSAGES.ERROR.NOT_FOUND));
-    }
-
-    res.json(formatResponse(true, "Album retrieved successfully", album));
-  } catch (error) {
-    next(error);
+  if (!album) {
+    throw new AppError(MESSAGES.ERROR.NOT_FOUND, 404);
   }
-};
+
+  res.json(formatResponse(true, "Album retrieved successfully", album));
+});
 
 /**
  * searchAlbums
  *
  * Searches albums by title, artist or description using regex matching
- *
- * @param {Object} req - Express request object with search query in query string
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const searchAlbums = async (req, res, next) => {
-  try {
-    const { q } = req.query;
+export const searchAlbums = asyncHandler(async (req, res) => {
+  const { q } = req.query;
 
-    // Validate minimum search query length
-    if (!q || q.trim().length < 3) {
-      return res.json(formatResponse(true, "Search results", []));
-    }
-
-    const searchQuery = q.trim();
-    const searchRegex = new RegExp(searchQuery, "i");
-
-    // Search across multiple fields
-    const albums = await Album.find({
-      $or: [
-        { title: searchRegex },
-        { artist: searchRegex },
-        { description: searchRegex },
-      ],
-    })
-      .populate("category", "name")
-      .limit(10);
-
-    res.json(formatResponse(true, "Search results", albums));
-  } catch (error) {
-    next(error);
+  if (!q || q.trim().length < 3) {
+    return res.json(formatResponse(true, "Search results", []));
   }
-};
+
+  const searchQuery = q.trim();
+  const searchRegex = new RegExp(searchQuery, "i");
+
+  const albums = await Album.find({
+    $or: [
+      { title: searchRegex },
+      { artist: searchRegex },
+      { description: searchRegex },
+    ],
+  })
+    .populate("category", "name")
+    .limit(10);
+
+  res.json(formatResponse(true, "Search results", albums));
+});
 
 /**
  * getNewAlbums
  *
  * Retrieves newest albums sorted by creation date
- *
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const getNewAlbums = async (req, res, next) => {
-  try {
-    const { page = 1, limit = 23 } = req.query;
+export const getNewAlbums = asyncHandler(async (req, res) => {
+  const { page = 1, limit = 23 } = req.query;
 
-    const query = Album.find().populate("category", "name").sort("-createdAt");
+  const query = Album.find().populate("category", "name").sort("-createdAt");
+  const result = await paginate(query, page, limit);
 
-    const result = await paginate(query, page, limit);
-    res.json(formatResponse(true, "New albums retrieved", result));
-  } catch (error) {
-    next(error);
-  }
-};
+  res.json(formatResponse(true, "New albums retrieved", result));
+});
 
 /**
  * createAlbum
  *
  * Creates a new album (Admin only)
- *
- * @param {Object} req - Express request object with album data in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const createAlbum = async (req, res, next) => {
-  try {
-    const album = await Album.create(req.body);
-    await album.populate("category", "name");
+export const createAlbum = asyncHandler(async (req, res) => {
+  const album = await Album.create(req.body);
+  await album.populate("category", "name");
 
-    res.status(201).json(formatResponse(true, MESSAGES.SUCCESS.CREATED, album));
-  } catch (error) {
-    next(error);
-  }
-};
+  res.status(201).json(formatResponse(true, MESSAGES.SUCCESS.CREATED, album));
+});
 
 /**
  * updateAlbum
  *
  * Updates an existing album (Admin only)
- *
- * @param {Object} req - Express request object with album ID in params and update data in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const updateAlbum = async (req, res, next) => {
-  try {
-    const album = await Album.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    }).populate("category", "name");
+export const updateAlbum = asyncHandler(async (req, res) => {
+  const album = await Album.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  }).populate("category", "name");
 
-    if (!album) {
-      return res
-        .status(404)
-        .json(formatResponse(false, MESSAGES.ERROR.NOT_FOUND));
-    }
-
-    res.json(formatResponse(true, MESSAGES.SUCCESS.UPDATED, album));
-  } catch (error) {
-    next(error);
+  if (!album) {
+    throw new AppError(MESSAGES.ERROR.NOT_FOUND, 404);
   }
-};
+
+  res.json(formatResponse(true, MESSAGES.SUCCESS.UPDATED, album));
+});
 
 /**
  * deleteAlbum
  *
  * Deletes an album (Admin only)
- *
- * @param {Object} req - Express request object with album ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const deleteAlbum = async (req, res, next) => {
-  try {
-    const album = await Album.findByIdAndDelete(req.params.id);
+export const deleteAlbum = asyncHandler(async (req, res) => {
+  const album = await Album.findByIdAndDelete(req.params.id);
 
-    if (!album) {
-      return res
-        .status(404)
-        .json(formatResponse(false, MESSAGES.ERROR.NOT_FOUND));
-    }
-
-    res.json(formatResponse(true, MESSAGES.SUCCESS.DELETED));
-  } catch (error) {
-    next(error);
+  if (!album) {
+    throw new AppError(MESSAGES.ERROR.NOT_FOUND, 404);
   }
-};
+
+  res.json(formatResponse(true, MESSAGES.SUCCESS.DELETED));
+});

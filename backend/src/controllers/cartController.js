@@ -2,224 +2,162 @@ import CartItem from "../models/CartItem.js";
 import Album from "../models/Album.js";
 import { MESSAGES } from "../config/constants.js";
 import { formatResponse, generateSessionId } from "../utils/helpers.js";
+import { asyncHandler, AppError } from "../middleware/errorHandler.js";
+
+/**
+ * Build cart query based on authentication
+ */
+const buildCartQuery = (req) => {
+  const sessionId = req.headers["x-session-id"];
+  return req.user ? { user: req.user._id } : { sessionId };
+};
+
+/**
+ * Calculate cart total
+ */
+const calculateCartTotal = (cartItems) => {
+  return cartItems.reduce(
+    (sum, item) => sum + item.album.price * item.quantity,
+    0
+  );
+};
 
 /**
  * getCart
  *
  * Retrieves the user's cart items with calculated total
- *
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const getCart = async (req, res, next) => {
-  try {
-    const sessionId = req.headers["x-session-id"];
+export const getCart = asyncHandler(async (req, res) => {
+  const query = buildCartQuery(req);
+  const cartItems = await CartItem.find(query).populate("album");
+  const total = calculateCartTotal(cartItems);
 
-    // Build query based on authentication status
-    const query = req.user ? { user: req.user._id } : { sessionId };
-
-    const cartItems = await CartItem.find(query).populate("album");
-
-    // Calculate total price
-    const total = cartItems.reduce(
-      (sum, item) => sum + item.album.price * item.quantity,
-      0,
-    );
-
-    res.json(
-      formatResponse(true, "Cart retrieved", {
-        items: cartItems,
-        itemCount: cartItems.length,
-        total,
-      }),
-    );
-  } catch (error) {
-    next(error);
-  }
-};
+  res.json(
+    formatResponse(true, "Cart retrieved", {
+      items: cartItems,
+      itemCount: cartItems.length,
+      total,
+    })
+  );
+});
 
 /**
  * addToCart
  *
  * Adds an album to the cart or updates quantity if already exists
- *
- * @param {Object} req - Express request object with albumId and quantity in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const addToCart = async (req, res, next) => {
-  try {
-    const { albumId, quantity = 1 } = req.body;
+export const addToCart = asyncHandler(async (req, res) => {
+  const { albumId, quantity = 1 } = req.body;
 
-    // Verify album exists
-    const album = await Album.findById(albumId);
-    if (!album) {
-      return res.status(404).json(formatResponse(false, "Album not found"));
-    }
-
-    // Check stock availability
-    if (!album.canPurchase(quantity)) {
-      return res
-        .status(400)
-        .json(formatResponse(false, MESSAGES.ERROR.OUT_OF_STOCK));
-    }
-
-    let sessionId = req.headers["x-session-id"];
-
-    // Generate session ID for guest users
-    if (!req.user && !sessionId) {
-      sessionId = generateSessionId();
-    }
-
-    // Build cart item data
-    const cartData = {
-      album: albumId,
-      quantity,
-      ...(req.user ? { user: req.user._id } : { sessionId }),
-    };
-
-    // Build search criteria
-    const searchCriteria = {
-      album: albumId,
-      ...(req.user ? { user: req.user._id } : { sessionId }),
-    };
-
-    let cartItem = await CartItem.findOne(searchCriteria);
-
-    if (cartItem) {
-      // Update existing item quantity
-      cartItem.quantity += quantity;
-      await cartItem.save();
-    } else {
-      // Create new cart item
-      cartItem = await CartItem.create(cartData);
-    }
-
-    await cartItem.populate("album");
-
-    res.json(
-      formatResponse(true, "Item added to cart", {
-        item: cartItem,
-        sessionId: !req.user ? sessionId : undefined,
-      }),
-    );
-  } catch (error) {
-    next(error);
+  const album = await Album.findById(albumId);
+  if (!album) {
+    throw new AppError("Album not found", 404);
   }
-};
+
+  if (!album.canPurchase(quantity)) {
+    throw new AppError(MESSAGES.ERROR.OUT_OF_STOCK, 400);
+  }
+
+  let sessionId = req.headers["x-session-id"];
+  if (!req.user && !sessionId) {
+    sessionId = generateSessionId();
+  }
+
+  const cartData = {
+    album: albumId,
+    quantity,
+    ...(req.user ? { user: req.user._id } : { sessionId }),
+  };
+
+  const searchCriteria = {
+    album: albumId,
+    ...(req.user ? { user: req.user._id } : { sessionId }),
+  };
+
+  let cartItem = await CartItem.findOne(searchCriteria);
+
+  if (cartItem) {
+    cartItem.quantity += quantity;
+    await cartItem.save();
+  } else {
+    cartItem = await CartItem.create(cartData);
+  }
+
+  await cartItem.populate("album");
+
+  res.json(
+    formatResponse(true, "Item added to cart", {
+      item: cartItem,
+      sessionId: !req.user ? sessionId : undefined,
+    })
+  );
+});
 
 /**
  * updateCartItem
  *
  * Updates the quantity of a cart item
- *
- * @param {Object} req - Express request object with cart item ID in params and quantity in body
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const updateCartItem = async (req, res, next) => {
-  try {
-    const { quantity } = req.body;
+export const updateCartItem = asyncHandler(async (req, res) => {
+  const { quantity } = req.body;
 
-    const cartItem = await CartItem.findById(req.params.id).populate("album");
+  const cartItem = await CartItem.findById(req.params.id).populate("album");
 
-    if (!cartItem) {
-      return res.status(404).json(formatResponse(false, "Cart item not found"));
-    }
-
-    // Check authorization for authenticated users
-    if (req.user && cartItem.user && !cartItem.user.equals(req.user._id)) {
-      return res
-        .status(403)
-        .json(formatResponse(false, MESSAGES.ERROR.UNAUTHORIZED));
-    }
-
-    // Check authorization for guest users
-    if (!req.user && cartItem.sessionId !== req.headers["x-session-id"]) {
-      return res
-        .status(403)
-        .json(formatResponse(false, MESSAGES.ERROR.UNAUTHORIZED));
-    }
-
-    // Check stock availability
-    if (!cartItem.album.canPurchase(quantity)) {
-      return res
-        .status(400)
-        .json(formatResponse(false, MESSAGES.ERROR.OUT_OF_STOCK));
-    }
-
-    await cartItem.updateQuantity(quantity);
-
-    res.json(formatResponse(true, "Cart item updated", cartItem));
-  } catch (error) {
-    next(error);
+  if (!cartItem) {
+    throw new AppError("Cart item not found", 404);
   }
-};
+
+  // Check authorization
+  const isAuthorized = req.user
+    ? cartItem.user && cartItem.user.equals(req.user._id)
+    : cartItem.sessionId === req.headers["x-session-id"];
+
+  if (!isAuthorized) {
+    throw new AppError(MESSAGES.ERROR.UNAUTHORIZED, 403);
+  }
+
+  if (!cartItem.album.canPurchase(quantity)) {
+    throw new AppError(MESSAGES.ERROR.OUT_OF_STOCK, 400);
+  }
+
+  await cartItem.updateQuantity(quantity);
+
+  res.json(formatResponse(true, "Cart item updated", cartItem));
+});
 
 /**
  * removeFromCart
  *
  * Removes an item from the cart
- *
- * @param {Object} req - Express request object with cart item ID in params
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const removeFromCart = async (req, res, next) => {
-  try {
-    const cartItem = await CartItem.findById(req.params.id);
+export const removeFromCart = asyncHandler(async (req, res) => {
+  const cartItem = await CartItem.findById(req.params.id);
 
-    if (!cartItem) {
-      return res.status(404).json(formatResponse(false, "Cart item not found"));
-    }
-
-    // Check authorization for authenticated users
-    if (req.user && cartItem.user && !cartItem.user.equals(req.user._id)) {
-      return res
-        .status(403)
-        .json(formatResponse(false, MESSAGES.ERROR.UNAUTHORIZED));
-    }
-
-    // Check authorization for guest users
-    if (!req.user && cartItem.sessionId !== req.headers["x-session-id"]) {
-      return res
-        .status(403)
-        .json(formatResponse(false, MESSAGES.ERROR.UNAUTHORIZED));
-    }
-
-    await cartItem.deleteOne();
-
-    res.json(formatResponse(true, "Item removed from cart"));
-  } catch (error) {
-    next(error);
+  if (!cartItem) {
+    throw new AppError("Cart item not found", 404);
   }
-};
+
+  const isAuthorized = req.user
+    ? cartItem.user && cartItem.user.equals(req.user._id)
+    : cartItem.sessionId === req.headers["x-session-id"];
+
+  if (!isAuthorized) {
+    throw new AppError(MESSAGES.ERROR.UNAUTHORIZED, 403);
+  }
+
+  await cartItem.deleteOne();
+
+  res.json(formatResponse(true, "Item removed from cart"));
+});
 
 /**
  * clearCart
  *
  * Removes all items from the cart
- *
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- * @return {Promise<void>}
  */
-export const clearCart = async (req, res, next) => {
-  try {
-    const query = req.user
-      ? { user: req.user._id }
-      : { sessionId: req.headers["x-session-id"] };
+export const clearCart = asyncHandler(async (req, res) => {
+  const query = buildCartQuery(req);
+  await CartItem.deleteMany(query);
 
-    await CartItem.deleteMany(query);
-
-    res.json(formatResponse(true, "Cart cleared"));
-  } catch (error) {
-    next(error);
-  }
-};
+  res.json(formatResponse(true, "Cart cleared"));
+});
