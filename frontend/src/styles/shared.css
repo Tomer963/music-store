@@ -836,6 +836,238 @@
 }
 
 /* ========================================
+   HEADER STYLES - Common header components
+   ======================================== */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
+.nav-top {
+  background-color: #f5f5f5;
+  color: var(--secondary-color);
+  font-size: 0.875rem;
+  height: 40px;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 40px;
+  align-items: center;
+}
+
+.nav-item {
+  margin-right: var(--spacing-lg);
+}
+
+.nav-item a {
+  color: var(--secondary-color);
+  text-decoration: none;
+  padding: var(--spacing-xs) 0;
+  transition: color var(--transition-fast);
+}
+
+.nav-item a:hover,
+.nav-item a.active {
+  color: var(--primary-color);
+}
+
+/* ========================================
+   SIDEBAR STYLES - Common sidebar components
+   ======================================== */
+
+.sidebar {
+  position: static;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-color);
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.categories-section {
+  margin-bottom: 0;
+  flex-shrink: 0;
+  height: auto;
+}
+
+.categories-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 3px 0;
+}
+
+.category-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 6px 12px;
+  margin-bottom: 1px;
+  margin-left: -16px;
+  margin-right: -16px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: 0.875rem;
+  min-height: 32px;
+  height: 32px;
+}
+
+.category-item:hover {
+  background-color: var(--primary-dark);
+}
+
+.category-item.active {
+  background-color: var(--secondary-color);
+  color: var(--white);
+}
+
+.category-name {
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.3px;
+  line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  padding-left: 0;
+}
+
+/* ========================================
+   SEARCH BOX STYLES - Common search components
+   ======================================== */
+
+.search-box {
+  position: relative;
+  width: 100%;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  background-color: var(--white);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+}
+
+.search-input {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-right: 40px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: var(--secondary-color);
+}
+
+.search-input::placeholder {
+  color: #999999;
+  opacity: 1;
+}
+
+.search-button,
+.clear-button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-fast);
+  height: 100%;
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--black);
+}
+
+/* ========================================
+   SPINNER STYLES - Common spinner components
+   ======================================== */
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+}
+
+.vinyl-spinner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vinyl-spinner.small {
+  width: 60px;
+  height: 60px;
+}
+
+.vinyl-spinner.medium {
+  width: 100px;
+  height: 100px;
+}
+
+.vinyl-spinner.large {
+  width: 140px;
+  height: 140px;
+}
+
+.vinyl-record {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    var(--primary-color) 0%,
+    var(--primary-color) 18%,
+    #1a1a1a 18%,
+    #1a1a1a 28%,
+    #333 28%,
+    #333 29%,
+    #1a1a1a 29%,
+    #1a1a1a 43%,
+    #333 43%,
+    #333 44%,
+    #1a1a1a 44%,
+    #1a1a1a 58%,
+    #333 58%,
+    #333 59%,
+    #1a1a1a 59%,
+    #1a1a1a 100%
+  );
+  animation: vinylSpin 2s linear infinite;
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.4),
+    inset 0 0 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* ========================================
    RESPONSIVE UTILITIES
    ======================================== */
 

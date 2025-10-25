@@ -1,13 +1,4 @@
-.sidebar {
-  position: static;
-  width: 100%;
-  height: 100%;
-  background-color: var(--background-color);
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+/* Uses shared: .sidebar, .categories-section, .categories-list, .category-item, .category-name */
 
 /* Ensure consistent appearance across all pages */
 .sidebar.in-album-page,
@@ -18,12 +9,6 @@
   flex-direction: column;
   justify-content: flex-start;
   overflow: hidden;
-}
-
-.categories-section {
-  margin-bottom: 0;
-  flex-shrink: 0;
-  height: auto;
 }
 
 /* Consistent padding across pages */
@@ -39,12 +24,6 @@
   padding: var(--spacing-lg) 0;
 }
 
-.categories-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 3px 0;
-}
-
 /* 30px gap between categories and cart */
 .sidebar.in-album-page .categories-list,
 .sidebar.in-category-page .categories-list,
@@ -56,23 +35,6 @@
   justify-content: space-between;
 }
 
-.category-item {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 6px 12px;
-  margin-bottom: 1px;
-  margin-left: -16px;
-  margin-right: -16px;
-  background-color: var(--primary-color);
-  color: var(--white);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  font-size: 0.875rem;
-  min-height: 32px;
-  height: 32px;
-}
-
 /* Consistent height across pages */
 .sidebar.in-album-page .category-item,
 .sidebar.in-category-page .category-item,
@@ -80,27 +42,6 @@
   min-height: 39px;
   height: 39px;
   padding: 10px 12px;
-}
-
-.category-item:hover {
-  background-color: var(--primary-dark);
-}
-
-.category-item.active {
-  background-color: var(--secondary-color);
-  color: var(--white);
-}
-
-.category-name {
-  font-weight: 600;
-  font-size: 0.875rem;
-  letter-spacing: 0.3px;
-  line-height: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-align: left;
-  padding-left: 0;
 }
 
 .no-categories {

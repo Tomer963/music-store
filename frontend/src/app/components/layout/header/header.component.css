@@ -1,46 +1,4 @@
-/* Header Container */
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background-color: var(--white);
-  box-shadow: var(--shadow-md);
-}
-
-/* Top Navigation Bar */
-.nav-top {
-  background-color: #f5f5f5;
-  color: var(--secondary-color);
-  font-size: 0.875rem;
-  height: 40px;
-}
-
-.nav-list {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  height: 40px;
-  align-items: center;
-}
-
-.nav-item {
-  margin-right: var(--spacing-lg);
-}
-
-.nav-item a {
-  color: var(--secondary-color);
-  text-decoration: none;
-  padding: var(--spacing-xs) 0;
-  transition: color var(--transition-fast);
-}
-
-.nav-item a:hover,
-.nav-item a.active {
-  color: var(--primary-color);
-}
+/* Uses shared: .header, .nav-top, .nav-list, .nav-item */
 
 /* Main Header */
 .header-main {

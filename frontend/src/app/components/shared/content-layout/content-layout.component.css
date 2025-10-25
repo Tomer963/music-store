@@ -1,3 +1,5 @@
+/* Uses shared: .breadcrumb-container, .breadcrumb */
+
 .content-layout-page {
   position: relative;
   min-height: calc(100vh - clamp(88px, 12vh, 120px));
@@ -27,62 +29,6 @@
   flex-direction: column;
 }
 
-.breadcrumb-container {
-  width: 100%;
-  margin: 0 0 clamp(16px, 2.5vh, 24px) 0;
-  padding: 0 16px;
-  flex-shrink: 0;
-}
-
-.breadcrumb {
-  display: inline-block;
-  background-color: var(--white);
-  padding: clamp(6px, 1vh, 8px) clamp(12px, 2vw, 24px);
-  border-radius: 0;
-  box-shadow: var(--shadow-sm);
-  font-size: clamp(0.75rem, 1.3vw, 0.875rem);
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Breadcrumb styling - all links black */
-.breadcrumb a,
-.breadcrumb .breadcrumb-link {
-  color: #000000 !important;
-  text-decoration: none;
-  transition: color var(--transition-fast);
-  font-weight: 700;
-}
-
-.breadcrumb a:hover,
-.breadcrumb .breadcrumb-link:hover {
-  color: var(--primary-color) !important;
-}
-
-/* All separators black with responsive spacing */
-.breadcrumb .breadcrumb-separator {
-  margin: 0 clamp(4px, 1vw, 8px);
-  color: #000000 !important;
-  font-weight: 700;
-  display: inline;
-}
-
-/* Last separator gray */
-.breadcrumb .breadcrumb-separator:last-of-type {
-  color: #999999 !important;
-  margin: 0 clamp(4px, 1vw, 8px);
-}
-
-/* Current page text gray */
-.breadcrumb .breadcrumb-current {
-  font-weight: 400;
-  color: #999999 !important;
-  display: inline;
-}
-
 .container-with-sidebar {
   display: flex;
   gap: clamp(12px, 2vw, 24px);
@@ -102,7 +48,7 @@
   background-color: #f5f5f5;
   overflow: hidden;
   min-width: 0;
-  order: 1; /* סיידבר מימין בדסקטופ */
+  order: 1;
 }
 
 .main-content-area {
@@ -111,10 +57,10 @@
   display: flex;
   flex-direction: column;
   gap: clamp(8px, 1.5vh, 12px);
-  order: 2; /* תוכן ראשי משמאל בדסקטופ */
+  order: 2;
 }
 
-/* Extra Large Screens - Match checkout margins */
+/* Extra Large Screens */
 @media (min-width: 1600px) {
   .breadcrumb-container {
     padding: 0 256px;
@@ -129,7 +75,7 @@
   }
 }
 
-/* Large Desktop - Match checkout margins */
+/* Large Desktop */
 @media (min-width: 1400px) and (max-width: 1599px) {
   .breadcrumb-container {
     padding: 0 200px;
@@ -140,7 +86,7 @@
   }
 }
 
-/* Medium Desktop - Match checkout margins */
+/* Medium Desktop */
 @media (min-width: 1200px) and (max-width: 1399px) {
   .breadcrumb-container {
     padding: 0 120px;
@@ -153,13 +99,9 @@
   .floating-sidebar {
     flex: 0 0 clamp(270px, 21vw, 312px);
   }
-
-  .breadcrumb {
-    font-size: clamp(0.75rem, 1.25vw, 0.813rem);
-  }
 }
 
-/* Small Desktop - Match checkout margins */
+/* Small Desktop */
 @media (min-width: 992px) and (max-width: 1199px) {
   .breadcrumb-container {
     padding: 0 40px;
@@ -192,16 +134,12 @@
     position: static;
     min-height: auto;
     overflow: visible;
-    order: 2; /* סיידבר למטה במסכים קטנים */
+    order: 2;
   }
 
   .main-content-area {
     gap: clamp(12px, 2vh, 16px);
-    order: 1; /* תוכן ראשי למעלה במסכים קטנים */
-  }
-
-  .breadcrumb {
-    font-size: clamp(0.688rem, 1.2vw, 0.75rem);
+    order: 1;
   }
 }
 
@@ -214,28 +152,9 @@
     padding: 30px 0 0 0;
   }
 
-  .breadcrumb {
-    font-size: clamp(0.688rem, 1.15vw, 0.75rem);
-    padding: clamp(6px, 0.9vh, 8px) clamp(10px, 1.8vw, 16px);
-  }
-
   .breadcrumb-container {
     margin-bottom: clamp(12px, 2vh, 16px);
     padding: 0 12px;
-  }
-
-  .breadcrumb a,
-  .breadcrumb .breadcrumb-link {
-    font-weight: 600;
-  }
-
-  .breadcrumb .breadcrumb-separator {
-    margin: 0 clamp(4px, 0.8vw, 6px);
-    font-weight: 600;
-  }
-
-  .breadcrumb .breadcrumb-separator:last-of-type {
-    margin: 0 clamp(4px, 0.8vw, 6px);
   }
 
   .container-with-sidebar {
@@ -243,7 +162,6 @@
     gap: clamp(12px, 2vh, 16px);
   }
 
-  /* שמירה על הסדר: תוכן ראשי למעלה, סיידבר למטה */
   .floating-sidebar {
     order: 2;
   }
@@ -263,28 +181,14 @@
     padding: 0 8px;
   }
 
-  .breadcrumb {
-    font-size: clamp(0.625rem, 1.1vw, 0.688rem);
-    padding: clamp(5px, 0.8vh, 6px) clamp(8px, 1.5vw, 12px);
-  }
-
   .main-content-area {
     gap: clamp(10px, 1.8vh, 12px);
-  }
-
-  .breadcrumb .breadcrumb-separator {
-    margin: 0 clamp(3px, 0.6vw, 4px);
-  }
-
-  .breadcrumb .breadcrumb-separator:last-of-type {
-    margin: 0 clamp(3px, 0.6vw, 4px);
   }
 
   .container-with-sidebar {
     padding: 0 8px clamp(10px, 1.8vh, 12px) 8px;
   }
 
-  /* שמירה על הסדר: תוכן ראשי למעלה, סיידבר למטה */
   .floating-sidebar {
     order: 2;
   }
@@ -299,16 +203,6 @@
     padding: 20px 0 0 0;
   }
 
-  .breadcrumb {
-    font-size: 0.625rem;
-    padding: 5px 8px;
-  }
-
-  .breadcrumb .breadcrumb-separator,
-  .breadcrumb .breadcrumb-separator:last-of-type {
-    margin: 0 3px;
-  }
-
   .breadcrumb-container {
     padding: 0 6px;
   }
@@ -317,7 +211,6 @@
     padding: 0 6px 10px 6px;
   }
 
-  /* שמירה על הסדר: תוכן ראשי למעלה, סיידבר למטה */
   .floating-sidebar {
     order: 2;
   }
@@ -332,16 +225,6 @@
     padding: 15px 0 0 0;
   }
 
-  .breadcrumb {
-    font-size: 0.563rem;
-    padding: 4px 6px;
-  }
-
-  .breadcrumb .breadcrumb-separator,
-  .breadcrumb .breadcrumb-separator:last-of-type {
-    margin: 0 2px;
-  }
-
   .breadcrumb-container {
     padding: 0 4px;
   }
@@ -350,7 +233,6 @@
     padding: 0 4px 8px 4px;
   }
 
-  /* שמירה על הסדר: תוכן ראשי למעלה, סיידבר למטה */
   .floating-sidebar {
     order: 2;
   }
