@@ -332,8 +332,8 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  cursor: pointer; /* ✅ הוספה */
-  transition: transform var(--transition-fast); /* ✅ הוספה */
+  cursor: pointer;
+  transition: transform var(--transition-fast);
 }
 
 /* ✅ אפקט hover על התמונה */
@@ -346,7 +346,7 @@
   height: 100%;
   object-fit: fill;
   display: block;
-  transition: transform var(--transition-fast); /* ✅ הוספה */
+  transition: transform var(--transition-fast);
 }
 
 /* ✅ אפקט נוסף על התמונה עצמה */
@@ -672,6 +672,10 @@
 }
 
 @media (max-width: 575px) {
+  .home-page {
+    min-height: calc(100vh - 65px);
+  }
+
   .top-albums-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -684,6 +688,10 @@
 }
 
 @media (max-width: 429px) {
+  .home-page {
+    min-height: calc(100vh - 56px);
+  }
+
   .top-albums-grid {
     grid-template-columns: 1fr;
   }

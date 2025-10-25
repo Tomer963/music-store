@@ -196,6 +196,11 @@
   border: none;
   cursor: pointer;
   padding: var(--spacing-sm);
+  position: relative;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
 }
 
 .menu-icon {
@@ -215,6 +220,7 @@
   height: 100%;
   background-color: var(--white);
   transition: transform var(--transition-fast);
+  left: 0;
 }
 
 .menu-icon::before {
@@ -330,7 +336,7 @@
   }
 
   .menu-toggle {
-    display: block;
+    display: flex;
   }
 
   .cart-icon {
@@ -368,7 +374,21 @@
   }
 
   .menu-toggle {
-    padding: var(--spacing-xs);
+    padding: 6px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .menu-icon {
+    width: 22px;
+  }
+
+  .menu-icon::before {
+    transform: translateY(-7px);
+  }
+
+  .menu-icon::after {
+    transform: translateY(7px);
   }
 
   .cart-icon {

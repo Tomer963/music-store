@@ -25,3 +25,23 @@
     min-height: calc(100vh - 80px);
   }
 }
+
+@media (max-width: 576px) {
+  .main-content {
+    padding-top: 65px;
+  }
+
+  .content-wrapper {
+    min-height: calc(100vh - 65px);
+  }
+}
+
+@media (max-width: 429px) {
+  .main-content {
+    padding-top: 56px;
+  }
+
+  .content-wrapper {
+    min-height: calc(100vh - 56px);
+  }
+}
