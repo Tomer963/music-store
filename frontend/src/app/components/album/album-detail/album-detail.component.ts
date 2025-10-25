@@ -41,13 +41,6 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
     private wishlistService: WishlistService,
   ) {}
 
-  /**
-   * Ng On Init
-   *
-   * Loads album data from route params
-   *
-   * @return void
-   */
   ngOnInit(): void {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       const albumId = params["id"];
@@ -55,13 +48,6 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Ng On Destroy
-   *
-   * Cleans up subscriptions
-   *
-   * @return void
-   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -72,7 +58,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
    *
    * Fetches album data by ID
    *
-   * @param (string) albumId - Album ID to load
+   * @param albumId - Album ID to load
    * @return void
    */
   private loadAlbum(albumId: string): void {
@@ -119,7 +105,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
    *
    * Creates array of exactly 3 thumbnail images
    *
-   * @return AlbumImage[] Array of 3 thumbnail objects
+   * @return Array of 3 thumbnail objects
    */
   private buildThumbnails(): AlbumImage[] {
     if (!this.album) return [];
@@ -133,7 +119,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
       isMain: true,
     });
 
-    // Add secondary images (non-main images from the album)
+    // Add secondary images
     if (this.album.images && this.album.images.length > 0) {
       const secondaryImages = this.album.images.filter((img) => !img.isMain);
 
@@ -144,7 +130,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
         });
       }
 
-      // If we don't have enough secondary images, use other images
+      // Use other images if not enough secondary images
       if (thumbnails.length === 1 && this.album.images.length > 1) {
         for (let i = 1; i < Math.min(3, this.album.images.length); i++) {
           thumbnails.push({
@@ -171,7 +157,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
    *
    * Sets selected thumbnail image by index
    *
-   * @param (number) index - Thumbnail index (0-2)
+   * @param index - Thumbnail index (0-2)
    * @return void
    */
   selectImage(index: number): void {
@@ -185,7 +171,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
    *
    * Gets URL of currently selected image
    *
-   * @return string Selected image URL
+   * @return Selected image URL
    */
   getSelectedImageUrl(): string {
     if (!this.album || this.thumbnails.length === 0) {
@@ -207,7 +193,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
    *
    * Returns the thumbnails array for display
    *
-   * @return AlbumImage[] Array of 3 thumbnail objects
+   * @return Array of 3 thumbnail objects
    */
   getThreeThumbnails(): AlbumImage[] {
     return this.thumbnails;
@@ -260,8 +246,8 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
    *
    * Type guard for category object
    *
-   * @param (string | Category) category - Category to check
-   * @return boolean True if category is object
+   * @param category - Category to check
+   * @return True if category is object
    */
   isCategory(category: string | Category): category is Category {
     return typeof category === "object" && category !== null;
@@ -272,7 +258,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
    *
    * Extracts category ID for breadcrumb
    *
-   * @return string Category ID or empty string
+   * @return Category ID or empty string
    */
   getCategoryId(): string {
     return this.album && this.isCategory(this.album.category)
@@ -285,7 +271,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
    *
    * Extracts category name for breadcrumb
    *
-   * @return string Category name or empty string
+   * @return Category name or empty string
    */
   getCategoryName(): string {
     return this.album && this.isCategory(this.album.category)
@@ -298,8 +284,8 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
    *
    * Formats price for display
    *
-   * @param (number) price - Price to format
-   * @return string Formatted price
+   * @param price - Price to format
+   * @return Formatted price
    */
   formatPrice(price: number): string {
     return this.albumService.formatPrice(price);
@@ -310,7 +296,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
    *
    * Splits description into paragraphs
    *
-   * @return string[] Array of paragraphs
+   * @return Array of paragraphs
    */
   getFormattedDescription(): string[] {
     if (!this.album?.longDescription) {

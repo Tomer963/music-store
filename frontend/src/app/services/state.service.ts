@@ -18,7 +18,6 @@ export interface AppState {
   providedIn: "root",
 })
 export class StateService {
-  // Initial state with empty data
   private stateSubject = new BehaviorSubject<AppState>({
     albums: [],
     categories: [],
@@ -34,7 +33,7 @@ export class StateService {
     private albumService: AlbumService,
     private categoryService: CategoryService,
   ) {
-    // Load initial data on service creation if not already loaded
+    // Load initial data if not already loaded
     if (!this.getCurrentState().isDataLoaded) {
       this.loadInitialData().subscribe();
     }
@@ -45,7 +44,7 @@ export class StateService {
    *
    * Returns the current snapshot of application state
    *
-   * @return AppState Current state object
+   * @return Current state object
    */
   getCurrentState(): AppState {
     return this.stateSubject.value;
@@ -54,9 +53,9 @@ export class StateService {
   /**
    * Get State
    *
-   * Returns state as an observable for reactive updates
+   * Returns state as an observable
    *
-   * @return Observable<AppState> State observable
+   * @return State observable
    */
   getState(): Observable<AppState> {
     return this.state$;
@@ -67,7 +66,7 @@ export class StateService {
    *
    * Loads albums and categories on app initialization
    *
-   * @return Observable<AppState> Loaded state
+   * @return Loaded state
    */
   loadInitialData(): Observable<AppState> {
     // Return cached state if already loaded
@@ -86,7 +85,7 @@ export class StateService {
           limit: 23,
         };
 
-        // Update state with albums data
+        // Update state with albums
         this.updateState({
           albums,
           isDataLoaded: true,
@@ -104,8 +103,7 @@ export class StateService {
         this.updateState(newState);
         return newState;
       }),
-      catchError((error) => {
-        console.error("Failed to load initial data:", error);
+      catchError(() => {
         return of(this.getCurrentState());
       }),
     );
@@ -116,7 +114,7 @@ export class StateService {
    *
    * Merges partial state update with current state
    *
-   * @param (Partial<AppState>) partial - Partial state to merge
+   * @param partial - Partial state to merge
    * @return void
    */
   private updateState(partial: Partial<AppState>): void {

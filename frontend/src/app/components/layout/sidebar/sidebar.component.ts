@@ -88,7 +88,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Setup Route Listener
    *
-   * Monitors navigation events to update sidebar state
+   * Monitors navigation events
    *
    * @return void
    */
@@ -114,16 +114,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
     // Hide cart only on home page
     this.showCart = url !== "/" && !url.startsWith("/?");
 
-    // Detect page type for conditional styling
+    // Detect page type
     this.isInCategoryPage = url.includes("/category/");
     this.isInAlbumPage = url.includes("/album/");
     this.isInWishlistPage = url.includes("/wishlist");
 
-    // Extract active category ID from URL
+    // Extract active category ID
     const categoryMatch = url.match(/\/category\/([a-f0-9]{24})/);
     this.activeCategoryId = categoryMatch ? categoryMatch[1] : null;
 
-    // Get album's category for sidebar highlighting
+    // Get album's category for highlighting
     if (this.isInAlbumPage) {
       const albumMatch = url.match(/\/album\/([a-f0-9]{24})/);
       if (albumMatch) {
@@ -137,9 +137,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Get Album Category
    *
-   * Fetches album's category for highlighting in sidebar
+   * Fetches album's category for sidebar highlighting
    *
-   * @param (string) albumId - Album identifier
+   * @param albumId - Album identifier
    * @return void
    */
   private getAlbumCategory(albumId: string): void {
@@ -159,7 +159,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
    *
    * Navigates to category page
    *
-   * @param (string) categoryId - Category identifier
+   * @param categoryId - Category identifier
    * @return void
    */
   selectCategory(categoryId: string): void {
@@ -171,8 +171,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
    *
    * Checks if category is currently active
    *
-   * @param (string) categoryId - Category identifier
-   * @return boolean True if category is active
+   * @param categoryId - Category identifier
+   * @return True if category is active
    */
   isCategoryActive(categoryId: string): boolean {
     return (
@@ -186,7 +186,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
    *
    * Returns CSS classes based on current page
    *
-   * @return string Space-separated CSS class names
+   * @return Space-separated CSS class names
    */
   getSidebarClasses(): string {
     const classes = [];

@@ -19,7 +19,7 @@ export class OrderService {
    *
    * Fetches all orders for the authenticated user
    *
-   * @return Observable<Order[]> Array of user orders
+   * @return Array of user orders
    */
   getOrders(): Observable<Order[]> {
     return this.http.get<ApiResponse<Order[]>>(this.apiUrl).pipe(
@@ -33,8 +33,8 @@ export class OrderService {
    *
    * Fetches a single order by ID
    *
-   * @param (string) id - Order ID
-   * @return Observable<Order> Order details
+   * @param id - Order ID
+   * @return Order details
    */
   getOrder(id: string): Observable<Order> {
     return this.http.get<ApiResponse<Order>>(`${this.apiUrl}/${id}`).pipe(
@@ -48,8 +48,8 @@ export class OrderService {
    *
    * Creates a new order from current cart
    *
-   * @param (CreateOrderRequest) orderData - Order creation data (payment, billing info)
-   * @return Observable<Order> Created order
+   * @param orderData - Order creation data
+   * @return Created order
    */
   createOrder(orderData: CreateOrderRequest): Observable<Order> {
     return this.http.post<ApiResponse<Order>>(this.apiUrl, orderData).pipe(
@@ -61,13 +61,12 @@ export class OrderService {
   /**
    * Handle Error
    *
-   * Centralized error handling for HTTP requests
+   * Centralized error handling
    *
-   * @param (any) error - Error object
-   * @return Observable<never> Error observable
+   * @param error - Error object
+   * @return Error observable
    */
   private handleError(error: any): Observable<never> {
-    console.error("Order service error:", error);
     return throwError(() => error);
   }
 }

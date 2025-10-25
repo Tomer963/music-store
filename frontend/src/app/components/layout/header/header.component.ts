@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((user) => (this.currentUser = user));
 
-    // Subscribe to cart changes and calculate total items
+    // Subscribe to cart changes
     this.cartService.cart$.pipe(takeUntil(this.destroy$)).subscribe((cart) => {
       this.cartItemCount = cart.items.reduce(
         (total, item) => total + item.quantity,
@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /**
    * Toggle Menu
    *
-   * Opens/closes mobile navigation menu
+   * Opens or closes mobile navigation menu
    *
    * @return void
    */
@@ -71,21 +71,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /**
    * Logout
    *
-   * Logs out user, clears cart session, and navigates to logout page
+   * Logs out user and clears cart session
    *
    * @return void
    */
   logout(): void {
-    this.cartService.clearSession(); // Clear guest cart
+    this.cartService.clearSession();
     this.authService.logout();
     this.closeMenu();
-    this.router.navigate(["/logout"]); // Navigate to logout page
+    this.router.navigate(["/logout"]);
   }
 
   /**
    * Navigate To Checkout
    *
-   * Navigates to checkout page and closes mobile menu
+   * Navigates to checkout page
    *
    * @return void
    */

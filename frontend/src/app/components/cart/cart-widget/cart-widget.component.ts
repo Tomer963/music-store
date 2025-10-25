@@ -26,27 +26,14 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
     private router: Router,
   ) {}
 
-  /**
-   * Ng On Init
-   *
-   * Subscribes to cart updates on component initialization
-   *
-   * @return void
-   */
   ngOnInit(): void {
+    // Subscribe to cart updates
     this.cartService.cart$.pipe(takeUntil(this.destroy$)).subscribe((cart) => {
       this.cart = cart;
       this.isLoading = false;
     });
   }
 
-  /**
-   * Ng On Destroy
-   *
-   * Cleans up subscriptions
-   *
-   * @return void
-   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -57,7 +44,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
    *
    * Checks if currently viewing album detail page
    *
-   * @return boolean True if in album page
+   * @return True if in album page
    */
   isInAlbumPage(): boolean {
     return this.router.url.includes("/album/");
@@ -68,10 +55,10 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
    *
    * Determines if scrollbar should be visible
    *
-   * @return boolean True if scrollbar should show
+   * @return True if scrollbar should show
    */
   shouldShowScroll(): boolean {
-    // Show scroll after 2 items in album page, after 3 items elsewhere
+    // Show scroll after 2 items in album page, 3 items elsewhere
     return this.isInAlbumPage()
       ? this.cart.items.length >= 3
       : this.cart.items.length > 2;
@@ -82,7 +69,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
    *
    * Removes item from cart with loading state
    *
-   * @param (string) itemId - Cart item ID to remove
+   * @param itemId - Cart item ID to remove
    * @return void
    */
   removeItem(itemId: string): void {
@@ -109,7 +96,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
    *
    * Navigates to album detail page
    *
-   * @param (string) albumId - Album ID to view
+   * @param albumId - Album ID to view
    * @return void
    */
   goToAlbum(albumId: string): void {
@@ -121,8 +108,8 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
    *
    * Gets album image URL for cart item
    *
-   * @param (CartItem) item - Cart item
-   * @return string Image URL
+   * @param item - Cart item
+   * @return Image URL
    */
   getImageUrl(item: CartItem): string {
     return this.albumService.getMainImageUrl(item.album);
@@ -133,8 +120,8 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
    *
    * Formats price for display
    *
-   * @param (number) price - Price to format
-   * @return string Formatted price
+   * @param price - Price to format
+   * @return Formatted price
    */
   formatPrice(price: number): string {
     return this.albumService.formatPrice(price);

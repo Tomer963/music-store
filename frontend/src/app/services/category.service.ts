@@ -18,22 +18,19 @@ export class CategoryService {
    *
    * Fetches all categories that have albums
    *
-   * @return Observable<Category[]> Array of categories with albums
+   * @return Array of categories with albums
    */
   getCategories(): Observable<Category[]> {
     return this.http.get<ApiResponse<Category[]>>(this.apiUrl).pipe(
       map((response) => {
         const categories = response.data || [];
 
-        // Filter categories with albums
-        const categoriesWithAlbums = categories.filter(
-          (cat) => (cat.albumCount || 0) > 0,
-        );
-
-        // Sort alphabetically
-        return categoriesWithAlbums.sort((a, b) =>
-          a.name.localeCompare(b.name, "en", { sensitivity: "base" }),
-        );
+        // Filter categories with albums and sort alphabetically
+        return categories
+          .filter((cat) => (cat.albumCount || 0) > 0)
+          .sort((a, b) =>
+            a.name.localeCompare(b.name, "en", { sensitivity: "base" })
+          );
       }),
       catchError(this.handleError),
     );
@@ -44,8 +41,8 @@ export class CategoryService {
    *
    * Fetches a single category by ID
    *
-   * @param (string) id - Category ID
-   * @return Observable<Category> Category data
+   * @param id - Category ID
+   * @return Category data
    */
   getCategory(id: string): Observable<Category> {
     return this.http.get<ApiResponse<Category>>(`${this.apiUrl}/${id}`).pipe(
@@ -57,13 +54,12 @@ export class CategoryService {
   /**
    * Handle Error
    *
-   * Centralized error handling for HTTP requests
+   * Centralized error handling
    *
-   * @param (any) error - Error object
-   * @return Observable<never> Error observable
+   * @param error - Error object
+   * @return Error observable
    */
   private handleError(error: any): Observable<never> {
-    console.error("Category service error:", error);
     return throwError(() => error);
   }
 }

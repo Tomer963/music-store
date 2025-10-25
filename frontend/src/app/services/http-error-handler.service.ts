@@ -19,13 +19,10 @@ export class HttpErrorHandlerService {
    * Centralized HTTP error handling with standardized error format
    *
    * @param error - HTTP error response
-   * @param context - Context for logging (e.g., 'AlbumService.getAlbums')
+   * @param context - Context for logging
    * @return Observable error
    */
-  handleError(
-    error: HttpErrorResponse,
-    context?: string
-  ): Observable<never> {
+  handleError(error: HttpErrorResponse, context?: string): Observable<never> {
     const apiError: ApiError = {
       message: this.getErrorMessage(error),
       statusCode: error.status,
@@ -33,20 +30,13 @@ export class HttpErrorHandlerService {
       timestamp: new Date().toISOString(),
     };
 
-    // Log error for debugging
-    if (context) {
-      console.error(`[${context}]`, apiError);
-    } else {
-      console.error("HTTP Error:", apiError);
-    }
-
     return throwError(() => apiError);
   }
 
   /**
    * Get Error Message
    *
-   * Extracts user-friendly error message from HTTP error
+   * Extracts user-friendly error message
    *
    * @param error - HTTP error response
    * @return Error message
@@ -88,7 +78,7 @@ export class HttpErrorHandlerService {
   /**
    * Get Errors
    *
-   * Extracts validation errors array from response
+   * Extracts validation errors array
    *
    * @param error - HTTP error response
    * @return Array of error messages
@@ -103,7 +93,7 @@ export class HttpErrorHandlerService {
   /**
    * Is Client Error
    *
-   * Checks if error is a client-side (4xx) error
+   * Checks if error is client-side
    *
    * @param error - API error
    * @return True if client error
@@ -115,7 +105,7 @@ export class HttpErrorHandlerService {
   /**
    * Is Server Error
    *
-   * Checks if error is a server-side (5xx) error
+   * Checks if error is server-side
    *
    * @param error - API error
    * @return True if server error
@@ -127,7 +117,7 @@ export class HttpErrorHandlerService {
   /**
    * Is Network Error
    *
-   * Checks if error is a network error (status 0)
+   * Checks if error is network error
    *
    * @param error - API error
    * @return True if network error

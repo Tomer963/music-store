@@ -50,13 +50,6 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     private wishlistService: WishlistService,
   ) {}
 
-  /**
-   * Ng On Init
-   *
-   * Initializes component and loads album data
-   *
-   * @return void
-   */
   ngOnInit(): void {
     this.mainImageUrl = this.albumService.getMainImageUrl(this.album);
 
@@ -72,13 +65,6 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     this.checkCartStatus();
   }
 
-  /**
-   * Ng On Destroy
-   *
-   * Cleans up subscriptions
-   *
-   * @return void
-   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -89,7 +75,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
    *
    * Determines if content should be hidden based on index
    *
-   * @return boolean True if content should be hidden
+   * @return True if content should be hidden
    */
   shouldHideContent(): boolean {
     return this.albumIndex !== undefined && this.albumIndex > 10;
@@ -100,10 +86,10 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
    *
    * Checks if image click should be prevented
    *
-   * @return boolean True if click should be prevented
+   * @return True if click should be prevented
    */
   shouldPreventImageClick(): boolean {
-    return false; // Always allow image click
+    return false;
   }
 
   /**
@@ -111,7 +97,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
    *
    * Handles click on album image
    *
-   * @param (Event) event - Click event
+   * @param event - Click event
    * @return void
    */
   handleImageClick(event: Event): void {
@@ -157,7 +143,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
    *
    * Navigates to album detail page
    *
-   * @param (Event) event - Click event
+   * @param event - Click event
    * @return void
    */
   viewAlbum(event: Event): void {
@@ -175,7 +161,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
    *
    * Adds album to cart
    *
-   * @param (Event) event - Click event
+   * @param event - Click event
    * @return void
    */
   addToCart(event: Event): void {
@@ -225,7 +211,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
    *
    * Increases cart quantity by 1
    *
-   * @param (Event) event - Click event
+   * @param event - Click event
    * @return void
    */
   incrementCart(event: Event): void {
@@ -260,7 +246,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
    *
    * Removes item from cart
    *
-   * @param (Event) event - Click event
+   * @param event - Click event
    * @return void
    */
   decrementCart(event: Event): void {
@@ -291,7 +277,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
    *
    * Adds or removes album from wishlist
    *
-   * @param (Event) event - Click event
+   * @param event - Click event
    * @return void
    */
   toggleWishlist(event: Event): void {
@@ -310,7 +296,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
    *
    * Formats album price for display
    *
-   * @return string Formatted price
+   * @return Formatted price
    */
   getFormattedPrice(): string {
     return this.albumService.formatPrice(this.album.price);
@@ -321,7 +307,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
    *
    * Formats original price for display
    *
-   * @return string Formatted original price
+   * @return Formatted original price
    */
   formatOriginalPrice(): string {
     return this.album.originalPrice
@@ -334,7 +320,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
    *
    * Returns truncated description
    *
-   * @return string Truncated description
+   * @return Truncated description
    */
   getTruncatedDescription(): string {
     const maxLength = 100;

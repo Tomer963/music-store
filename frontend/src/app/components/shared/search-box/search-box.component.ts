@@ -35,12 +35,12 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Setup search with debounce to reduce API calls
+    // Setup search with debounce
     this.searchControl.valueChanges
       .pipe(
         takeUntil(this.destroy$),
-        debounceTime(300), // Wait 300ms after user stops typing
-        distinctUntilChanged(), // Only trigger if value actually changed
+        debounceTime(300),
+        distinctUntilChanged(),
         switchMap((query) => {
           const trimmedQuery = query?.trim() || "";
           this.searchQuery = trimmedQuery;
@@ -65,8 +65,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
           this.showResults =
             this.searchResults.length > 0 || this.searchQuery.length >= 3;
         },
-        error: (error) => {
-          console.error("Search error:", error);
+        error: () => {
           this.isSearching = false;
           this.searchResults = [];
           this.showResults = this.searchQuery.length >= 3;
@@ -97,7 +96,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   /**
    * On Search
    *
-   * Handles search form submission (enter key)
+   * Handles search form submission
    *
    * @return void
    */
@@ -112,9 +111,9 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   /**
    * Select Album
    *
-   * Navigates to album detail page from search results
+   * Navigates to album detail page
    *
-   * @param (string) albumId - Album ID
+   * @param albumId - Album ID
    * @return void
    */
   selectAlbum(albumId: string): void {
@@ -138,9 +137,9 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   /**
    * On Click Outside
    *
-   * Closes dropdown when clicking outside search box
+   * Closes dropdown when clicking outside
    *
-   * @param (Event) event - Mouse click event
+   * @param event - Mouse click event
    * @return void
    */
   @HostListener("document:click", ["$event"])

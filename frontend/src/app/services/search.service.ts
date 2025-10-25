@@ -10,7 +10,7 @@ import { Album, ApiResponse } from "../models/album.model";
 })
 export class SearchService {
   private apiUrl = `${environment.apiUrl}/albums/search`;
-  private cache = new Map<string, Album[]>(); // Cache for search results
+  private cache = new Map<string, Album[]>();
   private readonly MAX_CACHE_SIZE = 50;
   private readonly MIN_QUERY_LENGTH = 3;
 
@@ -19,10 +19,10 @@ export class SearchService {
   /**
    * Search Albums
    *
-   * Searches for albums with client-side caching to reduce API calls
+   * Searches for albums with client-side caching
    *
-   * @param (string) query - Search query string
-   * @return Observable<Album[]> Array of matching albums
+   * @param query - Search query string
+   * @return Array of matching albums
    */
   searchAlbums(query: string): Observable<Album[]> {
     const trimmedQuery = query.trim();
@@ -32,7 +32,7 @@ export class SearchService {
       return of([]);
     }
 
-    // Check cache first to avoid unnecessary API calls
+    // Check cache first
     if (this.cache.has(trimmedQuery)) {
       return of(this.cache.get(trimmedQuery)!);
     }
@@ -45,10 +45,7 @@ export class SearchService {
         this.cacheResults(trimmedQuery, albums);
         return albums;
       }),
-      catchError((error) => {
-        console.error("Search error:", error);
-        return of([]);
-      }),
+      catchError(() => of([])),
     );
   }
 
@@ -66,16 +63,16 @@ export class SearchService {
   /**
    * Cache Results
    *
-   * Stores search results with LRU-style eviction
+   * Stores search results with LRU eviction
    *
-   * @param (string) key - Cache key (search query)
-   * @param (Album[]) albums - Albums to cache
+   * @param key - Cache key
+   * @param albums - Albums to cache
    * @return void
    */
   private cacheResults(key: string, albums: Album[]): void {
     this.cache.set(key, albums);
 
-    // Implement simple LRU: remove oldest entry if cache is full
+    // Remove oldest entry if cache is full
     if (this.cache.size > this.MAX_CACHE_SIZE) {
       const firstKey = this.cache.keys().next().value;
       if (firstKey) this.cache.delete(firstKey);

@@ -20,7 +20,7 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    // Listen to route changes to update page flags
+    // Listen to route changes
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -41,7 +41,7 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
   /**
    * Check Current Route
    *
-   * Updates flags based on current URL for conditional rendering
+   * Updates flags based on current URL
    *
    * @return void
    */
