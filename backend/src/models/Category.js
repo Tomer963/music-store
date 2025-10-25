@@ -12,23 +12,18 @@ const categorySchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
-/**
- * Virtual: albumCount
- *
- * Counts albums in this category
- */
+// Virtual
 categorySchema.virtual("albumCount", {
   ref: "Album",
   localField: "_id",
   foreignField: "category",
   count: true,
 });
-
-// Include virtuals in JSON output
-categorySchema.set("toJSON", { virtuals: true });
 
 const Category = mongoose.model("Category", categorySchema);
 

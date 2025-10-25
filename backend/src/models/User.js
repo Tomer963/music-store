@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters"],
-      select: false, // Don't include password in queries by default
+      select: false,
     },
     role: {
       type: String,
@@ -55,17 +55,23 @@ const userSchema = new mongoose.Schema(
     },
     lastLogin: Date,
   },
-  { timestamps: true },
+  { 
+    timestamps: true,
+    toJSON: { 
+      transform: (doc, ret) => {
+        delete ret.password;
+        delete ret.__v;
+        return ret;
+      }
+    }
+  }
 );
 
-// Index for faster email lookups
+// Index
 userSchema.index({ email: 1 });
 
-/**
- * Pre-save hook to hash password before saving
- */
+// Hooks
 userSchema.pre("save", async function (next) {
-  // Only hash if password is modified
   if (!this.isModified("password")) {
     return next();
   }
@@ -79,25 +85,11 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-/**
- * comparePassword
- *
- * Compares provided password with hashed password
- *
- * @param {string} candidatePassword - Password to compare
- * @return {Promise<boolean>}
- */
+// Methods
 userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-/**
- * generateAuthToken
- *
- * Generates JWT token for authentication
- *
- * @return {string}
- */
 userSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     {
@@ -108,20 +100,11 @@ userSchema.methods.generateAuthToken = function () {
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_EXPIRE || "7d",
-    },
+    }
   );
 };
 
-/**
- * addToWishlist
- *
- * Adds album to user's wishlist if not already present
- *
- * @param {string} albumId - Album ID to add
- * @return {Promise<Array>}
- */
 userSchema.methods.addToWishlist = async function (albumId) {
-  // Only add if not already in wishlist
   if (!this.wishlist.includes(albumId)) {
     this.wishlist.push(albumId);
     await this.save();
@@ -129,14 +112,6 @@ userSchema.methods.addToWishlist = async function (albumId) {
   return this.wishlist;
 };
 
-/**
- * removeFromWishlist
- *
- * Removes album from user's wishlist
- *
- * @param {string} albumId - Album ID to remove
- * @return {Promise<Array>}
- */
 userSchema.methods.removeFromWishlist = async function (albumId) {
   this.wishlist = this.wishlist.filter((id) => !id.equals(albumId));
   await this.save();

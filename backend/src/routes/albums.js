@@ -14,12 +14,7 @@ const router = Router();
 router.get("/", albumController.getAlbums);
 router.get("/search", albumController.searchAlbums);
 router.get("/new", albumController.getNewAlbums);
-router.get(
-  "/:id",
-  mongoIdValidation,
-  validateRequest,
-  albumController.getAlbum,
-);
+router.get("/:id", mongoIdValidation, validateRequest, albumController.getAlbum);
 
 // Admin routes
 router.post(
@@ -28,7 +23,7 @@ router.post(
   isAdmin,
   albumValidation,
   validateRequest,
-  albumController.createAlbum,
+  albumController.createAlbum
 );
 
 router.put(
@@ -38,7 +33,7 @@ router.put(
   mongoIdValidation,
   albumUpdateValidation,
   validateRequest,
-  albumController.updateAlbum,
+  albumController.updateAlbum
 );
 
 router.delete(
@@ -47,7 +42,7 @@ router.delete(
   isAdmin,
   mongoIdValidation,
   validateRequest,
-  albumController.deleteAlbum,
+  albumController.deleteAlbum
 );
 
 export default router;

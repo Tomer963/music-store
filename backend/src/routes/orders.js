@@ -6,39 +6,17 @@ import { orderValidation, mongoIdValidation } from "../utils/validators.js";
 
 const router = Router();
 
-// All order routes require authentication
 router.use(authenticate);
 
 // User routes
 router.get("/", orderController.getOrders);
-
-router.get(
-  "/:id",
-  mongoIdValidation,
-  validateRequest,
-  orderController.getOrder,
-);
-
+router.get("/:id", mongoIdValidation, validateRequest, orderController.getOrder);
 router.post("/", orderValidation, validateRequest, orderController.createOrder);
 
 // Admin routes
 router.get("/admin/all", isAdmin, orderController.getAllOrders);
 router.get("/admin/statistics", isAdmin, orderController.getOrderStatistics);
-
-router.put(
-  "/:id",
-  isAdmin,
-  mongoIdValidation,
-  validateRequest,
-  orderController.updateOrder,
-);
-
-router.delete(
-  "/:id",
-  isAdmin,
-  mongoIdValidation,
-  validateRequest,
-  orderController.deleteOrder,
-);
+router.put("/:id", isAdmin, mongoIdValidation, validateRequest, orderController.updateOrder);
+router.delete("/:id", isAdmin, mongoIdValidation, validateRequest, orderController.deleteOrder);
 
 export default router;
