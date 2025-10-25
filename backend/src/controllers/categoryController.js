@@ -6,7 +6,7 @@ import { formatResponse } from "../utils/helpers.js";
 /**
  * getCategories
  *
- * Retrieves all active categories with album count
+ * Retrieves all categories with album count
  *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
@@ -15,7 +15,7 @@ import { formatResponse } from "../utils/helpers.js";
  */
 export const getCategories = async (req, res, next) => {
   try {
-    const categories = await Category.find({ isActive: true })
+    const categories = await Category.find()
       .sort("name")
       .populate("albumCount");
 

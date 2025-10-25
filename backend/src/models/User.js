@@ -41,10 +41,6 @@ const userSchema = new mongoose.Schema(
       enum: Object.values(USER_ROLES),
       default: USER_ROLES.USER,
     },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
     wishlist: [
       {
         type: mongoose.Schema.Types.ObjectId,

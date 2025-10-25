@@ -16,7 +16,7 @@ export class CategoryService {
   /**
    * Get Categories
    *
-   * Fetches all active categories that have albums
+   * Fetches all categories that have albums
    *
    * @return Observable<Category[]> Array of categories with albums
    */
@@ -25,9 +25,9 @@ export class CategoryService {
       map((response) => {
         const categories = response.data || [];
 
-        // Filter active categories with albums
+        // Filter categories with albums
         const categoriesWithAlbums = categories.filter(
-          (cat) => cat.isActive !== false && (cat.albumCount || 0) > 0,
+          (cat) => (cat.albumCount || 0) > 0,
         );
 
         // Sort alphabetically

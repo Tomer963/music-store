@@ -9,10 +9,6 @@ const categorySchema = new mongoose.Schema(
       trim: true,
       maxlength: [50, "Category name cannot exceed 50 characters"],
     },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
   },
   {
     timestamps: true,

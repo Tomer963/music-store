@@ -27,7 +27,7 @@ export const authenticate = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id).select("-password");
 
-    if (!user || !user.isActive) {
+    if (!user) {
       return res.status(401).json({
         success: false,
         message: MESSAGES.ERROR.UNAUTHORIZED,
@@ -91,7 +91,7 @@ export const optionalAuth = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const user = await User.findById(decoded.id).select("-password");
 
-      if (user?.isActive) {
+      if (user) {
         req.user = user;
         req.token = token;
       }

@@ -26,7 +26,6 @@ export interface AlbumImage {
 export interface Category {
   _id: string;
   name: string;
-  isActive: boolean;
   albumCount?: number;
 }
 
