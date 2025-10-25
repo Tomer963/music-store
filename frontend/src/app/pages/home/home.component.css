@@ -320,7 +320,7 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* ✅ Album image container - עם אפקטים על hover */
+/* Album image container */
 .album-image-container {
   width: 100%;
   height: 280px;
@@ -336,7 +336,6 @@
   transition: transform var(--transition-fast);
 }
 
-/* ✅ אפקט hover על התמונה */
 .album-image-container:hover {
   transform: scale(1.02);
 }
@@ -349,7 +348,6 @@
   transition: transform var(--transition-fast);
 }
 
-/* ✅ אפקט נוסף על התמונה עצמה */
 .album-image-container:hover img {
   transform: scale(1.05);
 }
@@ -664,11 +662,6 @@
   .album-content.red-background .album-artist-line.large-artist {
     font-size: 1.125rem;
   }
-
-  /* ✅ שמירה על אפקט hover גם במובייל */
-  .album-image-container {
-    cursor: pointer;
-  }
 }
 
 @media (max-width: 575px) {
@@ -679,11 +672,36 @@
   .top-albums-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  
   .albums-grid {
     grid-template-columns: 1fr;
   }
+  
   .new-products-title h2 {
     font-size: 1.25rem;
+  }
+
+  /* ✅ FIX: הוספת margin גדול ל-sidebar albums כדי למנוע חפיפה */
+  .content-with-sidebar {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .sidebar-column {
+    order: 2; /* Sidebar מתחת לכל התוכן */
+    width: 100%;
+    margin-top: 40px; /* רווח גדול מספיק */
+  }
+
+  .main-albums-wrapper {
+    order: 1; /* Grid albums מעל */
+    margin-bottom: 40px; /* רווח נוסף */
+  }
+
+  /* ✅ הרווח בין אלבומים 10-11 */
+  .side-albums-vertical {
+    margin-top: 60px; /* רווח גדול יותר */
+    gap: var(--spacing-xl); /* רווח בין 10 ל-11 */
   }
 }
 
@@ -695,14 +713,35 @@
   .top-albums-grid {
     grid-template-columns: 1fr;
   }
+  
   .album-content.red-background .album-title-line.large-title {
     font-size: 1.25rem;
   }
+  
   .album-content.red-background .album-artist-line.large-artist {
     font-size: 0.938rem;
   }
+  
   .no-more-plain {
     font-size: 1rem;
     padding: var(--spacing-sm) 0 8px 0;
+  }
+
+  /* ✅ FIX נוסף למסכים הכי קטנים */
+  .content-with-sidebar {
+    gap: 0;
+  }
+
+  .sidebar-column {
+    margin-top: 50px; /* עוד יותר רווח */
+  }
+
+  .main-albums-wrapper {
+    margin-bottom: 50px;
+  }
+
+  .side-albums-vertical {
+    margin-top: 70px; /* רווח מקסימלי */
+    gap: 30px;
   }
 }
