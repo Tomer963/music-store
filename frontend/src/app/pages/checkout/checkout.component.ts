@@ -427,8 +427,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * ✅ Address Validator - מתוקן לחלוטין
-   * הכתובת חייבת להתחיל במילה (אותיות בלבד) ולאחר מכן מספר בית
-   * פורמט: "רחוב 123" או "Street 45"
    */
   private addressValidator(
     control: AbstractControl,
@@ -436,12 +434,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const value = control.value?.trim();
     if (!value) return null;
 
-    // ✅ בדיקה: הכתובת חייבת להתחיל במילה (לפחות 3 אותיות) ולהכיל מספר
-    // תומך בכל שפה: עברית, אנגלית, וכו'
-    // דוגמאות תקינות: "הרצל 34", "King George 5", "רח הגפן 12"
-    // דוגמאות שגויות: "123 Street", "34Herzl", "H3", "St 1"
-    
-    // תבנית: מילה (לפחות 3 אותיות) -> רווח -> מספר (לפחות ספרה אחת)
     const addressPattern = /^[\p{L}]{3,}[\p{L}\s]*\s+\d+/u;
     
     if (!addressPattern.test(value)) {
@@ -467,7 +459,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
-    // מאפשר 5 או 7 ספרות
     return /^\d{5}$|^\d{7}$/.test(value) ? null : { invalidZipCode: true };
   }
 
@@ -646,9 +637,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (fieldName === "cardNumber" || fieldName === "cvv") {
       const numericValue = value.replace(/\D/g, "");
       this.paymentForm.get(fieldName)?.setValue(numericValue);
+      this.paymentForm.get(fieldName)?.markAsTouched();
       target.value = numericValue;
     } else {
       this.paymentForm.get(fieldName)?.setValue(value);
+      this.paymentForm.get(fieldName)?.markAsTouched();
     }
 
     this.saveFormData();
@@ -677,31 +670,36 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const forms = [null, this.billingForm, this.paymentForm];
     const currentForm = forms[this.currentStep];
 
-    if (currentForm && currentForm.valid) {
-      if (this.currentStep === 1) {
-        this.billingFormSubmitted = false;
-      } else if (this.currentStep === 2) {
-        this.paymentFormSubmitted = false;
+    if (currentForm) {
+      // Mark all fields as touched to trigger validation
+      Object.keys(currentForm.controls).forEach((key) => {
+        currentForm.get(key)?.markAsTouched();
+        currentForm.get(key)?.updateValueAndValidity();
+      });
+
+      if (currentForm.valid) {
+        if (this.currentStep === 1) {
+          this.billingFormSubmitted = false;
+        } else if (this.currentStep === 2) {
+          this.paymentFormSubmitted = false;
+        }
+
+        this.currentStep++;
+
+        if (this.currentStep > this.highestStepReached) {
+          this.highestStepReached = this.currentStep;
+        }
+
+        this.saveFormData();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        // Set submitted flag to show errors
+        if (this.currentStep === 1) {
+          this.billingFormSubmitted = true;
+        } else if (this.currentStep === 2) {
+          this.paymentFormSubmitted = true;
+        }
       }
-
-      this.currentStep++;
-
-      if (this.currentStep > this.highestStepReached) {
-        this.highestStepReached = this.currentStep;
-      }
-
-      this.saveFormData();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else if (currentForm) {
-      if (this.currentStep === 1) {
-        this.billingFormSubmitted = true;
-      } else if (this.currentStep === 2) {
-        this.paymentFormSubmitted = true;
-      }
-
-      Object.keys(currentForm.controls).forEach((key) =>
-        currentForm.get(key)?.markAsTouched(),
-      );
     }
   }
 
@@ -721,6 +719,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
 
     if (step === 2) {
+      // Mark all billing fields as touched
+      Object.keys(this.billingForm.controls).forEach((key) => {
+        this.billingForm.get(key)?.markAsTouched();
+        this.billingForm.get(key)?.updateValueAndValidity();
+      });
+
       if (this.billingForm.valid) {
         this.currentStep = 2;
         this.paymentFormSubmitted = false;
@@ -735,14 +739,22 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         }, 100);
       } else {
         this.billingFormSubmitted = true;
-        Object.keys(this.billingForm.controls).forEach((key) =>
-          this.billingForm.get(key)?.markAsTouched(),
-        );
       }
       return;
     }
 
     if (step === 3) {
+      // Mark all fields as touched in both forms
+      Object.keys(this.billingForm.controls).forEach((key) => {
+        this.billingForm.get(key)?.markAsTouched();
+        this.billingForm.get(key)?.updateValueAndValidity();
+      });
+      
+      Object.keys(this.paymentForm.controls).forEach((key) => {
+        this.paymentForm.get(key)?.markAsTouched();
+        this.paymentForm.get(key)?.updateValueAndValidity();
+      });
+
       if (this.billingForm.valid && this.paymentForm.valid) {
         this.currentStep = 3;
 
@@ -757,14 +769,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       } else {
         if (!this.billingForm.valid) {
           this.billingFormSubmitted = true;
-          Object.keys(this.billingForm.controls).forEach((key) =>
-            this.billingForm.get(key)?.markAsTouched(),
-          );
-        } else if (!this.paymentForm.valid) {
+        }
+        if (!this.paymentForm.valid) {
           this.paymentFormSubmitted = true;
-          Object.keys(this.paymentForm.controls).forEach((key) =>
-            this.paymentForm.get(key)?.markAsTouched(),
-          );
         }
       }
     }
@@ -819,6 +826,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.router.navigate(["/"]);
   }
 
+  /**
+   * ✅ FIXED: תנאי להצגת שגיאות - חייב להיות touched + invalid
+   */
   shouldShowError(
     form: FormGroup,
     fieldName: string,
@@ -826,7 +836,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ): boolean {
     const control = form.get(fieldName);
     if (!control) return false;
-    return formSubmitted && control.invalid && control.touched;
+    
+    // Show error if: field is touched AND invalid AND (form was submitted OR field was modified)
+    return control.invalid && control.touched && (formSubmitted || control.dirty);
   }
 
   getErrorMessage(form: FormGroup, field: string): string {
