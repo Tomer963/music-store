@@ -1,3 +1,4 @@
+/* Logout Page Container */
 .logout-page {
   min-height: calc(100vh - 120px);
   display: flex;
@@ -9,6 +10,7 @@
   overflow: hidden;
 }
 
+/* Main Content Container */
 .logout-container {
   max-width: 600px;
   width: 100%;
