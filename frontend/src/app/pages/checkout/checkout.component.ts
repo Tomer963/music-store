@@ -426,19 +426,25 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ✅ Address Validator - מתוקן
+   * ✅ Address Validator - מתוקן לחלוטין
+   * הכתובת חייבת להתחיל במילה (אותיות בלבד) ולאחר מכן מספר בית
+   * פורמט: "רחוב 123" או "Street 45"
    */
   private addressValidator(
     control: AbstractControl,
   ): { [key: string]: boolean } | null {
-    const value = control.value;
+    const value = control.value?.trim();
     if (!value) return null;
 
-    // בדיקה שיש לפחות מילה אחת עם 3 אותיות ומספר אחד
-    const hasThreeLetters = /[a-zA-Zא-ת]{3,}/.test(value);
-    const hasDigit = /\d/.test(value);
-
-    if (!hasThreeLetters || !hasDigit) {
+    // ✅ בדיקה: הכתובת חייבת להתחיל במילה (לפחות 3 אותיות) ולהכיל מספר
+    // תומך בכל שפה: עברית, אנגלית, וכו'
+    // דוגמאות תקינות: "הרצל 34", "King George 5", "רח הגפן 12"
+    // דוגמאות שגויות: "123 Street", "34Herzl", "H3", "St 1"
+    
+    // תבנית: מילה (לפחות 3 אותיות) -> רווח -> מספר (לפחות ספרה אחת)
+    const addressPattern = /^[\p{L}]{3,}[\p{L}\s]*\s+\d+/u;
+    
+    if (!addressPattern.test(value)) {
       return { invalidAddress: true };
     }
 
@@ -830,8 +836,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (control.errors["required"]) return "This is a required field";
 
     const errorMessages: { [key: string]: string } = {
-      address:
-        "Address must contain at least one word with 3 letters and at least one digit (e.g., 'Herzl 34', 'King George 5')",
+      address: "Address must start with a street name (at least 3 letters) followed by a space and a house number (e.g., 'Herzl 34', 'King George 5')",
       city: "City must contain only letters in English and be at least 3 characters",
       zipCode: "Zip code must be 5 or 7 digits",
       phone: "Phone format: 03-6381414 or 050-1112222",
