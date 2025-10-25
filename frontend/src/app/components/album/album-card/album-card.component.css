@@ -26,6 +26,26 @@
   }
 }
 
+@media (max-width: 576px) {
+  .main-content {
+    padding-top: 65px;
+  }
+
+  .content-wrapper {
+    min-height: calc(100vh - 65px);
+  }
+}
+
+@media (max-width: 429px) {
+  .main-content {
+    padding-top: 56px;
+  }
+
+  .content-wrapper {
+    min-height: calc(100vh - 56px);
+  }
+}
+
 /* Album Card Base */
 .album-card {
   position: relative;
@@ -201,12 +221,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(0, 0, 0, 0.75) 50%,
-    transparent 100%
-  );
+  background: rgba(0, 0, 0, 0.85);
   color: white;
   padding: 12px var(--spacing-md);
   z-index: 2;
@@ -220,15 +235,7 @@
 .album-card:hover .text-overlay {
   height: 140px;
   padding: var(--spacing-md);
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.98) 0%,
-    rgba(0, 0, 0, 0.96) 30%,
-    rgba(0, 0, 0, 0.92) 50%,
-    rgba(0, 0, 0, 0.85) 70%,
-    rgba(0, 0, 0, 0.7) 85%,
-    transparent 100%
-  );
+  background: rgba(0, 0, 0, 0.92);
 }
 
 .overlay-static-content {
@@ -356,6 +363,24 @@
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
 }
 
+/* Info button - larger and bolder i */
+.overlay-icon-btn.info-icon {
+  background-color: #737373;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+}
+
+.overlay-icon-btn.info-icon:hover {
+  background-color: #8a8a8a;
+}
+
+.overlay-icon-btn.info-icon span {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--white);
+}
+
 /* ============================
    RED BACKGROUND OVERLAY - ALBUMS 10-11 - ONLY PRICE AND ICONS ON HOVER
    ============================ */
@@ -380,12 +405,7 @@
 .album-card.red-background:hover .red-background-overlay {
   height: 70px;
   padding: 12px var(--spacing-md);
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.98) 0%,
-    rgba(0, 0, 0, 0.92) 50%,
-    transparent 100%
-  );
+  background: rgba(0, 0, 0, 0.92);
 }
 
 .red-hover-content {
@@ -446,6 +466,24 @@
 
 .red-overlay-icon-btn:hover:not(:disabled) {
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Info button - larger and bolder i */
+.red-overlay-icon-btn.info-icon {
+  background-color: #737373;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+}
+
+.red-overlay-icon-btn.info-icon:hover {
+  background-color: #8a8a8a;
+}
+
+.red-overlay-icon-btn.info-icon span {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--white);
 }
 
 /* Album Info Section */
@@ -597,9 +635,9 @@
 }
 
 .bottom-icon-btn.info-icon {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--black);
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--white);
   background-color: #737373;
   border-radius: var(--radius-full);
 }
@@ -610,6 +648,7 @@
   .text-overlay {
     height: 140px;
     padding: var(--spacing-md);
+    background: rgba(0, 0, 0, 0.92);
   }
 
   .album-card.red-background:hover .red-background-overlay {
@@ -652,6 +691,11 @@
   .album-card.small:not(.large) .overlay-artist {
     font-size: 0.75rem;
   }
+
+  .overlay-icon-btn.info-icon span,
+  .red-overlay-icon-btn.info-icon span {
+    font-size: 24px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -677,5 +721,10 @@
 
   .album-card.small:not(.large) .overlay-artist {
     font-size: 0.7rem;
+  }
+
+  .overlay-icon-btn.info-icon span,
+  .red-overlay-icon-btn.info-icon span {
+    font-size: 22px;
   }
 }

@@ -16,7 +16,7 @@
 
 .cart-widget {
   background-color: var(--white);
-  border-radius: var(--radius-md);
+  border-radius: 0;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   height: 100%;
@@ -35,12 +35,14 @@
   justify-content: flex-start;
   flex-shrink: 0;
   height: 33px;
+  border-radius: 0;
 }
 
 .cart-widget-container.in-album-page .cart-header {
   height: 33px;
   padding-top: 3px;
   padding-bottom: 3px;
+  border-radius: 0;
 }
 
 .cart-title {
@@ -387,11 +389,13 @@
   .cart-header {
     height: 33px;
     padding: 3px 14px;
+    border-radius: 0;
   }
 
   .cart-widget-container.in-album-page .cart-header {
     height: 33px;
     padding-top: 3px;
+    border-radius: 0;
   }
 
   .cart-title {
@@ -420,11 +424,13 @@
   .cart-header {
     height: 33px;
     padding: 3px 12px;
+    border-radius: 0;
   }
 
   .cart-widget-container.in-album-page .cart-header {
     height: 33px;
     padding-top: 3px;
+    border-radius: 0;
   }
 
   .cart-title {
@@ -457,6 +463,7 @@
   .cart-widget {
     margin-top: var(--spacing-md);
     height: auto;
+    border-radius: 0;
   }
 
   .cart-content {
@@ -473,11 +480,13 @@
   .cart-header {
     height: 31px;
     padding: 3px 10px;
+    border-radius: 0;
   }
 
   .cart-widget-container.in-album-page .cart-header {
     height: 31px;
     padding-top: 3px;
+    border-radius: 0;
   }
 
   .cart-title {
@@ -521,6 +530,7 @@
   .cart-widget-container,
   .cart-widget {
     height: auto;
+    border-radius: 0;
   }
 
   .cart-content {
@@ -537,11 +547,13 @@
   .cart-header {
     height: 29px;
     padding: 3px 10px;
+    border-radius: 0;
   }
 
   .cart-widget-container.in-album-page .cart-header {
     height: 29px;
     padding-top: 3px;
+    border-radius: 0;
   }
 
   .cart-title {
@@ -580,6 +592,7 @@
   .cart-widget-container,
   .cart-widget {
     height: auto;
+    border-radius: 0;
   }
 
   .cart-content {
@@ -596,11 +609,13 @@
   .cart-header {
     height: 27px;
     padding: 3px 8px;
+    border-radius: 0;
   }
 
   .cart-widget-container.in-album-page .cart-header {
     height: 27px;
     padding-top: 3px;
+    border-radius: 0;
   }
 
   .cart-title {
@@ -656,6 +671,7 @@
   .cart-widget-container,
   .cart-widget {
     height: auto;
+    border-radius: 0;
   }
 
   .cart-content {
@@ -672,12 +688,14 @@
   .cart-header {
     height: 27px;
     padding: 2px 6px;
+    border-radius: 0;
   }
 
   .cart-widget-container.in-album-page .cart-header {
     height: 27px;
     padding-top: 2px;
     padding-bottom: 2px;
+    border-radius: 0;
   }
 
   .cart-title {
