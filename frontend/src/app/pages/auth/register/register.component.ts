@@ -76,7 +76,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * setupFieldChangeTracking
+   * Setup Field Change Tracking
    *
    * Track field changes to remove errors when user starts typing
    *
@@ -103,7 +103,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * emailValidator
+   * Email Validator
    *
    * Custom email validator supporting Hebrew and English characters
    *
@@ -114,14 +114,14 @@ export class RegisterModalComponent {
     const value = control.value;
     if (!value) return null;
 
-    // Email regex supporting Hebrew (א-ת), English, numbers, and special chars
+    // Email regex supporting Hebrew, English, numbers, and special chars
     const emailRegex = /^[a-zA-Z0-9א-ת._+-]+@[a-zA-Z0-9א-ת.-]+\.[a-zA-Z]{2,}$/;
 
     return emailRegex.test(value) ? null : { invalidEmail: true };
   }
 
   /**
-   * passwordMatchValidator
+   * Password Match Validator
    *
    * Validate that password and confirm password match
    *
@@ -151,7 +151,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * shouldShowError
+   * Should Show Error
    *
    * Determine if error should be displayed for a field
    *
@@ -169,7 +169,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * closeModal
+   * Close Modal
    *
    * Close registration modal and reset form
    *
@@ -183,7 +183,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * goToLogin
+   * Go To Login
    *
    * Navigate to login page and close modal
    *
@@ -198,7 +198,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * onSubmit
+   * On Submit
    *
    * Handle registration form submission
    *
@@ -233,7 +233,7 @@ export class RegisterModalComponent {
         this.isLoading = false;
         this.showSuccess = true;
 
-        // ✅ 5 שניות כמו שנדרש בדרישות
+        // Wait 5 seconds before closing and emitting success
         setTimeout(() => {
           this.registerSuccess.emit({
             email: formData.email,
@@ -247,6 +247,7 @@ export class RegisterModalComponent {
         this.isLoading = false;
         this.errorMessage =
           error.error?.message || "Registration failed. Please try again.";
+        
         // Auto-clear error message after 5 seconds
         setTimeout(() => (this.errorMessage = ""), 5000);
       },
@@ -254,7 +255,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * resetForm
+   * Reset Form
    *
    * Reset form to initial state and clear all flags
    *
