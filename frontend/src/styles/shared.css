@@ -356,6 +356,18 @@
   cursor: default;
 }
 
+/* Album Artist */
+.album-artist-line {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--white);
+  margin: 0 0 6px 0;
+  word-wrap: break-word;
+  line-height: 1.3;
+  flex-shrink: 0;
+  cursor: default;
+}
+
 /* Album Description */
 .album-description,
 .album-description-text {
@@ -415,6 +427,64 @@
   display: flex;
   gap: var(--spacing-xs);
   align-items: center;
+}
+
+/* ========================================
+   PAGE CONTAINERS - Common page wrappers
+   ======================================== */
+
+.page-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+  width: 100%;
+}
+
+/* Extra Large Screens */
+@media (min-width: 1600px) {
+  .page-container {
+    padding: 0 256px;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1400px) and (max-width: 1599px) {
+  .page-container {
+    padding: 0 200px;
+  }
+}
+
+/* Medium Desktop */
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .page-container {
+    padding: 0 120px;
+  }
+}
+
+/* Small Desktop */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .page-container {
+    padding: 0 40px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+  .page-container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .page-container {
+    padding: 0 8px;
+  }
 }
 
 /* ========================================
@@ -587,6 +657,61 @@
   50% {
     transform: scaleY(1);
   }
+}
+
+/* ========================================
+   FORM ELEMENTS - Common form styles
+   ======================================== */
+
+.form-control {
+  width: 100%;
+  padding: 7px 10px;
+  font-size: 0.875rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 0;
+  transition: border-color var(--transition-fast);
+  background-color: var(--white);
+}
+
+.form-control::placeholder {
+  color: #999999;
+  opacity: 1;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--focus-color);
+}
+
+.form-control.error {
+  border: 1px dashed var(--error-color) !important;
+  background-color: rgba(244, 67, 54, 0.05);
+}
+
+.form-control.error:focus {
+  border: 1px dashed var(--error-color) !important;
+}
+
+.form-error {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: var(--error-color);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 700;
+  color: var(--secondary-color);
+  font-size: 0.875rem;
+}
+
+.required {
+  color: var(--error-color);
 }
 
 /* ========================================
