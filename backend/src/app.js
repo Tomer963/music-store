@@ -10,6 +10,8 @@ import cartRoutes from "./routes/cart.js";
 import orderRoutes from "./routes/orders.js";
 import wishlistRoutes from "./routes/wishlist.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
+import { getClientIp } from "./utils/helpers.js";
+import { getDatabaseStatus } from "./config/database.js";
 
 const app = express();
 
@@ -43,69 +45,60 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // Request logging in development mode
 if (process.env.NODE_ENV === "development") {
   app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+    const timestamp = new Date().toISOString();
+    const ip = getClientIp(req);
+    console.log(`[${timestamp}] ${req.method} ${req.path} - IP: ${ip}`);
     next();
   });
 }
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: process.env.NODE_ENV === "production" ? 100 : 1000,
-  standardHeaders: "draft-7",
-  legacyHeaders: false,
-  requestWasSuccessful: (req, res) => res.statusCode < 400,
-  keyGenerator: (req) => {
-    const forwarded = req.headers["x-forwarded-for"];
-    const realIp = req.headers["x-real-ip"];
-    const ip = req.ip || req.connection?.remoteAddress || "unknown";
+/**
+ * Configure rate limiter based on environment
+ */
+const createRateLimiter = () => {
+  const isProduction = process.env.NODE_ENV === "production";
+  const maxRequests = isProduction ? 100 : 1000;
+  const windowMs = 15 * 60 * 1000; // 15 minutes
 
-    let clientIp = ip;
-    if (forwarded) {
-      clientIp = forwarded.split(",")[0].trim();
-    } else if (realIp) {
-      clientIp = realIp;
-    }
+  return rateLimit({
+    windowMs,
+    max: maxRequests,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    requestWasSuccessful: (req, res) => res.statusCode < 400,
+    keyGenerator: (req) => getClientIp(req),
+    handler: (req, res) => {
+      const clientIp = getClientIp(req);
+      const retryAfter = Math.ceil((req.rateLimit?.resetTime - Date.now()) / 1000) || 900;
 
-    clientIp = clientIp.replace(/^::ffff:/, "");
+      console.log(
+        `⚠ Rate limit exceeded for IP: ${clientIp} (${process.env.NODE_ENV || "development"} mode: ${maxRequests} req/15min)`
+      );
 
-    if (process.env.NODE_ENV === "development") {
-      console.log(`Rate limit key: ${clientIp}`);
-    }
+      res.status(429).json({
+        success: false,
+        message: "Too many requests, please try again later.",
+        error: "Rate limit exceeded",
+        limit: maxRequests,
+        windowMs: windowMs / 1000,
+        retryAfter,
+      });
+    },
+    skip: (req) => {
+      return req.path === "/health" || req.path === "/health/detailed";
+    },
+  });
+};
 
-    return clientIp;
-  },
-  handler: (req, res) => {
-    const clientIp = req.ip?.replace(/^::ffff:/, "") || "unknown";
-    const env = process.env.NODE_ENV || "development";
-    const limit = env === "production" ? 100 : 1000;
-
-    console.log(
-      `Rate limit exceeded for IP: ${clientIp} (${env} mode: ${limit} req/15min)`
-    );
-
-    res.status(429).json({
-      success: false,
-      message: "Too many requests, please try again later.",
-      error: "Rate limit exceeded",
-      limit: limit,
-      windowMs: 900,
-      retryAfter:
-        Math.ceil((req.rateLimit?.resetTime - Date.now()) / 1000) || 900,
-    });
-  },
-  skip: (req) => {
-    return req.path === "/health" || req.path === "/health/detailed";
-  },
-});
-
-app.use("/api", limiter);
+app.use("/api", createRateLimiter());
 
 console.log(
-  `Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`
+  `⚡ Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`
 );
 
-// Database connection check middleware
+/**
+ * Database connection check middleware
+ */
 app.use((req, res, next) => {
   if (mongoose.connection.readyState !== 1) {
     return res.status(503).json({
@@ -117,7 +110,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Root endpoint
+/**
+ * Root endpoint
+ */
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -132,66 +127,54 @@ app.get("/", (req, res) => {
     endpoints: {
       health: "/health",
       api: `/api/${process.env.API_VERSION || "v1"}`,
+      docs: "/api/docs",
     },
   });
 });
 
-// Health check endpoints
-app.get("/health", async (req, res) => {
-  const dbState = mongoose.connection.readyState;
-  const isConnected = dbState === 1;
-  const status = isConnected ? "OK" : "DEGRADED";
-  const code = isConnected ? 200 : 503;
+/**
+ * Health check endpoints
+ */
+app.get("/health", (req, res) => {
+  const dbStatus = getDatabaseStatus();
+  const isHealthy = dbStatus.isConnected;
+  const statusCode = isHealthy ? 200 : 503;
 
-  const dbStateMap = {
-    0: "disconnected",
-    1: "connected",
-    2: "connecting",
-    3: "disconnecting",
-  };
-
-  res.status(code).json({
-    status,
+  res.status(statusCode).json({
+    status: isHealthy ? "OK" : "DEGRADED",
     timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
+    uptime: Math.floor(process.uptime()),
     database: {
-      connected: isConnected,
-      state: dbStateMap[dbState] || "unknown",
-      host: mongoose.connection.host || "N/A",
-      name: mongoose.connection.name || "N/A",
+      connected: dbStatus.isConnected,
+      state: dbStatus.state,
     },
     environment: process.env.NODE_ENV || "development",
   });
 });
 
-app.get("/health/detailed", async (req, res) => {
-  const dbState = mongoose.connection.readyState;
-  const isConnected = dbState === 1;
-
-  const dbStateMap = {
-    0: "disconnected",
-    1: "connected",
-    2: "connecting",
-    3: "disconnecting",
-  };
+app.get("/health/detailed", (req, res) => {
+  const dbStatus = getDatabaseStatus();
+  const memoryUsage = process.memoryUsage();
 
   res.json({
-    status: isConnected ? "healthy" : "unhealthy",
+    status: dbStatus.isConnected ? "healthy" : "unhealthy",
     timestamp: new Date().toISOString(),
     service: "music-store-backend",
     version: process.env.API_VERSION || "v1",
-    uptime: process.uptime(),
+    uptime: Math.floor(process.uptime()),
     memory: {
-      used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
-      total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
+      used: Math.round(memoryUsage.heapUsed / 1024 / 1024),
+      total: Math.round(memoryUsage.heapTotal / 1024 / 1024),
+      external: Math.round(memoryUsage.external / 1024 / 1024),
       unit: "MB",
     },
     database: {
-      connected: isConnected,
-      state: dbStateMap[dbState] || "unknown",
-      host: mongoose.connection.host || "N/A",
-      name: mongoose.connection.name || "N/A",
+      connected: dbStatus.isConnected,
+      state: dbStatus.state,
+      host: dbStatus.host,
+      name: dbStatus.name,
       models: Object.keys(mongoose.models),
+      reconnectAttempts: dbStatus.reconnectAttempts,
     },
     rateLimit: {
       enabled: true,

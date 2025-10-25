@@ -16,6 +16,60 @@ export class AppError extends Error {
 }
 
 /**
+ * NotFoundError - Resource not found
+ */
+export class NotFoundError extends AppError {
+  constructor(resource = "Resource") {
+    super(`${resource} not found`, 404);
+  }
+}
+
+/**
+ * UnauthorizedError - Authentication required
+ */
+export class UnauthorizedError extends AppError {
+  constructor(message = MESSAGES.ERROR.UNAUTHORIZED) {
+    super(message, 401);
+  }
+}
+
+/**
+ * ForbiddenError - Insufficient permissions
+ */
+export class ForbiddenError extends AppError {
+  constructor(message = "Access denied") {
+    super(message, 403);
+  }
+}
+
+/**
+ * ValidationError - Input validation failed
+ */
+export class ValidationError extends AppError {
+  constructor(errors) {
+    super(MESSAGES.ERROR.VALIDATION_ERROR, 400, errors);
+  }
+}
+
+/**
+ * ConflictError - Resource conflict (e.g., duplicate)
+ */
+export class ConflictError extends AppError {
+  constructor(message) {
+    super(message, 409);
+  }
+}
+
+/**
+ * BadRequestError - Invalid request
+ */
+export class BadRequestError extends AppError {
+  constructor(message) {
+    super(message, 400);
+  }
+}
+
+/**
  * Error Response Builder
  *
  * Creates standardized error response object
@@ -50,7 +104,7 @@ const buildErrorResponse = (err, includeStack = false) => {
  */
 const handleValidationError = (err) => {
   const errors = Object.values(err.errors).map((e) => e.message);
-  return new AppError(MESSAGES.ERROR.VALIDATION_ERROR, 400, errors);
+  return new ValidationError(errors);
 };
 
 /**
@@ -61,7 +115,8 @@ const handleValidationError = (err) => {
  */
 const handleDuplicateKeyError = (err) => {
   const field = Object.keys(err.keyValue)[0];
-  return new AppError(`${field} already exists`, 400);
+  const value = err.keyValue[field];
+  return new ConflictError(`${field} '${value}' already exists`);
 };
 
 /**
@@ -71,7 +126,7 @@ const handleDuplicateKeyError = (err) => {
  * @return {AppError} Formatted application error
  */
 const handleCastError = (err) => {
-  return new AppError("Invalid ID format", 400);
+  return new BadRequestError(`Invalid ${err.path}: ${err.value}`);
 };
 
 /**
@@ -81,8 +136,37 @@ const handleCastError = (err) => {
  * @return {AppError} Formatted application error
  */
 const handleJWTError = (err) => {
-  const message = err.name === "TokenExpiredError" ? "Token expired" : "Invalid token";
-  return new AppError(message, 401);
+  if (err.name === "TokenExpiredError") {
+    return new UnauthorizedError("Token expired");
+  }
+  return new UnauthorizedError("Invalid token");
+};
+
+/**
+ * Log Error
+ *
+ * Logs error details for debugging and monitoring
+ *
+ * @param {Error} err - Error object
+ * @param {Object} req - Express request object
+ */
+const logError = (err, req) => {
+  const errorLog = {
+    timestamp: new Date().toISOString(),
+    message: err.message,
+    statusCode: err.statusCode,
+    method: req.method,
+    path: req.path,
+    ip: req.ip,
+    userId: req.user?._id,
+  };
+
+  if (process.env.NODE_ENV === "development") {
+    errorLog.stack = err.stack;
+    errorLog.body = req.body;
+  }
+
+  console.error("Error:", errorLog);
 };
 
 /**
@@ -97,13 +181,8 @@ const handleJWTError = (err) => {
  * @return {void}
  */
 export const errorHandler = (err, req, res, next) => {
-  // Log error for debugging
-  console.error("Error:", {
-    message: err.message,
-    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
-    path: req.path,
-    method: req.method,
-  });
+  // Log error
+  logError(err, req);
 
   let error = err;
 
@@ -165,4 +244,34 @@ export const notFoundHandler = (req, res) => {
     message: "Resource not found",
     error: `Cannot ${req.method} ${req.originalUrl}`,
   });
+};
+
+/**
+ * assertFound
+ *
+ * Throws NotFoundError if resource is null/undefined
+ *
+ * @param {*} resource - Resource to check
+ * @param {string} resourceName - Name of the resource for error message
+ * @throws {NotFoundError}
+ */
+export const assertFound = (resource, resourceName = "Resource") => {
+  if (!resource) {
+    throw new NotFoundError(resourceName);
+  }
+};
+
+/**
+ * assertAuthorized
+ *
+ * Throws ForbiddenError if condition is false
+ *
+ * @param {boolean} condition - Authorization condition
+ * @param {string} message - Error message
+ * @throws {ForbiddenError}
+ */
+export const assertAuthorized = (condition, message = "Access denied") => {
+  if (!condition) {
+    throw new ForbiddenError(message);
+  }
 };

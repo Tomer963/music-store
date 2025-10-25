@@ -37,10 +37,40 @@ export const MESSAGES = {
   ERROR: {
     NOT_FOUND: "Resource not found",
     UNAUTHORIZED: "Unauthorized access",
+    FORBIDDEN: "Access denied",
     INVALID_CREDENTIALS: "Invalid email or password",
     EMAIL_EXISTS: "Email already exists",
     VALIDATION_ERROR: "Validation error",
     SERVER_ERROR: "Internal server error",
     OUT_OF_STOCK: "Product is out of stock",
+    CART_EMPTY: "Cart is empty",
+    INSUFFICIENT_STOCK: "Insufficient stock available",
+    INVALID_ID: "Invalid ID format",
+    TOKEN_EXPIRED: "Token expired. Please login again.",
+    TOKEN_INVALID: "Invalid token. Please login again.",
+    DATABASE_ERROR: "Database operation failed",
+    DUPLICATE_ENTRY: "Entry already exists",
+    MISSING_FIELDS: "Required fields are missing",
   },
+};
+
+export const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  CONFLICT: 409,
+  UNPROCESSABLE_ENTITY: 422,
+  TOO_MANY_REQUESTS: 429,
+  INTERNAL_SERVER_ERROR: 500,
+  SERVICE_UNAVAILABLE: 503,
+};
+
+export const DATABASE_STATES = {
+  DISCONNECTED: 0,
+  CONNECTED: 1,
+  CONNECTING: 2,
+  DISCONNECTING: 3,
 };
