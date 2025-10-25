@@ -1,3 +1,72 @@
+/* Loading State */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 450px;
+}
+
+/* Vinyl loader animation */
+.vinyl-loader {
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+
+.vinyl-loader .record {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    #ff0000 0% 20%,
+    #1a1a1a 20% 30%,
+    #333 30% 31%,
+    #1a1a1a 31% 45%,
+    #333 45% 46%,
+    #1a1a1a 46% 60%,
+    #333 60% 61%,
+    #1a1a1a 61% 100%
+  );
+  animation: spin 2s linear infinite;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.vinyl-loader .label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  height: 30%;
+  background: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+.error-content h2 {
+  color: var(--error-color);
+  margin-bottom: var(--spacing-md);
+}
+
+.error-content p {
+  color: var(--gray-dark);
+  margin-bottom: var(--spacing-lg);
+}
+
 .home-page {
   position: relative;
   min-height: calc(100vh - 120px);
@@ -12,18 +81,6 @@
   max-width: 100%;
   margin-right: 0;
   padding: 0;
-}
-
-.loading-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
 }
 
 .home-content {
@@ -112,7 +169,7 @@
   width: 100%;
   padding-top: var(--spacing-lg);
   display: block;
-  clear: both; /* ✅ Clear floats */
+  clear: both;
 }
 
 .new-products-title {
@@ -665,34 +722,44 @@
   }
 }
 
-/* ✅ FIX CRITICAL: מסכים קטנים - featured-wrapper צריך להיות BLOCK ולא GRID */
+/* ✅ FIX המפתח האמיתי - מסכים קטנים */
 @media (max-width: 575px) {
   .home-page {
     min-height: calc(100vh - 65px);
   }
 
-  /* ✅ הפיכת featured-wrapper ל-block layout במקום grid */
+  /* ✅ הפיכת featured-wrapper ל-block layout */
   .featured-wrapper {
-    display: block; /* ✅ לא grid! */
-    margin-bottom: 40px;
+    display: block;
+    margin-bottom: 0; /* ✅ אפס margin למטה */
+    min-height: auto; /* ✅ לא לכפות גובה */
+    max-height: none; /* ✅ אין הגבלה */
   }
 
   .featured-album {
     width: 100%;
-    min-height: auto;
+    min-height: auto; /* ✅ גובה אוטומטי */
     margin-bottom: 0;
   }
 
+  /* ✅ ה-grid של אלבומים 1-8 */
   .top-albums-grid {
     grid-template-columns: repeat(2, 1fr);
-    margin-top: 0; /* ✅ אין margin למעלה */
-    margin-bottom: 0; /* ✅ אין margin למטה */
+    margin-top: 0;
+    margin-bottom: 0;
+    min-height: auto; /* ✅ גובה אוטומטי */
+    height: auto; /* ✅ גובה לפי תוכן */
   }
   
-  /* ✅ רווח גדול לפני content-below-featured */
+  /* ✅ זה הפתרון האמיתי! רווח ענק אחרי featured-section כולה */
+  .featured-section {
+    margin-bottom: 80px !important; /* ✅ רווח ענק למטה */
+  }
+  
+  /* ✅ content-below-featured מתחיל הרבה למטה */
   .content-below-featured {
-    margin-top: 60px; /* ✅ רווח גדול */
-    padding-top: 0;
+    margin-top: 0;
+    padding-top: 80px; /* ✅ padding גדול למעלה */
   }
 
   .albums-grid {
@@ -700,7 +767,7 @@
   }
   
   .new-products-title {
-    margin-top: 0; /* ✅ אין margin למעלה */
+    margin-top: 0;
     margin-bottom: 30px;
   }
 
@@ -716,26 +783,26 @@
   .sidebar-column {
     order: 2;
     width: 100%;
-    margin-top: 60px; /* ✅ רווח גדול */
+    margin-top: 60px;
   }
 
   .main-albums-wrapper {
     order: 1;
-    margin-bottom: 60px; /* ✅ רווח גדול */
+    margin-bottom: 60px;
   }
 
   .side-albums-vertical {
-    margin-top: 80px; /* ✅ רווח גדול */
+    margin-top: 80px;
     gap: 40px;
   }
 
   .albums-section {
-    margin-top: 0; /* ✅ אין margin למעלה - הכל דרך content-below-featured */
+    margin-top: 0;
     padding-top: 0;
   }
 }
 
-/* ✅ FIX נוסף למסכים הכי קטנים */
+/* ✅ מסכים הכי קטנים */
 @media (max-width: 429px) {
   .home-page {
     min-height: calc(100vh - 56px);
@@ -744,11 +811,16 @@
   /* ✅ grid של עמודה אחת */
   .top-albums-grid {
     grid-template-columns: 1fr;
+    height: auto; /* ✅ גובה לפי תוכן */
   }
 
-  /* ✅ רווח גדול יותר */
+  /* ✅ רווח ענק יותר */
+  .featured-section {
+    margin-bottom: 100px !important; /* ✅ עוד יותר רווח */
+  }
+  
   .content-below-featured {
-    margin-top: 80px;
+    padding-top: 100px; /* ✅ padding גדול יותר */
   }
   
   .album-content.red-background .album-title-line.large-title {
