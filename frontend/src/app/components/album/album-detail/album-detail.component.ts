@@ -6,7 +6,7 @@ import { Subject, takeUntil } from "rxjs";
 import { AlbumService } from "../../../services/album.service";
 import { CartService } from "../../../services/cart.service";
 import { WishlistService } from "../../../services/wishlist.service";
-import { Album, Category } from "../../../models/album.model";
+import { Album, Category, AlbumImage } from "../../../models/album.model";
 import { SpinnerComponent } from "../../shared/spinner/spinner.component";
 import { ContentLayoutComponent } from "../../shared/content-layout/content-layout.component";
 
@@ -30,6 +30,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   quantity = 1;
   selectedImageIndex = 0;
   inWishlist = false;
+  thumbnails: AlbumImage[] = [];
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -81,6 +82,8 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (album) => {
           this.album = album;
+          this.thumbnails = this.buildThumbnails();
+          this.selectedImageIndex = 0;
           this.isLoading = false;
           this.quantity = album.stock > 0 ? 1 : 0;
           this.subscribeToWishlistStatus();
@@ -112,15 +115,69 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Build Thumbnails
+   *
+   * Creates array of exactly 3 thumbnail images
+   *
+   * @return AlbumImage[] Array of 3 thumbnail objects
+   */
+  private buildThumbnails(): AlbumImage[] {
+    if (!this.album) return [];
+
+    const thumbnails: AlbumImage[] = [];
+
+    // Add main image first
+    const mainImageUrl = this.albumService.getMainImageUrl(this.album);
+    thumbnails.push({
+      url: mainImageUrl,
+      isMain: true,
+    });
+
+    // Add secondary images (non-main images from the album)
+    if (this.album.images && this.album.images.length > 0) {
+      const secondaryImages = this.album.images.filter((img) => !img.isMain);
+
+      for (let i = 0; i < Math.min(2, secondaryImages.length); i++) {
+        thumbnails.push({
+          url: secondaryImages[i].url,
+          isMain: false,
+        });
+      }
+
+      // If we don't have enough secondary images, use other images
+      if (thumbnails.length === 1 && this.album.images.length > 1) {
+        for (let i = 1; i < Math.min(3, this.album.images.length); i++) {
+          thumbnails.push({
+            url: this.album.images[i].url,
+            isMain: false,
+          });
+        }
+      }
+    }
+
+    // Fill remaining slots with placeholders
+    while (thumbnails.length < 3) {
+      thumbnails.push({
+        url: "/assets/images/album-placeholder.svg",
+        isMain: false,
+      });
+    }
+
+    return thumbnails;
+  }
+
+  /**
    * Select Image
    *
-   * Sets selected thumbnail image
+   * Sets selected thumbnail image by index
    *
-   * @param (number) index - Thumbnail index
+   * @param (number) index - Thumbnail index (0-2)
    * @return void
    */
   selectImage(index: number): void {
-    this.selectedImageIndex = index;
+    if (index >= 0 && index < this.thumbnails.length) {
+      this.selectedImageIndex = index;
+    }
   }
 
   /**
@@ -131,14 +188,29 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
    * @return string Selected image URL
    */
   getSelectedImageUrl(): string {
-    if (!this.album) return "/assets/images/album-placeholder.svg";
-
-    const thumbnails = this.getThreeThumbnails();
-    if (thumbnails[this.selectedImageIndex]) {
-      return thumbnails[this.selectedImageIndex].url;
+    if (!this.album || this.thumbnails.length === 0) {
+      return "/assets/images/album-placeholder.svg";
     }
 
-    return this.albumService.getMainImageUrl(this.album);
+    if (
+      this.selectedImageIndex >= 0 &&
+      this.selectedImageIndex < this.thumbnails.length
+    ) {
+      return this.thumbnails[this.selectedImageIndex].url;
+    }
+
+    return this.thumbnails[0].url;
+  }
+
+  /**
+   * Get Three Thumbnails
+   *
+   * Returns the thumbnails array for display
+   *
+   * @return AlbumImage[] Array of 3 thumbnail objects
+   */
+  getThreeThumbnails(): AlbumImage[] {
+    return this.thumbnails;
   }
 
   /**
@@ -253,56 +325,5 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
     return paragraphs.length > 0
       ? paragraphs
       : ["No detailed description available."];
-  }
-
-  /**
-   * Get Three Thumbnails
-   *
-   * Gets exactly 3 thumbnail images
-   *
-   * @return any[] Array of 3 thumbnail objects
-   */
-  getThreeThumbnails(): any[] {
-    if (!this.album) return [];
-
-    const thumbnails = [];
-
-    // Add main image first
-    thumbnails.push({
-      url: this.albumService.getMainImageUrl(this.album),
-      isMain: true,
-    });
-
-    // Add secondary images
-    if (this.album.images && this.album.images.length > 0) {
-      const secondaryImages = this.album.images.filter((img) => !img.isMain);
-
-      for (let i = 0; i < Math.min(2, secondaryImages.length); i++) {
-        thumbnails.push({
-          url: secondaryImages[i].url,
-          isMain: false,
-        });
-      }
-
-      // Fallback to other images if needed
-      if (thumbnails.length === 1 && this.album.images.length > 1) {
-        for (let i = 1; i < Math.min(3, this.album.images.length); i++) {
-          thumbnails.push({
-            url: this.album.images[i].url,
-            isMain: false,
-          });
-        }
-      }
-    }
-
-    // Fill with placeholders
-    while (thumbnails.length < 3) {
-      thumbnails.push({
-        url: "/assets/images/album-placeholder.svg",
-        isMain: false,
-      });
-    }
-
-    return thumbnails;
   }
 }

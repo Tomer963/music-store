@@ -195,7 +195,7 @@
 
 .field-input {
   width: 100%;
-  max-width: 280px;
+  max-width: 490px; /* 🔵 הוגדל מ-280px ל-490px (+210px) */
   height: 31px;
   padding: 0 8px;
   font-family: Arial, sans-serif;
@@ -230,7 +230,7 @@
   position: relative;
   display: inline-block;
   width: 100%;
-  max-width: 280px;
+  max-width: 490px; /* 🔵 הוגדל מ-280px ל-490px (+210px) */
 }
 
 .password-toggle {

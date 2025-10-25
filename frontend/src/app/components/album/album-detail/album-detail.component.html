@@ -108,16 +108,15 @@
               <hr class="wishlist-divider" />
 
               <div class="wishlist-section">
-                <a
-                  href="#"
+                <span
                   class="wishlist-link"
-                  (click)="toggleWishlist(); $event.preventDefault()"
+                  (click)="toggleWishlist()"
                 >
                   <span class="heart-icon-inline">{{
                     inWishlist ? "❤" : "♡"
                   }}</span>
                   {{ inWishlist ? "Remove from Wishlist" : "Add to Wishlist" }}
-                </a>
+                </span>
               </div>
             </div>
           </div>
