@@ -233,9 +233,9 @@
 }
 
 .album-card:hover .text-overlay {
-  height: 140px;
+  height: 110px;
   padding: var(--spacing-md);
-  background: rgba(0, 0, 0, 0.92);
+  background: rgba(0, 0, 0, 0.85);
 }
 
 .overlay-static-content {
@@ -405,7 +405,7 @@
 .album-card.red-background:hover .red-background-overlay {
   height: 70px;
   padding: 12px var(--spacing-md);
-  background: rgba(0, 0, 0, 0.92);
+  background: rgba(0, 0, 0, 0.85);
 }
 
 .red-hover-content {
@@ -646,9 +646,9 @@
 @media (max-width: 768px) {
   .red-background-overlay,
   .text-overlay {
-    height: 140px;
+    height: 110px;
     padding: var(--spacing-md);
-    background: rgba(0, 0, 0, 0.92);
+    background: rgba(0, 0, 0, 0.85);
   }
 
   .album-card.red-background:hover .red-background-overlay {
