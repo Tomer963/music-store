@@ -102,6 +102,7 @@
   background-color: #f5f5f5;
   overflow: hidden;
   min-width: 0;
+  order: 1; /* סיידבר מימין בדסקטופ */
 }
 
 .main-content-area {
@@ -110,6 +111,7 @@
   display: flex;
   flex-direction: column;
   gap: clamp(8px, 1.5vh, 12px);
+  order: 2; /* תוכן ראשי משמאל בדסקטופ */
 }
 
 /* Extra Large Screens - Match checkout margins */
@@ -190,10 +192,12 @@
     position: static;
     min-height: auto;
     overflow: visible;
+    order: 2; /* סיידבר למטה במסכים קטנים */
   }
 
   .main-content-area {
     gap: clamp(12px, 2vh, 16px);
+    order: 1; /* תוכן ראשי למעלה במסכים קטנים */
   }
 
   .breadcrumb {
@@ -238,6 +242,15 @@
     padding: 0 12px clamp(12px, 2vh, 16px) 12px;
     gap: clamp(12px, 2vh, 16px);
   }
+
+  /* שמירה על הסדר: תוכן ראשי למעלה, סיידבר למטה */
+  .floating-sidebar {
+    order: 2;
+  }
+
+  .main-content-area {
+    order: 1;
+  }
 }
 
 @media (max-width: 576px) {
@@ -270,6 +283,15 @@
   .container-with-sidebar {
     padding: 0 8px clamp(10px, 1.8vh, 12px) 8px;
   }
+
+  /* שמירה על הסדר: תוכן ראשי למעלה, סיידבר למטה */
+  .floating-sidebar {
+    order: 2;
+  }
+
+  .main-content-area {
+    order: 1;
+  }
 }
 
 @media (max-width: 400px) {
@@ -294,6 +316,15 @@
   .container-with-sidebar {
     padding: 0 6px 10px 6px;
   }
+
+  /* שמירה על הסדר: תוכן ראשי למעלה, סיידבר למטה */
+  .floating-sidebar {
+    order: 2;
+  }
+
+  .main-content-area {
+    order: 1;
+  }
 }
 
 @media (max-width: 320px) {
@@ -317,6 +348,15 @@
 
   .container-with-sidebar {
     padding: 0 4px 8px 4px;
+  }
+
+  /* שמירה על הסדר: תוכן ראשי למעלה, סיידבר למטה */
+  .floating-sidebar {
+    order: 2;
+  }
+
+  .main-content-area {
+    order: 1;
   }
 }
 
