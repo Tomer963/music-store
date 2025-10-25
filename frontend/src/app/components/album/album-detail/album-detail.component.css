@@ -187,6 +187,16 @@
   margin: 6px 18px 6px 0;
 }
 
+/* הגדלת האורך של price-divider ב-18px ימינה */
+.price-divider {
+  margin-right: 0;
+}
+
+/* הגדלת האורך של wishlist-divider ב-18px ימינה */
+.wishlist-divider {
+  margin-right: 0;
+}
+
 /* Price and Description */
 .price-line {
   font-size: 1.25rem;
@@ -452,6 +462,14 @@
     margin: 14px;
     margin-left: 0;
   }
+
+  .price-divider {
+    margin-right: 0;
+  }
+
+  .wishlist-divider {
+    margin-right: 0;
+  }
 }
 
 @media (max-width: 768px) {
@@ -488,6 +506,14 @@
     font-size: 0.75rem;
     line-height: 1.6;
   }
+
+  .price-divider {
+    margin-right: 0;
+  }
+
+  .wishlist-divider {
+    margin-right: 0;
+  }
 }
 
 @media (max-width: 576px) {
@@ -516,5 +542,13 @@
     margin: 10px;
     margin-left: 0;
     font-size: 0.7rem;
+  }
+
+  .price-divider {
+    margin-right: 0;
+  }
+
+  .wishlist-divider {
+    margin-right: 0;
   }
 }
