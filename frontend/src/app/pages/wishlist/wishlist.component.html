@@ -37,6 +37,7 @@
             <div
               *ngFor="let album of wishlistItems; trackBy: trackByAlbum"
               class="wishlist-album-card"
+              (click)="viewAlbum($event, album._id)"
             >
               <div class="album-image-container">
                 <img
@@ -103,7 +104,7 @@
                       <button
                         class="album-icon-btn info-btn"
                         (click)="
-                          viewAlbum($event, album._id);
+                          viewAlbumInfo($event, album._id);
                           $event.stopPropagation();
                           $event.preventDefault()
                         "

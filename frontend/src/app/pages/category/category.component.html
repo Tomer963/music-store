@@ -35,6 +35,7 @@
           <div
             *ngFor="let album of albums; trackBy: trackByAlbum"
             class="category-album-card"
+            (click)="viewAlbumFromCard($event, album._id)"
           >
             <div class="album-image-container">
               <img

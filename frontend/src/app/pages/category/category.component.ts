@@ -246,8 +246,30 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * viewAlbumFromCard
+   * Navigate to album detail (called when clicking on card)
+   * @param event Click event
+   * @param albumId Album ID
+   * @return void
+   */
+  viewAlbumFromCard(event: Event, albumId: string): void {
+    // Check if the click came from a button or link
+    const target = event.target as HTMLElement;
+    if (
+      target.closest(".album-icon-btn") ||
+      target.closest(".action-link") ||
+      target.closest("button") ||
+      target.closest("a")
+    ) {
+      return;
+    }
+
+    this.router.navigate(["/album", albumId]);
+  }
+
+  /**
    * viewAlbum
-   * Navigate to album detail
+   * Navigate to album detail (called when clicking info button)
    * @param event Click event
    * @param albumId Album ID
    * @return void

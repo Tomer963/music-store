@@ -80,13 +80,35 @@ export class WishlistComponent implements OnInit, OnDestroy {
   /**
    * View Album
    *
-   * Navigates to album detail page
+   * Navigates to album detail page (called when clicking on card)
    *
    * @param (Event) event - Click event
    * @param (string) albumId - Album ID
    * @return void
    */
   viewAlbum(event: Event, albumId: string): void {
+    // Check if the click came from a button
+    const target = event.target as HTMLElement;
+    if (
+      target.closest(".album-icon-btn") ||
+      target.closest("button")
+    ) {
+      return;
+    }
+
+    this.router.navigate(["/album", albumId]);
+  }
+
+  /**
+   * View Album Info
+   *
+   * Navigates to album detail page (called when clicking info button)
+   *
+   * @param (Event) event - Click event
+   * @param (string) albumId - Album ID
+   * @return void
+   */
+  viewAlbumInfo(event: Event, albumId: string): void {
     event.stopPropagation();
     event.preventDefault();
     this.router.navigate(["/album", albumId]);

@@ -104,17 +104,30 @@
 }
 
 /* Album Card - uses shared .wishlist-album-card */
+.wishlist-album-card {
+  cursor: pointer;
+}
 
 /* Album image container - uses shared .album-image-container */
 .album-image-container {
   height: 260px;
+  cursor: pointer;
 }
 
 /* Album content - uses shared .album-content */
+.album-content {
+  cursor: pointer;
+}
 
 /* Album title - uses shared .album-title-line */
+.album-title-line {
+  cursor: pointer;
+}
 
 /* Album description - uses shared .album-description */
+.album-description {
+  cursor: pointer;
+}
 
 /* Album bottom section - uses shared .album-bottom-section */
 
@@ -123,6 +136,9 @@
 /* Price display - uses shared .price-display */
 
 /* Album price text - uses shared .album-price-text */
+.album-price-text {
+  cursor: pointer;
+}
 
 /* Original price - uses shared .original-price */
 
