@@ -34,9 +34,35 @@
           <!-- ✅ Price on the LEFT -->
           <p class="overlay-price">{{ getFormattedPrice() }}</p>
 
-          <!-- ✅ Icons on the RIGHT -->
+          <!-- ✅ Icons on the RIGHT - סדר מעודכן כמו אלבום 10 -->
           <div class="overlay-icons-group">
-            <!-- Cart button or counter -->
+            <!-- Wishlist button - ראשון -->
+            <button
+              class="overlay-icon-btn wishlist-icon"
+              [class.loading]="isWishlistLoading"
+              [class.active]="isInWishlist"
+              [disabled]="isWishlistLoading"
+              (click)="toggleWishlist($event)"
+              [title]="
+                isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'
+              "
+            >
+              <div class="icon-spinner" *ngIf="isWishlistLoading"></div>
+              <span *ngIf="!isWishlistLoading">{{
+                isInWishlist ? "❤️" : "🤍"
+              }}</span>
+            </button>
+
+            <!-- Out of stock indicator - שני -->
+            <div
+              *ngIf="!album.inStock"
+              class="overlay-icon-btn out-of-stock"
+              title="Out of Stock"
+            >
+              <span>🚫</span>
+            </div>
+
+            <!-- Cart button or counter - שלישי -->
             <button
               *ngIf="album.inStock && !showCartCounter"
               class="overlay-icon-btn cart-icon"
@@ -62,7 +88,7 @@
               </svg>
             </button>
 
-            <!-- Cart counter (when in cart) -->
+            <!-- Cart counter (when in cart) - שלישי -->
             <div
               *ngIf="album.inStock && showCartCounter"
               class="overlay-cart-counter"
@@ -85,39 +111,13 @@
               </button>
             </div>
 
-            <!-- Out of stock indicator -->
-            <div
-              *ngIf="!album.inStock"
-              class="overlay-icon-btn out-of-stock"
-              title="Out of Stock"
-            >
-              <span>🚫</span>
-            </div>
-
-            <!-- Info button -->
+            <!-- Info button - רביעי -->
             <button
               class="overlay-icon-btn info-icon"
               (click)="viewAlbum($event)"
               title="View Album Details"
             >
               <span>ℹ</span>
-            </button>
-
-            <!-- Wishlist button -->
-            <button
-              class="overlay-icon-btn wishlist-icon"
-              [class.loading]="isWishlistLoading"
-              [class.active]="isInWishlist"
-              [disabled]="isWishlistLoading"
-              (click)="toggleWishlist($event)"
-              [title]="
-                isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'
-              "
-            >
-              <div class="icon-spinner" *ngIf="isWishlistLoading"></div>
-              <span *ngIf="!isWishlistLoading">{{
-                isInWishlist ? "❤️" : "🤍"
-              }}</span>
             </button>
           </div>
         </div>
@@ -138,7 +138,7 @@
 
           <!-- ✅ Icons on the RIGHT -->
           <div class="red-overlay-icons-group">
-            <!-- Wishlist button -->
+            <!-- Wishlist button - ראשון -->
             <button
               class="red-overlay-icon-btn wishlist-icon"
               [class.loading]="isWishlistLoading"
@@ -155,7 +155,7 @@
               }}</span>
             </button>
 
-            <!-- Out of stock indicator -->
+            <!-- Out of stock indicator - שני -->
             <div
               *ngIf="!album.inStock"
               class="red-overlay-icon-btn out-of-stock"
@@ -164,7 +164,7 @@
               <span>🚫</span>
             </div>
 
-            <!-- Cart button or counter -->
+            <!-- Cart button or counter - שלישי -->
             <button
               *ngIf="album.inStock && !showCartCounter"
               class="red-overlay-icon-btn cart-icon"
@@ -191,7 +191,7 @@
               </svg>
             </button>
 
-            <!-- Cart counter (when in cart) -->
+            <!-- Cart counter (when in cart) - שלישי -->
             <div
               *ngIf="album.inStock && showCartCounter"
               class="red-overlay-cart-counter"
@@ -214,7 +214,7 @@
               </button>
             </div>
 
-            <!-- Info button -->
+            <!-- Info button - רביעי -->
             <button
               class="red-overlay-icon-btn info-icon"
               (click)="viewAlbum($event)"

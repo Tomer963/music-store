@@ -249,61 +249,98 @@
   line-height: 1.4;
 }
 
+/* ========================================
+   ICONS GROUP - אייקונים באלבומים 12 והלאה
+   ======================================== */
+
+.album-icons-group {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
 /* Wishlist button specific */
 .album-icon-btn.wishlist-btn {
-  background-color: transparent;
-  padding: 5px;
+  background: rgba(255, 0, 0, 0.85);
+  color: var(--white);
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  padding: 0;
   transition: all var(--transition-fast);
 }
 
 .album-icon-btn.wishlist-btn:hover {
-  background-color: transparent;
-  transform: scale(1.2);
+  background: rgba(255, 0, 0, 0.95);
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .wishlist-heart-icon {
-  font-size: 24px;
-  color: var(--gray-medium);
+  font-size: 20px;
+  color: var(--white);
   transition: color var(--transition-fast);
 }
 
-.album-icon-btn.wishlist-btn:hover .wishlist-heart-icon {
-  color: var(--primary-color);
+/* Out of stock button */
+.album-icon-btn.out-of-stock {
+  background: rgba(156, 156, 156, 0.8);
+  cursor: not-allowed;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.album-icon-btn.out-of-stock span {
+  font-size: 20px;
 }
 
 /* Cart button specific - gray variant */
 .album-icon-btn.cart-btn {
-  background-color: transparent !important;
-  padding: 5px;
-  width: 36px;
-  height: 36px;
+  background: rgba(76, 175, 80, 0.85);
+  padding: 6px;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0;
+  transition: all var(--transition-fast);
 }
 
 .album-icon-btn.cart-btn:hover {
-  background-color: transparent !important;
-  transform: scale(1.2);
+  background: rgba(76, 175, 80, 0.95);
+  transform: scale(1.1);
 }
 
 .album-icon-btn.cart-btn .album-cart-icon {
-  width: 26px;
-  height: 26px;
-  color: #737373;
+  width: 24px;
+  height: 24px;
+  color: var(--white);
 }
 
 /* Info button specific - larger and bolder i */
 .album-icon-btn.info-btn {
-  background-color: #737373;
-  width: 36px;
-  height: 36px;
+  background: rgba(115, 115, 115, 0.9);
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .album-icon-btn.info-btn:hover {
-  background-color: #8a8a8a;
+  background: rgba(140, 140, 140, 0.95);
+  transform: scale(1.1);
 }
 
 .album-info-icon {
@@ -317,13 +354,51 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(115, 115, 115, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
+  background: rgba(76, 175, 80, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
   padding: 0;
-  min-width: 80px;
-  height: 36px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  min-width: 90px;
+  height: 40px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.bottom-counter-btn {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0 10px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-fast);
+  min-width: 30px;
+}
+
+.bottom-counter-btn.trash-btn {
+  font-size: 14px;
+  order: 1;
+}
+
+.bottom-counter-btn.plus-btn {
+  font-size: 20px;
+  order: -1;
+}
+
+.bottom-counter-value {
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 24px;
+  text-align: center;
+  user-select: none;
+  order: 0;
 }
 
 .load-more,
@@ -554,6 +629,33 @@
   .album-content.red-background .album-artist-line.large-artist {
     font-size: 1.125rem;
   }
+  
+  /* רווחים באייקונים במובייל */
+  .album-icons-group {
+    gap: 6px;
+  }
+
+  .album-icon-btn.wishlist-btn,
+  .album-icon-btn.cart-btn,
+  .album-icon-btn.info-btn,
+  .album-icon-btn.out-of-stock {
+    width: 36px;
+    height: 36px;
+  }
+
+  .album-icon-btn.cart-btn .album-cart-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .album-info-icon {
+    font-size: 24px;
+  }
+
+  .bottom-cart-counter {
+    min-width: 80px;
+    height: 36px;
+  }
 }
 
 @media (max-width: 575px) {
@@ -668,6 +770,37 @@
     margin-bottom: var(--spacing-xxl);
     font-size: 1rem;
     padding: var(--spacing-sm) 0;
+  }
+  
+  /* רווחים באייקונים במובייל קטן */
+  .album-icons-group {
+    gap: 4px;
+  }
+
+  .album-icon-btn.wishlist-btn,
+  .album-icon-btn.cart-btn,
+  .album-icon-btn.info-btn,
+  .album-icon-btn.out-of-stock {
+    width: 32px;
+    height: 32px;
+  }
+
+  .album-icon-btn.cart-btn .album-cart-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .album-info-icon {
+    font-size: 22px;
+  }
+
+  .wishlist-heart-icon {
+    font-size: 18px;
+  }
+
+  .bottom-cart-counter {
+    min-width: 70px;
+    height: 32px;
   }
 }
 

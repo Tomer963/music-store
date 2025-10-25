@@ -183,9 +183,9 @@
                           </p>
                         </div>
 
-                        <!-- Action icons -->
+                        <!-- Action icons - סדר מעודכן כמו אלבום 10 -->
                         <div class="album-icons-group">
-                          <!-- Wishlist button -->
+                          <!-- Wishlist button - ראשון -->
                           <button
                             class="album-icon-btn wishlist-btn"
                             [disabled]="isWishlistLoadingMap[album._id]"
@@ -208,9 +208,18 @@
                             ></div>
                           </button>
 
-                          <!-- Cart button or counter -->
+                          <!-- Out of stock - שני (אם אין במלאי) -->
+                          <div
+                            *ngIf="!album.inStock"
+                            class="album-icon-btn out-of-stock"
+                            title="Out of Stock"
+                          >
+                            <span>🚫</span>
+                          </div>
+
+                          <!-- Cart button or counter - שלישי -->
                           <button
-                            *ngIf="!showCartCounter[album._id]"
+                            *ngIf="album.inStock && !showCartCounter[album._id]"
                             class="album-icon-btn cart-btn gray-cart-btn"
                             (click)="addToCart($event, album._id)"
                             [disabled]="
@@ -239,7 +248,7 @@
                             ></div>
                           </button>
 
-                          <!-- Cart counter -->
+                          <!-- Cart counter - שלישי -->
                           <div
                             *ngIf="
                               album.inStock && showCartCounter[album._id]
@@ -270,7 +279,7 @@
                             </button>
                           </div>
 
-                          <!-- Info button -->
+                          <!-- Info button - רביעי -->
                           <button
                             class="album-icon-btn info-btn"
                             (click)="
