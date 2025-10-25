@@ -164,6 +164,28 @@
   width: 100%;
 }
 
+/* Side albums 10-11 - hidden on desktop, shown on mobile */
+.side-albums-mobile-section {
+  display: none;
+}
+
+.side-albums-mobile-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Desktop only classes */
+.desktop-only {
+  display: block;
+}
+
+/* Mobile sidebar section - hidden on desktop */
+.sidebar-mobile-section {
+  display: none;
+}
+
 /* Content below featured */
 .content-below-featured {
   width: 100%;
@@ -219,120 +241,6 @@
   margin-top: var(--spacing-sm);
 }
 
-/* Center icons overlay */
-.side-albums-vertical .home-album-card.album-10-11,
-.albums-grid .home-album-card {
-  width: 100%;
-  display: block;
-  height: auto;
-  position: relative;
-  cursor: default;
-}
-
-.center-icons-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  gap: var(--spacing-md);
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity var(--transition-normal);
-  z-index: 10;
-  pointer-events: none;
-}
-
-.home-album-card:hover .center-icons-overlay {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.center-icon-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-full);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
-  position: relative;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  background: none;
-  padding: 0;
-  font: inherit;
-  color: inherit;
-  outline: none;
-}
-
-.center-icon-btn:hover:not(:disabled) {
-  transform: scale(1.15);
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
-}
-
-.center-icon-btn.wishlist-icon {
-  background: rgba(255, 0, 0, 0.8);
-  font-size: 24px;
-  color: var(--white);
-}
-
-.center-icon-btn.cart-icon {
-  padding: 8px;
-  background: rgba(76, 175, 80, 0.8);
-}
-
-.center-icon-btn.info-icon {
-  background: rgba(115, 115, 115, 0.9);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--white);
-}
-
-.center-icon-btn.info-icon:hover {
-  background: rgba(140, 140, 140, 0.95);
-}
-
-.center-cart-icon-svg,
-.album-cart-icon {
-  width: 28px;
-  height: 28px;
-  color: var(--white);
-}
-
-/* Red background albums */
-.album-content.red-background {
-  background-color: var(--primary-color);
-  color: var(--white);
-  min-height: 250px;
-  padding: var(--spacing-lg);
-}
-
-.album-content.red-background .album-title-line.large-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--white);
-  margin-bottom: var(--spacing-sm);
-  line-height: 1.2;
-}
-
-.album-content.red-background .album-artist-line.large-artist {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--white);
-  margin-bottom: var(--spacing-md);
-  line-height: 1.2;
-}
-
-.album-content.red-background .album-description-text.black-text {
-  color: var(--black);
-  font-size: 0.875rem;
-  line-height: 1.4;
-}
-
 .cart-widget-container {
   margin-top: var(--spacing-lg);
   width: 100%;
@@ -357,7 +265,7 @@
   margin-bottom: var(--spacing-xl);
 }
 
-/* Album card - NO BORDER RADIUS */
+/* Album card */
 .home-album-card {
   background-color: var(--black);
   border-radius: 0;
@@ -425,6 +333,35 @@
 .album-content.no-description {
   padding: var(--spacing-sm) var(--spacing-md);
   min-height: auto;
+}
+
+.album-content.red-background {
+  background-color: var(--primary-color);
+  color: var(--white);
+  min-height: 250px;
+  padding: var(--spacing-lg);
+}
+
+.album-content.red-background .album-title-line.large-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.2;
+}
+
+.album-content.red-background .album-artist-line.large-artist {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.2;
+}
+
+.album-content.red-background .album-description-text.black-text {
+  color: var(--black);
+  font-size: 0.875rem;
+  line-height: 1.4;
 }
 
 .album-title-line {
@@ -653,6 +590,7 @@
   font-size: 1.125rem;
   font-weight: 500;
   margin-bottom: 0;
+  margin-top: var(--spacing-xl);
 }
 
 /* Animation */
@@ -722,83 +660,121 @@
   }
 }
 
-/* ✅ FIX המפתח האמיתי - מסכים קטנים */
+/* ✅ מסכים קטנים - הסדר הנכון */
 @media (max-width: 575px) {
   .home-page {
     min-height: calc(100vh - 65px);
   }
 
-  /* ✅ הפיכת featured-wrapper ל-block layout */
+  /* ✅ Featured section - albums 1-9 */
+  .featured-section {
+    margin-bottom: var(--spacing-lg);
+  }
+
   .featured-wrapper {
     display: block;
-    margin-bottom: 0; /* ✅ אפס margin למטה */
-    min-height: auto; /* ✅ לא לכפות גובה */
-    max-height: none; /* ✅ אין הגבלה */
+    margin-bottom: 0;
+    min-height: auto;
+    max-height: none;
   }
 
   .featured-album {
     width: 100%;
-    min-height: auto; /* ✅ גובה אוטומטי */
+    min-height: auto;
     margin-bottom: 0;
   }
 
-  /* ✅ ה-grid של אלבומים 1-8 */
   .top-albums-grid {
     grid-template-columns: repeat(2, 1fr);
     margin-top: 0;
     margin-bottom: 0;
-    min-height: auto; /* ✅ גובה אוטומטי */
-    height: auto; /* ✅ גובה לפי תוכן */
-  }
-  
-  /* ✅ זה הפתרון האמיתי! רווח ענק אחרי featured-section כולה */
-  .featured-section {
-    margin-bottom: 80px !important; /* ✅ רווח ענק למטה */
-  }
-  
-  /* ✅ content-below-featured מתחיל הרבה למטה */
-  .content-below-featured {
-    margin-top: 0;
-    padding-top: 80px; /* ✅ padding גדול למעלה */
+    min-height: auto;
+    height: auto;
   }
 
-  .albums-grid {
-    grid-template-columns: 1fr;
+  /* ✅ הצגת אלבומים 10-11 אחרי featured */
+  .side-albums-mobile-section {
+    display: block;
+    margin-bottom: var(--spacing-xl);
   }
-  
+
+  .side-albums-mobile-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  /* ✅ הסתרת אלבומים 10-11 מהסיידבר */
+  .side-albums-vertical.desktop-only {
+    display: none !important;
+  }
+
+  /* ✅ Content below featured */
+  .content-below-featured {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  /* ✅ כותרת New Products */
   .new-products-title {
     margin-top: 0;
-    margin-bottom: 30px;
+    margin-bottom: var(--spacing-lg);
   }
 
   .new-products-title h2 {
     font-size: 1.25rem;
   }
 
+  /* ✅ Content with sidebar - מבנה עמודות */
   .content-with-sidebar {
     flex-direction: column;
     gap: 0;
   }
 
+  /* ✅ הסתרת הסיידבר מהמיקום הדסקטופי */
   .sidebar-column {
-    order: 2;
-    width: 100%;
-    margin-top: 60px;
+    display: none !important;
   }
 
+  /* ✅ Main albums wrapper - אלבומים 12+ */
   .main-albums-wrapper {
     order: 1;
-    margin-bottom: 60px;
+    margin-bottom: 0;
   }
 
-  .side-albums-vertical {
-    margin-top: 80px;
-    gap: 40px;
+  .albums-grid {
+    grid-template-columns: 1fr;
   }
 
   .albums-section {
     margin-top: 0;
     padding-top: 0;
+    margin-bottom: var(--spacing-xl);
+  }
+
+  /* ✅ הצגת הסיידבר במיקום המובייל (אחרי albums 12+) */
+  .sidebar-mobile-section {
+    display: block;
+    order: 2;
+    width: 100%;
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .sidebar-mobile-section .sidebar-container {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .sidebar-mobile-section .cart-widget-container {
+    margin-top: var(--spacing-lg);
+  }
+
+  /* ✅ הודעת סיום - תמיד בסוף */
+  .no-more-plain {
+    order: 3;
+    margin-top: var(--spacing-lg);
+    font-size: 1rem;
+    padding: var(--spacing-sm) 0;
   }
 }
 
@@ -808,48 +784,46 @@
     min-height: calc(100vh - 56px);
   }
 
-  /* ✅ grid של עמודה אחת */
   .top-albums-grid {
     grid-template-columns: 1fr;
-    height: auto; /* ✅ גובה לפי תוכן */
+    height: auto;
   }
 
-  /* ✅ רווח ענק יותר */
   .featured-section {
-    margin-bottom: 100px !important; /* ✅ עוד יותר רווח */
+    margin-bottom: var(--spacing-md);
   }
-  
-  .content-below-featured {
-    padding-top: 100px; /* ✅ padding גדול יותר */
-  }
-  
+
   .album-content.red-background .album-title-line.large-title {
     font-size: 1.25rem;
   }
-  
+
   .album-content.red-background .album-artist-line.large-artist {
     font-size: 0.938rem;
   }
-  
+
   .no-more-plain {
-    font-size: 1rem;
-    padding: var(--spacing-sm) 0 8px 0;
+    font-size: 0.938rem;
+    padding: 8px 0;
   }
 
   .new-products-title {
-    margin-bottom: 40px;
+    margin-bottom: var(--spacing-md);
   }
 
-  .sidebar-column {
-    margin-top: 80px;
+  .new-products-title h2 {
+    font-size: 1.125rem;
   }
 
-  .main-albums-wrapper {
-    margin-bottom: 80px;
+  .side-albums-mobile-wrapper {
+    gap: var(--spacing-md);
   }
 
-  .side-albums-vertical {
-    margin-top: 100px;
-    gap: 50px;
+  .sidebar-mobile-section {
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .albums-section {
+    margin-bottom: var(--spacing-lg);
   }
 }
