@@ -59,11 +59,11 @@
   line-height: 1.5;
 }
 
-/* Featured section */
+/* Featured section - NO MARGIN BOTTOM */
 .featured-section {
   display: flex;
   flex-direction: column;
-  margin-bottom: var(--spacing-xxl);
+  margin-bottom: 0;
 }
 
 .featured-wrapper {
@@ -346,6 +346,11 @@
   animation: fadeInUp 0.5s ease-out backwards;
 }
 
+/* Hide sidebar-mobile-section on desktop */
+.sidebar-mobile-section {
+  display: none;
+}
+
 /* Responsive */
 @media (min-width: 1400px) {
   .featured-wrapper {
@@ -480,7 +485,7 @@
   }
 
   .sidebar-mobile-section {
-    display: block;
+    display: block !important;
     order: 2;
     width: 100%;
     margin-top: var(--spacing-xl);
