@@ -53,8 +53,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * ngOnInit
-   * Initialize component and load category data
+   * Initialize Component
+   * 
+   * Sets up subscriptions and loads category data
+   *
    * @return void
    */
   ngOnInit(): void {
@@ -64,8 +66,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ngOnDestroy
-   * Cleanup subscriptions
+   * Cleanup Component
+   * 
+   * Unsubscribes from all observables
+   *
    * @return void
    */
   ngOnDestroy(): void {
@@ -74,8 +78,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * initializeWishlist
-   * Setup wishlist subscriptions
+   * Initialize Wishlist
+   * 
+   * Sets up wishlist subscriptions
+   *
    * @return void
    */
   private initializeWishlist(): void {
@@ -88,8 +94,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * subscribeToLoadingStates
-   * Track loading states for wishlist operations
+   * Subscribe To Loading States
+   * 
+   * Tracks loading states for wishlist operations
+   *
    * @return void
    */
   private subscribeToLoadingStates(): void {
@@ -104,8 +112,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * initializeRouteParams
-   * Subscribe to route params and reload on category change
+   * Initialize Route Params
+   * 
+   * Subscribes to route params and reloads on category change
+   *
    * @return void
    */
   private initializeRouteParams(): void {
@@ -122,8 +132,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * resetState
-   * Reset component state for new category
+   * Reset State
+   * 
+   * Resets component state for new category
+   *
    * @return void
    */
   private resetState(): void {
@@ -134,8 +146,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * loadCategoryData
-   * Load category info and albums in parallel
+   * Load Category Data
+   * 
+   * Loads category info and albums in parallel
+   *
    * @return void
    */
   private loadCategoryData(): void {
@@ -162,8 +176,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * loadAlbums
-   * Fetch albums for current page
+   * Load Albums
+   * 
+   * Fetches albums for current page
+   *
    * @return void
    */
   private loadAlbums(): void {
@@ -181,9 +197,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * handleAlbumsResponse
-   * Process albums response and update state
-   * @param response API response
+   * Handle Albums Response
+   * 
+   * Processes albums response and updates state
+   *
+   * @param (any) response - API response
    * @return void
    */
   private handleAlbumsResponse(response: any): void {
@@ -202,8 +220,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * handleAlbumsError
-   * Handle album loading errors
+   * Handle Albums Error
+   * 
+   * Handles album loading errors
+   *
    * @return void
    */
   private handleAlbumsError(): void {
@@ -214,8 +234,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * onWindowScroll
-   * Handle infinite scroll
+   * On Window Scroll
+   * 
+   * Handles infinite scroll for loading more albums
+   *
    * @return void
    */
   @HostListener("window:scroll", ["$event"])
@@ -232,8 +254,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * loadMoreAlbums
-   * Load next page for infinite scroll
+   * Load More Albums
+   * 
+   * Loads next page for infinite scroll
+   *
    * @return void
    */
   private loadMoreAlbums(): void {
@@ -246,14 +270,16 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * viewAlbumFromCard
-   * Navigate to album detail (called when clicking on card)
-   * @param event Click event
-   * @param albumId Album ID
+   * View Album From Card
+   * 
+   * Navigates to album detail when clicking on card
+   *
+   * @param (Event) event - Click event
+   * @param (string) albumId - Album ID
    * @return void
    */
   viewAlbumFromCard(event: Event, albumId: string): void {
-    // Check if the click came from a button or link
+    // Check if click came from button or link
     const target = event.target as HTMLElement;
     if (
       target.closest(".album-icon-btn") ||
@@ -268,10 +294,12 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * viewAlbum
-   * Navigate to album detail (called when clicking info button)
-   * @param event Click event
-   * @param albumId Album ID
+   * View Album
+   * 
+   * Navigates to album detail when clicking info button
+   *
+   * @param (Event) event - Click event
+   * @param (string) albumId - Album ID
    * @return void
    */
   viewAlbum(event: Event, albumId: string): void {
@@ -281,10 +309,12 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * addToCart
-   * Add album to cart with loading state
-   * @param event Click event
-   * @param albumId Album ID
+   * Add To Cart
+   * 
+   * Adds album to cart with loading state
+   *
+   * @param (Event) event - Click event
+   * @param (string) albumId - Album ID
    * @return void
    */
   addToCart(event: Event, albumId: string): void {
@@ -310,10 +340,12 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * addToWishlistLink
-   * Toggle wishlist via link
-   * @param event Click event
-   * @param albumId Album ID
+   * Add To Wishlist Link
+   * 
+   * Toggles wishlist via link
+   *
+   * @param (Event) event - Click event
+   * @param (string) albumId - Album ID
    * @return void
    */
   addToWishlistLink(event: Event, albumId: string): void {
@@ -323,22 +355,25 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * addToCompare
-   * Placeholder for compare feature (not implemented)
-   * @param event Click event
-   * @param albumId Album ID
+   * Add To Compare
+   * 
+   * Placeholder for compare feature
+   *
+   * @param (Event) event - Click event
+   * @param (string) albumId - Album ID
    * @return void
    */
   addToCompare(event: Event, albumId: string): void {
     event.preventDefault();
     event.stopPropagation();
-    // Feature not implemented
   }
 
   /**
-   * isInWishlist
-   * Check if album is in wishlist
-   * @param albumId Album ID
+   * Is In Wishlist
+   * 
+   * Checks if album is in wishlist
+   *
+   * @param (string) albumId - Album ID
    * @return boolean True if in wishlist
    */
   isInWishlist(albumId: string): boolean {
@@ -346,9 +381,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getMainImageUrl
-   * Get primary image URL
-   * @param album Album object
+   * Get Main Image URL
+   * 
+   * Gets primary image URL with fallback
+   *
+   * @param (Album) album - Album object
    * @return string Image URL
    */
   getMainImageUrl(album: Album): string {
@@ -356,9 +393,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * formatPrice
-   * Format price as currency
-   * @param price Price value
+   * Format Price
+   * 
+   * Formats price as currency
+   *
+   * @param (number) price - Price value
    * @return string Formatted price
    */
   formatPrice(price: number): string {
@@ -366,44 +405,41 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getTruncatedDescription
-   * FIXED: Smart truncation that respects word boundaries
-   * Truncates to approximately 2 lines (~80-90 chars) and ensures no word breaking
-   * @param description Full description text
+   * Get Truncated Description
+   * 
+   * Smart truncation that respects word boundaries
+   *
+   * @param (string) description - Full description text
    * @return string Truncated description with ellipsis if needed
    */
   getTruncatedDescription(description: string): string {
     if (!description) return "";
 
-    // Approximate character limit for 2 lines (considering font size 0.813rem, line-height 1.4)
-    // This is roughly 40-45 characters per line = ~85 chars total
-    const maxLength = 85;
+    const maxLength = 85; // Approx 2 lines
 
-    // If description is shorter than limit, return as-is
     if (description.length <= maxLength) {
       return description;
     }
 
-    // Find the last complete word before the limit
+    // Find last complete word before limit
     let truncated = description.substring(0, maxLength);
-
-    // Find the last space to avoid cutting mid-word
     const lastSpace = truncated.lastIndexOf(" ");
 
     if (lastSpace > 0) {
-      // Cut at the last space and add ellipsis
       truncated = truncated.substring(0, lastSpace);
     }
 
-    // Remove trailing punctuation before adding ellipsis
+    // Remove trailing punctuation
     truncated = truncated.replace(/[.,;:!?-]+$/, "");
 
     return truncated + "...";
   }
 
   /**
-   * goHome
-   * Navigate to home page
+   * Go Home
+   * 
+   * Navigates to home page
+   *
    * @return void
    */
   goHome(): void {
@@ -411,10 +447,12 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * trackByAlbum
-   * TrackBy function for performance
-   * @param index Item index
-   * @param album Album object
+   * Track By Album
+   * 
+   * TrackBy function for ngFor performance
+   *
+   * @param (number) index - Item index
+   * @param (Album) album - Album object
    * @return string Unique ID
    */
   trackByAlbum(index: number, album: Album): string {

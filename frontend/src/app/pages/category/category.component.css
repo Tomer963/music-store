@@ -1,14 +1,9 @@
-/* Loading State - uses shared .loading-container and .vinyl-loader */
-
-/* Error Container - uses shared .error-container */
-
 .category-content-inner {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
 
-/* ✅ SYNCHRONIZED CATEGORY HEADER - matches home page new-products-title */
 .category-header {
   background-color: var(--white);
   padding: 8px 12px;
@@ -41,50 +36,32 @@
   padding-bottom: var(--spacing-lg);
 }
 
-/* Album card - uses shared .category-album-card with clickable cursor */
 .category-album-card {
   cursor: pointer;
 }
 
-/* Album image container - uses shared .album-image-container */
 .album-image-container {
   height: 260px;
   cursor: pointer;
 }
 
-/* Album content - uses shared .album-content */
 .album-content {
   cursor: pointer;
 }
 
-/* Album title - uses shared .album-title-line */
 .album-title-line {
   cursor: pointer;
 }
 
-/* Album description - uses shared .album-description */
 .album-description {
   cursor: pointer;
 }
 
-/* Album bottom section - uses shared .album-bottom-section */
-
-/* Album price icons row - uses shared .album-price-icons-row */
-
-/* Price display - uses shared .price-display */
-
-/* Album price text - uses shared .album-price-text */
 .album-price-text {
   cursor: pointer;
 }
 
-/* Original price - uses shared .original-price */
-
-/* Album icons group - uses shared .album-icons-group */
-
-/* Icon buttons - uses shared styles */
-
-/* Cart button specific - gray variant */
+/* Cart button - gray variant */
 .album-icon-btn.cart-btn.gray-cart-btn {
   background-color: transparent !important;
   padding: 5px;
@@ -107,7 +84,7 @@
   color: #737373;
 }
 
-/* Info button specific */
+/* Info button */
 .album-icon-btn.info-btn {
   background-color: #737373;
   width: 34px;
@@ -157,7 +134,7 @@
   color: var(--white);
 }
 
-/* No albums - uses shared .empty-state */
+/* No albums */
 .no-albums {
   text-align: center;
   padding: var(--spacing-xxl) 0;
@@ -178,7 +155,7 @@
   flex-shrink: 0;
 }
 
-/* Animation - uses shared fadeInUp */
+/* Animation */
 .albums-grid .category-album-card {
   animation: fadeInUp 0.5s ease-out backwards;
 }

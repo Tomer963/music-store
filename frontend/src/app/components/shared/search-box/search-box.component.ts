@@ -31,8 +31,14 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   constructor(private searchService: SearchService, private router: Router) {}
 
+  /**
+   * Initialize Component
+   * 
+   * Sets up search with debounce and minimum character requirement
+   *
+   * @return void
+   */
   ngOnInit(): void {
-    // Setup search with debounce
     this.searchControl.valueChanges
       .pipe(
         takeUntil(this.destroy$),
@@ -70,6 +76,13 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Cleanup Component
+   * 
+   * Unsubscribes from all observables
+   *
+   * @return void
+   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -77,7 +90,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Clear Search
-   *
+   * 
    * Resets search input and results
    *
    * @return void
@@ -92,7 +105,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * On Search
-   *
+   * 
    * Handles search form submission
    *
    * @return void
@@ -107,10 +120,10 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Select Album
-   *
+   * 
    * Navigates to album detail page
    *
-   * @param albumId - Album ID
+   * @param (string) albumId - Album ID
    * @return void
    */
   selectAlbum(albumId: string): void {
@@ -122,7 +135,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Hide Results
-   *
+   * 
    * Closes search results dropdown
    *
    * @return void
@@ -133,10 +146,10 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * On Click Outside
+   * 
+   * Closes dropdown when clicking outside search box
    *
-   * Closes dropdown when clicking outside
-   *
-   * @param event - Mouse click event
+   * @param (Event) event - Mouse click event
    * @return void
    */
   @HostListener("document:click", ["$event"])

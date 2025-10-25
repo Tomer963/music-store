@@ -1,5 +1,3 @@
-/* Uses shared: .header, .nav-top, .nav-list, .nav-item */
-
 /* Main Header */
 .header-main {
   background-color: var(--primary-color);
@@ -9,7 +7,6 @@
   align-items: center;
 }
 
-/* Container with consistent padding */
 .header .container {
   max-width: 100%;
   margin: 0 auto;
@@ -68,7 +65,7 @@
   }
 }
 
-/* Logo - shifted 40px left */
+/* Logo */
 .logo {
   flex-shrink: 0;
   display: flex;
@@ -92,7 +89,7 @@
   object-fit: contain;
 }
 
-/* Search - centered */
+/* Search */
 .search-wrapper {
   flex: 1;
   max-width: 500px;

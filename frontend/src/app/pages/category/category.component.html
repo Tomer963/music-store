@@ -9,7 +9,7 @@
     <div class="loading-container" *ngIf="isLoading">
       <div class="vinyl-loader">
         <div class="record">
-          <div class="label">♪</div>
+          <div class="label">&#9834;</div>
         </div>
       </div>
     </div>
@@ -106,13 +106,13 @@
                       "
                       title="View Details"
                     >
-                      <span class="album-info-icon">ℹ</span>
+                      <span class="album-info-icon">&#8505;</span>
                     </button>
                   </div>
                 </div>
 
                 <div class="album-action-links">
-                  <a
+                  
                     href="#"
                     class="action-link"
                     (click)="addToWishlistLink($event, album._id)"
@@ -123,7 +123,7 @@
                         : "Add to Wishlist"
                     }}
                   </a>
-                  <a
+                  
                     href="#"
                     class="action-link compare-link"
                     (click)="addToCompare($event, album._id)"

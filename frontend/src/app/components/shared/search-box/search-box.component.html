@@ -17,7 +17,7 @@
       (click)="clearSearch()"
       title="Clear search"
     >
-      ×
+      &times;
     </button>
     <button
       type="submit"
@@ -77,7 +77,6 @@
           <div class="result-year">Released {{ album.releaseYear }}</div>
         </div>
 
-        <!-- HR separator - not shown after last item -->
         <hr class="result-separator" *ngIf="!last" />
       </div>
     </div>
