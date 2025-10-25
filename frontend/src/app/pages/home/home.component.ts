@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private albumService: AlbumService,
     private cartService: CartService,
     private wishlistService: WishlistService,
-    private router: Router,
+    private router: Router
   ) {}
 
   /**

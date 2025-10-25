@@ -47,7 +47,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     private router: Router,
     private cartService: CartService,
     private albumService: AlbumService,
-    private wishlistService: WishlistService,
+    private wishlistService: WishlistService
   ) {}
 
   ngOnInit(): void {
@@ -125,7 +125,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   private checkCartStatus(): void {
     this.cartService.cart$.pipe(takeUntil(this.destroy$)).subscribe((cart) => {
       const cartItem = cart.items.find(
-        (item) => item.album._id === this.album._id,
+        (item) => item.album._id === this.album._id
       );
       if (cartItem) {
         this.cartQuantity = cartItem.quantity;

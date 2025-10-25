@@ -45,7 +45,7 @@ export class SearchService {
         this.cacheResults(trimmedQuery, albums);
         return albums;
       }),
-      catchError(() => of([])),
+      catchError(() => of([]))
     );
   }
 

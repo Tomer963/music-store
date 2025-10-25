@@ -25,10 +25,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isInWishlistPage = false;
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private stateService: StateService,
-    private router: Router,
-  ) {}
+  constructor(private stateService: StateService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadCategories();
@@ -96,7 +93,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
-        takeUntil(this.destroy$),
+        takeUntil(this.destroy$)
       )
       .subscribe(() => this.checkCurrentRoute());
   }

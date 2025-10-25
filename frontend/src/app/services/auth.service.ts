@@ -33,10 +33,7 @@ export class AuthService {
   private readonly INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes
   private readonly ACTIVITY_CHECK_INTERVAL = 60 * 1000; // 1 minute
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-  ) {
+  constructor(private http: HttpClient, private router: Router) {
     this.setupActivityTracking();
     this.setupInactivityCheck();
   }
@@ -55,7 +52,7 @@ export class AuthService {
       fromEvent(document, "mousedown"),
       fromEvent(document, "keypress"),
       fromEvent(document, "scroll"),
-      fromEvent(document, "touchstart"),
+      fromEvent(document, "touchstart")
     ).pipe(throttleTime(5000));
 
     userActivity$.subscribe(() => {
@@ -187,7 +184,7 @@ export class AuthService {
       .post<ApiResponse<AuthResponse>>(`${this.apiUrl}/register`, requestData)
       .pipe(
         map((response) => response.data!),
-        catchError((error) => this.handleError(error)),
+        catchError((error) => this.handleError(error))
       );
   }
 
@@ -211,7 +208,7 @@ export class AuthService {
           this.setAuthData(authData);
           this.updateLastActivity();
         }),
-        catchError((error) => this.handleError(error)),
+        catchError((error) => this.handleError(error))
       );
   }
 
@@ -285,7 +282,7 @@ export class AuthService {
         this.currentUserSubject.next(user);
         this.updateLastActivity();
       }),
-      catchError((error) => this.handleError(error)),
+      catchError((error) => this.handleError(error))
     );
   }
 
@@ -399,7 +396,7 @@ export class AuthService {
       atob(base64)
         .split("")
         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join(""),
+        .join("")
     );
     return JSON.parse(jsonPayload);
   }

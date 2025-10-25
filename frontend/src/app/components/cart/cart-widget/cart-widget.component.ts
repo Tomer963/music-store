@@ -23,7 +23,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
   constructor(
     private cartService: CartService,
     private albumService: AlbumService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {

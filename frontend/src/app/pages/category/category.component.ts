@@ -49,7 +49,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private categoryService: CategoryService,
     private cartService: CartService,
     private wishlistService: WishlistService,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {}
 
   /**
@@ -171,7 +171,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       .getAlbumsByCategory(
         this.categoryId,
         this.currentPage,
-        this.ITEMS_PER_PAGE,
+        this.ITEMS_PER_PAGE
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe({

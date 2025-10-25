@@ -31,7 +31,7 @@ export class StateService {
 
   constructor(
     private albumService: AlbumService,
-    private categoryService: CategoryService,
+    private categoryService: CategoryService
   ) {
     // Load initial data if not already loaded
     if (!this.getCurrentState().isDataLoaded) {
@@ -105,7 +105,7 @@ export class StateService {
       }),
       catchError(() => {
         return of(this.getCurrentState());
-      }),
+      })
     );
   }
 

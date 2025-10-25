@@ -29,14 +29,11 @@ export class WishlistService {
   // Per-item loading states
   private itemLoadingStates = new Map<string, boolean>();
   private itemLoadingSubject = new BehaviorSubject<Map<string, boolean>>(
-    new Map(),
+    new Map()
   );
   public itemLoading$ = this.itemLoadingSubject.asObservable();
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-  ) {
+  constructor(private http: HttpClient, private authService: AuthService) {
     this.initializeWishlistIds();
 
     // Sync local wishlist to server when user logs in
@@ -50,7 +47,7 @@ export class WishlistService {
 
   /**
    * Toggle Wishlist
-   * 
+   *
    * Adds or removes album from wishlist
    *
    * @param albumId Album identifier
@@ -69,13 +66,13 @@ export class WishlistService {
       catchError((error) => {
         this.setItemLoading(albumId, false);
         return throwError(() => error);
-      }),
+      })
     );
   }
 
   /**
    * Is Item Loading
-   * 
+   *
    * Checks loading state for specific item
    *
    * @param albumId Album identifier
@@ -87,7 +84,7 @@ export class WishlistService {
 
   /**
    * Is In Wishlist
-   * 
+   *
    * Checks if album exists in wishlist reactively
    *
    * @param albumId Album identifier
@@ -99,7 +96,7 @@ export class WishlistService {
 
   /**
    * Get Real Time Wishlist
-   * 
+   *
    * Returns current wishlist albums as observable stream
    *
    * @return Observable array of wishlist albums
@@ -110,7 +107,7 @@ export class WishlistService {
 
   /**
    * Refresh Wishlist
-   * 
+   *
    * Forces reload of wishlist from source
    *
    * @return void
@@ -121,7 +118,7 @@ export class WishlistService {
 
   /**
    * Add To Wishlist
-   * 
+   *
    * Internal method to add album to wishlist
    *
    * @param albumId Album identifier
@@ -141,14 +138,14 @@ export class WishlistService {
 
   /**
    * Remove From Wishlist
-   * 
+   *
    * Internal method to remove album from wishlist
    *
    * @param albumId Album identifier
    * @return Observable with updated wishlist IDs
    */
   private removeFromWishlist(
-    albumId: string,
+    albumId: string
   ): Observable<{ wishlist: string[] }> {
     return this.authService.isAuthenticated()
       ? this.removeFromServerWishlist(albumId)
@@ -157,7 +154,7 @@ export class WishlistService {
 
   /**
    * Initialize Wishlist IDs
-   * 
+   *
    * Loads wishlist from appropriate source (server or localStorage)
    *
    * @return void
@@ -188,7 +185,7 @@ export class WishlistService {
 
   /**
    * Get Server Wishlist
-   * 
+   *
    * Fetches wishlist from API
    *
    * @return Observable array of wishlist albums
@@ -196,25 +193,25 @@ export class WishlistService {
   private getServerWishlist(): Observable<Album[]> {
     return this.http.get<ApiResponse<Album[]>>(this.apiUrl).pipe(
       map((response) => response.data || []),
-      catchError(() => of([])),
+      catchError(() => of([]))
     );
   }
 
   /**
    * Add To Server Wishlist
-   * 
+   *
    * Adds album to server-side wishlist
    *
    * @param albumId Album identifier
    * @return Observable with updated wishlist IDs
    */
   private addToServerWishlist(
-    albumId: string,
+    albumId: string
   ): Observable<{ wishlist: string[] }> {
     return this.http
       .post<ApiResponse<{ wishlist: string[] }>>(
         `${this.apiUrl}/${albumId}`,
-        {},
+        {}
       )
       .pipe(
         map((response) => response.data!),
@@ -229,7 +226,7 @@ export class WishlistService {
             .get<ApiResponse<Album>>(`${this.albumsApiUrl}/${albumId}`)
             .pipe(
               map((response) => response.data!),
-              catchError(() => of(null)),
+              catchError(() => of(null))
             )
             .subscribe((album) => {
               if (album) {
@@ -238,42 +235,40 @@ export class WishlistService {
               }
             });
         }),
-        catchError(this.handleError),
+        catchError(this.handleError)
       );
   }
 
   /**
    * Remove From Server Wishlist
-   * 
+   *
    * Removes album from server-side wishlist
    *
    * @param albumId Album identifier
    * @return Observable with updated wishlist IDs
    */
   private removeFromServerWishlist(
-    albumId: string,
+    albumId: string
   ): Observable<{ wishlist: string[] }> {
     return this.http
-      .delete<ApiResponse<{ wishlist: string[] }>>(
-        `${this.apiUrl}/${albumId}`,
-      )
+      .delete<ApiResponse<{ wishlist: string[] }>>(`${this.apiUrl}/${albumId}`)
       .pipe(
         map((response) => response.data!),
         tap(() => this.updateAfterRemoval(albumId)),
-        catchError(this.handleError),
+        catchError(this.handleError)
       );
   }
 
   /**
    * Add To Local Wishlist
-   * 
+   *
    * Adds album to localStorage wishlist
    *
    * @param albumId Album identifier
    * @return Observable with updated wishlist IDs
    */
   private addToLocalWishlist(
-    albumId: string,
+    albumId: string
   ): Observable<{ wishlist: string[] }> {
     const wishlistIds = this.getLocalWishlistIds();
 
@@ -290,7 +285,7 @@ export class WishlistService {
         .get<ApiResponse<Album>>(`${this.albumsApiUrl}/${albumId}`)
         .pipe(
           map((response) => response.data!),
-          catchError(() => of(null)),
+          catchError(() => of(null))
         )
         .subscribe((album) => {
           if (album) {
@@ -304,14 +299,14 @@ export class WishlistService {
 
   /**
    * Remove From Local Wishlist
-   * 
+   *
    * Removes album from localStorage wishlist
    *
    * @param albumId Album identifier
    * @return Observable with updated wishlist IDs
    */
   private removeFromLocalWishlist(
-    albumId: string,
+    albumId: string
   ): Observable<{ wishlist: string[] }> {
     let wishlistIds = this.getLocalWishlistIds();
     wishlistIds = wishlistIds.filter((id) => id !== albumId);
@@ -322,7 +317,7 @@ export class WishlistService {
 
   /**
    * Update After Removal
-   * 
+   *
    * Updates state after removing item from wishlist
    *
    * @param albumId Album identifier
@@ -335,13 +330,13 @@ export class WishlistService {
 
     const currentAlbums = this.wishlistAlbumsSubject.value;
     this.wishlistAlbumsSubject.next(
-      currentAlbums.filter((album) => album._id !== albumId),
+      currentAlbums.filter((album) => album._id !== albumId)
     );
   }
 
   /**
    * Load Local Wishlist Albums
-   * 
+   *
    * Fetches album details for localStorage IDs
    *
    * @return void
@@ -360,15 +355,15 @@ export class WishlistService {
     const albumRequests = localWishlistIds.map((id) =>
       this.http.get<ApiResponse<Album>>(`${this.albumsApiUrl}/${id}`).pipe(
         map((response) => response.data),
-        catchError(() => of(null)),
-      ),
+        catchError(() => of(null))
+      )
     );
 
     if (albumRequests.length > 0) {
       forkJoin(albumRequests).subscribe({
         next: (albums) => {
           const validAlbums = albums.filter(
-            (album) => album !== null,
+            (album) => album !== null
           ) as Album[];
           this.wishlistAlbumsSubject.next(validAlbums);
           this.loadingSubject.next(false);
@@ -386,7 +381,7 @@ export class WishlistService {
 
   /**
    * Sync Local To Server
-   * 
+   *
    * Syncs localStorage wishlist to server on login
    *
    * @return Observable of sync operation
@@ -399,20 +394,20 @@ export class WishlistService {
       this.http
         .post<ApiResponse<{ wishlist: string[] }>>(
           `${this.apiUrl}/${albumId}`,
-          {},
+          {}
         )
-        .pipe(catchError(() => of(null))),
+        .pipe(catchError(() => of(null)))
     );
 
     return forkJoin(syncRequests).pipe(
       tap(() => this.clearLocalWishlist()),
-      catchError(() => of(null)),
+      catchError(() => of(null))
     );
   }
 
   /**
    * Set Item Loading
-   * 
+   *
    * Updates loading state for specific item
    *
    * @param albumId Album identifier
@@ -426,7 +421,7 @@ export class WishlistService {
 
   /**
    * Get Local Wishlist IDs
-   * 
+   *
    * Retrieves wishlist IDs from localStorage
    *
    * @return Array of album IDs
@@ -443,7 +438,7 @@ export class WishlistService {
 
   /**
    * Save Local Wishlist IDs
-   * 
+   *
    * Stores wishlist IDs in localStorage
    *
    * @param wishlistIds Array of album IDs
@@ -459,7 +454,7 @@ export class WishlistService {
 
   /**
    * Clear Local Wishlist
-   * 
+   *
    * Removes wishlist from localStorage
    *
    * @return void
@@ -470,7 +465,7 @@ export class WishlistService {
 
   /**
    * Handle Error
-   * 
+   *
    * Centralized error handling
    *
    * @param error Error object

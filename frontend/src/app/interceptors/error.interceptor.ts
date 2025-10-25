@@ -25,8 +25,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else if (error.status === 403) {
         router.navigate(["/"]);
       }
-      
+
       return throwError(() => error);
-    }),
+    })
   );
 };

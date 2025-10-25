@@ -30,7 +30,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
     private wishlistService: WishlistService,
     private cartService: CartService,
     private albumService: AlbumService,
-    private router: Router,
+    private router: Router
   ) {}
 
   /**
@@ -89,10 +89,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   viewAlbum(event: Event, albumId: string): void {
     // Check if the click came from a button
     const target = event.target as HTMLElement;
-    if (
-      target.closest(".album-icon-btn") ||
-      target.closest("button")
-    ) {
+    if (target.closest(".album-icon-btn") || target.closest("button")) {
       return;
     }
 

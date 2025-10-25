@@ -26,10 +26,7 @@ export class CartService {
   public cart$ = this.cartSubject.asObservable();
   private sessionId: string | null = null;
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-  ) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   /**
    * Initialize Cart
@@ -62,7 +59,7 @@ export class CartService {
           this.sessionId = null;
           localStorage.removeItem(environment.sessionIdKey);
         }
-      }),
+      })
     );
   }
 
@@ -84,7 +81,7 @@ export class CartService {
         }),
         catchError(() => {
           return of({ items: [], itemCount: 0, total: 0 });
-        }),
+        })
       );
   }
 
@@ -113,7 +110,7 @@ export class CartService {
           }
           this.loadCart();
         }),
-        catchError(this.handleError),
+        catchError(this.handleError)
       );
   }
 
@@ -136,7 +133,7 @@ export class CartService {
       .pipe(
         map((response) => response.data!),
         tap(() => this.loadCart()),
-        catchError(this.handleError),
+        catchError(this.handleError)
       );
   }
 
@@ -156,7 +153,7 @@ export class CartService {
       .pipe(
         map(() => undefined),
         tap(() => this.loadCart()),
-        catchError(this.handleError),
+        catchError(this.handleError)
       );
   }
 
@@ -175,7 +172,7 @@ export class CartService {
       .pipe(
         map(() => undefined),
         tap(() => this.cartSubject.next({ items: [], itemCount: 0, total: 0 })),
-        catchError(this.handleError),
+        catchError(this.handleError)
       );
   }
 

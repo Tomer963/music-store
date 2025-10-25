@@ -32,7 +32,7 @@ export class CategoryService {
             a.name.localeCompare(b.name, "en", { sensitivity: "base" })
           );
       }),
-      catchError(this.handleError),
+      catchError(this.handleError)
     );
   }
 
@@ -47,7 +47,7 @@ export class CategoryService {
   getCategory(id: string): Observable<Category> {
     return this.http.get<ApiResponse<Category>>(`${this.apiUrl}/${id}`).pipe(
       map((response) => response.data!),
-      catchError(this.handleError),
+      catchError(this.handleError)
     );
   }
 

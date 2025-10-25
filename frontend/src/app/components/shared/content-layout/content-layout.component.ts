@@ -24,7 +24,7 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
-        takeUntil(this.destroy$),
+        takeUntil(this.destroy$)
       )
       .subscribe(() => {
         this.checkCurrentRoute();

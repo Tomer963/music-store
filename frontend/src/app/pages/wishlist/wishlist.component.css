@@ -213,7 +213,7 @@
   color: var(--black);
 }
 
-/* ✅ End message - styled like home page */
+/* End message - styled like home page */
 .no-more-plain {
   text-align: center;
   padding: var(--spacing-md) 0 var(--spacing-sm) 0;
@@ -379,8 +379,8 @@
     font-size: 0.688rem;
     word-break: break-word;
   }
-  
-  /* ✅ Mobile styling for end message */
+
+  /* Mobile styling for end message */
   .no-more-plain {
     font-size: 1rem;
     padding: var(--spacing-sm) 0;
@@ -404,7 +404,7 @@
   .empty-wishlist p {
     font-size: 0.938rem;
   }
-  
+
   .no-more-plain {
     font-size: 0.938rem;
     padding: 8px 0;

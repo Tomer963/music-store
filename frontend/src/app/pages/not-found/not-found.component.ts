@@ -10,10 +10,7 @@ import { Router, RouterModule } from "@angular/router";
   styleUrls: ["./not-found.component.css"],
 })
 export class NotFoundComponent {
-  constructor(
-    private router: Router,
-    private location: Location,
-  ) {}
+  constructor(private router: Router, private location: Location) {}
 
   /**
    * Go Home

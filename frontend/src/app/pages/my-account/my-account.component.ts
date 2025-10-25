@@ -28,7 +28,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private orderService: OrderService,
-    private albumService: AlbumService,
+    private albumService: AlbumService
   ) {}
 
   /**

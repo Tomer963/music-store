@@ -38,7 +38,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private albumService: AlbumService,
     private cartService: CartService,
-    private wishlistService: WishlistService,
+    private wishlistService: WishlistService
   ) {}
 
   ngOnInit(): void {
