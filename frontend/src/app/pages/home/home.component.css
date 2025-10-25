@@ -151,6 +151,8 @@
   flex-direction: column;
   gap: var(--spacing-lg);
   visibility: visible;
+  min-width: 410px;
+  max-width: 410px;
 }
 
 .sidebar-container {
@@ -361,6 +363,8 @@
   }
   .sidebar-column {
     flex: 0 0 430px;
+    min-width: 430px;
+    max-width: 430px;
   }
   .album-content.red-background .album-title-line.large-title {
     font-size: 2.25rem;
@@ -370,19 +374,99 @@
   }
 }
 
-@media (max-width: 1023px) {
+/* CRITICAL FIX: Tablet and small desktop breakpoints */
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .sidebar-column {
+    flex: 0 0 350px;
+    min-width: 350px;
+    max-width: 350px;
+  }
+  
+  .content-with-sidebar {
+    gap: var(--spacing-md);
+  }
+}
+
+/* ===== CRITICAL: Order fix for medium screens (768px-1023px) ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
   .featured-wrapper {
     grid-template-columns: 1fr;
+    min-height: auto;
+    max-height: none;
   }
-  .content-with-sidebar {
+
+  .featured-album {
+    min-height: auto;
+  }
+
+  .top-albums-grid {
+    min-height: auto;
+    grid-template-rows: auto;
+  }
+
+  /* Show side albums in mobile section AFTER top albums */
+  .side-albums-mobile-section {
+    display: block;
+    margin-bottom: var(--spacing-xl);
+    order: 1;
+  }
+
+  .side-albums-mobile-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  /* Hide desktop side albums */
+  .side-albums-vertical.desktop-only {
+    display: none !important;
+  }
+
+  /* Main content area with proper ordering */
+  .content-below-featured {
+    display: flex;
     flex-direction: column;
   }
-  .sidebar-column {
-    flex: 1;
+
+  .new-products-title {
+    order: 2;
+  }
+
+  .content-with-sidebar {
+    order: 3;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    width: 100%;
+    margin: 0;
+    padding: 0 var(--spacing-md);
+  }
+
+  .main-albums-wrapper {
+    order: 1;
     width: 100%;
   }
+
+  .sidebar-column {
+    order: 2;
+    flex: 1;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .no-more-plain {
+    order: 4;
+  }
+
   .albums-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .album-content.red-background .album-title-line.large-title {
+    font-size: 1.5rem;
+  }
+  .album-content.red-background .album-artist-line.large-artist {
+    font-size: 1.125rem;
   }
 }
 
@@ -390,9 +474,79 @@
   .home-page {
     min-height: calc(100vh - 80px);
   }
+
+  .featured-wrapper {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    max-height: none;
+  }
+
+  .featured-album {
+    min-height: auto;
+  }
+
+  .top-albums-grid {
+    min-height: auto;
+    grid-template-rows: auto;
+  }
+
+  /* Show side albums in mobile section AFTER top albums */
+  .side-albums-mobile-section {
+    display: block;
+    margin-bottom: var(--spacing-xl);
+    order: 1;
+  }
+
+  .side-albums-mobile-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  /* Hide desktop side albums */
+  .side-albums-vertical.desktop-only {
+    display: none !important;
+  }
+
+  /* Main content area with proper ordering */
+  .content-below-featured {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .new-products-title {
+    order: 2;
+  }
+
+  .content-with-sidebar {
+    order: 3;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    width: 100%;
+    margin: 0;
+    padding: 0 var(--spacing-md);
+  }
+
+  .main-albums-wrapper {
+    order: 1;
+  }
+
+  .sidebar-column {
+    order: 2;
+    flex: 1;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .no-more-plain {
+    order: 4;
+  }
+
   .albums-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .album-content.red-background .album-title-line.large-title {
     font-size: 1.5rem;
   }
@@ -449,11 +603,14 @@
   .content-below-featured {
     margin-top: 0;
     padding-top: 0;
+    display: flex;
+    flex-direction: column;
   }
 
   .new-products-title {
     margin-top: 0;
     margin-bottom: var(--spacing-lg);
+    order: 2;
   }
 
   .new-products-title h2 {
@@ -463,6 +620,10 @@
   .content-with-sidebar {
     flex-direction: column;
     gap: 0;
+    order: 3;
+    width: 100%;
+    margin: 0;
+    padding: 0 var(--spacing-sm);
   }
 
   .sidebar-column {
@@ -501,7 +662,7 @@
   }
 
   .no-more-plain {
-    order: 3;
+    order: 4;
     margin-top: var(--spacing-lg);
     margin-bottom: var(--spacing-xxl);
     font-size: 1rem;
