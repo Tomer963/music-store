@@ -11,21 +11,21 @@ export const routes: Routes = [
     path: "login",
     loadComponent: () =>
       import("./pages/auth/login/login.component").then(
-        (m) => m.LoginComponent
+        (m) => m.LoginComponent,
       ),
   },
   {
     path: "album/:id",
     loadComponent: () =>
       import("./components/album/album-detail/album-detail.component").then(
-        (m) => m.AlbumDetailComponent
+        (m) => m.AlbumDetailComponent,
       ),
   },
   {
     path: "checkout",
     loadComponent: () =>
       import("./pages/checkout/checkout.component").then(
-        (m) => m.CheckoutComponent
+        (m) => m.CheckoutComponent,
       ),
     canActivate: [authGuard],
   },
@@ -33,7 +33,7 @@ export const routes: Routes = [
     path: "my-account",
     loadComponent: () =>
       import("./pages/my-account/my-account.component").then(
-        (m) => m.MyAccountComponent
+        (m) => m.MyAccountComponent,
       ),
     canActivate: [authGuard],
   },
@@ -41,21 +41,21 @@ export const routes: Routes = [
     path: "wishlist",
     loadComponent: () =>
       import("./pages/wishlist/wishlist.component").then(
-        (m) => m.WishlistComponent
+        (m) => m.WishlistComponent,
       ),
   },
   {
     path: "category/:id",
     loadComponent: () =>
       import("./pages/category/category.component").then(
-        (m) => m.CategoryComponent
+        (m) => m.CategoryComponent,
       ),
   },
   {
     path: "404",
     loadComponent: () =>
       import("./pages/not-found/not-found.component").then(
-        (m) => m.NotFoundComponent
+        (m) => m.NotFoundComponent,
       ),
   },
   {

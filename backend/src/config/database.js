@@ -6,7 +6,7 @@ const MAX_RECONNECT_ATTEMPTS = 5;
 
 /**
  * connectDatabase
- * 
+ *
  * Establishes connection to MongoDB database with automatic reconnection and error handling
  *
  * @return {Promise<void>}
@@ -63,19 +63,17 @@ export const connectDatabase = async () => {
       if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
         reconnectAttempts++;
         console.log(
-          `Attempting to reconnect... (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})`
+          `Attempting to reconnect... (${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS})`,
         );
 
         setTimeout(() => {
-          mongoose
-            .connect(process.env.MONGODB_URI, options)
-            .catch((err) => {
-              console.error("Reconnection failed:", err.message);
-            });
+          mongoose.connect(process.env.MONGODB_URI, options).catch((err) => {
+            console.error("Reconnection failed:", err.message);
+          });
         }, 5000);
       } else {
         console.error(
-          "Maximum reconnection attempts reached. Please restart the server."
+          "Maximum reconnection attempts reached. Please restart the server.",
         );
       }
     });
@@ -97,7 +95,7 @@ export const connectDatabase = async () => {
 
 /**
  * closeDatabaseConnection
- * 
+ *
  * Closes the MongoDB connection gracefully
  *
  * @return {Promise<void>}
@@ -116,7 +114,7 @@ export const closeDatabaseConnection = async () => {
 
 /**
  * checkDatabaseConnection
- * 
+ *
  * Checks if database is currently connected
  *
  * @return {boolean} True if connected, false otherwise

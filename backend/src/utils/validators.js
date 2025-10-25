@@ -12,7 +12,7 @@ export const registerValidation = [
       max: VALIDATION.MAX_NAME_LENGTH,
     })
     .withMessage(
-      `First name must be between ${VALIDATION.MIN_NAME_LENGTH} and ${VALIDATION.MAX_NAME_LENGTH} characters`
+      `First name must be between ${VALIDATION.MIN_NAME_LENGTH} and ${VALIDATION.MAX_NAME_LENGTH} characters`,
     ),
 
   body("lastName")
@@ -22,7 +22,7 @@ export const registerValidation = [
       max: VALIDATION.MAX_NAME_LENGTH,
     })
     .withMessage(
-      `Last name must be between ${VALIDATION.MIN_NAME_LENGTH} and ${VALIDATION.MAX_NAME_LENGTH} characters`
+      `Last name must be between ${VALIDATION.MIN_NAME_LENGTH} and ${VALIDATION.MAX_NAME_LENGTH} characters`,
     ),
 
   body("email")
@@ -34,7 +34,7 @@ export const registerValidation = [
   body("password")
     .isLength({ min: VALIDATION.MIN_PASSWORD_LENGTH })
     .withMessage(
-      `Password must be at least ${VALIDATION.MIN_PASSWORD_LENGTH} characters`
+      `Password must be at least ${VALIDATION.MIN_PASSWORD_LENGTH} characters`,
     )
     .matches(/[A-Z]/)
     .withMessage("Password must contain at least one uppercase letter"),
@@ -127,10 +127,7 @@ export const albumUpdateValidation = [
     .isLength({ max: 100 })
     .withMessage("Artist name cannot exceed 100 characters"),
 
-  body("category")
-    .optional()
-    .isMongoId()
-    .withMessage("Invalid category ID"),
+  body("category").optional().isMongoId().withMessage("Invalid category ID"),
 
   body("releaseYear")
     .optional()
@@ -203,20 +200,19 @@ export const cartItemValidation = [
     .withMessage("SessionId must be a string"),
 
   // Reject any unexpected fields
-  body()
-    .custom((value, { req }) => {
-      const allowedFields = ['albumId', 'quantity', 'sessionId'];
-      const receivedFields = Object.keys(req.body);
-      const extraFields = receivedFields.filter(
-        field => !allowedFields.includes(field)
-      );
-      
-      if (extraFields.length > 0) {
-        throw new Error(`Unexpected fields: ${extraFields.join(', ')}`);
-      }
-      
-      return true;
-    }),
+  body().custom((value, { req }) => {
+    const allowedFields = ["albumId", "quantity", "sessionId"];
+    const receivedFields = Object.keys(req.body);
+    const extraFields = receivedFields.filter(
+      (field) => !allowedFields.includes(field),
+    );
+
+    if (extraFields.length > 0) {
+      throw new Error(`Unexpected fields: ${extraFields.join(", ")}`);
+    }
+
+    return true;
+  }),
 ];
 
 /**

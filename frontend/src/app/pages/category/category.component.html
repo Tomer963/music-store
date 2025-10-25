@@ -49,7 +49,9 @@
                 {{ album.artist }} - {{ album.title }}
               </h3>
 
-              <p class="album-description">{{ getTruncatedDescription(album.description) }}</p>
+              <p class="album-description">
+                {{ getTruncatedDescription(album.description) }}
+              </p>
 
               <div class="album-bottom-section">
                 <div class="album-price-icons-row">
@@ -109,10 +111,22 @@
                 </div>
 
                 <div class="album-action-links">
-                  <a href="#" class="action-link" (click)="addToWishlistLink($event, album._id)">
-                    {{ isInWishlist(album._id) ? "Remove from Wishlist" : "Add to Wishlist" }}
+                  <a
+                    href="#"
+                    class="action-link"
+                    (click)="addToWishlistLink($event, album._id)"
+                  >
+                    {{
+                      isInWishlist(album._id)
+                        ? "Remove from Wishlist"
+                        : "Add to Wishlist"
+                    }}
                   </a>
-                  <a href="#" class="action-link compare-link" (click)="addToCompare($event, album._id)">
+                  <a
+                    href="#"
+                    class="action-link compare-link"
+                    (click)="addToCompare($event, album._id)"
+                  >
                     Add to Compare
                   </a>
                 </div>

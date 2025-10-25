@@ -15,10 +15,7 @@
   (mouseleave)="isHovered = false"
 >
   <!-- ✅ Album image - with click to product page -->
-  <div 
-    class="album-image"
-    (click)="handleImageClick($event)"
-  >
+  <div class="album-image" (click)="handleImageClick($event)">
     <img [src]="mainImageUrl" [alt]="album.title" loading="lazy" />
 
     <!-- ============================
@@ -113,7 +110,9 @@
               [class.active]="isInWishlist"
               [disabled]="isWishlistLoading"
               (click)="toggleWishlist($event)"
-              [title]="isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'"
+              [title]="
+                isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'
+              "
             >
               <div class="icon-spinner" *ngIf="isWishlistLoading"></div>
               <span *ngIf="!isWishlistLoading">{{
@@ -130,7 +129,7 @@
          ============================ -->
     <div class="red-background-overlay" *ngIf="hasRedBackground && showHover">
       <!-- ✅ NO static content - removed album name and artist -->
-      
+
       <!-- ✅ Hover content - ONLY price and icons (no text) -->
       <div class="red-hover-content">
         <div class="red-overlay-price-icons-row">
@@ -146,10 +145,14 @@
               [class.active]="isInWishlist"
               [disabled]="isWishlistLoading"
               (click)="toggleWishlist($event)"
-              [title]="isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'"
+              [title]="
+                isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'
+              "
             >
               <div class="icon-spinner" *ngIf="isWishlistLoading"></div>
-              <span *ngIf="!isWishlistLoading">{{ isInWishlist ? "❤️" : "🤍" }}</span>
+              <span *ngIf="!isWishlistLoading">{{
+                isInWishlist ? "❤️" : "🤍"
+              }}</span>
             </button>
 
             <!-- Out of stock indicator -->

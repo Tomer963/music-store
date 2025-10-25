@@ -29,7 +29,10 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
   searchQuery = "";
   private destroy$ = new Subject<void>();
 
-  constructor(private searchService: SearchService, private router: Router) {}
+  constructor(
+    private searchService: SearchService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     // Setup search with debounce to reduce API calls
@@ -53,7 +56,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
           this.isSearching = true;
           this.showResults = true;
           return this.searchService.searchAlbums(trimmedQuery);
-        })
+        }),
       )
       .subscribe({
         next: (results) => {

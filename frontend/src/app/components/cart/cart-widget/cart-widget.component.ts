@@ -23,12 +23,12 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
   constructor(
     private cartService: CartService,
     private albumService: AlbumService,
-    private router: Router
+    private router: Router,
   ) {}
 
   /**
    * Ng On Init
-   * 
+   *
    * Subscribes to cart updates on component initialization
    *
    * @return void
@@ -42,7 +42,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Ng On Destroy
-   * 
+   *
    * Cleans up subscriptions
    *
    * @return void
@@ -54,7 +54,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Is In Album Page
-   * 
+   *
    * Checks if currently viewing album detail page
    *
    * @return boolean True if in album page
@@ -65,7 +65,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Should Show Scroll
-   * 
+   *
    * Determines if scrollbar should be visible
    *
    * @return boolean True if scrollbar should show
@@ -79,7 +79,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Remove Item
-   * 
+   *
    * Removes item from cart with loading state
    *
    * @param (string) itemId - Cart item ID to remove
@@ -95,7 +95,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Go To Checkout
-   * 
+   *
    * Navigates to checkout page
    *
    * @return void
@@ -106,7 +106,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Go To Album
-   * 
+   *
    * Navigates to album detail page
    *
    * @param (string) albumId - Album ID to view
@@ -118,7 +118,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Get Image URL
-   * 
+   *
    * Gets album image URL for cart item
    *
    * @param (CartItem) item - Cart item
@@ -130,7 +130,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Format Price
-   * 
+   *
    * Formats price for display
    *
    * @param (number) price - Price to format

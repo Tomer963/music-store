@@ -2,7 +2,7 @@ import { MESSAGES } from "../config/constants.js";
 
 /**
  * errorHandler
- * 
+ *
  * Global error handling middleware for Express application
  *
  * @param {Error} err - Error object
@@ -21,7 +21,7 @@ export const errorHandler = (err, req, res, next) => {
       success: false,
       message: MESSAGES.ERROR.VALIDATION_ERROR,
       errors,
-      error: "Validation failed"
+      error: "Validation failed",
     });
   }
 

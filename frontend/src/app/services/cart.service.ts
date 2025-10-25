@@ -27,11 +27,14 @@ export class CartService {
   public cart$ = this.cartSubject.asObservable();
   private sessionId: string | null = null;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+  ) {}
 
   /**
    * Initialize Cart
-   * 
+   *
    * Restores cart from session or user account
    *
    * @return void
@@ -44,7 +47,7 @@ export class CartService {
 
   /**
    * Refresh Cart
-   * 
+   *
    * Reloads cart and merges guest cart with user cart after login
    *
    * @return Observable<Cart> Refreshed cart data
@@ -61,13 +64,13 @@ export class CartService {
           this.sessionId = null;
           localStorage.removeItem(environment.sessionIdKey);
         }
-      })
+      }),
     );
   }
 
   /**
    * Get Cart
-   * 
+   *
    * Fetches current cart from server
    *
    * @return Observable<Cart> Cart data
@@ -86,13 +89,13 @@ export class CartService {
         catchError((error) => {
           console.error("Error getting cart:", error);
           return of({ items: [], itemCount: 0, total: 0 });
-        })
+        }),
       );
   }
 
   /**
    * Add To Cart
-   * 
+   *
    * Adds item to cart or increases quantity
    *
    * @param (string) albumId - Album ID to add
@@ -117,13 +120,13 @@ export class CartService {
           // Reload cart to reflect changes
           this.loadCart();
         }),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
   /**
    * Update Cart Item
-   * 
+   *
    * Updates quantity of existing cart item
    *
    * @param (string) itemId - Cart item ID
@@ -140,13 +143,13 @@ export class CartService {
       .pipe(
         map((response) => response.data!),
         tap(() => this.loadCart()),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
   /**
    * Remove From Cart
-   * 
+   *
    * Removes item completely from cart
    *
    * @param (string) itemId - Cart item ID to remove
@@ -160,13 +163,13 @@ export class CartService {
       .pipe(
         map(() => undefined),
         tap(() => this.loadCart()),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
   /**
    * Clear Cart
-   * 
+   *
    * Removes all items from cart
    *
    * @return Observable<void> Void observable
@@ -179,13 +182,13 @@ export class CartService {
       .pipe(
         map(() => undefined),
         tap(() => this.cartSubject.next({ items: [], itemCount: 0, total: 0 })),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
   /**
    * Get Item Count
-   * 
+   *
    * Returns total items in cart
    *
    * @return number Total item count
@@ -196,7 +199,7 @@ export class CartService {
 
   /**
    * Get Total
-   * 
+   *
    * Returns cart total price
    *
    * @return number Total price
@@ -207,7 +210,7 @@ export class CartService {
 
   /**
    * Get Session ID
-   * 
+   *
    * Returns current session ID for guest users
    *
    * @return string | null Session ID or null
@@ -218,7 +221,7 @@ export class CartService {
 
   /**
    * Clear Session
-   * 
+   *
    * Clears cart for guest users on logout
    *
    * @return void
@@ -232,7 +235,7 @@ export class CartService {
 
   /**
    * Load Cart
-   * 
+   *
    * Internal method to fetch and update cart state
    *
    * @return void
@@ -251,7 +254,7 @@ export class CartService {
 
   /**
    * Get Or Create Session ID
-   * 
+   *
    * Retrieves existing session ID or creates new one
    *
    * @return string Session ID
@@ -271,7 +274,7 @@ export class CartService {
 
   /**
    * Generate Session ID
-   * 
+   *
    * Creates unique session ID for guest users
    *
    * @return string Generated session ID
@@ -283,7 +286,7 @@ export class CartService {
 
   /**
    * Set Session ID
-   * 
+   *
    * Stores session ID in memory and localStorage
    *
    * @param (string) sessionId - Session ID to store
@@ -296,7 +299,7 @@ export class CartService {
 
   /**
    * Get Headers
-   * 
+   *
    * Creates HTTP headers with session ID
    *
    * @return HttpHeaders Headers with session ID for cart merge
@@ -314,7 +317,7 @@ export class CartService {
 
   /**
    * Handle Error
-   * 
+   *
    * Centralized error handling
    *
    * @param (any) error - Error object

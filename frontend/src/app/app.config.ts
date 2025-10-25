@@ -9,7 +9,7 @@ import { AuthService } from "./services/auth.service";
 
 /**
  * Initialize Auth Service
- * 
+ *
  * Restores user session before app starts
  *
  * @param (AuthService) authService - Authentication service instance

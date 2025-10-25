@@ -117,11 +117,11 @@
   .breadcrumb-container {
     padding: 0 256px;
   }
-  
+
   .container-with-sidebar {
     padding: 0 256px clamp(16px, 2.5vh, 24px) 256px;
   }
-  
+
   .floating-sidebar {
     flex: 0 0 clamp(310px, 23vw, 330px);
   }
@@ -132,7 +132,7 @@
   .breadcrumb-container {
     padding: 0 200px;
   }
-  
+
   .container-with-sidebar {
     padding: 0 200px clamp(16px, 2.5vh, 24px) 200px;
   }
@@ -143,11 +143,11 @@
   .breadcrumb-container {
     padding: 0 120px;
   }
-  
+
   .container-with-sidebar {
     padding: 0 120px clamp(16px, 2.5vh, 24px) 120px;
   }
-  
+
   .floating-sidebar {
     flex: 0 0 clamp(270px, 21vw, 312px);
   }
@@ -162,7 +162,7 @@
   .breadcrumb-container {
     padding: 0 40px;
   }
-  
+
   .container-with-sidebar {
     padding: 0 40px clamp(16px, 2.5vh, 24px) 40px;
   }

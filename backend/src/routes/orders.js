@@ -2,10 +2,7 @@ import { Router } from "express";
 import * as orderController from "../controllers/orderController.js";
 import { authenticate, isAdmin } from "../middleware/auth.js";
 import { validateRequest } from "../middleware/validation.js";
-import {
-  orderValidation,
-  mongoIdValidation,
-} from "../utils/validators.js";
+import { orderValidation, mongoIdValidation } from "../utils/validators.js";
 
 const router = Router();
 
@@ -19,15 +16,10 @@ router.get(
   "/:id",
   mongoIdValidation,
   validateRequest,
-  orderController.getOrder
+  orderController.getOrder,
 );
 
-router.post(
-  "/",
-  orderValidation,
-  validateRequest,
-  orderController.createOrder
-);
+router.post("/", orderValidation, validateRequest, orderController.createOrder);
 
 // Admin routes
 router.get("/admin/all", isAdmin, orderController.getAllOrders);
@@ -38,7 +30,7 @@ router.put(
   isAdmin,
   mongoIdValidation,
   validateRequest,
-  orderController.updateOrder
+  orderController.updateOrder,
 );
 
 router.delete(
@@ -46,7 +38,7 @@ router.delete(
   isAdmin,
   mongoIdValidation,
   validateRequest,
-  orderController.deleteOrder
+  orderController.deleteOrder,
 );
 
 export default router;

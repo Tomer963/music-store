@@ -10,26 +10,13 @@ router.post(
   "/register",
   registerValidation,
   validateRequest,
-  authController.register
+  authController.register,
 );
 
-router.post(
-  "/login", 
-  loginValidation, 
-  validateRequest, 
-  authController.login
-);
+router.post("/login", loginValidation, validateRequest, authController.login);
 
-router.get(
-  "/profile", 
-  authenticate, 
-  authController.getProfile
-);
+router.get("/profile", authenticate, authController.getProfile);
 
-router.get(
-  "/logout", 
-  authenticate, 
-  authController.logout
-);
+router.get("/logout", authenticate, authController.logout);
 
 export default router;

@@ -5,7 +5,7 @@ import { formatResponse } from "../utils/helpers.js";
 
 /**
  * getCategories
- * 
+ *
  * Retrieves all active categories with album count
  *
  * @param {Object} req - Express request object
@@ -27,7 +27,7 @@ export const getCategories = async (req, res, next) => {
 
 /**
  * getCategory
- * 
+ *
  * Retrieves a single category by ID
  *
  * @param {Object} req - Express request object with category ID in params
@@ -51,7 +51,7 @@ export const getCategory = async (req, res, next) => {
 
 /**
  * getAlbumsByCategory
- * 
+ *
  * Retrieves all albums in a specific category
  *
  * @param {Object} req - Express request object with category ID in params
@@ -76,7 +76,7 @@ export const getAlbumsByCategory = async (req, res, next) => {
         category: category.name,
         count: albums.length,
         albums,
-      })
+      }),
     );
   } catch (error) {
     next(error);
@@ -85,7 +85,7 @@ export const getAlbumsByCategory = async (req, res, next) => {
 
 /**
  * createCategory
- * 
+ *
  * Creates a new category (Admin only)
  *
  * @param {Object} req - Express request object with category data in body
@@ -106,7 +106,7 @@ export const createCategory = async (req, res, next) => {
 
 /**
  * updateCategory
- * 
+ *
  * Updates an existing category (Admin only)
  *
  * @param {Object} req - Express request object with category ID in params and update data in body
@@ -135,7 +135,7 @@ export const updateCategory = async (req, res, next) => {
 
 /**
  * deleteCategory
- * 
+ *
  * Deletes a category if it has no albums (Admin only)
  *
  * @param {Object} req - Express request object with category ID in params

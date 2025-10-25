@@ -5,7 +5,7 @@ import { formatResponse } from "../utils/helpers.js";
 
 /**
  * register
- * 
+ *
  * Creates a new user account and optionally transfers guest cart
  *
  * @param {Object} req - Express request object with user data in body
@@ -51,7 +51,7 @@ export const register = async (req, res, next) => {
           email: user.email,
           role: user.role,
         },
-      })
+      }),
     );
   } catch (error) {
     next(error);
@@ -60,7 +60,7 @@ export const register = async (req, res, next) => {
 
 /**
  * login
- * 
+ *
  * Authenticates user and returns JWT token, optionally merges guest cart
  *
  * @param {Object} req - Express request object with credentials in body
@@ -106,7 +106,7 @@ export const login = async (req, res, next) => {
           role: user.role,
         },
         token,
-      })
+      }),
     );
   } catch (error) {
     next(error);
@@ -115,7 +115,7 @@ export const login = async (req, res, next) => {
 
 /**
  * getProfile
- * 
+ *
  * Retrieves authenticated user's profile with populated wishlist
  *
  * @param {Object} req - Express request object with authenticated user
@@ -134,7 +134,7 @@ export const getProfile = async (req, res, next) => {
 
 /**
  * logout
- * 
+ *
  * Logs out the user (client-side token removal)
  *
  * @param {Object} req - Express request object
@@ -152,7 +152,7 @@ export const logout = async (req, res, next) => {
 
 /**
  * transferCart
- * 
+ *
  * Transfers or merges guest cart items to user cart
  *
  * @param {string} sessionId - Guest session ID

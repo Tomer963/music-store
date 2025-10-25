@@ -205,17 +205,17 @@
     padding: var(--spacing-xs) var(--spacing-sm);
     font-size: 0.938rem;
   }
-  
+
   .search-icon {
     width: 18px;
     height: 18px;
   }
-  
+
   .result-image {
     width: 45px;
     height: 45px;
   }
-  
+
   .search-results {
     max-height: 350px;
   }
@@ -227,52 +227,52 @@
     padding-right: 35px;
     font-size: 0.813rem;
   }
-  
+
   .search-button,
   .clear-button {
     padding: var(--spacing-xs) var(--spacing-sm);
   }
-  
+
   .clear-button {
     font-size: 1.25rem;
   }
-  
+
   .search-icon {
     width: 16px;
     height: 16px;
   }
-  
+
   .result-item {
     padding: var(--spacing-xs) var(--spacing-sm);
     gap: var(--spacing-sm);
   }
-  
+
   .result-image {
     width: 35px;
     height: 35px;
   }
-  
+
   .result-title {
     font-size: 0.813rem;
   }
-  
+
   .result-artist {
     font-size: 0.75rem;
   }
-  
+
   .result-year {
     font-size: 0.625rem;
   }
-  
+
   .search-results {
     max-height: 250px;
   }
-  
+
   .no-results {
     padding: var(--spacing-md);
     font-size: 0.813rem;
   }
-  
+
   .result-separator {
     left: var(--spacing-sm);
     right: var(--spacing-sm);
@@ -283,65 +283,65 @@
   .search-form {
     border-radius: 4px;
   }
-  
+
   .search-input {
     padding: 5px 8px;
     padding-right: 30px;
     font-size: 0.75rem;
   }
-  
+
   .search-button,
   .clear-button {
     padding: 4px 8px;
   }
-  
+
   .clear-button {
     font-size: 1.125rem;
     padding: 0 8px;
   }
-  
+
   .search-icon {
     width: 14px;
     height: 14px;
   }
-  
+
   .search-loading {
     padding: var(--spacing-md);
     font-size: 0.75rem;
   }
-  
+
   .result-item {
     padding: 6px 8px;
     gap: 8px;
   }
-  
+
   .result-image {
     width: 30px;
     height: 30px;
   }
-  
+
   .result-title {
     font-size: 0.75rem;
   }
-  
+
   .result-artist {
     font-size: 0.688rem;
   }
-  
+
   .result-year {
     font-size: 0.563rem;
   }
-  
+
   .search-results {
     max-height: 200px;
     box-shadow: var(--shadow-md);
   }
-  
+
   .no-results {
     padding: var(--spacing-sm);
     font-size: 0.75rem;
   }
-  
+
   .result-separator {
     left: 8px;
     right: 8px;

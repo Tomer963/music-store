@@ -1,5 +1,8 @@
 <!-- Empty state - without layout wrapper -->
-<div class="wishlist-page-standalone" *ngIf="!isLoading && wishlistItems.length === 0">
+<div
+  class="wishlist-page-standalone"
+  *ngIf="!isLoading && wishlistItems.length === 0"
+>
   <div class="empty-wishlist">
     <div class="empty-icon">❤️</div>
     <h2>Your wishlist is empty</h2>
@@ -48,7 +51,9 @@
                   {{ album.artist }} - {{ album.title }}
                 </h3>
 
-                <p class="album-description">{{ getTruncatedDescription(album.description) }}</p>
+                <p class="album-description">
+                  {{ getTruncatedDescription(album.description) }}
+                </p>
 
                 <div class="album-bottom-section">
                   <div class="album-price-icons-row">

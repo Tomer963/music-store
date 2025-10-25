@@ -1,6 +1,6 @@
 /**
  * paginate
- * 
+ *
  * Paginates query results with metadata
  *
  * @param {Object} query - Mongoose query object
@@ -29,7 +29,7 @@ export const paginate = async (query, page = 1, limit = 12) => {
 
 /**
  * formatResponse
- * 
+ *
  * Creates standardized API response object
  *
  * @param {boolean} success - Success status
@@ -42,7 +42,7 @@ export const formatResponse = (
   success,
   message,
   data = null,
-  errors = null
+  errors = null,
 ) => {
   const response = { success, message };
 
@@ -54,7 +54,7 @@ export const formatResponse = (
 
 /**
  * generateSessionId
- * 
+ *
  * Generates unique session ID for anonymous users
  *
  * @return {string} Unique session identifier

@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private cartService: CartService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   /**
@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit {
    * @return object | null - Validation error or null
    */
   private passwordValidator(
-    control: AbstractControl
+    control: AbstractControl,
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;

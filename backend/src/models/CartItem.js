@@ -27,7 +27,7 @@ const cartItemSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Unique index for authenticated users (sparse: true means only applies when user exists)
@@ -37,7 +37,7 @@ cartItemSchema.index(
     unique: true,
     sparse: true,
     partialFilterExpression: { user: { $type: "objectId" } },
-  }
+  },
 );
 
 // Unique index for guest users
@@ -47,7 +47,7 @@ cartItemSchema.index(
     unique: true,
     sparse: true,
     partialFilterExpression: { sessionId: { $type: "string" } },
-  }
+  },
 );
 
 // Regular indexes for fast lookup
@@ -56,7 +56,7 @@ cartItemSchema.index({ sessionId: 1 });
 
 /**
  * Virtual: totalPrice
- * 
+ *
  * Calculates total price for this cart item
  *
  * @return {number}
@@ -67,7 +67,7 @@ cartItemSchema.virtual("totalPrice").get(function () {
 
 /**
  * updateQuantity
- * 
+ *
  * Updates the quantity of the cart item
  *
  * @param {number} newQuantity - New quantity value

@@ -177,7 +177,9 @@
             >Confirmation is required</span
           >
           <span
-            *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']"
+            *ngIf="
+              registerForm.get('confirmPassword')?.errors?.['passwordMismatch']
+            "
             >Passwords must match</span
           >
         </span>

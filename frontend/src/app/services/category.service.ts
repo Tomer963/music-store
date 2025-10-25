@@ -27,15 +27,15 @@ export class CategoryService {
 
         // Filter active categories with albums
         const categoriesWithAlbums = categories.filter(
-          (cat) => cat.isActive !== false && (cat.albumCount || 0) > 0
+          (cat) => cat.isActive !== false && (cat.albumCount || 0) > 0,
         );
 
         // Sort alphabetically
         return categoriesWithAlbums.sort((a, b) =>
-          a.name.localeCompare(b.name, "en", { sensitivity: "base" })
+          a.name.localeCompare(b.name, "en", { sensitivity: "base" }),
         );
       }),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 
@@ -50,7 +50,7 @@ export class CategoryService {
   getCategory(id: string): Observable<Category> {
     return this.http.get<ApiResponse<Category>>(`${this.apiUrl}/${id}`).pipe(
       map((response) => response.data!),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 

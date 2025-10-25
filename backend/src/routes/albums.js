@@ -2,10 +2,10 @@ import { Router } from "express";
 import * as albumController from "../controllers/albumController.js";
 import { authenticate, isAdmin } from "../middleware/auth.js";
 import { validateRequest } from "../middleware/validation.js";
-import { 
-  albumValidation, 
+import {
+  albumValidation,
   albumUpdateValidation,
-  mongoIdValidation 
+  mongoIdValidation,
 } from "../utils/validators.js";
 
 const router = Router();
@@ -18,7 +18,7 @@ router.get(
   "/:id",
   mongoIdValidation,
   validateRequest,
-  albumController.getAlbum
+  albumController.getAlbum,
 );
 
 // Admin routes
@@ -28,7 +28,7 @@ router.post(
   isAdmin,
   albumValidation,
   validateRequest,
-  albumController.createAlbum
+  albumController.createAlbum,
 );
 
 router.put(
@@ -38,7 +38,7 @@ router.put(
   mongoIdValidation,
   albumUpdateValidation,
   validateRequest,
-  albumController.updateAlbum
+  albumController.updateAlbum,
 );
 
 router.delete(
@@ -47,7 +47,7 @@ router.delete(
   isAdmin,
   mongoIdValidation,
   validateRequest,
-  albumController.deleteAlbum
+  albumController.deleteAlbum,
 );
 
 export default router;

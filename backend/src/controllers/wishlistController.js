@@ -4,7 +4,7 @@ import { formatResponse } from "../utils/helpers.js";
 
 /**
  * getWishlist
- * 
+ *
  * Retrieves the user's wishlist with populated album details
  *
  * @param {Object} req - Express request object with authenticated user
@@ -27,7 +27,7 @@ export const getWishlist = async (req, res, next) => {
 
 /**
  * addToWishlist
- * 
+ *
  * Adds an album to the user's wishlist
  *
  * @param {Object} req - Express request object with albumId in params
@@ -54,7 +54,7 @@ export const addToWishlist = async (req, res, next) => {
 
 /**
  * removeFromWishlist
- * 
+ *
  * Removes an album from the user's wishlist
  *
  * @param {Object} req - Express request object with albumId in params

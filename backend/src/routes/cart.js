@@ -20,7 +20,7 @@ router.post(
   "/items",
   cartItemValidation,
   validateRequest,
-  cartController.addToCart
+  cartController.addToCart,
 );
 
 router.put(
@@ -28,14 +28,14 @@ router.put(
   mongoIdValidation,
   quantityValidation,
   validateRequest,
-  cartController.updateCartItem
+  cartController.updateCartItem,
 );
 
 router.delete(
   "/items/:id",
   mongoIdValidation,
   validateRequest,
-  cartController.removeFromCart
+  cartController.removeFromCart,
 );
 
 router.delete("/", cartController.clearCart);

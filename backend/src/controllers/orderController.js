@@ -5,7 +5,7 @@ import { formatResponse } from "../utils/helpers.js";
 
 /**
  * getOrders
- * 
+ *
  * Retrieves all orders for the authenticated user
  *
  * @param {Object} req - Express request object with authenticated user
@@ -27,7 +27,7 @@ export const getOrders = async (req, res, next) => {
 
 /**
  * getAllOrders
- * 
+ *
  * Retrieves all orders in the system with pagination (Admin only)
  *
  * @param {Object} req - Express request object with optional pagination params
@@ -58,7 +58,7 @@ export const getAllOrders = async (req, res, next) => {
           total,
           pages: Math.ceil(total / limit),
         },
-      })
+      }),
     );
   } catch (error) {
     next(error);
@@ -67,7 +67,7 @@ export const getAllOrders = async (req, res, next) => {
 
 /**
  * getOrder
- * 
+ *
  * Retrieves a single order by ID with authorization check
  *
  * @param {Object} req - Express request object with order ID in params
@@ -100,7 +100,7 @@ export const getOrder = async (req, res, next) => {
 
 /**
  * createOrder
- * 
+ *
  * Creates a new order from cart items with validation and stock updates
  *
  * @param {Object} req - Express request object with order details in body
@@ -132,14 +132,23 @@ export const createOrder = async (req, res, next) => {
     }
 
     // Check required billing fields
-    if (!billingInfo.address || !billingInfo.city || !billingInfo.zipCode || !billingInfo.phone) {
+    if (
+      !billingInfo.address ||
+      !billingInfo.city ||
+      !billingInfo.zipCode ||
+      !billingInfo.phone
+    ) {
       return res
         .status(400)
-        .json(formatResponse(false, "Complete billing information is required"));
+        .json(
+          formatResponse(false, "Complete billing information is required"),
+        );
     }
 
     // Get user's cart items
-    const cartItems = await CartItem.find({ user: req.user._id }).populate("album");
+    const cartItems = await CartItem.find({ user: req.user._id }).populate(
+      "album",
+    );
 
     if (cartItems.length === 0) {
       return res.status(400).json(formatResponse(false, "Cart is empty"));
@@ -155,7 +164,7 @@ export const createOrder = async (req, res, next) => {
         return res
           .status(400)
           .json(
-            formatResponse(false, `${cartItem.album.title} is out of stock`)
+            formatResponse(false, `${cartItem.album.title} is out of stock`),
           );
       }
 
@@ -182,14 +191,14 @@ export const createOrder = async (req, res, next) => {
 
     // Update stock for each album
     await Promise.all(
-      cartItems.map((item) => item.album.updateStock(item.quantity))
+      cartItems.map((item) => item.album.updateStock(item.quantity)),
     );
 
     // Clear user's cart
     await CartItem.deleteMany({ user: req.user._id });
-    
+
     await order.populate("items.album");
-    
+
     res
       .status(201)
       .json(formatResponse(true, "Order created successfully", order));
@@ -201,7 +210,7 @@ export const createOrder = async (req, res, next) => {
 
 /**
  * updateOrder
- * 
+ *
  * Updates order details with protection for critical fields (Admin only)
  *
  * @param {Object} req - Express request object with order ID in params and update data in body
@@ -250,7 +259,7 @@ export const updateOrder = async (req, res, next) => {
 
 /**
  * deleteOrder
- * 
+ *
  * Permanently deletes an order and restores stock (Admin only)
  *
  * @param {Object} req - Express request object with order ID in params
@@ -288,7 +297,7 @@ export const deleteOrder = async (req, res, next) => {
 
 /**
  * getOrderStatistics
- * 
+ *
  * Retrieves order statistics including total count and revenue (Admin only)
  *
  * @param {Object} req - Express request object
@@ -299,7 +308,7 @@ export const deleteOrder = async (req, res, next) => {
 export const getOrderStatistics = async (req, res, next) => {
   try {
     const totalOrders = await Order.countDocuments();
-    
+
     const revenueResult = await Order.aggregate([
       {
         $group: {
@@ -309,13 +318,14 @@ export const getOrderStatistics = async (req, res, next) => {
       },
     ]);
 
-    const totalRevenue = revenueResult.length > 0 ? revenueResult[0].totalRevenue : 0;
+    const totalRevenue =
+      revenueResult.length > 0 ? revenueResult[0].totalRevenue : 0;
 
     res.json(
       formatResponse(true, "Order statistics retrieved", {
         totalOrders,
         totalRevenue,
-      })
+      }),
     );
   } catch (error) {
     next(error);

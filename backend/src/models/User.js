@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema(
     },
     lastLogin: Date,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Index for faster email lookups
@@ -85,7 +85,7 @@ userSchema.pre("save", async function (next) {
 
 /**
  * comparePassword
- * 
+ *
  * Compares provided password with hashed password
  *
  * @param {string} candidatePassword - Password to compare
@@ -97,7 +97,7 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 
 /**
  * generateAuthToken
- * 
+ *
  * Generates JWT token for authentication
  *
  * @return {string}
@@ -112,13 +112,13 @@ userSchema.methods.generateAuthToken = function () {
     process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_EXPIRE || "7d",
-    }
+    },
   );
 };
 
 /**
  * addToWishlist
- * 
+ *
  * Adds album to user's wishlist if not already present
  *
  * @param {string} albumId - Album ID to add
@@ -135,7 +135,7 @@ userSchema.methods.addToWishlist = async function (albumId) {
 
 /**
  * removeFromWishlist
- * 
+ *
  * Removes album from user's wishlist
  *
  * @param {string} albumId - Album ID to remove

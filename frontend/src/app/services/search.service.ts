@@ -48,7 +48,7 @@ export class SearchService {
       catchError((error) => {
         console.error("Search error:", error);
         return of([]);
-      })
+      }),
     );
   }
 

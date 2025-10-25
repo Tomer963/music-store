@@ -30,7 +30,7 @@ export class AlbumService {
   getAlbums(
     page = 1,
     limit = 12,
-    sort = "-createdAt"
+    sort = "-createdAt",
   ): Observable<PaginatedResponse<Album>> {
     const params = new HttpParams()
       .set("page", page.toString())
@@ -53,7 +53,7 @@ export class AlbumService {
   getAlbum(id: string): Observable<Album> {
     return this.http.get<ApiResponse<Album>>(`${this.apiUrl}/${id}`).pipe(
       map((response) => response.data!),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 
@@ -79,9 +79,9 @@ export class AlbumService {
             response.data || {
               results: [],
               pagination: { page: 1, limit, total: 0, pages: 1 },
-            }
+            },
         ),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
@@ -99,7 +99,7 @@ export class AlbumService {
       .get<ApiResponse<Album[]>>(`${this.apiUrl}/search`, { params })
       .pipe(
         map((response) => response.data || []),
-        catchError(this.handleError)
+        catchError(this.handleError),
       );
   }
 
@@ -116,7 +116,7 @@ export class AlbumService {
   getAlbumsByCategory(
     categoryId: string,
     page = 1,
-    limit = 12
+    limit = 12,
   ): Observable<PaginatedResponse<Album>> {
     const params = new HttpParams()
       .set("page", page.toString())

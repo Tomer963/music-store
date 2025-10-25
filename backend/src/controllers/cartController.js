@@ -5,7 +5,7 @@ import { formatResponse, generateSessionId } from "../utils/helpers.js";
 
 /**
  * getCart
- * 
+ *
  * Retrieves the user's cart items with calculated total
  *
  * @param {Object} req - Express request object
@@ -25,7 +25,7 @@ export const getCart = async (req, res, next) => {
     // Calculate total price
     const total = cartItems.reduce(
       (sum, item) => sum + item.album.price * item.quantity,
-      0
+      0,
     );
 
     res.json(
@@ -33,7 +33,7 @@ export const getCart = async (req, res, next) => {
         items: cartItems,
         itemCount: cartItems.length,
         total,
-      })
+      }),
     );
   } catch (error) {
     next(error);
@@ -42,7 +42,7 @@ export const getCart = async (req, res, next) => {
 
 /**
  * addToCart
- * 
+ *
  * Adds an album to the cart or updates quantity if already exists
  *
  * @param {Object} req - Express request object with albumId and quantity in body
@@ -104,7 +104,7 @@ export const addToCart = async (req, res, next) => {
       formatResponse(true, "Item added to cart", {
         item: cartItem,
         sessionId: !req.user ? sessionId : undefined,
-      })
+      }),
     );
   } catch (error) {
     next(error);
@@ -113,7 +113,7 @@ export const addToCart = async (req, res, next) => {
 
 /**
  * updateCartItem
- * 
+ *
  * Updates the quantity of a cart item
  *
  * @param {Object} req - Express request object with cart item ID in params and quantity in body
@@ -162,7 +162,7 @@ export const updateCartItem = async (req, res, next) => {
 
 /**
  * removeFromCart
- * 
+ *
  * Removes an item from the cart
  *
  * @param {Object} req - Express request object with cart item ID in params
@@ -202,7 +202,7 @@ export const removeFromCart = async (req, res, next) => {
 
 /**
  * clearCart
- * 
+ *
  * Removes all items from the cart
  *
  * @param {Object} req - Express request object

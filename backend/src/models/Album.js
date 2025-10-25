@@ -65,7 +65,7 @@ const albumSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Indexes for optimized queries
@@ -76,7 +76,7 @@ albumSchema.index({ createdAt: -1 });
 
 /**
  * Virtual: inStock
- * 
+ *
  * Checks if album is in stock
  *
  * @return {boolean}
@@ -87,7 +87,7 @@ albumSchema.virtual("inStock").get(function () {
 
 /**
  * Virtual: discountPercentage
- * 
+ *
  * Calculates discount percentage if original price exists
  *
  * @return {number}
@@ -97,13 +97,13 @@ albumSchema.virtual("discountPercentage").get(function () {
     return 0;
   }
   return Math.round(
-    ((this.originalPrice - this.price) / this.originalPrice) * 100
+    ((this.originalPrice - this.price) / this.originalPrice) * 100,
   );
 });
 
 /**
  * Virtual: hasDiscount
- * 
+ *
  * Checks if album has an active discount
  *
  * @return {boolean}
@@ -114,7 +114,7 @@ albumSchema.virtual("hasDiscount").get(function () {
 
 /**
  * canPurchase
- * 
+ *
  * Checks if album can be purchased with given quantity
  *
  * @param {number} quantity - Requested quantity
@@ -126,7 +126,7 @@ albumSchema.methods.canPurchase = function (quantity) {
 
 /**
  * updateStock
- * 
+ *
  * Updates album stock after purchase and manages availability
  *
  * @param {number} quantity - Quantity purchased

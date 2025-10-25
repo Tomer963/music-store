@@ -30,12 +30,12 @@ export class WishlistComponent implements OnInit, OnDestroy {
     private wishlistService: WishlistService,
     private cartService: CartService,
     private albumService: AlbumService,
-    private router: Router
+    private router: Router,
   ) {}
 
   /**
    * Ng On Init
-   * 
+   *
    * Initializes component and loads wishlist
    *
    * @return void
@@ -67,7 +67,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * Ng On Destroy
-   * 
+   *
    * Cleans up subscriptions
    *
    * @return void
@@ -79,7 +79,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * View Album
-   * 
+   *
    * Navigates to album detail page
    *
    * @param (Event) event - Click event
@@ -94,7 +94,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * Add To Cart
-   * 
+   *
    * Adds album to cart from wishlist
    *
    * @param (Event) event - Click event
@@ -108,7 +108,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle Wishlist
-   * 
+   *
    * Removes album from wishlist
    *
    * @param (Event) event - Click event
@@ -123,7 +123,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * Get Main Image URL
-   * 
+   *
    * Gets primary image URL with fallback
    *
    * @param (Album) album - Album object
@@ -135,7 +135,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * Format Price
-   * 
+   *
    * Formats price as currency string
    *
    * @param (number) price - Price value
@@ -147,7 +147,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * Get Truncated Description
-   * 
+   *
    * Smart truncation that respects word boundaries
    *
    * @param (string) description - Full description text
@@ -155,29 +155,29 @@ export class WishlistComponent implements OnInit, OnDestroy {
    */
   getTruncatedDescription(description: string): string {
     if (!description) return "";
-    
+
     const maxLength = 85; // ~2 lines
-    
+
     if (description.length <= maxLength) {
       return description;
     }
-    
+
     let truncated = description.substring(0, maxLength);
-    const lastSpace = truncated.lastIndexOf(' ');
-    
+    const lastSpace = truncated.lastIndexOf(" ");
+
     if (lastSpace > 0) {
       truncated = truncated.substring(0, lastSpace);
     }
-    
+
     // Remove trailing punctuation
-    truncated = truncated.replace(/[.,;:!?-]+$/, '');
-    
-    return truncated + '...';
+    truncated = truncated.replace(/[.,;:!?-]+$/, "");
+
+    return truncated + "...";
   }
 
   /**
    * Track By Album
-   * 
+   *
    * TrackBy function for ngFor performance
    *
    * @param (number) index - Item index

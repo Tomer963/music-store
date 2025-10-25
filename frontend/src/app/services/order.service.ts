@@ -24,7 +24,7 @@ export class OrderService {
   getOrders(): Observable<Order[]> {
     return this.http.get<ApiResponse<Order[]>>(this.apiUrl).pipe(
       map((response) => response.data!),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 
@@ -39,7 +39,7 @@ export class OrderService {
   getOrder(id: string): Observable<Order> {
     return this.http.get<ApiResponse<Order>>(`${this.apiUrl}/${id}`).pipe(
       map((response) => response.data!),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 
@@ -54,7 +54,7 @@ export class OrderService {
   createOrder(orderData: CreateOrderRequest): Observable<Order> {
     return this.http.post<ApiResponse<Order>>(this.apiUrl, orderData).pipe(
       map((response) => response.data!),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 

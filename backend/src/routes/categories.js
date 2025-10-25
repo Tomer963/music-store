@@ -2,10 +2,10 @@ import { Router } from "express";
 import * as categoryController from "../controllers/categoryController.js";
 import { authenticate, isAdmin } from "../middleware/auth.js";
 import { validateRequest } from "../middleware/validation.js";
-import { 
-  categoryValidation, 
+import {
+  categoryValidation,
   categoryUpdateValidation,
-  mongoIdValidation 
+  mongoIdValidation,
 } from "../utils/validators.js";
 
 const router = Router();
@@ -17,14 +17,14 @@ router.get(
   "/:id",
   mongoIdValidation,
   validateRequest,
-  categoryController.getCategory
+  categoryController.getCategory,
 );
 
 router.get(
   "/:id/albums",
   mongoIdValidation,
   validateRequest,
-  categoryController.getAlbumsByCategory
+  categoryController.getAlbumsByCategory,
 );
 
 // Admin routes
@@ -34,7 +34,7 @@ router.post(
   isAdmin,
   categoryValidation,
   validateRequest,
-  categoryController.createCategory
+  categoryController.createCategory,
 );
 
 router.put(
@@ -44,7 +44,7 @@ router.put(
   mongoIdValidation,
   categoryUpdateValidation,
   validateRequest,
-  categoryController.updateCategory
+  categoryController.updateCategory,
 );
 
 router.delete(
@@ -53,7 +53,7 @@ router.delete(
   isAdmin,
   mongoIdValidation,
   validateRequest,
-  categoryController.deleteCategory
+  categoryController.deleteCategory,
 );
 
 export default router;

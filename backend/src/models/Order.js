@@ -66,7 +66,7 @@ const orderSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Indexes for performance optimization
@@ -88,7 +88,7 @@ orderSchema.pre("save", async function (next) {
 
 /**
  * calculateTotal
- * 
+ *
  * Calculates the total amount for the order
  *
  * @return {number}
@@ -96,7 +96,7 @@ orderSchema.pre("save", async function (next) {
 orderSchema.methods.calculateTotal = function () {
   this.totalAmount = this.items.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
   return this.totalAmount;
 };

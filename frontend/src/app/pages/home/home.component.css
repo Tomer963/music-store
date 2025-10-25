@@ -305,7 +305,8 @@
   border-radius: 0;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-normal),
+  transition:
+    transform var(--transition-normal),
     box-shadow var(--transition-normal);
   cursor: default;
   display: flex;
@@ -663,7 +664,7 @@
   .album-content.red-background .album-artist-line.large-artist {
     font-size: 1.125rem;
   }
-  
+
   /* ✅ שמירה על אפקט hover גם במובייל */
   .album-image-container {
     cursor: pointer;

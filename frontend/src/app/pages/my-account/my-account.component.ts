@@ -28,12 +28,12 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private orderService: OrderService,
-    private albumService: AlbumService
+    private albumService: AlbumService,
   ) {}
 
   /**
    * Ng On Init
-   * 
+   *
    * Initializes component and loads user data
    *
    * @return void
@@ -45,7 +45,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Ng On Destroy
-   * 
+   *
    * Cleans up subscriptions
    *
    * @return void
@@ -57,7 +57,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Load User Profile
-   * 
+   *
    * Fetches user profile from API
    *
    * @return void
@@ -77,7 +77,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Load Orders
-   * 
+   *
    * Fetches user orders with album details
    *
    * @return void
@@ -94,7 +94,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Process Orders
-   * 
+   *
    * Fetches album details for each order item
    *
    * @param (Order[]) orders - Array of orders
@@ -164,7 +164,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Switch Tab
-   * 
+   *
    * Switches between profile and orders tabs
    *
    * @param ("profile" | "orders") tab - Target tab
@@ -176,7 +176,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Format Date
-   * 
+   *
    * Formats date for display
    *
    * @param (string | undefined) date - Date string
@@ -195,7 +195,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Format Price
-   * 
+   *
    * Formats price as currency
    *
    * @param (number) price - Price value
@@ -207,7 +207,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Get Payment Method Text
-   * 
+   *
    * Formats payment method for display
    *
    * @param (string) method - Payment method
@@ -219,7 +219,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Get Total Items
-   * 
+   *
    * Calculates total items in order
    *
    * @param (Order) order - Order object
@@ -231,7 +231,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Is Order Expandable
-   * 
+   *
    * Checks if order has items to display
    *
    * @param (Order) order - Order object
@@ -243,7 +243,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle Order Details
-   * 
+   *
    * Toggles order details visibility
    *
    * @param (string) orderId - Order ID
@@ -256,7 +256,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Get Item Display Name
-   * 
+   *
    * Formats item name as "Artist - Title"
    *
    * @param (OrderItem) item - Order item
@@ -272,7 +272,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Get Album Image
-   * 
+   *
    * Gets album image URL with fallback
    *
    * @param (OrderItem) item - Order item

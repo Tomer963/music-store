@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private cartService: CartService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.cartService.cart$.pipe(takeUntil(this.destroy$)).subscribe((cart) => {
       this.cartItemCount = cart.items.reduce(
         (total, item) => total + item.quantity,
-        0
+        0,
       );
     });
   }

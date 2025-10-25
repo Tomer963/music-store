@@ -134,7 +134,8 @@
   border-radius: 0 !important;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-normal),
+  transition:
+    transform var(--transition-normal),
     box-shadow var(--transition-normal);
   cursor: default;
   display: flex;
@@ -202,12 +203,12 @@
   line-height: 1.4;
   color: var(--gray-medium);
   margin: 0 0 12px 0;
-  
+
   /* Display with word wrapping */
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
-  
+
   /* Height for 2 lines */
   min-height: calc(1.4em * 2);
 }

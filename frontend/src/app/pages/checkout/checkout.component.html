@@ -1,4 +1,8 @@
-<div class="checkout-page" [class.step-2]="currentStep === 2" [class.step-3]="currentStep === 3">
+<div
+  class="checkout-page"
+  [class.step-2]="currentStep === 2"
+  [class.step-3]="currentStep === 3"
+>
   <div class="loading-container" *ngIf="isLoading">
     <app-spinner></app-spinner>
   </div>
@@ -47,18 +51,32 @@
                   <form [formGroup]="billingForm" class="billing-form">
                     <div class="form-field-container">
                       <div class="form-group">
-                        <label class="form-label">Address <span class="required">*</span></label>
+                        <label class="form-label"
+                          >Address <span class="required">*</span></label
+                        >
                         <input
                           type="text"
                           class="form-control"
                           formControlName="address"
-                          [class.error]="shouldShowError(billingForm, 'address', billingFormSubmitted)"
+                          [class.error]="
+                            shouldShowError(
+                              billingForm,
+                              'address',
+                              billingFormSubmitted
+                            )
+                          "
                           placeholder="Enter your address"
                           autocomplete="nope"
                         />
                         <span
                           class="form-error"
-                          *ngIf="shouldShowError(billingForm, 'address', billingFormSubmitted)"
+                          *ngIf="
+                            shouldShowError(
+                              billingForm,
+                              'address',
+                              billingFormSubmitted
+                            )
+                          "
                         >
                           {{ getErrorMessage(billingForm, "address") }}
                         </span>
@@ -67,36 +85,65 @@
 
                     <div class="form-row-container">
                       <div class="form-group">
-                        <label class="form-label">City <span class="required">*</span></label>
+                        <label class="form-label"
+                          >City <span class="required">*</span></label
+                        >
                         <input
                           type="text"
                           class="form-control"
                           formControlName="city"
-                          [class.error]="shouldShowError(billingForm, 'city', billingFormSubmitted)"
+                          [class.error]="
+                            shouldShowError(
+                              billingForm,
+                              'city',
+                              billingFormSubmitted
+                            )
+                          "
                           placeholder="Enter your city"
                           autocomplete="nope"
                         />
                         <span
                           class="form-error"
-                          *ngIf="shouldShowError(billingForm, 'city', billingFormSubmitted)"
+                          *ngIf="
+                            shouldShowError(
+                              billingForm,
+                              'city',
+                              billingFormSubmitted
+                            )
+                          "
                         >
                           {{ getErrorMessage(billingForm, "city") }}
                         </span>
                       </div>
 
                       <div class="form-group">
-                        <label class="form-label">Zip/Postal Code <span class="required">*</span></label>
+                        <label class="form-label"
+                          >Zip/Postal Code
+                          <span class="required">*</span></label
+                        >
                         <input
                           type="text"
                           class="form-control"
                           formControlName="zipCode"
-                          [class.error]="shouldShowError(billingForm, 'zipCode', billingFormSubmitted)"
+                          [class.error]="
+                            shouldShowError(
+                              billingForm,
+                              'zipCode',
+                              billingFormSubmitted
+                            )
+                          "
                           placeholder="12345"
                           autocomplete="nope"
                         />
                         <span
                           class="form-error"
-                          *ngIf="shouldShowError(billingForm, 'zipCode', billingFormSubmitted)"
+                          *ngIf="
+                            shouldShowError(
+                              billingForm,
+                              'zipCode',
+                              billingFormSubmitted
+                            )
+                          "
                         >
                           {{ getErrorMessage(billingForm, "zipCode") }}
                         </span>
@@ -105,18 +152,32 @@
 
                     <div class="form-field-container">
                       <div class="form-group">
-                        <label class="form-label">Telephone <span class="required">*</span></label>
+                        <label class="form-label"
+                          >Telephone <span class="required">*</span></label
+                        >
                         <input
                           type="text"
                           class="form-control"
                           formControlName="phone"
-                          [class.error]="shouldShowError(billingForm, 'phone', billingFormSubmitted)"
+                          [class.error]="
+                            shouldShowError(
+                              billingForm,
+                              'phone',
+                              billingFormSubmitted
+                            )
+                          "
                           placeholder="03-1234567"
                           autocomplete="nope"
                         />
                         <span
                           class="form-error"
-                          *ngIf="shouldShowError(billingForm, 'phone', billingFormSubmitted)"
+                          *ngIf="
+                            shouldShowError(
+                              billingForm,
+                              'phone',
+                              billingFormSubmitted
+                            )
+                          "
                         >
                           {{ getErrorMessage(billingForm, "phone") }}
                         </span>
@@ -128,7 +189,11 @@
                     </div>
 
                     <div class="form-button-container">
-                      <button type="button" class="btn continue-btn" (click)="continueToNextStep()">
+                      <button
+                        type="button"
+                        class="btn continue-btn"
+                        (click)="continueToNextStep()"
+                      >
                         Continue
                       </button>
                     </div>
@@ -161,7 +226,9 @@
                       <label class="radio-option">
                         <input
                           type="radio"
-                          [checked]="paymentForm.get('paymentMethod')?.value === 'check'"
+                          [checked]="
+                            paymentForm.get('paymentMethod')?.value === 'check'
+                          "
                           (change)="onPaymentMethodChange('check')"
                         />
                         <span>Check / Money order</span>
@@ -170,7 +237,10 @@
                       <label class="radio-option">
                         <input
                           type="radio"
-                          [checked]="paymentForm.get('paymentMethod')?.value === 'credit_card'"
+                          [checked]="
+                            paymentForm.get('paymentMethod')?.value ===
+                            'credit_card'
+                          "
                           (change)="onPaymentMethodChange('credit_card')"
                         />
                         <span>Credit Card (saved)</span>
@@ -178,24 +248,45 @@
                     </div>
                   </div>
 
-                  <div class="credit-card-container" *ngIf="paymentForm.get('paymentMethod')?.value === 'credit_card'">
+                  <div
+                    class="credit-card-container"
+                    *ngIf="
+                      paymentForm.get('paymentMethod')?.value === 'credit_card'
+                    "
+                  >
                     <div class="credit-card-fields">
                       <div class="form-field-container cardholder-name-field">
                         <div class="form-group">
-                          <label class="form-label">Name on Card <span class="required">*</span></label>
+                          <label class="form-label"
+                            >Name on Card <span class="required">*</span></label
+                          >
                           <input
                             type="search"
                             class="form-control"
-                            [value]="paymentForm.get('cardholderName')?.value || ''"
+                            [value]="
+                              paymentForm.get('cardholderName')?.value || ''
+                            "
                             (input)="updateFormField('cardholderName', $event)"
-                            [class.error]="shouldShowError(paymentForm, 'cardholderName', paymentFormSubmitted)"
+                            [class.error]="
+                              shouldShowError(
+                                paymentForm,
+                                'cardholderName',
+                                paymentFormSubmitted
+                              )
+                            "
                             placeholder="First and Last name"
                             autocomplete="nope"
                             role="presentation"
                           />
                           <span
                             class="form-error"
-                            *ngIf="shouldShowError(paymentForm, 'cardholderName', paymentFormSubmitted)"
+                            *ngIf="
+                              shouldShowError(
+                                paymentForm,
+                                'cardholderName',
+                                paymentFormSubmitted
+                              )
+                            "
                           >
                             {{ getErrorMessage(paymentForm, "cardholderName") }}
                           </span>
@@ -204,12 +295,21 @@
 
                       <div class="form-field-container card-type-field">
                         <div class="form-group">
-                          <label class="form-label">Credit Card Type <span class="required">*</span></label>
+                          <label class="form-label"
+                            >Credit Card Type
+                            <span class="required">*</span></label
+                          >
                           <select
                             class="form-control"
                             [value]="paymentForm.get('cardType')?.value || ''"
                             (change)="updateFormField('cardType', $event)"
-                            [class.error]="shouldShowError(paymentForm, 'cardType', paymentFormSubmitted)"
+                            [class.error]="
+                              shouldShowError(
+                                paymentForm,
+                                'cardType',
+                                paymentFormSubmitted
+                              )
+                            "
                             autocomplete="nope"
                           >
                             <option value="">Please select a card</option>
@@ -219,7 +319,13 @@
                           </select>
                           <span
                             class="form-error"
-                            *ngIf="shouldShowError(paymentForm, 'cardType', paymentFormSubmitted)"
+                            *ngIf="
+                              shouldShowError(
+                                paymentForm,
+                                'cardType',
+                                paymentFormSubmitted
+                              )
+                            "
                           >
                             {{ getErrorMessage(paymentForm, "cardType") }}
                           </span>
@@ -228,13 +334,22 @@
 
                       <div class="form-field-container card-number-field">
                         <div class="form-group">
-                          <label class="form-label">Credit Card Number <span class="required">*</span></label>
+                          <label class="form-label"
+                            >Credit Card Number
+                            <span class="required">*</span></label
+                          >
                           <input
                             type="search"
                             class="form-control"
                             [value]="paymentForm.get('cardNumber')?.value || ''"
                             (input)="updateFormField('cardNumber', $event)"
-                            [class.error]="shouldShowError(paymentForm, 'cardNumber', paymentFormSubmitted)"
+                            [class.error]="
+                              shouldShowError(
+                                paymentForm,
+                                'cardNumber',
+                                paymentFormSubmitted
+                              )
+                            "
                             maxlength="16"
                             placeholder="16 digits"
                             inputmode="numeric"
@@ -243,7 +358,13 @@
                           />
                           <span
                             class="form-error"
-                            *ngIf="shouldShowError(paymentForm, 'cardNumber', paymentFormSubmitted)"
+                            *ngIf="
+                              shouldShowError(
+                                paymentForm,
+                                'cardNumber',
+                                paymentFormSubmitted
+                              )
+                            "
                           >
                             {{ getErrorMessage(paymentForm, "cardNumber") }}
                           </span>
@@ -252,25 +373,47 @@
 
                       <div class="form-field-container expiry-date-field">
                         <div class="form-group">
-                          <label class="form-label">Expiration Date <span class="required">*</span></label>
+                          <label class="form-label"
+                            >Expiration Date
+                            <span class="required">*</span></label
+                          >
                           <div class="expiry-inputs">
                             <select
                               class="form-control expiry-month"
-                              [value]="paymentForm.get('expiryMonth')?.value || ''"
+                              [value]="
+                                paymentForm.get('expiryMonth')?.value || ''
+                              "
                               (change)="updateFormField('expiryMonth', $event)"
-                              [class.error]="shouldShowError(paymentForm, 'expiryMonth', paymentFormSubmitted)"
+                              [class.error]="
+                                shouldShowError(
+                                  paymentForm,
+                                  'expiryMonth',
+                                  paymentFormSubmitted
+                                )
+                              "
                               autocomplete="nope"
                             >
                               <option value="">MM</option>
-                              <option *ngFor="let month of months" [value]="month.value">
+                              <option
+                                *ngFor="let month of months"
+                                [value]="month.value"
+                              >
                                 {{ month.label }}
                               </option>
                             </select>
                             <select
                               class="form-control expiry-year"
-                              [value]="paymentForm.get('expiryYear')?.value || ''"
+                              [value]="
+                                paymentForm.get('expiryYear')?.value || ''
+                              "
                               (change)="updateFormField('expiryYear', $event)"
-                              [class.error]="shouldShowError(paymentForm, 'expiryYear', paymentFormSubmitted)"
+                              [class.error]="
+                                shouldShowError(
+                                  paymentForm,
+                                  'expiryYear',
+                                  paymentFormSubmitted
+                                )
+                              "
                               autocomplete="nope"
                             >
                               <option value="">YYYY</option>
@@ -281,7 +424,18 @@
                           </div>
                           <span
                             class="form-error"
-                            *ngIf="shouldShowError(paymentForm, 'expiryMonth', paymentFormSubmitted) || shouldShowError(paymentForm, 'expiryYear', paymentFormSubmitted)"
+                            *ngIf="
+                              shouldShowError(
+                                paymentForm,
+                                'expiryMonth',
+                                paymentFormSubmitted
+                              ) ||
+                              shouldShowError(
+                                paymentForm,
+                                'expiryYear',
+                                paymentFormSubmitted
+                              )
+                            "
                           >
                             Please select a valid expiration date
                           </span>
@@ -290,7 +444,10 @@
 
                       <div class="form-field-container cvv-field">
                         <div class="form-group">
-                          <label class="form-label">Card Verification Number <span class="required">*</span></label>
+                          <label class="form-label"
+                            >Card Verification Number
+                            <span class="required">*</span></label
+                          >
                           <div class="cvv-row">
                             <span class="cvv-hint">What is this?</span>
                             <input
@@ -298,7 +455,13 @@
                               class="form-control cvv-input"
                               [value]="paymentForm.get('cvv')?.value || ''"
                               (input)="updateFormField('cvv', $event)"
-                              [class.error]="shouldShowError(paymentForm, 'cvv', paymentFormSubmitted)"
+                              [class.error]="
+                                shouldShowError(
+                                  paymentForm,
+                                  'cvv',
+                                  paymentFormSubmitted
+                                )
+                              "
                               maxlength="3"
                               placeholder="3 digits"
                               inputmode="numeric"
@@ -308,7 +471,13 @@
                           </div>
                           <span
                             class="form-error"
-                            *ngIf="shouldShowError(paymentForm, 'cvv', paymentFormSubmitted)"
+                            *ngIf="
+                              shouldShowError(
+                                paymentForm,
+                                'cvv',
+                                paymentFormSubmitted
+                              )
+                            "
                           >
                             {{ getErrorMessage(paymentForm, "cvv") }}
                           </span>
@@ -318,7 +487,11 @@
                   </div>
 
                   <div class="form-button-container">
-                    <button type="button" class="btn continue-btn" (click)="continueToNextStep()">
+                    <button
+                      type="button"
+                      class="btn continue-btn"
+                      (click)="continueToNextStep()"
+                    >
                       Continue
                     </button>
                   </div>
@@ -382,12 +555,22 @@
                   <div class="order-actions-wrapper">
                     <div class="edit-cart-section">
                       <span class="forgotten-item">Forgot an Item?</span>
-                      <a href="#" class="edit-cart-link" (click)="editCart($event)">Edit Your Cart</a>
+                      <a
+                        href="#"
+                        class="edit-cart-link"
+                        (click)="editCart($event)"
+                        >Edit Your Cart</a
+                      >
                     </div>
 
                     <div class="place-order-wrapper">
                       <div class="place-order-section">
-                        <button type="button" class="place-order-btn" (click)="submitOrder()" [disabled]="isProcessing">
+                        <button
+                          type="button"
+                          class="place-order-btn"
+                          (click)="submitOrder()"
+                          [disabled]="isProcessing"
+                        >
                           Place Order
                         </button>
                       </div>
@@ -414,7 +597,11 @@
                   <span>Billing Information</span>
                   <ng-container *ngIf="hasReachedStep(1) && hasBillingInfo()">
                     <span class="progress-separator">|</span>
-                    <button type="button" class="change-btn" (click)="changeStep(1)">
+                    <button
+                      type="button"
+                      class="change-btn"
+                      (click)="changeStep(1)"
+                    >
                       Change
                     </button>
                   </ng-container>
@@ -424,7 +611,12 @@
                     <div class="info-item">{{ getUserFullName() }}</div>
                     <div class="info-item">{{ billingInfo.address }}</div>
                     <!-- ✅ שינוי כאן: מציג City + Zip באותה שורה -->
-                    <div class="info-item" *ngIf="billingInfo.city || billingInfo.zipCode">{{ getCityZip() }}</div>
+                    <div
+                      class="info-item"
+                      *ngIf="billingInfo.city || billingInfo.zipCode"
+                    >
+                      {{ getCityZip() }}
+                    </div>
                     <div class="info-item">{{ getPhoneFormatted() }}</div>
                   </div>
                 </div>
@@ -437,7 +629,11 @@
                   <span>Payment Method</span>
                   <ng-container *ngIf="hasReachedStep(2) && hasPaymentInfo()">
                     <span class="progress-separator">|</span>
-                    <button type="button" class="change-btn" (click)="changeStep(2)">
+                    <button
+                      type="button"
+                      class="change-btn"
+                      (click)="changeStep(2)"
+                    >
                       Change
                     </button>
                   </ng-container>
@@ -445,26 +641,56 @@
                 <div class="progress-content" *ngIf="hasPaymentInfo()">
                   <div class="progress-filled-content">
                     <!-- ✅ בלי הכותרת "Payment Method:" - רק הערך -->
-                    <div class="info-item">{{ paymentForm.get("paymentMethod")?.value === "check" ? "Check / Money order" : "Credit Card (saved)" }}</div>
-                    
+                    <div class="info-item">
+                      {{
+                        paymentForm.get("paymentMethod")?.value === "check"
+                          ? "Check / Money order"
+                          : "Credit Card (saved)"
+                      }}
+                    </div>
+
                     <!-- Credit Card Details (only if credit card selected) -->
-                    <ng-container *ngIf="paymentForm.get('paymentMethod')?.value === 'credit_card'">
+                    <ng-container
+                      *ngIf="
+                        paymentForm.get('paymentMethod')?.value ===
+                        'credit_card'
+                      "
+                    >
                       <!-- Card Type -->
-                      <div class="info-item-wrapper" *ngIf="paymentForm.get('cardType')?.value">
+                      <div
+                        class="info-item-wrapper"
+                        *ngIf="paymentForm.get('cardType')?.value"
+                      >
                         <div class="info-label">Credit Card Type:</div>
-                        <div class="info-value">{{ getCardTypeName(paymentForm.get("cardType")?.value) }}</div>
+                        <div class="info-value">
+                          {{
+                            getCardTypeName(paymentForm.get("cardType")?.value)
+                          }}
+                        </div>
                       </div>
-                      
+
                       <!-- Card Number -->
-                      <div class="info-item-wrapper" *ngIf="paymentForm.get('cardNumber')?.value">
+                      <div
+                        class="info-item-wrapper"
+                        *ngIf="paymentForm.get('cardNumber')?.value"
+                      >
                         <div class="info-label">Credit Card Number:</div>
-                        <div class="info-value">xxxx-{{ paymentForm.get("cardNumber")?.value.slice(-4) }}</div>
+                        <div class="info-value">
+                          xxxx-{{
+                            paymentForm.get("cardNumber")?.value.slice(-4)
+                          }}
+                        </div>
                       </div>
-                      
+
                       <!-- Cardholder Name -->
-                      <div class="info-item-wrapper" *ngIf="paymentForm.get('cardholderName')?.value">
+                      <div
+                        class="info-item-wrapper"
+                        *ngIf="paymentForm.get('cardholderName')?.value"
+                      >
                         <div class="info-label">Name on the Card:</div>
-                        <div class="info-value">{{ paymentForm.get("cardholderName")?.value }}</div>
+                        <div class="info-value">
+                          {{ paymentForm.get("cardholderName")?.value }}
+                        </div>
                       </div>
                     </ng-container>
                   </div>

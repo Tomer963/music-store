@@ -3,7 +3,7 @@ import { MESSAGES } from "../config/constants.js";
 
 /**
  * validateRequest
- * 
+ *
  * Middleware to check validation results and return errors if any
  *
  * @param {Object} req - Express request object

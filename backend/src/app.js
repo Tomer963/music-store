@@ -26,7 +26,7 @@ const corsOptions = {
       "http://localhost:4200",
       "http://localhost:3000",
     ];
-    
+
     // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -58,51 +58,54 @@ if (process.env.NODE_ENV === "development") {
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: process.env.NODE_ENV === "production" ? 100 : 1000,
-  standardHeaders: 'draft-7',
+  standardHeaders: "draft-7",
   legacyHeaders: false,
   requestWasSuccessful: (req, res) => res.statusCode < 400,
-  
+
   // Extract client IP from various headers
   keyGenerator: (req) => {
     const forwarded = req.headers["x-forwarded-for"];
     const realIp = req.headers["x-real-ip"];
     const ip = req.ip || req.connection?.remoteAddress || "unknown";
-    
+
     let clientIp = ip;
     if (forwarded) {
       clientIp = forwarded.split(",")[0].trim();
     } else if (realIp) {
       clientIp = realIp;
     }
-    
+
     // Remove IPv6 prefix
     clientIp = clientIp.replace(/^::ffff:/, "");
-    
+
     if (process.env.NODE_ENV === "development") {
       console.log(`Rate limit key: ${clientIp}`);
     }
-    
+
     return clientIp;
   },
-  
+
   // Handler for rate limit exceeded
   handler: (req, res) => {
     const clientIp = req.ip?.replace(/^::ffff:/, "") || "unknown";
     const env = process.env.NODE_ENV || "development";
     const limit = env === "production" ? 100 : 1000;
-    
-    console.log(`Rate limit exceeded for IP: ${clientIp} (${env} mode: ${limit} req/15min)`);
-    
+
+    console.log(
+      `Rate limit exceeded for IP: ${clientIp} (${env} mode: ${limit} req/15min)`,
+    );
+
     res.status(429).json({
       success: false,
       message: "Too many requests, please try again later.",
       error: "Rate limit exceeded",
       limit: limit,
       windowMs: 900,
-      retryAfter: Math.ceil((req.rateLimit?.resetTime - Date.now()) / 1000) || 900,
+      retryAfter:
+        Math.ceil((req.rateLimit?.resetTime - Date.now()) / 1000) || 900,
     });
   },
-  
+
   // Skip rate limiting for health check endpoints
   skip: (req) => {
     return req.path === "/health" || req.path === "/health/detailed";
@@ -112,7 +115,9 @@ const limiter = rateLimit({
 // Apply rate limiter to all API routes
 app.use("/api", limiter);
 
-console.log(`Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`);
+console.log(
+  `Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`,
+);
 console.log(`Rate Limit Headers: draft-7 standard`);
 
 // Database connection check middleware

@@ -4,7 +4,7 @@ import { paginate, formatResponse } from "../utils/helpers.js";
 
 /**
  * getAlbums
- * 
+ *
  * Retrieves all albums with pagination and optional category filter
  *
  * @param {Object} req - Express request object
@@ -36,7 +36,7 @@ export const getAlbums = async (req, res, next) => {
 
 /**
  * getAlbum
- * 
+ *
  * Retrieves a single album by ID with populated category
  *
  * @param {Object} req - Express request object with album ID in params
@@ -48,7 +48,7 @@ export const getAlbum = async (req, res, next) => {
   try {
     const album = await Album.findById(req.params.id).populate(
       "category",
-      "name"
+      "name",
     );
 
     if (!album) {
@@ -65,7 +65,7 @@ export const getAlbum = async (req, res, next) => {
 
 /**
  * searchAlbums
- * 
+ *
  * Searches albums by title, artist or description using regex matching
  *
  * @param {Object} req - Express request object with search query in query string
@@ -104,7 +104,7 @@ export const searchAlbums = async (req, res, next) => {
 
 /**
  * getNewAlbums
- * 
+ *
  * Retrieves newest albums sorted by creation date
  *
  * @param {Object} req - Express request object
@@ -127,7 +127,7 @@ export const getNewAlbums = async (req, res, next) => {
 
 /**
  * createAlbum
- * 
+ *
  * Creates a new album (Admin only)
  *
  * @param {Object} req - Express request object with album data in body
@@ -148,7 +148,7 @@ export const createAlbum = async (req, res, next) => {
 
 /**
  * updateAlbum
- * 
+ *
  * Updates an existing album (Admin only)
  *
  * @param {Object} req - Express request object with album ID in params and update data in body
@@ -177,7 +177,7 @@ export const updateAlbum = async (req, res, next) => {
 
 /**
  * deleteAlbum
- * 
+ *
  * Deletes an album (Admin only)
  *
  * @param {Object} req - Express request object with album ID in params

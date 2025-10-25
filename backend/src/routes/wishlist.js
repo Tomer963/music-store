@@ -15,14 +15,14 @@ router.post(
   "/:albumId",
   albumIdValidation,
   validateRequest,
-  wishlistController.addToWishlist
+  wishlistController.addToWishlist,
 );
 
 router.delete(
   "/:albumId",
   albumIdValidation,
   validateRequest,
-  wishlistController.removeFromWishlist
+  wishlistController.removeFromWishlist,
 );
 
 export default router;

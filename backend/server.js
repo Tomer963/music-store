@@ -13,7 +13,7 @@ let isShuttingDown = false;
 
 /**
  * startServer
- * 
+ *
  * Initializes database connection and starts Express server
  *
  * @return {Promise<void>}
@@ -51,7 +51,7 @@ const startServer = async () => {
 
 /**
  * gracefulShutdown
- * 
+ *
  * Handles graceful application shutdown, closing database and server connections
  *
  * @param {string} signal - Termination signal received

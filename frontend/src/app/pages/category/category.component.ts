@@ -49,7 +49,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private categoryService: CategoryService,
     private cartService: CartService,
     private wishlistService: WishlistService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   /**
@@ -171,7 +171,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       .getAlbumsByCategory(
         this.categoryId,
         this.currentPage,
-        this.ITEMS_PER_PAGE
+        this.ITEMS_PER_PAGE,
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -352,31 +352,31 @@ export class CategoryComponent implements OnInit, OnDestroy {
    */
   getTruncatedDescription(description: string): string {
     if (!description) return "";
-    
+
     // Approximate character limit for 2 lines (considering font size 0.813rem, line-height 1.4)
     // This is roughly 40-45 characters per line = ~85 chars total
     const maxLength = 85;
-    
+
     // If description is shorter than limit, return as-is
     if (description.length <= maxLength) {
       return description;
     }
-    
+
     // Find the last complete word before the limit
     let truncated = description.substring(0, maxLength);
-    
+
     // Find the last space to avoid cutting mid-word
-    const lastSpace = truncated.lastIndexOf(' ');
-    
+    const lastSpace = truncated.lastIndexOf(" ");
+
     if (lastSpace > 0) {
       // Cut at the last space and add ellipsis
       truncated = truncated.substring(0, lastSpace);
     }
-    
+
     // Remove trailing punctuation before adding ellipsis
-    truncated = truncated.replace(/[.,;:!?-]+$/, '');
-    
-    return truncated + '...';
+    truncated = truncated.replace(/[.,;:!?-]+$/, "");
+
+    return truncated + "...";
   }
 
   /**

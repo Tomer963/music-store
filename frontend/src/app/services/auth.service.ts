@@ -36,14 +36,17 @@ export class AuthService {
   // Check for inactivity every minute
   private readonly ACTIVITY_CHECK_INTERVAL = 60 * 1000;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {
     this.setupActivityTracking();
     this.setupInactivityCheck();
   }
 
   /**
    * Setup Activity Tracking
-   * 
+   *
    * Monitors user interactions to track session activity
    *
    * @return void
@@ -55,7 +58,7 @@ export class AuthService {
       fromEvent(document, "mousedown"),
       fromEvent(document, "keypress"),
       fromEvent(document, "scroll"),
-      fromEvent(document, "touchstart")
+      fromEvent(document, "touchstart"),
     ).pipe(throttleTime(5000)); // Throttle to prevent excessive updates
 
     userActivity$.subscribe(() => {
@@ -67,7 +70,7 @@ export class AuthService {
 
   /**
    * Setup Inactivity Check
-   * 
+   *
    * Periodically checks for session timeout
    *
    * @return void
@@ -89,7 +92,7 @@ export class AuthService {
 
   /**
    * Update Last Activity
-   * 
+   *
    * Records current timestamp as last user activity
    *
    * @return void
@@ -100,7 +103,7 @@ export class AuthService {
 
   /**
    * Get Last Activity
-   * 
+   *
    * Retrieves timestamp of last user activity
    *
    * @return number | null Timestamp or null if not found
@@ -112,7 +115,7 @@ export class AuthService {
 
   /**
    * Handle Session Expiry
-   * 
+   *
    * Clears auth data and redirects to home with message
    *
    * @return void
@@ -126,7 +129,7 @@ export class AuthService {
 
   /**
    * Initialize Auth
-   * 
+   *
    * Restores user session on app startup
    *
    * @return void
@@ -149,7 +152,7 @@ export class AuthService {
       // Decode token and restore user data
       try {
         const payload = this.decodeToken(token);
-        
+
         // Create user object from token payload
         const user: User = {
           _id: payload.id,
@@ -178,7 +181,7 @@ export class AuthService {
 
   /**
    * Register
-   * 
+   *
    * Creates new user account
    *
    * @param (RegistrationData) data - User registration information
@@ -193,13 +196,13 @@ export class AuthService {
       .post<ApiResponse<AuthResponse>>(`${this.apiUrl}/register`, requestData)
       .pipe(
         map((response) => response.data!),
-        catchError((error) => this.handleError(error))
+        catchError((error) => this.handleError(error)),
       );
   }
 
   /**
    * Login
-   * 
+   *
    * Authenticates user and stores session
    *
    * @param (LoginCredentials) credentials - Email and password
@@ -219,13 +222,13 @@ export class AuthService {
           this.setAuthData(authData);
           this.updateLastActivity();
         }),
-        catchError((error) => this.handleError(error))
+        catchError((error) => this.handleError(error)),
       );
   }
 
   /**
    * Save Return URL
-   * 
+   *
    * Stores URL to redirect after login
    *
    * @param (string) url - URL to return to
@@ -240,7 +243,7 @@ export class AuthService {
 
   /**
    * Get Return URL
-   * 
+   *
    * Retrieves saved return URL
    *
    * @return string | null Saved URL or null
@@ -251,7 +254,7 @@ export class AuthService {
 
   /**
    * Clear Return URL
-   * 
+   *
    * Removes saved return URL
    *
    * @return void
@@ -262,7 +265,7 @@ export class AuthService {
 
   /**
    * Logout
-   * 
+   *
    * Clears user session and navigates to home
    *
    * @return void
@@ -287,7 +290,7 @@ export class AuthService {
 
   /**
    * Get Profile
-   * 
+   *
    * Fetches complete user profile from server
    *
    * @return Observable<User> User profile data
@@ -300,13 +303,13 @@ export class AuthService {
         this.currentUserSubject.next(user);
         this.updateLastActivity();
       }),
-      catchError((error) => this.handleError(error))
+      catchError((error) => this.handleError(error)),
     );
   }
 
   /**
    * Is Authenticated
-   * 
+   *
    * Checks if user has valid session
    *
    * @return boolean True if authenticated
@@ -318,7 +321,7 @@ export class AuthService {
 
   /**
    * Get Current User
-   * 
+   *
    * Returns current user from local state
    *
    * @return User | null Current user or null
@@ -329,7 +332,7 @@ export class AuthService {
 
   /**
    * Get Token
-   * 
+   *
    * Retrieves JWT token from storage
    *
    * @return string | null Token or null
@@ -340,7 +343,7 @@ export class AuthService {
 
   /**
    * Set Auth Data
-   * 
+   *
    * Stores authentication data locally
    *
    * @param (AuthResponse) authData - Token and user info
@@ -353,7 +356,7 @@ export class AuthService {
 
   /**
    * Clear Auth
-   * 
+   *
    * Removes all authentication data
    *
    * @return void
@@ -367,7 +370,7 @@ export class AuthService {
 
   /**
    * Load User Profile
-   * 
+   *
    * Fetches full profile in background
    *
    * @return void
@@ -387,7 +390,7 @@ export class AuthService {
 
   /**
    * Is Token Expired
-   * 
+   *
    * Checks if JWT token has expired
    *
    * @param (string) token - JWT token to check
@@ -405,7 +408,7 @@ export class AuthService {
 
   /**
    * Decode Token
-   * 
+   *
    * Extracts payload from JWT token
    *
    * @param (string) token - JWT token to decode
@@ -419,14 +422,14 @@ export class AuthService {
       atob(base64)
         .split("")
         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
+        .join(""),
     );
     return JSON.parse(jsonPayload);
   }
 
   /**
    * Handle Error
-   * 
+   *
    * Centralized error handling
    *
    * @param (HttpErrorResponse) error - HTTP error object

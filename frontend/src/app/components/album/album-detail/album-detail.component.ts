@@ -37,12 +37,12 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private albumService: AlbumService,
     private cartService: CartService,
-    private wishlistService: WishlistService
+    private wishlistService: WishlistService,
   ) {}
 
   /**
    * Ng On Init
-   * 
+   *
    * Loads album data from route params
    *
    * @return void
@@ -56,7 +56,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Ng On Destroy
-   * 
+   *
    * Cleans up subscriptions
    *
    * @return void
@@ -68,7 +68,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Load Album
-   * 
+   *
    * Fetches album data by ID
    *
    * @param (string) albumId - Album ID to load
@@ -94,7 +94,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Subscribe To Wishlist Status
-   * 
+   *
    * Monitors wishlist status changes
    *
    * @return void
@@ -113,7 +113,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Select Image
-   * 
+   *
    * Sets selected thumbnail image
    *
    * @param (number) index - Thumbnail index
@@ -125,7 +125,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Get Selected Image URL
-   * 
+   *
    * Gets URL of currently selected image
    *
    * @return string Selected image URL
@@ -143,7 +143,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Add To Cart
-   * 
+   *
    * Adds album to cart with specified quantity
    *
    * @return void
@@ -169,7 +169,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle Wishlist
-   * 
+   *
    * Adds or removes album from wishlist
    *
    * @return void
@@ -185,7 +185,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Is Category
-   * 
+   *
    * Type guard for category object
    *
    * @param (string | Category) category - Category to check
@@ -197,7 +197,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Get Category ID
-   * 
+   *
    * Extracts category ID for breadcrumb
    *
    * @return string Category ID or empty string
@@ -210,7 +210,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Get Category Name
-   * 
+   *
    * Extracts category name for breadcrumb
    *
    * @return string Category name or empty string
@@ -223,7 +223,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Format Price
-   * 
+   *
    * Formats price for display
    *
    * @param (number) price - Price to format
@@ -235,7 +235,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Get Formatted Description
-   * 
+   *
    * Splits description into paragraphs
    *
    * @return string[] Array of paragraphs
@@ -257,7 +257,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Get Three Thumbnails
-   * 
+   *
    * Gets exactly 3 thumbnail images
    *
    * @return any[] Array of 3 thumbnail objects

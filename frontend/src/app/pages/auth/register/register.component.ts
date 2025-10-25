@@ -36,7 +36,7 @@ export class RegisterModalComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {
     this.registerForm = this.fb.group(
       {
@@ -69,7 +69,7 @@ export class RegisterModalComponent {
         confirmPassword: ["", Validators.required],
         acceptTerms: [false, Validators.requiredTrue],
       },
-      { validators: this.passwordMatchValidator }
+      { validators: this.passwordMatchValidator },
     );
 
     this.setupFieldChangeTracking();

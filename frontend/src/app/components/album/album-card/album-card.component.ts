@@ -47,12 +47,12 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     private router: Router,
     private cartService: CartService,
     private albumService: AlbumService,
-    private wishlistService: WishlistService
+    private wishlistService: WishlistService,
   ) {}
 
   /**
    * Ng On Init
-   * 
+   *
    * Initializes component and loads album data
    *
    * @return void
@@ -74,7 +74,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Ng On Destroy
-   * 
+   *
    * Cleans up subscriptions
    *
    * @return void
@@ -86,7 +86,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Should Hide Content
-   * 
+   *
    * Determines if content should be hidden based on index
    *
    * @return boolean True if content should be hidden
@@ -97,7 +97,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Should Prevent Image Click
-   * 
+   *
    * Checks if image click should be prevented
    *
    * @return boolean True if click should be prevented
@@ -108,7 +108,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Handle Image Click
-   * 
+   *
    * Handles click on album image
    *
    * @param (Event) event - Click event
@@ -118,10 +118,10 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     // Don't navigate if clicking buttons
     const target = event.target as HTMLElement;
     if (
-      target.closest('.overlay-icon-btn') || 
-      target.closest('.center-icon-btn') ||
-      target.closest('.cart-counter') ||
-      target.closest('.overlay-cart-counter')
+      target.closest(".overlay-icon-btn") ||
+      target.closest(".center-icon-btn") ||
+      target.closest(".cart-counter") ||
+      target.closest(".overlay-cart-counter")
     ) {
       return;
     }
@@ -131,7 +131,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Check Cart Status
-   * 
+   *
    * Monitors cart changes and updates local state
    *
    * @return void
@@ -139,7 +139,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   private checkCartStatus(): void {
     this.cartService.cart$.pipe(takeUntil(this.destroy$)).subscribe((cart) => {
       const cartItem = cart.items.find(
-        (item) => item.album._id === this.album._id
+        (item) => item.album._id === this.album._id,
       );
       if (cartItem) {
         this.cartQuantity = cartItem.quantity;
@@ -154,7 +154,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * View Album
-   * 
+   *
    * Navigates to album detail page
    *
    * @param (Event) event - Click event
@@ -172,7 +172,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Add To Cart
-   * 
+   *
    * Adds album to cart
    *
    * @param (Event) event - Click event
@@ -222,7 +222,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Increment Cart
-   * 
+   *
    * Increases cart quantity by 1
    *
    * @param (Event) event - Click event
@@ -257,7 +257,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Decrement Cart
-   * 
+   *
    * Removes item from cart
    *
    * @param (Event) event - Click event
@@ -288,7 +288,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle Wishlist
-   * 
+   *
    * Adds or removes album from wishlist
    *
    * @param (Event) event - Click event
@@ -307,7 +307,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Get Formatted Price
-   * 
+   *
    * Formats album price for display
    *
    * @return string Formatted price
@@ -318,7 +318,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Format Original Price
-   * 
+   *
    * Formats original price for display
    *
    * @return string Formatted original price
@@ -331,7 +331,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
 
   /**
    * Get Truncated Description
-   * 
+   *
    * Returns truncated description
    *
    * @return string Truncated description

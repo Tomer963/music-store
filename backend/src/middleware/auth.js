@@ -4,7 +4,7 @@ import { MESSAGES } from "../config/constants.js";
 
 /**
  * authenticate
- * 
+ *
  * Middleware to authenticate user via JWT token
  *
  * @param {Object} req - Express request object
@@ -54,7 +54,7 @@ export const authenticate = async (req, res, next) => {
 
 /**
  * isAdmin
- * 
+ *
  * Middleware to check if authenticated user has admin role
  *
  * @param {Object} req - Express request object with authenticated user
@@ -75,7 +75,7 @@ export const isAdmin = (req, res, next) => {
 
 /**
  * optionalAuth
- * 
+ *
  * Middleware for optional authentication (doesn't fail if no token provided)
  *
  * @param {Object} req - Express request object

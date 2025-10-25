@@ -25,7 +25,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isInWishlistPage = false;
   private destroy$ = new Subject<void>();
 
-  constructor(private stateService: StateService, private router: Router) {}
+  constructor(
+    private stateService: StateService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.loadCategories();
@@ -40,7 +43,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Load Categories
-   * 
+   *
    * Loads categories with albums from state service
    *
    * @return void
@@ -84,7 +87,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Setup Route Listener
-   * 
+   *
    * Monitors navigation events to update sidebar state
    *
    * @return void
@@ -93,14 +96,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe(() => this.checkCurrentRoute());
   }
 
   /**
    * Check Current Route
-   * 
+   *
    * Updates component state based on current route
    *
    * @return void
@@ -133,7 +136,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Get Album Category
-   * 
+   *
    * Fetches album's category for highlighting in sidebar
    *
    * @param (string) albumId - Album identifier
@@ -153,7 +156,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Select Category
-   * 
+   *
    * Navigates to category page
    *
    * @param (string) categoryId - Category identifier
@@ -165,7 +168,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Is Category Active
-   * 
+   *
    * Checks if category is currently active
    *
    * @param (string) categoryId - Category identifier
@@ -180,7 +183,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Get Sidebar Classes
-   * 
+   *
    * Returns CSS classes based on current page
    *
    * @return string Space-separated CSS class names

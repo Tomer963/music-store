@@ -16,12 +16,12 @@ const categorySchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 /**
  * Virtual: albumCount
- * 
+ *
  * Counts albums in this category
  */
 categorySchema.virtual("albumCount", {
