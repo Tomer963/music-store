@@ -45,6 +45,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: "logout",
+    loadComponent: () =>
+      import("./pages/auth/logout/logout.component").then(
+        (m) => m.LogoutComponent,
+      ),
+  },
+  {
     path: "category/:id",
     loadComponent: () =>
       import("./pages/category/category.component").then(

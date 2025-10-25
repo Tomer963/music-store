@@ -71,7 +71,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /**
    * Logout
    *
-   * Logs out user, clears cart session, and navigates to home
+   * Logs out user, clears cart session, and navigates to logout page
    *
    * @return void
    */
@@ -79,6 +79,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.cartService.clearSession(); // Clear guest cart
     this.authService.logout();
     this.closeMenu();
+    this.router.navigate(["/logout"]); // Navigate to logout page
   }
 
   /**

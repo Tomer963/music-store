@@ -34,6 +34,10 @@
   box-shadow: none;
 }
 
+.empty-wishlist .btn-primary {
+  margin-top: var(--spacing-lg);
+}
+
 /* Wishlist header */
 .wishlist-header {
   background-color: var(--white);

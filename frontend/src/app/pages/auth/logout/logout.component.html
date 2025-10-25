@@ -1,0 +1,44 @@
+<div class="logout-page">
+  <div class="logout-container">
+    <!-- Success Icon with Animation -->
+    <div class="success-animation">
+      <div class="checkmark-circle">
+        <svg class="checkmark" viewBox="0 0 52 52">
+          <circle class="checkmark-circle-path" cx="26" cy="26" r="25" fill="none"/>
+          <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Logout Message -->
+    <div class="logout-content">
+      <h1 class="logout-title">You have been logged out successfully</h1>
+      <p class="logout-message">
+        Thank you for using our Music Store.<br />
+        We hope to see you again soon!
+      </p>
+
+      <!-- Countdown Display -->
+      <div class="countdown-container">
+        <p class="countdown-text">
+          Redirecting to home page in
+          <span class="countdown-number">{{ countdown }}</span>
+          {{ countdown === 1 ? "second" : "seconds" }}...
+        </p>
+      </div>
+
+      <!-- Action Button -->
+      <button class="home-button" (click)="navigateToHome()">
+        Go to Home Page Now
+      </button>
+    </div>
+
+    <!-- Decorative Music Notes -->
+    <div class="music-notes">
+      <div class="note note-1">♪</div>
+      <div class="note note-2">♫</div>
+      <div class="note note-3">♪</div>
+      <div class="note note-4">♫</div>
+    </div>
+  </div>
+</div>

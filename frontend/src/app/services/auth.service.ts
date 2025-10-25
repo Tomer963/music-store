@@ -266,7 +266,7 @@ export class AuthService {
   /**
    * Logout
    *
-   * Clears user session and navigates to home
+   * Clears user session - navigation handled by component
    *
    * @return void
    */
@@ -281,10 +281,7 @@ export class AuthService {
         .pipe(take(1))
         .subscribe({
           error: (error) => console.error("Logout error:", error),
-          complete: () => this.router.navigate(["/"]),
         });
-    } else {
-      this.router.navigate(["/"]);
     }
   }
 
