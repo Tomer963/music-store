@@ -42,7 +42,9 @@ export class StateService {
 
   /**
    * Get Current State
+   *
    * Returns the current snapshot of application state
+   *
    * @return AppState Current state object
    */
   getCurrentState(): AppState {
@@ -51,7 +53,9 @@ export class StateService {
 
   /**
    * Get State
+   *
    * Returns state as an observable for reactive updates
+   *
    * @return Observable<AppState> State observable
    */
   getState(): Observable<AppState> {
@@ -60,8 +64,9 @@ export class StateService {
 
   /**
    * Load Initial Data
+   *
    * Loads albums and categories on app initialization
-   * Uses switchMap to chain API calls sequentially
+   *
    * @return Observable<AppState> Loaded state
    */
   loadInitialData(): Observable<AppState> {
@@ -108,8 +113,10 @@ export class StateService {
 
   /**
    * Update State
+   *
    * Merges partial state update with current state
-   * @param partial Partial state to merge
+   *
+   * @param (Partial<AppState>) partial - Partial state to merge
    * @return void
    */
   private updateState(partial: Partial<AppState>): void {

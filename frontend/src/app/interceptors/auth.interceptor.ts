@@ -4,9 +4,11 @@ import { AuthService } from "../services/auth.service";
 
 /**
  * Auth Interceptor
+ *
  * Automatically adds JWT token to all HTTP requests
- * @param req HTTP request
- * @param next HTTP handler
+ *
+ * @param req - HTTP request
+ * @param next - HTTP handler
  * @return Observable HTTP event
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {

@@ -4,9 +4,11 @@ import { AuthService } from "../services/auth.service";
 
 /**
  * Auth Guard
+ *
  * Protects routes that require user authentication
- * @param route Activated route snapshot
- * @param state Current router state
+ *
+ * @param route - Activated route snapshot
+ * @param state - Current router state
  * @return boolean True if user can activate route
  */
 export const authGuard: CanActivateFn = (route, state) => {

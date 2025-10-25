@@ -48,7 +48,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle Menu
-   * Open/close mobile navigation menu
+   *
+   * Opens/closes mobile navigation menu
+   *
    * @return void
    */
   toggleMenu(): void {
@@ -57,7 +59,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Close Menu
-   * Close mobile navigation menu
+   *
+   * Closes mobile navigation menu
+   *
    * @return void
    */
   closeMenu(): void {
@@ -66,7 +70,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Logout
-   * Log out user, clear cart session, and navigate to home
+   *
+   * Logs out user, clears cart session, and navigates to home
+   *
    * @return void
    */
   logout(): void {
@@ -77,7 +83,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Navigate To Checkout
-   * Navigate to checkout page and close mobile menu
+   *
+   * Navigates to checkout page and closes mobile menu
+   *
    * @return void
    */
   navigateToCheckout(): void {

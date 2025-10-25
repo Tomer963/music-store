@@ -6,9 +6,11 @@ import { catchError, throwError } from "rxjs";
 
 /**
  * Error Interceptor
+ *
  * Handles HTTP errors globally (401, 403, etc.)
- * @param req HTTP request
- * @param next HTTP handler
+ *
+ * @param req - HTTP request
+ * @param next - HTTP handler
  * @return Observable HTTP event with error handling
  */
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {

@@ -18,8 +18,10 @@ export class SearchService {
 
   /**
    * Search Albums
-   * Search for albums with client-side caching to reduce API calls
-   * @param query Search query string
+   *
+   * Searches for albums with client-side caching to reduce API calls
+   *
+   * @param (string) query - Search query string
    * @return Observable<Album[]> Array of matching albums
    */
   searchAlbums(query: string): Observable<Album[]> {
@@ -52,7 +54,9 @@ export class SearchService {
 
   /**
    * Clear Cache
+   *
    * Clears all cached search results
+   *
    * @return void
    */
   clearCache(): void {
@@ -61,9 +65,11 @@ export class SearchService {
 
   /**
    * Cache Results
-   * Store search results with LRU-style eviction
-   * @param key Cache key (search query)
-   * @param albums Albums to cache
+   *
+   * Stores search results with LRU-style eviction
+   *
+   * @param (string) key - Cache key (search query)
+   * @param (Album[]) albums - Albums to cache
    * @return void
    */
   private cacheResults(key: string, albums: Album[]): void {

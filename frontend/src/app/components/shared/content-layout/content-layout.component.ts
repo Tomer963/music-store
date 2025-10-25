@@ -40,7 +40,9 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
 
   /**
    * Check Current Route
+   *
    * Updates flags based on current URL for conditional rendering
+   *
    * @return void
    */
   private checkCurrentRoute(): void {

@@ -78,7 +78,9 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Clear Search
+   *
    * Resets search input and results
+   *
    * @return void
    */
   clearSearch(): void {
@@ -91,7 +93,9 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * On Search
-   * Handle search form submission (enter key)
+   *
+   * Handles search form submission (enter key)
+   *
    * @return void
    */
   onSearch(): void {
@@ -104,8 +108,10 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Select Album
-   * Navigate to album detail page from search results
-   * @param albumId Album ID
+   *
+   * Navigates to album detail page from search results
+   *
+   * @param (string) albumId - Album ID
    * @return void
    */
   selectAlbum(albumId: string): void {
@@ -117,7 +123,9 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Hide Results
-   * Close search results dropdown
+   *
+   * Closes search results dropdown
+   *
    * @return void
    */
   hideResults(): void {
@@ -126,8 +134,10 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * On Click Outside
-   * Close dropdown when clicking outside search box
-   * @param event Mouse click event
+   *
+   * Closes dropdown when clicking outside search box
+   *
+   * @param (Event) event - Mouse click event
    * @return void
    */
   @HostListener("document:click", ["$event"])
