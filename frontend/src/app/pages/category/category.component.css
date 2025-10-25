@@ -1,71 +1,6 @@
-/* Loading State */
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 450px;
-}
+/* Loading State - uses shared .loading-container and .vinyl-loader */
 
-/* Vinyl loader animation */
-.vinyl-loader {
-  width: 80px;
-  height: 80px;
-  position: relative;
-}
-
-.vinyl-loader .record {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    #ff0000 0% 20%,
-    #1a1a1a 20% 30%,
-    #333 30% 31%,
-    #1a1a1a 31% 45%,
-    #333 45% 46%,
-    #1a1a1a 46% 60%,
-    #333 60% 61%,
-    #1a1a1a 61% 100%
-  );
-  animation: spin 2s linear infinite;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-.vinyl-loader .label {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30%;
-  height: 30%;
-  background: var(--primary-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-.error-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-  text-align: center;
-}
-
-.error-content h2 {
-  color: var(--error-color);
-  margin-bottom: var(--spacing-md);
-}
-
-.error-content p {
-  color: var(--gray-dark);
-  margin-bottom: var(--spacing-lg);
-}
+/* Error Container - uses shared .error-container */
 
 .category-content-inner {
   width: 100%;
@@ -89,7 +24,7 @@
   font-weight: 600;
 }
 
-/* Albums section - NO INTERNAL SCROLL, just normal flow */
+/* Albums section */
 .albums-section {
   width: 100%;
   display: flex;
@@ -103,152 +38,34 @@
   padding-bottom: var(--spacing-lg);
 }
 
-/* Album card */
-.category-album-card {
-  background-color: var(--black);
-  border-radius: 0;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform var(--transition-normal),
-    box-shadow var(--transition-normal);
-  cursor: default;
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  position: relative;
-}
+/* Album card - uses shared .category-album-card */
 
-.category-album-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
+/* Album image container - uses shared .album-image-container */
 .album-image-container {
-  width: 100%;
   height: 260px;
-  overflow: hidden;
-  background-color: #1a1a1a;
-  position: relative;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  cursor: default;
 }
 
-.album-image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  display: block;
-  cursor: default;
-}
+/* Album content - uses shared .album-content */
 
-.album-content {
-  padding: 12px;
-  background-color: var(--black);
-  color: var(--white);
-  display: flex;
-  flex-direction: column;
-  overflow: visible;
-  flex-shrink: 0;
-  height: auto;
-  cursor: default;
-}
+/* Album title - uses shared .album-title-line */
 
-.album-title-line {
-  font-size: 0.938rem;
-  font-weight: 600;
-  color: var(--white);
-  margin: 0 0 6px 0;
-  word-wrap: break-word;
-  line-height: 1.3;
-  flex-shrink: 0;
-  cursor: default;
-}
+/* Album description - uses shared .album-description */
 
-/* FIXED: Album description - truncation handled in TypeScript, CSS just displays it */
-.album-description {
-  font-size: 0.813rem;
-  line-height: 1.4;
-  color: var(--gray-medium);
-  margin: 0 0 12px 0;
+/* Album bottom section - uses shared .album-bottom-section */
 
-  /* Display with word wrapping */
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
+/* Album price icons row - uses shared .album-price-icons-row */
 
-  /* Height for 2 lines */
-  min-height: calc(1.4em * 2);
-}
+/* Price display - uses shared .price-display */
 
-.album-bottom-section {
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
+/* Album price text - uses shared .album-price-text */
 
-.album-price-icons-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  min-height: 40px;
-  padding: 4px 0;
-}
+/* Original price - uses shared .original-price */
 
-.price-display {
-  display: flex;
-  align-items: baseline;
-  gap: var(--spacing-sm);
-}
+/* Album icons group - uses shared .album-icons-group */
 
-.album-price-text {
-  font-size: 1.375rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin: 0;
-  line-height: 1.2;
-}
+/* Icon buttons - uses shared styles */
 
-.original-price {
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--gray-medium);
-  text-decoration: line-through;
-  margin: 0;
-}
-
-.album-icons-group {
-  display: flex;
-  gap: var(--spacing-xs);
-  align-items: center;
-}
-
-/* Icon buttons */
-.album-icon-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius-full);
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
-  padding: 0;
-  position: relative;
-}
-
-.album-icon-btn:hover {
-  transform: scale(1.1);
-}
-
+/* Cart button specific - gray variant */
 .album-icon-btn.cart-btn.gray-cart-btn {
   background-color: transparent !important;
   padding: 5px;
@@ -271,6 +88,7 @@
   color: #737373;
 }
 
+/* Info button specific */
 .album-icon-btn.info-btn {
   background-color: #737373;
   width: 34px;
@@ -288,27 +106,7 @@
   color: var(--black);
 }
 
-.icon-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: var(--white);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-.icon-spinner.small {
-  width: 16px;
-  height: 16px;
-  border-width: 2px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+/* Action links */
 .album-action-links {
   display: flex;
   flex-direction: column;
@@ -340,6 +138,7 @@
   color: var(--white);
 }
 
+/* No albums - uses shared .empty-state */
 .no-albums {
   text-align: center;
   padding: var(--spacing-xxl) 0;
@@ -351,6 +150,7 @@
   margin-bottom: var(--spacing-lg);
 }
 
+/* Load more / No more */
 .load-more,
 .no-more {
   text-align: center;
@@ -359,92 +159,9 @@
   flex-shrink: 0;
 }
 
-/* Music preloader animation */
-.music-preloader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-}
-
-.music-preloader .bar {
-  width: 4px;
-  height: 40px;
-  background: linear-gradient(
-    to bottom,
-    var(--primary-color),
-    var(--primary-dark)
-  );
-  animation: musicBar 0.8s ease-in-out infinite;
-  border-radius: 2px;
-}
-
-.music-preloader .bar:nth-child(1) {
-  animation-delay: 0s;
-}
-.music-preloader .bar:nth-child(2) {
-  animation-delay: 0.1s;
-}
-.music-preloader .bar:nth-child(3) {
-  animation-delay: 0.2s;
-}
-.music-preloader .bar:nth-child(4) {
-  animation-delay: 0.3s;
-}
-.music-preloader .bar:nth-child(5) {
-  animation-delay: 0.4s;
-}
-
-@keyframes musicBar {
-  0%,
-  100% {
-    transform: scaleY(0.5);
-  }
-  50% {
-    transform: scaleY(1);
-  }
-}
-
-/* Fade in animation */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Animation - uses shared fadeInUp */
 .albums-grid .category-album-card {
   animation: fadeInUp 0.5s ease-out backwards;
-}
-
-/* Button styles */
-.btn {
-  display: inline-block;
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: none;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  outline: none;
-}
-
-.btn-primary {
-  background-color: var(--primary-color);
-  color: var(--white);
-}
-
-.btn-primary:hover {
-  background-color: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
 }
 
 /* Responsive Design */

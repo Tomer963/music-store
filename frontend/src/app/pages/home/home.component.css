@@ -1,71 +1,6 @@
-/* Loading State */
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 450px;
-}
+/* Loading State - uses shared .loading-container and .vinyl-loader */
 
-/* Vinyl loader animation */
-.vinyl-loader {
-  width: 80px;
-  height: 80px;
-  position: relative;
-}
-
-.vinyl-loader .record {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at center,
-    #ff0000 0% 20%,
-    #1a1a1a 20% 30%,
-    #333 30% 31%,
-    #1a1a1a 31% 45%,
-    #333 45% 46%,
-    #1a1a1a 46% 60%,
-    #333 60% 61%,
-    #1a1a1a 61% 100%
-  );
-  animation: spin 2s linear infinite;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-.vinyl-loader .label {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30%;
-  height: 30%;
-  background: var(--primary-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-.error-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-  text-align: center;
-}
-
-.error-content h2 {
-  color: var(--error-color);
-  margin-bottom: var(--spacing-md);
-}
-
-.error-content p {
-  color: var(--gray-dark);
-  margin-bottom: var(--spacing-lg);
-}
+/* Error Container - uses shared .error-container */
 
 .home-page {
   position: relative;
@@ -90,6 +25,7 @@
   width: 100%;
 }
 
+/* No Albums Container - uses shared .empty-state */
 .no-albums-container {
   display: flex;
   justify-content: center;
@@ -176,16 +112,6 @@
   margin-bottom: var(--spacing-lg);
 }
 
-/* Desktop only classes */
-.desktop-only {
-  display: block;
-}
-
-/* Mobile sidebar section - hidden on desktop */
-.sidebar-mobile-section {
-  display: none;
-}
-
 /* Content below featured */
 .content-below-featured {
   width: 100%;
@@ -265,39 +191,11 @@
   margin-bottom: var(--spacing-xl);
 }
 
-/* Album card */
-.home-album-card {
-  background-color: var(--black);
-  border-radius: 0;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform var(--transition-normal),
-    box-shadow var(--transition-normal);
-  cursor: default;
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  position: relative;
-}
+/* Album card - uses shared .home-album-card */
 
-.home-album-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Album image container */
+/* Album image container - uses shared .album-image-container */
 .album-image-container {
-  width: 100%;
   height: 280px;
-  overflow: hidden;
-  background-color: #1a1a1a;
-  position: relative;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
   cursor: pointer;
   transition: transform var(--transition-fast);
 }
@@ -307,10 +205,6 @@
 }
 
 .album-image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  display: block;
   transition: transform var(--transition-fast);
 }
 
@@ -318,18 +212,7 @@
   transform: scale(1.05);
 }
 
-.album-content {
-  min-height: auto;
-  padding: var(--spacing-md);
-  background-color: var(--black);
-  color: var(--white);
-  display: flex;
-  flex-direction: column;
-  overflow: visible;
-  flex-shrink: 0;
-  height: auto;
-}
-
+/* Album content - uses shared .album-content */
 .album-content.no-description {
   padding: var(--spacing-sm) var(--spacing-md);
   min-height: auto;
@@ -364,94 +247,7 @@
   line-height: 1.4;
 }
 
-.album-title-line {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--white);
-  margin: 0 0 var(--spacing-sm) 0;
-  word-wrap: break-word;
-  line-height: 1.3;
-  flex-shrink: 0;
-}
-
-.album-description-text {
-  font-size: 0.813rem;
-  color: var(--gray-medium);
-  line-height: 1.4;
-  margin: 0 0 var(--spacing-md) 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-shrink: 0;
-}
-
-.album-bottom-section {
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.album-price-icons-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  min-height: 45px;
-  padding: 5px 0;
-}
-
-.price-display {
-  display: flex;
-  align-items: baseline;
-  gap: var(--spacing-sm);
-}
-
-.album-price-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin: 0;
-  line-height: 1.2;
-}
-
-.original-price {
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: var(--gray-medium);
-  text-decoration: line-through;
-  margin: 0;
-}
-
-.album-icons-group {
-  display: flex;
-  gap: var(--spacing-xs);
-  align-items: center;
-}
-
-/* Icon buttons */
-.album-icon-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-full);
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
-  padding: 0;
-  position: relative;
-}
-
-.album-icon-btn:hover {
-  transform: scale(1.1);
-}
-
+/* Wishlist button specific */
 .album-icon-btn.wishlist-btn {
   background-color: transparent;
   padding: 5px;
@@ -473,6 +269,7 @@
   color: var(--primary-color);
 }
 
+/* Cart button specific - gray variant */
 .album-icon-btn.cart-btn {
   background-color: transparent !important;
   padding: 5px;
@@ -495,56 +292,7 @@
   color: #737373;
 }
 
-/* Cart counter */
-.bottom-cart-counter {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(115, 115, 115, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  padding: 0;
-  min-width: 80px;
-  height: 36px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.bottom-counter-btn {
-  background: none;
-  border: none;
-  color: var(--white);
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0 8px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color var(--transition-fast);
-  min-width: 28px;
-}
-
-.bottom-counter-btn.trash-btn {
-  font-size: 14px;
-  order: 1;
-}
-
-.bottom-counter-btn.plus-btn {
-  font-size: 18px;
-  order: -1;
-}
-
-.bottom-counter-value {
-  color: var(--white);
-  font-size: 14px;
-  font-weight: 600;
-  min-width: 20px;
-  text-align: center;
-  user-select: none;
-  order: 0;
-}
-
+/* Info button specific */
 .album-icon-btn.info-btn {
   background-color: #737373;
   width: 36px;
@@ -561,19 +309,18 @@
   color: var(--black);
 }
 
-.icon-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: var(--white);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+/* Cart counter specific - home page variant */
+.bottom-cart-counter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(115, 115, 115, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 0;
+  min-width: 80px;
+  height: 36px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .load-more,
@@ -593,18 +340,7 @@
   margin-top: var(--spacing-xl);
 }
 
-/* Animation */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Animations - uses shared fadeInUp */
 .albums-grid .home-album-card,
 .side-albums-vertical .home-album-card {
   animation: fadeInUp 0.5s ease-out backwards;
@@ -660,13 +396,11 @@
   }
 }
 
-/* ✅ מסכים קטנים - הסדר הנכון */
 @media (max-width: 575px) {
   .home-page {
     min-height: calc(100vh - 65px);
   }
 
-  /* ✅ Featured section - albums 1-9 */
   .featured-section {
     margin-bottom: var(--spacing-lg);
   }
@@ -692,7 +426,6 @@
     height: auto;
   }
 
-  /* ✅ הצגת אלבומים 10-11 אחרי featured */
   .side-albums-mobile-section {
     display: block;
     margin-bottom: var(--spacing-xl);
@@ -704,18 +437,15 @@
     gap: var(--spacing-lg);
   }
 
-  /* ✅ הסתרת אלבומים 10-11 מהסיידבר */
   .side-albums-vertical.desktop-only {
     display: none !important;
   }
 
-  /* ✅ Content below featured */
   .content-below-featured {
     margin-top: 0;
     padding-top: 0;
   }
 
-  /* ✅ כותרת New Products */
   .new-products-title {
     margin-top: 0;
     margin-bottom: var(--spacing-lg);
@@ -725,18 +455,15 @@
     font-size: 1.25rem;
   }
 
-  /* ✅ Content with sidebar - מבנה עמודות */
   .content-with-sidebar {
     flex-direction: column;
     gap: 0;
   }
 
-  /* ✅ הסתרת הסיידבר מהמיקום הדסקטופי */
   .sidebar-column {
     display: none !important;
   }
 
-  /* ✅ Main albums wrapper - אלבומים 12+ */
   .main-albums-wrapper {
     order: 1;
     margin-bottom: 0;
@@ -752,7 +479,6 @@
     margin-bottom: var(--spacing-xl);
   }
 
-  /* ✅ הצגת הסיידבר במיקום המובייל (אחרי albums 12+) */
   .sidebar-mobile-section {
     display: block;
     order: 2;
@@ -769,7 +495,6 @@
     margin-top: var(--spacing-lg);
   }
 
-  /* ✅ הודעת סיום - תמיד בסוף עם margin bottom */
   .no-more-plain {
     order: 3;
     margin-top: var(--spacing-lg);
@@ -779,7 +504,6 @@
   }
 }
 
-/* ✅ מסכים הכי קטנים */
 @media (max-width: 429px) {
   .home-page {
     min-height: calc(100vh - 56px);
@@ -820,7 +544,6 @@
     gap: var(--spacing-md);
   }
 
-  /* ✅ הסרת margin-top בסיידבר במובייל */
   .sidebar-mobile-section {
     margin-top: 0;
     margin-bottom: var(--spacing-lg);
