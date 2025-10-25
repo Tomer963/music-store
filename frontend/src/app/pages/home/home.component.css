@@ -589,7 +589,7 @@
   color: var(--gray-medium);
   font-size: 1.125rem;
   font-weight: 500;
-  margin-bottom: 0;
+  margin-bottom: var(--spacing-xxl);
   margin-top: var(--spacing-xl);
 }
 
@@ -769,10 +769,11 @@
     margin-top: var(--spacing-lg);
   }
 
-  /* ✅ הודעת סיום - תמיד בסוף */
+  /* ✅ הודעת סיום - תמיד בסוף עם margin bottom */
   .no-more-plain {
     order: 3;
     margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-xxl);
     font-size: 1rem;
     padding: var(--spacing-sm) 0;
   }
@@ -804,6 +805,7 @@
   .no-more-plain {
     font-size: 0.938rem;
     padding: 8px 0;
+    margin-bottom: var(--spacing-xl);
   }
 
   .new-products-title {
@@ -818,8 +820,9 @@
     gap: var(--spacing-md);
   }
 
+  /* ✅ הסרת margin-top בסיידבר במובייל */
   .sidebar-mobile-section {
-    margin-top: var(--spacing-lg);
+    margin-top: 0;
     margin-bottom: var(--spacing-lg);
   }
 
