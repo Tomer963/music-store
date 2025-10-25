@@ -13,8 +13,10 @@ export class NotFoundComponent {
   constructor(private router: Router, private location: Location) {}
 
   /**
-   * goHome
-   * Navigate to home page
+   * Go Home
+   * 
+   * Navigates to home page
+   *
    * @return void
    */
   goHome(): void {
@@ -22,8 +24,10 @@ export class NotFoundComponent {
   }
 
   /**
-   * goBack
-   * Navigate to previous page using browser history
+   * Go Back
+   * 
+   * Navigates to previous page
+   *
    * @return void
    */
   goBack(): void {

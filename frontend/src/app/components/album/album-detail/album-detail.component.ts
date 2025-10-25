@@ -30,7 +30,6 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   quantity = 1;
   selectedImageIndex = 0;
   inWishlist = false;
-
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -42,9 +41,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * ngOnInit
-   *
-   * Initialize component and load album data from route params
+   * Ng On Init
+   * 
+   * Loads album data from route params
    *
    * @return void
    */
@@ -56,9 +55,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ngOnDestroy
-   *
-   * Cleanup subscriptions on component destruction
+   * Ng On Destroy
+   * 
+   * Cleans up subscriptions
    *
    * @return void
    */
@@ -68,9 +67,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * loadAlbum
-   *
-   * Load album data by ID and subscribe to wishlist status
+   * Load Album
+   * 
+   * Fetches album data by ID
    *
    * @param (string) albumId - Album ID to load
    * @return void
@@ -83,7 +82,6 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
         next: (album) => {
           this.album = album;
           this.isLoading = false;
-          // Set initial quantity based on stock availability
           this.quantity = album.stock > 0 ? 1 : 0;
           this.subscribeToWishlistStatus();
         },
@@ -95,9 +93,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * subscribeToWishlistStatus
-   *
-   * Monitor wishlist status changes for current album
+   * Subscribe To Wishlist Status
+   * 
+   * Monitors wishlist status changes
    *
    * @return void
    */
@@ -114,11 +112,11 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * selectImage
+   * Select Image
+   * 
+   * Sets selected thumbnail image
    *
-   * Set selected thumbnail image index
-   *
-   * @param (number) index - Thumbnail index to select
+   * @param (number) index - Thumbnail index
    * @return void
    */
   selectImage(index: number): void {
@@ -126,11 +124,11 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getSelectedImageUrl
+   * Get Selected Image URL
+   * 
+   * Gets URL of currently selected image
    *
-   * Get URL of currently selected image
-   *
-   * @return string - Selected image URL
+   * @return string Selected image URL
    */
   getSelectedImageUrl(): string {
     if (!this.album) return "/assets/images/album-placeholder.svg";
@@ -144,16 +142,16 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * addToCart
-   *
-   * Add album to cart with specified quantity
+   * Add To Cart
+   * 
+   * Adds album to cart with specified quantity
    *
    * @return void
    */
   addToCart(): void {
     if (!this.album || this.isAddingToCart || !this.album.inStock) return;
 
-    // Validate quantity range
+    // Validate quantity
     if (this.quantity < 1 || this.quantity > this.album.stock) {
       this.quantity = 1;
       return;
@@ -163,7 +161,6 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
     this.cartService.addToCart(this.album._id, this.quantity).subscribe({
       next: () => {
         this.isAddingToCart = false;
-        // Reset quantity after successful add
         this.quantity = this.album!.stock > 0 ? 1 : 0;
       },
       error: () => (this.isAddingToCart = false),
@@ -171,9 +168,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * toggleWishlist
-   *
-   * Add or remove album from wishlist
+   * Toggle Wishlist
+   * 
+   * Adds or removes album from wishlist
    *
    * @return void
    */
@@ -187,23 +184,23 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * isCategory
-   *
-   * Type guard to check if category is an object
+   * Is Category
+   * 
+   * Type guard for category object
    *
    * @param (string | Category) category - Category to check
-   * @return boolean - True if category is object
+   * @return boolean True if category is object
    */
   isCategory(category: string | Category): category is Category {
     return typeof category === "object" && category !== null;
   }
 
   /**
-   * getCategoryId
+   * Get Category ID
+   * 
+   * Extracts category ID for breadcrumb
    *
-   * Extract category ID for breadcrumb navigation
-   *
-   * @return string - Category ID or empty string
+   * @return string Category ID or empty string
    */
   getCategoryId(): string {
     return this.album && this.isCategory(this.album.category)
@@ -212,11 +209,11 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getCategoryName
+   * Get Category Name
+   * 
+   * Extracts category name for breadcrumb
    *
-   * Extract category name for breadcrumb display
-   *
-   * @return string - Category name or empty string
+   * @return string Category name or empty string
    */
   getCategoryName(): string {
     return this.album && this.isCategory(this.album.category)
@@ -225,30 +222,29 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * formatPrice
-   *
-   * Format price for display
+   * Format Price
+   * 
+   * Formats price for display
    *
    * @param (number) price - Price to format
-   * @return string - Formatted price
+   * @return string Formatted price
    */
   formatPrice(price: number): string {
     return this.albumService.formatPrice(price);
   }
 
   /**
-   * getFormattedDescription
+   * Get Formatted Description
+   * 
+   * Splits description into paragraphs
    *
-   * Split long description into paragraphs by double newlines
-   *
-   * @return string[] - Array of paragraphs
+   * @return string[] Array of paragraphs
    */
   getFormattedDescription(): string[] {
     if (!this.album?.longDescription) {
       return ["No detailed description available."];
     }
 
-    // Split by double newlines to create paragraphs
     const paragraphs = this.album.longDescription
       .split("\n\n")
       .map((p) => p.trim())
@@ -260,28 +256,27 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getThreeThumbnails
+   * Get Three Thumbnails
+   * 
+   * Gets exactly 3 thumbnail images
    *
-   * Get exactly 3 thumbnail images (main + secondary or placeholders)
-   *
-   * @return any[] - Array of 3 thumbnail objects
+   * @return any[] Array of 3 thumbnail objects
    */
   getThreeThumbnails(): any[] {
     if (!this.album) return [];
 
     const thumbnails = [];
 
-    // Always add main image first
+    // Add main image first
     thumbnails.push({
       url: this.albumService.getMainImageUrl(this.album),
       isMain: true,
     });
 
-    // Add secondary images if available
+    // Add secondary images
     if (this.album.images && this.album.images.length > 0) {
       const secondaryImages = this.album.images.filter((img) => !img.isMain);
 
-      // Add up to 2 secondary images
       for (let i = 0; i < Math.min(2, secondaryImages.length); i++) {
         thumbnails.push({
           url: secondaryImages[i].url,
@@ -289,7 +284,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
         });
       }
 
-      // Fallback: if only main image exists, use other images
+      // Fallback to other images if needed
       if (thumbnails.length === 1 && this.album.images.length > 1) {
         for (let i = 1; i < Math.min(3, this.album.images.length); i++) {
           thumbnails.push({
@@ -300,7 +295,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
       }
     }
 
-    // Fill remaining slots with placeholders
+    // Fill with placeholders
     while (thumbnails.length < 3) {
       thumbnails.push({
         url: "/assets/images/album-placeholder.svg",

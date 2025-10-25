@@ -33,16 +33,13 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   isHovered = false;
   isInWishlist = false;
   mainImageUrl = "";
-
   isWishlistLoading = false;
   isCartLoading = false;
   isInfoLoading = false;
   isAddingToCart = false;
-
   showCartCounter = false;
   cartQuantity = 1;
   isUpdatingCart = false;
-
   private destroy$ = new Subject<void>();
   private cartItemId: string | null = null;
 
@@ -54,14 +51,16 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * ngOnInit
-   * Initialize component, load album image and check wishlist/cart status
+   * Ng On Init
+   * 
+   * Initializes component and loads album data
+   *
    * @return void
    */
   ngOnInit(): void {
     this.mainImageUrl = this.albumService.getMainImageUrl(this.album);
 
-    // Subscribe to wishlist status changes
+    // Subscribe to wishlist status
     this.wishlistService
       .isInWishlist(this.album._id)
       .pipe(takeUntil(this.destroy$))
@@ -74,8 +73,10 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ngOnDestroy
-   * Cleanup subscriptions on component destruction
+   * Ng On Destroy
+   * 
+   * Cleans up subscriptions
+   *
    * @return void
    */
   ngOnDestroy(): void {
@@ -84,31 +85,37 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * shouldHideContent
-   * Determine if content section should be hidden based on album index
-   * @return boolean - True if content should be hidden
+   * Should Hide Content
+   * 
+   * Determines if content should be hidden based on index
+   *
+   * @return boolean True if content should be hidden
    */
   shouldHideContent(): boolean {
     return this.albumIndex !== undefined && this.albumIndex > 10;
   }
 
   /**
-   * shouldPreventImageClick
-   * Check if image click navigation should be prevented
-   * @return boolean - True if click should be prevented
+   * Should Prevent Image Click
+   * 
+   * Checks if image click should be prevented
+   *
+   * @return boolean True if click should be prevented
    */
   shouldPreventImageClick(): boolean {
-    return false; // ✅ תמיד נאפשר לחיצה על תמונה
+    return false; // Always allow image click
   }
 
   /**
-   * ✅ handleImageClick - NEW METHOD
-   * Handle click on album image - navigate to album detail
+   * Handle Image Click
+   * 
+   * Handles click on album image
+   *
    * @param (Event) event - Click event
    * @return void
    */
   handleImageClick(event: Event): void {
-    // Don't navigate if clicking on buttons inside the overlay
+    // Don't navigate if clicking buttons
     const target = event.target as HTMLElement;
     if (
       target.closest('.overlay-icon-btn') || 
@@ -119,23 +126,14 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Navigate to album detail
     this.viewAlbum(event);
   }
 
   /**
-   * handleCardClick
-   * Handle card click event - deprecated, kept for compatibility
-   * @param (Event) event - Click event
-   * @return void
-   */
-  handleCardClick(event: Event): void {
-    // This method is no longer used but kept for backward compatibility
-  }
-
-  /**
-   * checkCartStatus
-   * Monitor cart changes and update local cart state
+   * Check Cart Status
+   * 
+   * Monitors cart changes and updates local state
+   *
    * @return void
    */
   private checkCartStatus(): void {
@@ -155,8 +153,10 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * viewAlbum
-   * Navigate to album detail page
+   * View Album
+   * 
+   * Navigates to album detail page
+   *
    * @param (Event) event - Click event
    * @return void
    */
@@ -171,8 +171,10 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * addToCart
-   * Add album to cart and show counter for hover cards
+   * Add To Cart
+   * 
+   * Adds album to cart
+   *
    * @param (Event) event - Click event
    * @return void
    */
@@ -219,8 +221,10 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * incrementCart
-   * Increase cart quantity by 1
+   * Increment Cart
+   * 
+   * Increases cart quantity by 1
+   *
    * @param (Event) event - Click event
    * @return void
    */
@@ -252,8 +256,10 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * decrementCart
-   * Remove item from cart
+   * Decrement Cart
+   * 
+   * Removes item from cart
+   *
    * @param (Event) event - Click event
    * @return void
    */
@@ -281,8 +287,10 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * toggleWishlist
-   * Add or remove album from wishlist
+   * Toggle Wishlist
+   * 
+   * Adds or removes album from wishlist
+   *
    * @param (Event) event - Click event
    * @return void
    */
@@ -298,18 +306,22 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getFormattedPrice
-   * Format album price for display
-   * @return string - Formatted price
+   * Get Formatted Price
+   * 
+   * Formats album price for display
+   *
+   * @return string Formatted price
    */
   getFormattedPrice(): string {
     return this.albumService.formatPrice(this.album.price);
   }
 
   /**
-   * formatOriginalPrice
-   * Format original price for display
-   * @return string - Formatted original price
+   * Format Original Price
+   * 
+   * Formats original price for display
+   *
+   * @return string Formatted original price
    */
   formatOriginalPrice(): string {
     return this.album.originalPrice
@@ -318,9 +330,11 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getTruncatedDescription
-   * Get truncated version of album description
-   * @return string - Truncated description
+   * Get Truncated Description
+   * 
+   * Returns truncated description
+   *
+   * @return string Truncated description
    */
   getTruncatedDescription(): string {
     const maxLength = 100;
@@ -329,7 +343,6 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
       : `${this.album.description.substring(0, maxLength)}...`;
   }
 
-  // Getter for text overlay visibility
   get shouldShowTextOverlay(): boolean {
     return this.showTextOverlay;
   }

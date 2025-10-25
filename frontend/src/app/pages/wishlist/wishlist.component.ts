@@ -24,7 +24,6 @@ import { ContentLayoutComponent } from "../../components/shared/content-layout/c
 export class WishlistComponent implements OnInit, OnDestroy {
   wishlistItems: Album[] = [];
   isLoading = true;
-
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -35,8 +34,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * ngOnInit
-   * Initialize component and load wishlist
+   * Ng On Init
+   * 
+   * Initializes component and loads wishlist
+   *
    * @return void
    */
   ngOnInit(): void {
@@ -55,18 +56,20 @@ export class WishlistComponent implements OnInit, OnDestroy {
         },
       });
 
-    // Track global loading state
+    // Track loading state
     this.wishlistService.loading$
       .pipe(takeUntil(this.destroy$))
       .subscribe((loading) => (this.isLoading = loading));
 
-    // Force refresh wishlist data
+    // Force refresh
     this.wishlistService.refreshWishlist();
   }
 
   /**
-   * ngOnDestroy
-   * Cleanup subscriptions
+   * Ng On Destroy
+   * 
+   * Cleans up subscriptions
+   *
    * @return void
    */
   ngOnDestroy(): void {
@@ -75,10 +78,12 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * viewAlbum
-   * Navigate to album detail page
-   * @param event Click event
-   * @param albumId Album ID
+   * View Album
+   * 
+   * Navigates to album detail page
+   *
+   * @param (Event) event - Click event
+   * @param (string) albumId - Album ID
    * @return void
    */
   viewAlbum(event: Event, albumId: string): void {
@@ -88,10 +93,12 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * addToCart
-   * Add album to cart from wishlist
-   * @param event Click event
-   * @param albumId Album ID
+   * Add To Cart
+   * 
+   * Adds album to cart from wishlist
+   *
+   * @param (Event) event - Click event
+   * @param (string) albumId - Album ID
    * @return void
    */
   addToCart(event: Event, albumId: string): void {
@@ -100,10 +107,12 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * toggleWishlist
-   * Remove album from wishlist
-   * @param event Click event
-   * @param albumId Album ID
+   * Toggle Wishlist
+   * 
+   * Removes album from wishlist
+   *
+   * @param (Event) event - Click event
+   * @param (string) albumId - Album ID
    * @return void
    */
   toggleWishlist(event: Event, albumId: string): void {
@@ -113,9 +122,11 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getMainImageUrl
-   * Get primary image URL with fallback
-   * @param album Album object
+   * Get Main Image URL
+   * 
+   * Gets primary image URL with fallback
+   *
+   * @param (Album) album - Album object
    * @return string Image URL
    */
   getMainImageUrl(album: Album): string {
@@ -123,9 +134,11 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * formatPrice
-   * Format price as currency string
-   * @param price Price value
+   * Format Price
+   * 
+   * Formats price as currency string
+   *
+   * @param (number) price - Price value
    * @return string Formatted price
    */
   formatPrice(price: number): string {
@@ -133,46 +146,42 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getTruncatedDescription
+   * Get Truncated Description
+   * 
    * Smart truncation that respects word boundaries
-   * Truncates to approximately 2 lines (~80-90 chars) and ensures no word breaking
-   * @param description Full description text
-   * @return string Truncated description with ellipsis if needed
+   *
+   * @param (string) description - Full description text
+   * @return string Truncated description with ellipsis
    */
   getTruncatedDescription(description: string): string {
     if (!description) return "";
     
-    // Approximate character limit for 2 lines (considering font size 0.813rem, line-height 1.4)
-    // This is roughly 40-45 characters per line = ~85 chars total
-    const maxLength = 85;
+    const maxLength = 85; // ~2 lines
     
-    // If description is shorter than limit, return as-is
     if (description.length <= maxLength) {
       return description;
     }
     
-    // Find the last complete word before the limit
     let truncated = description.substring(0, maxLength);
-    
-    // Find the last space to avoid cutting mid-word
     const lastSpace = truncated.lastIndexOf(' ');
     
     if (lastSpace > 0) {
-      // Cut at the last space and add ellipsis
       truncated = truncated.substring(0, lastSpace);
     }
     
-    // Remove trailing punctuation before adding ellipsis
+    // Remove trailing punctuation
     truncated = truncated.replace(/[.,;:!?-]+$/, '');
     
     return truncated + '...';
   }
 
   /**
-   * trackByAlbum
+   * Track By Album
+   * 
    * TrackBy function for ngFor performance
-   * @param index Item index
-   * @param album Album object
+   *
+   * @param (number) index - Item index
+   * @param (Album) album - Album object
    * @return string Unique identifier
    */
   trackByAlbum(index: number, album: Album): string {

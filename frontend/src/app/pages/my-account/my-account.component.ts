@@ -22,7 +22,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
   isLoadingProfile = true;
   isLoadingOrders = true;
-  activeTab: "profile" | "orders" = "orders"; // ✅ שונה מ-'profile' ל-'orders'
+  activeTab: "profile" | "orders" = "orders";
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -32,8 +32,10 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * ngOnInit
-   * Initialize component and load user data
+   * Ng On Init
+   * 
+   * Initializes component and loads user data
+   *
    * @return void
    */
   ngOnInit(): void {
@@ -42,8 +44,10 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ngOnDestroy
-   * Cleanup subscriptions
+   * Ng On Destroy
+   * 
+   * Cleans up subscriptions
+   *
    * @return void
    */
   ngOnDestroy(): void {
@@ -52,8 +56,10 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * loadUserProfile
-   * Fetch user profile from API
+   * Load User Profile
+   * 
+   * Fetches user profile from API
+   *
    * @return void
    */
   private loadUserProfile(): void {
@@ -70,8 +76,10 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * loadOrders
-   * Fetch user orders and populate album details
+   * Load Orders
+   * 
+   * Fetches user orders with album details
+   *
    * @return void
    */
   private loadOrders(): void {
@@ -85,9 +93,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * processOrders
-   * Fetch album details for each order item
-   * @param orders Array of orders
+   * Process Orders
+   * 
+   * Fetches album details for each order item
+   *
+   * @param (Order[]) orders - Array of orders
    * @return void
    */
   private processOrders(orders: Order[]): void {
@@ -103,7 +113,6 @@ export class MyAccountComponent implements OnInit, OnDestroy {
       let itemsProcessed = 0;
       const totalItems = order.items.length;
 
-      // Skip orders with no items
       if (totalItems === 0) {
         if (++processedCount === orders.length) {
           this.orders = orders;
@@ -127,7 +136,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
               }
             },
             error: () => {
-              // Fallback for failed album fetch
+              // Fallback for failed fetch
               (item as any).album = {
                 _id: item.album as string,
                 title: "Unknown Album",
@@ -154,9 +163,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * switchTab
-   * Switch between profile and orders tabs
-   * @param tab Target tab
+   * Switch Tab
+   * 
+   * Switches between profile and orders tabs
+   *
+   * @param ("profile" | "orders") tab - Target tab
    * @return void
    */
   switchTab(tab: "profile" | "orders"): void {
@@ -164,9 +175,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * formatDate
-   * Format date for display
-   * @param date Date string
+   * Format Date
+   * 
+   * Formats date for display
+   *
+   * @param (string | undefined) date - Date string
    * @return string Formatted date
    */
   formatDate(date: string | undefined): string {
@@ -181,9 +194,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * formatPrice
-   * Format price as currency
-   * @param price Price value
+   * Format Price
+   * 
+   * Formats price as currency
+   *
+   * @param (number) price - Price value
    * @return string Formatted price
    */
   formatPrice(price: number): string {
@@ -191,9 +206,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getPaymentMethodText
-   * Format payment method for display
-   * @param method Payment method
+   * Get Payment Method Text
+   * 
+   * Formats payment method for display
+   *
+   * @param (string) method - Payment method
    * @return string Formatted text
    */
   getPaymentMethodText(method: string): string {
@@ -201,9 +218,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getTotalItems
-   * Calculate total items in order
-   * @param order Order object
+   * Get Total Items
+   * 
+   * Calculates total items in order
+   *
+   * @param (Order) order - Order object
    * @return number Total quantity
    */
   getTotalItems(order: Order): number {
@@ -211,9 +230,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * isOrderExpandable
-   * Check if order has items to display
-   * @param order Order object
+   * Is Order Expandable
+   * 
+   * Checks if order has items to display
+   *
+   * @param (Order) order - Order object
    * @return boolean True if expandable
    */
   isOrderExpandable(order: Order): boolean {
@@ -221,9 +242,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * toggleOrderDetails
-   * Toggle order details section
-   * @param orderId Order ID
+   * Toggle Order Details
+   * 
+   * Toggles order details visibility
+   *
+   * @param (string) orderId - Order ID
    * @return void
    */
   toggleOrderDetails(orderId: string): void {
@@ -232,9 +255,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getItemDisplayName
-   * Format item name as "Artist - Title"
-   * @param item Order item
+   * Get Item Display Name
+   * 
+   * Formats item name as "Artist - Title"
+   *
+   * @param (OrderItem) item - Order item
    * @return string Formatted name
    */
   getItemDisplayName(item: OrderItem): string {
@@ -246,9 +271,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getAlbumImage
-   * Get album image URL with fallback to placeholder
-   * @param item Order item
+   * Get Album Image
+   * 
+   * Gets album image URL with fallback
+   *
+   * @param (OrderItem) item - Order item
    * @return string Image URL
    */
   getAlbumImage(item: OrderItem): string {

@@ -134,7 +134,7 @@
   height: 14px;
 }
 
-/* Music Note Icon - MUCH LARGER */
+/* Music Note Icon */
 .vinyl-label::after {
   content: "♪";
   position: absolute;
@@ -146,17 +146,16 @@
   line-height: 1;
 }
 
-/* Size-specific music notes - SIGNIFICANTLY LARGER */
 .vinyl-spinner.small .vinyl-label::after {
-  font-size: 18px; /* Was 8px - now 18px */
+  font-size: 18px;
 }
 
 .vinyl-spinner.medium .vinyl-label::after {
-  font-size: 28px; /* Was 12px - now 28px */
+  font-size: 28px;
 }
 
 .vinyl-spinner.large .vinyl-label::after {
-  font-size: 38px; /* Was 16px - now 38px */
+  font-size: 38px;
 }
 
 /* Spinner Text */
@@ -316,7 +315,6 @@
     font-size: 0.75rem;
   }
 
-  /* Adjust music note size for small screens */
   .vinyl-spinner.medium .vinyl-label::after {
     font-size: 24px;
   }

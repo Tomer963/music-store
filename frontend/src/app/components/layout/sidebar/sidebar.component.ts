@@ -40,21 +40,21 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Load Categories
-   * Load categories from state service
-   * Categories are already filtered by albumCount in the backend
+   * 
+   * Loads categories with albums from state service
+   *
    * @return void
    */
   private loadCategories(): void {
     this.isLoadingCategories = true;
 
-    // Subscribe to state changes for reactive updates
+    // Subscribe to state changes
     this.stateService
       .getState()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (state: any) => {
           if (state.categories) {
-            // Use categories directly - they're already filtered by the backend
             this.categoriesWithAlbums = state.categories;
             this.isLoadingCategories = false;
           }
@@ -67,7 +67,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
     // Check current state for immediate display
     const currentState = this.stateService.getCurrentState();
-
     if (currentState.categories?.length > 0) {
       this.categoriesWithAlbums = currentState.categories;
       this.isLoadingCategories = false;
@@ -85,7 +84,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Setup Route Listener
-   * Listen to route changes to update sidebar state
+   * 
+   * Monitors navigation events to update sidebar state
+   *
    * @return void
    */
   private setupRouteListener(): void {
@@ -99,14 +100,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Check Current Route
-   * Update component state based on current route
-   * Determines cart visibility and active category
+   * 
+   * Updates component state based on current route
+   *
    * @return void
    */
   private checkCurrentRoute(): void {
     const url = this.router.url;
 
-    // Hide cart on home page only
+    // Hide cart only on home page
     this.showCart = url !== "/" && !url.startsWith("/?");
 
     // Detect page type for conditional styling
@@ -131,8 +133,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Get Album Category
-   * Fetch album's category for highlighting in sidebar
-   * @param albumId Album identifier
+   * 
+   * Fetches album's category for highlighting in sidebar
+   *
+   * @param (string) albumId - Album identifier
    * @return void
    */
   private getAlbumCategory(albumId: string): void {
@@ -149,8 +153,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Select Category
-   * Navigate to category page
-   * @param categoryId Category identifier
+   * 
+   * Navigates to category page
+   *
+   * @param (string) categoryId - Category identifier
    * @return void
    */
   selectCategory(categoryId: string): void {
@@ -159,8 +165,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Is Category Active
-   * Check if category is currently active (highlighted in sidebar)
-   * @param categoryId Category identifier
+   * 
+   * Checks if category is currently active
+   *
+   * @param (string) categoryId - Category identifier
    * @return boolean True if category is active
    */
   isCategoryActive(categoryId: string): boolean {
@@ -172,7 +180,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Get Sidebar Classes
-   * Get CSS classes for sidebar based on current page
+   * 
+   * Returns CSS classes based on current page
+   *
    * @return string Space-separated CSS class names
    */
   getSidebarClasses(): string {

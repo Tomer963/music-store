@@ -27,9 +27,9 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * ngOnInit
-   *
-   * Initialize component and subscribe to cart updates
+   * Ng On Init
+   * 
+   * Subscribes to cart updates on component initialization
    *
    * @return void
    */
@@ -41,9 +41,9 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ngOnDestroy
-   *
-   * Cleanup subscriptions on component destruction
+   * Ng On Destroy
+   * 
+   * Cleans up subscriptions
    *
    * @return void
    */
@@ -53,35 +53,34 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * isInAlbumPage
+   * Is In Album Page
+   * 
+   * Checks if currently viewing album detail page
    *
-   * Check if currently viewing album detail page
-   *
-   * @return boolean - True if in album page
+   * @return boolean True if in album page
    */
   isInAlbumPage(): boolean {
     return this.router.url.includes("/album/");
   }
 
   /**
-   * shouldShowScroll
+   * Should Show Scroll
+   * 
+   * Determines if scrollbar should be visible
    *
-   * Determine if scrollbar should be visible based on item count and page
-   *
-   * @return boolean - True if scrollbar should show
+   * @return boolean True if scrollbar should show
    */
   shouldShowScroll(): boolean {
     // Show scroll after 2 items in album page, after 3 items elsewhere
-    if (this.isInAlbumPage()) {
-      return this.cart.items.length >= 3;
-    }
-    return this.cart.items.length > 2;
+    return this.isInAlbumPage()
+      ? this.cart.items.length >= 3
+      : this.cart.items.length > 2;
   }
 
   /**
-   * removeItem
-   *
-   * Remove item from cart with loading state
+   * Remove Item
+   * 
+   * Removes item from cart with loading state
    *
    * @param (string) itemId - Cart item ID to remove
    * @return void
@@ -95,9 +94,9 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * goToCheckout
-   *
-   * Navigate to checkout page
+   * Go To Checkout
+   * 
+   * Navigates to checkout page
    *
    * @return void
    */
@@ -106,9 +105,9 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * goToAlbum
-   *
-   * Navigate to album detail page
+   * Go To Album
+   * 
+   * Navigates to album detail page
    *
    * @param (string) albumId - Album ID to view
    * @return void
@@ -118,24 +117,24 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * getImageUrl
-   *
-   * Get album image URL for cart item
+   * Get Image URL
+   * 
+   * Gets album image URL for cart item
    *
    * @param (CartItem) item - Cart item
-   * @return string - Image URL
+   * @return string Image URL
    */
   getImageUrl(item: CartItem): string {
     return this.albumService.getMainImageUrl(item.album);
   }
 
   /**
-   * formatPrice
-   *
-   * Format price for display
+   * Format Price
+   * 
+   * Formats price for display
    *
    * @param (number) price - Price to format
-   * @return string - Formatted price
+   * @return string Formatted price
    */
   formatPrice(price: number): string {
     return this.albumService.formatPrice(price);
