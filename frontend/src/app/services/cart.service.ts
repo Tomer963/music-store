@@ -18,6 +18,7 @@ import { AuthService } from "./auth.service";
 })
 export class CartService {
   private apiUrl = `${environment.apiUrl}/cart`;
+  // Cart state shared across components
   private cartSubject = new BehaviorSubject<Cart>({
     items: [],
     itemCount: 0,
@@ -30,18 +31,22 @@ export class CartService {
 
   /**
    * Initialize Cart
-   * Called on app startup to restore cart from session or user account
+   * 
+   * Restores cart from session or user account
+   *
    * @return void
    */
   initializeCart(): void {
+    // Get or create guest session ID
     this.sessionId = this.getOrCreateSessionId();
     this.loadCart();
   }
 
   /**
    * Refresh Cart
-   * Reloads cart from server and merges guest cart with user cart after login
-   * CRITICAL: Sends sessionId even when authenticated to enable cart merge
+   * 
+   * Reloads cart and merges guest cart with user cart after login
+   *
    * @return Observable<Cart> Refreshed cart data
    */
   refreshCart(): Observable<Cart> {
@@ -51,7 +56,7 @@ export class CartService {
       tap((cart) => {
         this.cartSubject.next(cart);
 
-        // Clear sessionId AFTER successful merge (only for authenticated users)
+        // Clear session ID after successful merge for authenticated users
         if (isAuth && this.sessionId) {
           this.sessionId = null;
           localStorage.removeItem(environment.sessionIdKey);
@@ -62,7 +67,9 @@ export class CartService {
 
   /**
    * Get Cart
-   * Fetch current cart from server
+   * 
+   * Fetches current cart from server
+   *
    * @return Observable<Cart> Cart data
    */
   getCart(): Observable<Cart> {
@@ -72,6 +79,7 @@ export class CartService {
       })
       .pipe(
         map((response) => {
+          // Return empty cart if no data
           const cart = response.data || { items: [], itemCount: 0, total: 0 };
           return cart;
         }),
@@ -84,10 +92,12 @@ export class CartService {
 
   /**
    * Add To Cart
-   * Adds an item to cart or increases quantity if already exists
-   * @param albumId Album ID to add
-   * @param quantity Quantity to add (default 1)
-   * @return Observable<CartResponse> Cart response with item and sessionId
+   * 
+   * Adds item to cart or increases quantity
+   *
+   * @param (string) albumId - Album ID to add
+   * @param (number) quantity - Quantity to add
+   * @return Observable<CartResponse> Response with sessionId for guests
    */
   addToCart(albumId: string, quantity = 1): Observable<CartResponse> {
     const request: AddToCartRequest = { albumId, quantity };
@@ -99,11 +109,12 @@ export class CartService {
       .pipe(
         map((response) => response.data!),
         tap((response) => {
-          // Store sessionId for guest users
+          // Store session ID for guest users
           if (response.sessionId && !this.authService.isAuthenticated()) {
             this.setSessionId(response.sessionId);
           }
 
+          // Reload cart to reflect changes
           this.loadCart();
         }),
         catchError(this.handleError)
@@ -112,9 +123,11 @@ export class CartService {
 
   /**
    * Update Cart Item
+   * 
    * Updates quantity of existing cart item
-   * @param itemId Cart item ID
-   * @param quantity New quantity
+   *
+   * @param (string) itemId - Cart item ID
+   * @param (number) quantity - New quantity
    * @return Observable<CartItem> Updated cart item
    */
   updateCartItem(itemId: string, quantity: number): Observable<CartItem> {
@@ -133,8 +146,10 @@ export class CartService {
 
   /**
    * Remove From Cart
-   * Removes an item completely from cart
-   * @param itemId Cart item ID
+   * 
+   * Removes item completely from cart
+   *
+   * @param (string) itemId - Cart item ID to remove
    * @return Observable<void> Void observable
    */
   removeFromCart(itemId: string): Observable<void> {
@@ -151,7 +166,9 @@ export class CartService {
 
   /**
    * Clear Cart
+   * 
    * Removes all items from cart
+   *
    * @return Observable<void> Void observable
    */
   clearCart(): Observable<void> {
@@ -168,7 +185,9 @@ export class CartService {
 
   /**
    * Get Item Count
-   * Returns total number of items in cart (synchronous)
+   * 
+   * Returns total items in cart
+   *
    * @return number Total item count
    */
   getItemCount(): number {
@@ -177,7 +196,9 @@ export class CartService {
 
   /**
    * Get Total
-   * Returns cart total price (synchronous)
+   * 
+   * Returns cart total price
+   *
    * @return number Total price
    */
   getTotal(): number {
@@ -186,7 +207,9 @@ export class CartService {
 
   /**
    * Get Session ID
+   * 
    * Returns current session ID for guest users
+   *
    * @return string | null Session ID or null
    */
   getSessionId(): string | null {
@@ -195,10 +218,13 @@ export class CartService {
 
   /**
    * Clear Session
+   * 
    * Clears cart for guest users on logout
+   *
    * @return void
    */
   clearSession(): void {
+    // Only clear for non-authenticated users
     if (!this.authService.isAuthenticated()) {
       this.cartSubject.next({ items: [], itemCount: 0, total: 0 });
     }
@@ -206,7 +232,9 @@ export class CartService {
 
   /**
    * Load Cart
+   * 
    * Internal method to fetch and update cart state
+   *
    * @return void
    */
   private loadCart(): void {
@@ -223,7 +251,9 @@ export class CartService {
 
   /**
    * Get Or Create Session ID
-   * Retrieves existing session ID or creates new one for guest users
+   * 
+   * Retrieves existing session ID or creates new one
+   *
    * @return string Session ID
    */
   private getOrCreateSessionId(): string {
@@ -233,7 +263,7 @@ export class CartService {
       sessionId = this.generateSessionId();
       this.setSessionId(sessionId);
     } else {
-      // Ensure localStorage is in sync
+      // Ensure localStorage is synchronized
       localStorage.setItem(environment.sessionIdKey, sessionId);
     }
     return sessionId;
@@ -241,17 +271,22 @@ export class CartService {
 
   /**
    * Generate Session ID
+   * 
    * Creates unique session ID for guest users
+   *
    * @return string Generated session ID
    */
   private generateSessionId(): string {
+    // Combine timestamp with random string for uniqueness
     return `sess_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
   /**
    * Set Session ID
+   * 
    * Stores session ID in memory and localStorage
-   * @param sessionId Session ID to store
+   *
+   * @param (string) sessionId - Session ID to store
    * @return void
    */
   private setSessionId(sessionId: string): void {
@@ -261,9 +296,10 @@ export class CartService {
 
   /**
    * Get Headers
-   * Creates HTTP headers with session ID for guest users
-   * CRITICAL: Sends sessionId even when authenticated to enable cart merge
-   * @return HttpHeaders Headers with session ID
+   * 
+   * Creates HTTP headers with session ID
+   *
+   * @return HttpHeaders Headers with session ID for cart merge
    */
   private getHeaders(): HttpHeaders {
     let headers = new HttpHeaders({ "Content-Type": "application/json" });
@@ -278,8 +314,10 @@ export class CartService {
 
   /**
    * Handle Error
-   * Centralized error handling for HTTP requests
-   * @param error Error object
+   * 
+   * Centralized error handling
+   *
+   * @param (any) error - Error object
    * @return Observable<never> Error observable
    */
   private handleError(error: any): Observable<never> {

@@ -9,13 +9,16 @@ import { AuthService } from "./services/auth.service";
 
 /**
  * Initialize Auth Service
- * Runs before app initialization to restore user session
+ * 
+ * Restores user session before app starts
+ *
+ * @param (AuthService) authService - Authentication service instance
+ * @return () => Promise<void> Initialization function
  */
 function initializeAuth(authService: AuthService) {
   return () => {
-    // Initialize auth synchronously
+    // Restore user session from token if available
     authService.initializeAuth();
-    // Return resolved promise immediately
     return Promise.resolve();
   };
 }
@@ -23,11 +26,11 @@ function initializeAuth(authService: AuthService) {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(
-      withInterceptors([authInterceptor, errorInterceptor])
-    ),
+    // HTTP client with auth and error handling interceptors
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
     provideAnimations(),
     {
+      // Initialize auth before app bootstraps
       provide: APP_INITIALIZER,
       useFactory: initializeAuth,
       deps: [AuthService],
