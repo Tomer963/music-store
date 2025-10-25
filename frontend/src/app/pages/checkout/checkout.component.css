@@ -1,66 +1,17 @@
+/* Uses shared: .loading-container, .empty-state, .btn, .form-control, .form-error, .form-label, .required, .page-container */
+
 .checkout-page {
   min-height: calc(100vh - 120px);
   background-color: var(--background-color);
   padding: 40px 0;
   display: flex;
-  align-items: flex-start; /* ✅ שינוי מ-center ל-flex-start */
+  align-items: flex-start;
   justify-content: center;
 }
 
-/* Container with consistent padding - matches header exactly */
-.container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0 16px;
-  width: 100%;
-}
+/* Container inherits from shared .page-container */
 
-/* Extra Large Screens - Same as header */
-@media (min-width: 1600px) {
-  .container {
-    padding: 0 256px;
-  }
-}
-
-/* Large Desktop - Same as header */
-@media (min-width: 1400px) and (max-width: 1599px) {
-  .container {
-    padding: 0 200px;
-  }
-}
-
-/* Medium Desktop - Same as header */
-@media (min-width: 1200px) and (max-width: 1399px) {
-  .container {
-    padding: 0 120px;
-  }
-
-  .checkout-grid {
-    grid-template-columns: 1fr 280px;
-    gap: var(--spacing-lg);
-  }
-}
-
-/* Small Desktop - Same as header */
-@media (min-width: 992px) and (max-width: 1199px) {
-  .container {
-    padding: 0 40px;
-  }
-
-  .checkout-grid {
-    grid-template-columns: 1fr 280px;
-    gap: var(--spacing-lg);
-  }
-}
-
-/* Loading and Empty States */
-.loading-container,
-.empty-cart-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-}
+/* Loading and Empty States use shared styles */
 
 .empty-cart-content {
   text-align: center;
@@ -262,7 +213,8 @@
   padding: 0;
 }
 
-/* Form Fields */
+/* Form Fields - uses shared .form-control, .form-label, .form-error, .required */
+
 .form-field-container {
   margin-bottom: 12px;
 }
@@ -276,93 +228,6 @@
 
 .form-group {
   margin-bottom: 0;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 700;
-  color: var(--secondary-color);
-  font-size: 0.875rem;
-}
-
-.required {
-  color: var(--error-color);
-}
-
-.form-control {
-  width: 100%;
-  padding: 7px 10px;
-  font-size: 0.875rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 0;
-  transition: border-color var(--transition-fast);
-  background-color: var(--white);
-}
-
-/* Uniform Placeholder Styling */
-.form-control::placeholder {
-  color: #999999;
-  opacity: 1;
-  font-family: inherit;
-  font-size: 0.875rem;
-  font-weight: 400;
-}
-
-.form-control::-webkit-input-placeholder {
-  color: #999999;
-  opacity: 1;
-  font-family: inherit;
-  font-size: 0.875rem;
-  font-weight: 400;
-}
-
-.form-control::-moz-placeholder {
-  color: #999999;
-  opacity: 1;
-  font-family: inherit;
-  font-size: 0.875rem;
-  font-weight: 400;
-}
-
-.form-control:-ms-input-placeholder {
-  color: #999999;
-  opacity: 1;
-  font-family: inherit;
-  font-size: 0.875rem;
-  font-weight: 400;
-}
-
-/* Select placeholder styling */
-.form-control option[value=""] {
-  color: #999999;
-  font-family: inherit;
-  font-size: 0.875rem;
-  font-weight: 400;
-}
-
-/* Normal focus state - blue border only */
-.form-control:focus {
-  outline: none;
-  border-color: var(--focus-color);
-}
-
-/* Error state - red dashed border */
-.form-control.error {
-  border: 1px dashed var(--error-color) !important;
-  background-color: rgba(244, 67, 54, 0.05);
-}
-
-/* Error state with focus - red dashed border */
-.form-control.error:focus {
-  border: 1px dashed var(--error-color) !important;
-}
-
-.form-error {
-  display: block;
-  margin-top: 4px;
-  font-size: 0.75rem;
-  color: var(--error-color);
 }
 
 .form-note-container {
@@ -807,41 +672,12 @@
   line-height: 1.4;
 }
 
-/* Button Styles */
-.btn {
-  display: inline-block;
-  padding: 9px 22px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: none;
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  outline: none;
-}
-
-.btn-primary {
-  background-color: var(--primary-color);
-  color: var(--white);
-}
-
-.btn-primary:hover {
-  background-color: var(--primary-dark);
-  transform: translateY(-2px);
-}
-
 /* Responsive Design */
 
 /* Tablet and Below */
 @media (max-width: 991px) {
   .checkout-page {
     padding-top: 40px;
-  }
-
-  .container {
-    padding: 0 16px;
   }
 
   .checkout-grid {
@@ -884,10 +720,6 @@
   .checkout-page {
     min-height: calc(100vh - 80px);
     padding: 24px 0;
-  }
-
-  .container {
-    padding: 0 12px;
   }
 
   .checkout-title {
@@ -940,10 +772,6 @@
 @media (max-width: 576px) {
   .checkout-page {
     padding: 18px 0;
-  }
-
-  .container {
-    padding: 0 8px;
   }
 
   .checkout-title {

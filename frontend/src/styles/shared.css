@@ -715,6 +715,27 @@
 }
 
 /* ========================================
+   TITLE WRAPPERS - Common title sections
+   ======================================== */
+
+.title-wrapper,
+.page-title-wrapper {
+  background-color: var(--white);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.page-title,
+.section-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  text-align: left;
+}
+
+/* ========================================
    RESPONSIVE UTILITIES
    ======================================== */
 
@@ -729,5 +750,20 @@
 @media (min-width: 576px) {
   .mobile-only {
     display: none !important;
+  }
+}
+
+/* Responsive title sizes */
+@media (max-width: 768px) {
+  .page-title,
+  .section-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .page-title,
+  .section-title {
+    font-size: 1.125rem;
   }
 }

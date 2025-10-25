@@ -1,10 +1,4 @@
-/* Loading State */
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 450px;
-}
+/* Uses shared: .loading-container */
 
 /* Content Layout */
 .album-detail-content-inner {
