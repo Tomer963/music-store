@@ -14,29 +14,21 @@
   (mouseenter)="isHovered = true"
   (mouseleave)="isHovered = false"
 >
-  <!-- ✅ Album image - with click to product page -->
   <div class="album-image" (click)="handleImageClick($event)">
     <img [src]="mainImageUrl" [alt]="album.title" loading="lazy" />
 
-    <!-- ============================
-         TEXT OVERLAY FOR ALBUMS 1-9 WITH HOVER EXPANSION
-         ============================ -->
+    <!-- Text overlay for standard albums -->
     <div class="text-overlay" *ngIf="showTextOverlay && !hasRedBackground">
-      <!-- ✅ Static content - album name and artist (always visible, stacked vertically) -->
       <div class="overlay-static-content">
         <h4 class="overlay-title">{{ album.title }}</h4>
         <p class="overlay-artist">{{ album.artist }}</p>
       </div>
 
-      <!-- ✅ Hover content - price and icons in the same row -->
       <div class="hover-content">
         <div class="overlay-price-icons-row">
-          <!-- ✅ Price on the LEFT -->
           <p class="overlay-price">{{ getFormattedPrice() }}</p>
 
-          <!-- ✅ Icons on the RIGHT - סדר מעודכן כמו אלבום 10 -->
           <div class="overlay-icons-group">
-            <!-- Wishlist button - ראשון -->
             <button
               class="overlay-icon-btn wishlist-icon"
               [class.loading]="isWishlistLoading"
@@ -53,7 +45,6 @@
               }}</span>
             </button>
 
-            <!-- Out of stock indicator - שני -->
             <div
               *ngIf="!album.inStock"
               class="overlay-icon-btn out-of-stock"
@@ -62,7 +53,6 @@
               <span>🚫</span>
             </div>
 
-            <!-- Cart button or counter - שלישי -->
             <button
               *ngIf="album.inStock && !showCartCounter"
               class="overlay-icon-btn cart-icon"
@@ -88,7 +78,6 @@
               </svg>
             </button>
 
-            <!-- Cart counter (when in cart) - שלישי -->
             <div
               *ngIf="album.inStock && showCartCounter"
               class="overlay-cart-counter"
@@ -111,7 +100,6 @@
               </button>
             </div>
 
-            <!-- Info button - רביעי -->
             <button
               class="overlay-icon-btn info-icon"
               (click)="viewAlbum($event)"
@@ -124,21 +112,13 @@
       </div>
     </div>
 
-    <!-- ============================
-         RED BACKGROUND OVERLAY FOR ALBUMS 10-11 - ONLY PRICE AND ICONS ON HOVER
-         ============================ -->
+    <!-- Red background overlay -->
     <div class="red-background-overlay" *ngIf="hasRedBackground && showHover">
-      <!-- ✅ NO static content - removed album name and artist -->
-
-      <!-- ✅ Hover content - ONLY price and icons (no text) -->
       <div class="red-hover-content">
         <div class="red-overlay-price-icons-row">
-          <!-- ✅ Price on the LEFT -->
           <p class="red-overlay-price">{{ getFormattedPrice() }}</p>
 
-          <!-- ✅ Icons on the RIGHT -->
           <div class="red-overlay-icons-group">
-            <!-- Wishlist button - ראשון -->
             <button
               class="red-overlay-icon-btn wishlist-icon"
               [class.loading]="isWishlistLoading"
@@ -155,7 +135,6 @@
               }}</span>
             </button>
 
-            <!-- Out of stock indicator - שני -->
             <div
               *ngIf="!album.inStock"
               class="red-overlay-icon-btn out-of-stock"
@@ -164,7 +143,6 @@
               <span>🚫</span>
             </div>
 
-            <!-- Cart button or counter - שלישי -->
             <button
               *ngIf="album.inStock && !showCartCounter"
               class="red-overlay-icon-btn cart-icon"
@@ -191,7 +169,6 @@
               </svg>
             </button>
 
-            <!-- Cart counter (when in cart) - שלישי -->
             <div
               *ngIf="album.inStock && showCartCounter"
               class="red-overlay-cart-counter"
@@ -214,7 +191,6 @@
               </button>
             </div>
 
-            <!-- Info button - רביעי -->
             <button
               class="red-overlay-icon-btn info-icon"
               (click)="viewAlbum($event)"
@@ -228,7 +204,7 @@
     </div>
   </div>
 
-  <!-- FIXED: Content section for albums 10-11 with red background -->
+  <!-- Content section for red background albums -->
   <div class="album-info" *ngIf="hasRedBackground && !shouldHideContent()">
     <h3 class="album-title">{{ album.title }}</h3>
     <p class="album-artist">{{ album.artist }}</p>
@@ -237,7 +213,7 @@
     </p>
   </div>
 
-  <!-- Regular content for other albums (NOT shown for albums 1-9 with text overlay) -->
+  <!-- Regular content for other albums -->
   <div
     class="album-info"
     *ngIf="!showTextOverlay && !hasRedBackground && !shouldHideContent()"

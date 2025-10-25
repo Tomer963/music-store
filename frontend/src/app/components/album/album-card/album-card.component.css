@@ -1,51 +1,3 @@
-.app-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.main-content {
-  flex: 1;
-  padding-top: 120px;
-  background-color: var(--background-color);
-  width: 100%;
-}
-
-.content-wrapper {
-  width: 100%;
-  min-height: calc(100vh - 120px);
-}
-
-@media (max-width: 768px) {
-  .main-content {
-    padding-top: 80px;
-  }
-
-  .content-wrapper {
-    min-height: calc(100vh - 80px);
-  }
-}
-
-@media (max-width: 576px) {
-  .main-content {
-    padding-top: 65px;
-  }
-
-  .content-wrapper {
-    min-height: calc(100vh - 65px);
-  }
-}
-
-@media (max-width: 429px) {
-  .main-content {
-    padding-top: 56px;
-  }
-
-  .content-wrapper {
-    min-height: calc(100vh - 56px);
-  }
-}
-
 /* Album Card Base */
 .album-card {
   position: relative;
@@ -147,7 +99,7 @@
   cursor: pointer;
 }
 
-/* Red background cards (albums 10-11) */
+/* Red background cards */
 .album-card.red-background.with-hover .album-image {
   padding-bottom: 0;
   height: 240px !important;
@@ -212,10 +164,7 @@
   position: relative;
 }
 
-/* ============================
-   TEXT OVERLAY WITH HOVER EXPANSION - ALBUMS 1-9
-   ============================ */
-
+/* Text Overlay with Hover Expansion */
 .text-overlay {
   position: absolute;
   bottom: 0;
@@ -350,7 +299,6 @@
   flex-shrink: 0;
 }
 
-/* Use shared icon button styles */
 .overlay-icon-btn {
   width: 40px;
   height: 40px;
@@ -363,7 +311,6 @@
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* Info button - larger and bolder i */
 .overlay-icon-btn.info-icon {
   background-color: #737373;
   width: 40px;
@@ -381,10 +328,7 @@
   color: var(--white);
 }
 
-/* ============================
-   RED BACKGROUND OVERLAY - ALBUMS 10-11 - ONLY PRICE AND ICONS ON HOVER
-   ============================ */
-
+/* Red Background Overlay */
 .red-background-overlay {
   position: absolute;
   bottom: 0;
@@ -455,7 +399,6 @@
   flex-shrink: 0;
 }
 
-/* Use shared icon button styles */
 .red-overlay-icon-btn {
   width: 40px;
   height: 40px;
@@ -468,7 +411,6 @@
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* Info button - larger and bolder i */
 .red-overlay-icon-btn.info-icon {
   background-color: #737373;
   width: 40px;
@@ -616,7 +558,6 @@
   z-index: 10;
 }
 
-/* Use shared icon button styles */
 .bottom-icon-btn {
   width: 36px;
   height: 36px;
