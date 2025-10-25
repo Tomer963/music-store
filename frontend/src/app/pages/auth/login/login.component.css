@@ -1,3 +1,5 @@
+/* Uses shared: .page-container, .title-wrapper, .page-title, .form-control, .form-error, .form-label, .required */
+
 .login-page {
   background-color: #f5f5f5;
   min-height: calc(100vh - 120px);
@@ -15,42 +17,36 @@
   width: 100%;
 }
 
-/* Extra Large Screens - Match header exactly */
 @media (min-width: 1600px) {
   .container {
     padding: 0 256px;
   }
 }
 
-/* Large Desktop - Match header exactly */
 @media (min-width: 1400px) and (max-width: 1599px) {
   .container {
     padding: 0 200px;
   }
 }
 
-/* Medium Desktop - Match header exactly */
 @media (min-width: 1200px) and (max-width: 1399px) {
   .container {
     padding: 0 120px;
   }
 }
 
-/* Small Desktop - Match header exactly */
 @media (min-width: 992px) and (max-width: 1199px) {
   .container {
     padding: 0 40px;
   }
 }
 
-/* Tablet - Match header exactly */
 @media (min-width: 768px) and (max-width: 991px) {
   .container {
     padding: 0 16px;
   }
 }
 
-/* Mobile - Match header exactly */
 @media (max-width: 767px) {
   .container {
     padding: 0 12px;
@@ -61,21 +57,6 @@
   .container {
     padding: 0 8px;
   }
-}
-
-.title-wrapper {
-  background-color: #ffffff;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.page-title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--secondary-color);
-  text-align: left;
 }
 
 /* Checkout Alert Message */
@@ -106,17 +87,6 @@
   font-size: 14px;
   font-weight: 500;
   line-height: 1.5;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Two Column Layout */
@@ -158,7 +128,7 @@
   background-color: #ffffff;
 }
 
-/* SVG Background Icons - Extended to top */
+/* SVG Background Icons */
 .new-customers-column .column-content {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><g opacity="0.08"><circle cx="50" cy="45" r="18" fill="none" stroke="%23000000" stroke-width="3"/><path d="M50 68c-15 0-27 12-27 27v8h54v-8c0-15-12-27-27-27z" fill="none" stroke="%23000000" stroke-width="3"/><circle cx="80" cy="75" r="15" fill="none" stroke="%23000000" stroke-width="3"/><path d="M80 65v20M70 75h20" stroke="%23000000" stroke-width="3" stroke-linecap="round"/></g></svg>');
   background-repeat: no-repeat;
@@ -350,7 +320,6 @@
     text-align: center;
   }
 
-  /* Adjust SVG position for mobile */
   .new-customers-column .column-content,
   .registered-customers-column .column-content {
     background-position: center center;
@@ -375,7 +344,6 @@
     font-size: 13px;
   }
 
-  /* Smaller SVG for small mobile */
   .new-customers-column .column-content,
   .registered-customers-column .column-content {
     background-size: 150px 150px;

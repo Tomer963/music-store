@@ -1,3 +1,5 @@
+/* Uses shared: .loading-container, .page-container, .title-wrapper, .page-title, .btn-primary */
+
 .my-account-page {
   min-height: calc(100vh - 200px);
   background-color: var(--background-color);
@@ -11,7 +13,7 @@
   }
 }
 
-/* Container with same padding as header-content - SYNCHRONIZED */
+/* Container uses shared .page-container styles */
 .container {
   max-width: 100%;
   margin: 0 auto;
@@ -19,35 +21,31 @@
   width: 100%;
 }
 
-/* Extra Large Screens - Match header exactly */
+/* Extra Large Screens */
 @media (min-width: 1600px) {
   .container {
     padding: 0 256px;
   }
 }
 
-/* Large Desktop - Match header exactly */
 @media (min-width: 1400px) and (max-width: 1599px) {
   .container {
     padding: 0 200px;
   }
 }
 
-/* Medium Desktop - Match header exactly */
 @media (min-width: 1200px) and (max-width: 1399px) {
   .container {
     padding: 0 120px;
   }
 }
 
-/* Small Desktop - Match header exactly */
 @media (min-width: 992px) and (max-width: 1199px) {
   .container {
     padding: 0 40px;
   }
 }
 
-/* Tablet and Below - Match header exactly */
 @media (max-width: 991px) {
   .container {
     padding: 0 16px;
@@ -64,29 +62,6 @@
   .container {
     padding: 0 8px;
   }
-}
-
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
-}
-
-/* Title Section */
-.title-wrapper {
-  background-color: var(--white);
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow-sm);
-}
-
-.page-title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--secondary-color);
-  text-align: left;
 }
 
 /* Tabs */
@@ -370,7 +345,7 @@
   color: var(--secondary-color);
 }
 
-/* Responsive - only mobile specific adjustments */
+/* Responsive */
 @media (max-width: 768px) {
   .info-grid {
     grid-template-columns: 1fr;
