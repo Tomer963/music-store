@@ -156,9 +156,9 @@ background-position: right -55px top -95px;
 }
 
 .registered-customers-column .column-content {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><g opacity="0.08"><rect x="30" y="55" width="60" height="50" rx="8" fill="none" stroke="%23000000" stroke-width="2"/><rect x="35" y="60" width="50" height="40" rx="5" fill="none" stroke="%23000000" stroke-width="1"/><path d="M40 55v-15a20 20 0 0 1 40 0v15" stroke="%23000000" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="60" cy="75" r="8" fill="none" stroke="%23000000" stroke-width="2"/><path d="M60 80v15" stroke="%23000000" stroke-width="3" stroke-linecap="round"/><circle cx="60" cy="75" r="3" fill="%23000000"/></g></svg>');
+ background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><g opacity="0.08"><rect x="30" y="55" width="60" height="50" rx="8" fill="none" stroke="%23000000" stroke-width="2"/><rect x="35" y="60" width="50" height="40" rx="5" fill="none" stroke="%23000000" stroke-width="1"/><path d="M40 55v-15a20 20 0 0 1 40 0v15" stroke="%23000000" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="60" cy="75" r="8" fill="none" stroke="%23000000" stroke-width="2"/><path d="M60 80v15" stroke="%23000000" stroke-width="3" stroke-linecap="round"/><circle cx="60" cy="75" r="3" fill="%23000000"/></g></svg>');
   background-repeat: no-repeat;
-  background-position: right -5px;
+  background-position: right -10px top -40px;
   background-size: auto calc(100% + 60px);
   background-origin: border-box;
 }
