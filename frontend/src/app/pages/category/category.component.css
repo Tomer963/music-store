@@ -8,20 +8,23 @@
   flex-direction: column;
 }
 
+/* ✅ SYNCHRONIZED CATEGORY HEADER - matches home page new-products-title */
 .category-header {
-  margin-bottom: var(--spacing-md);
   background-color: var(--white);
-  padding: 0 var(--spacing-lg);
+  padding: 8px 12px;
+  margin-bottom: var(--spacing-lg);
   box-shadow: var(--shadow-sm);
-  border-radius: 0;
+  display: block;
   flex-shrink: 0;
 }
 
 .category-title {
-  font-size: 1.25rem;
-  color: var(--secondary-color);
   margin: 0;
+  font-size: 1.5rem;
   font-weight: 600;
+  color: var(--secondary-color);
+  text-align: left;
+  display: block;
 }
 
 /* Albums section */
@@ -195,7 +198,7 @@
 
 @media (max-width: 768px) {
   .category-header {
-    padding: 0 var(--spacing-md);
+    padding: 8px 12px;
   }
   .category-title {
     font-size: 1rem;

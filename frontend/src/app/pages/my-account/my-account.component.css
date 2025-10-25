@@ -64,6 +64,24 @@
   }
 }
 
+/* ✅ SYNCHRONIZED TITLE WRAPPER - matches home page new-products-title */
+.title-wrapper {
+  background-color: var(--white);
+  padding: 8px 12px;
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  display: block;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  text-align: left;
+  display: block;
+}
+
 /* Tabs */
 .account-tabs {
   display: flex;
