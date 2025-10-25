@@ -250,7 +250,7 @@
 }
 
 /* ========================================
-   ICONS GROUP - אייקונים באלבומים 12 והלאה
+   ICONS GROUP - אייקונים באלבומים 12 והלאה - זהה ל-wishlist
    ======================================== */
 
 .album-icons-group {
@@ -262,38 +262,39 @@
   flex-shrink: 0;
 }
 
-/* Wishlist button specific */
+/* Wishlist button - זהה ל-wishlist page */
 .album-icon-btn.wishlist-btn {
-  background: rgba(255, 0, 0, 0.85);
-  color: var(--white);
-  font-size: 20px;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  padding: 0;
+  background-color: transparent;
+  padding: 5px;
+  width: 34px;
+  height: 34px;
+  border-radius: 0;
   transition: all var(--transition-fast);
 }
 
 .album-icon-btn.wishlist-btn:hover {
-  background: rgba(255, 0, 0, 0.95);
-  transform: scale(1.1);
-  border-color: rgba(255, 255, 255, 0.5);
+  background-color: transparent;
+  transform: scale(1.2);
 }
 
 .wishlist-heart-icon {
-  font-size: 20px;
-  color: var(--white);
+  font-size: 24px;
+  color: var(--primary-color);
   transition: color var(--transition-fast);
 }
 
-/* Out of stock button */
+.album-icon-btn.wishlist-btn:hover .wishlist-heart-icon {
+  color: var(--primary-dark);
+}
+
+/* Out of stock button - זהה ל-wishlist page */
 .album-icon-btn.out-of-stock {
-  background: rgba(156, 156, 156, 0.8);
+  background-color: transparent;
   cursor: not-allowed;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  padding: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 0;
+  padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -303,12 +304,40 @@
   font-size: 20px;
 }
 
-/* Cart button specific - gray variant */
-.album-icon-btn.cart-btn {
-  background: rgba(76, 175, 80, 0.85);
-  padding: 6px;
-  width: 40px;
-  height: 40px;
+/* Cart button - זהה ל-wishlist page (gray variant) */
+.album-icon-btn.cart-btn.gray-cart-btn {
+  background-color: transparent !important;
+  padding: 5px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  transition: all var(--transition-fast);
+}
+
+.album-icon-btn.cart-btn.gray-cart-btn:hover {
+  background-color: transparent !important;
+  transform: scale(1.2);
+}
+
+.album-cart-icon {
+  width: 24px;
+  height: 24px;
+  color: #737373;
+  transition: color var(--transition-fast);
+}
+
+.album-icon-btn.cart-btn.gray-cart-btn:hover .album-cart-icon {
+  color: #555555;
+}
+
+/* Info button - זהה ל-wishlist page */
+.album-icon-btn.info-btn {
+  background-color: #737373;
+  width: 34px;
+  height: 34px;
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
@@ -316,40 +345,18 @@
   transition: all var(--transition-fast);
 }
 
-.album-icon-btn.cart-btn:hover {
-  background: rgba(76, 175, 80, 0.95);
-  transform: scale(1.1);
-}
-
-.album-icon-btn.cart-btn .album-cart-icon {
-  width: 24px;
-  height: 24px;
-  color: var(--white);
-}
-
-/* Info button specific - larger and bolder i */
-.album-icon-btn.info-btn {
-  background: rgba(115, 115, 115, 0.9);
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .album-icon-btn.info-btn:hover {
-  background: rgba(140, 140, 140, 0.95);
-  transform: scale(1.1);
+  background-color: #8a8a8a;
+  transform: scale(1.2);
 }
 
 .album-info-icon {
-  font-size: 26px;
-  font-weight: 900;
-  color: var(--white);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--black);
 }
 
-/* Cart counter specific - home page variant */
+/* Cart counter - זהה ל-wishlist page */
 .bottom-cart-counter {
   display: flex;
   align-items: center;
@@ -544,6 +551,28 @@
   .album-content.red-background .album-artist-line.large-artist {
     font-size: 1.125rem;
   }
+
+  /* Icon sizes for medium screens */
+  .album-icon-btn.wishlist-btn,
+  .album-icon-btn.cart-btn,
+  .album-icon-btn.info-btn,
+  .album-icon-btn.out-of-stock {
+    width: 32px;
+    height: 32px;
+  }
+
+  .album-cart-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .wishlist-heart-icon {
+    font-size: 22px;
+  }
+
+  .album-info-icon {
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 767px) {
@@ -630,7 +659,7 @@
     font-size: 1.125rem;
   }
   
-  /* רווחים באייקונים במובייל */
+  /* Icon sizes for tablet */
   .album-icons-group {
     gap: 6px;
   }
@@ -639,17 +668,21 @@
   .album-icon-btn.cart-btn,
   .album-icon-btn.info-btn,
   .album-icon-btn.out-of-stock {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
   }
 
-  .album-icon-btn.cart-btn .album-cart-icon {
-    width: 20px;
-    height: 20px;
+  .album-cart-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .wishlist-heart-icon {
+    font-size: 22px;
   }
 
   .album-info-icon {
-    font-size: 24px;
+    font-size: 18px;
   }
 
   .bottom-cart-counter {
@@ -772,7 +805,7 @@
     padding: var(--spacing-sm) 0;
   }
   
-  /* רווחים באייקונים במובייל קטן */
+  /* Icon sizes for mobile */
   .album-icons-group {
     gap: 4px;
   }
@@ -781,21 +814,21 @@
   .album-icon-btn.cart-btn,
   .album-icon-btn.info-btn,
   .album-icon-btn.out-of-stock {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
   }
 
-  .album-icon-btn.cart-btn .album-cart-icon {
-    width: 18px;
-    height: 18px;
+  .album-cart-icon {
+    width: 20px;
+    height: 20px;
   }
 
   .album-info-icon {
-    font-size: 22px;
+    font-size: 18px;
   }
 
   .wishlist-heart-icon {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .bottom-cart-counter {
