@@ -16,7 +16,6 @@ router.use(optionalAuth);
 
 router.get("/", cartController.getCart);
 
-// ✅ תיקון: ודא ש-cartItemValidation ו-validateRequest פועלים
 router.post(
   "/items",
   cartItemValidation,

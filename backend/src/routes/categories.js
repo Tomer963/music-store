@@ -4,7 +4,7 @@ import { authenticate, isAdmin } from "../middleware/auth.js";
 import { validateRequest } from "../middleware/validation.js";
 import { 
   categoryValidation, 
-  categoryUpdateValidation, // ✅ ייבוא הולידטור החדש לעדכון
+  categoryUpdateValidation,
   mongoIdValidation 
 } from "../utils/validators.js";
 
@@ -12,12 +12,14 @@ const router = Router();
 
 // Public routes
 router.get("/", categoryController.getCategories);
+
 router.get(
   "/:id",
   mongoIdValidation,
   validateRequest,
   categoryController.getCategory
 );
+
 router.get(
   "/:id/albums",
   mongoIdValidation,
@@ -26,8 +28,6 @@ router.get(
 );
 
 // Admin routes
-
-// ✅ יצירת קטגוריה - משתמש ב-categoryValidation (כל השדות חובה)
 router.post(
   "/",
   authenticate,
@@ -37,13 +37,12 @@ router.post(
   categoryController.createCategory
 );
 
-// ✅ עדכון קטגוריה - משתמש ב-categoryUpdateValidation (שדות אופציונליים)
 router.put(
   "/:id",
   authenticate,
   isAdmin,
   mongoIdValidation,
-  categoryUpdateValidation, // ✅ שינוי מ-categoryValidation
+  categoryUpdateValidation,
   validateRequest,
   categoryController.updateCategory
 );

@@ -68,18 +68,30 @@ const albumSchema = new mongoose.Schema(
   }
 );
 
-// Indexes for query optimization
+// Indexes for optimized queries
 albumSchema.index({ title: 1 });
 albumSchema.index({ artist: 1 });
 albumSchema.index({ category: 1 });
 albumSchema.index({ createdAt: -1 });
 
-// Virtual: Check if album is in stock
+/**
+ * Virtual: inStock
+ * 
+ * Checks if album is in stock
+ *
+ * @return {boolean}
+ */
 albumSchema.virtual("inStock").get(function () {
   return this.stock > 0 && this.availability === true;
 });
 
-// Virtual: Calculate discount percentage
+/**
+ * Virtual: discountPercentage
+ * 
+ * Calculates discount percentage if original price exists
+ *
+ * @return {number}
+ */
 albumSchema.virtual("discountPercentage").get(function () {
   if (!this.originalPrice || this.originalPrice <= this.price) {
     return 0;
@@ -89,14 +101,22 @@ albumSchema.virtual("discountPercentage").get(function () {
   );
 });
 
-// Virtual: Check if album has discount
+/**
+ * Virtual: hasDiscount
+ * 
+ * Checks if album has an active discount
+ *
+ * @return {boolean}
+ */
 albumSchema.virtual("hasDiscount").get(function () {
   return this.originalPrice && this.originalPrice > this.price;
 });
 
 /**
  * canPurchase
+ * 
  * Checks if album can be purchased with given quantity
+ *
  * @param {number} quantity - Requested quantity
  * @return {boolean}
  */
@@ -106,7 +126,9 @@ albumSchema.methods.canPurchase = function (quantity) {
 
 /**
  * updateStock
- * Updates album stock after purchase
+ * 
+ * Updates album stock after purchase and manages availability
+ *
  * @param {number} quantity - Quantity purchased
  * @return {Promise<Album>}
  */

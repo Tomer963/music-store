@@ -5,10 +5,12 @@ import { formatResponse } from "../utils/helpers.js";
 
 /**
  * register
- * Creates a new user account
- * @param {Object} req - Express request object
+ * 
+ * Creates a new user account and optionally transfers guest cart
+ *
+ * @param {Object} req - Express request object with user data in body
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const register = async (req, res, next) => {
@@ -58,10 +60,12 @@ export const register = async (req, res, next) => {
 
 /**
  * login
- * Authenticates user and returns token
- * @param {Object} req - Express request object
+ * 
+ * Authenticates user and returns JWT token, optionally merges guest cart
+ *
+ * @param {Object} req - Express request object with credentials in body
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const login = async (req, res, next) => {
@@ -77,11 +81,11 @@ export const login = async (req, res, next) => {
         .json(formatResponse(false, MESSAGES.ERROR.INVALID_CREDENTIALS));
     }
 
-    // Update last login
+    // Update last login timestamp
     user.lastLogin = new Date();
     await user.save();
 
-    // Generate authentication token
+    // Generate JWT authentication token
     const token = user.generateAuthToken();
 
     // Get sessionId from header or body
@@ -111,10 +115,12 @@ export const login = async (req, res, next) => {
 
 /**
  * getProfile
- * Retrieves authenticated user's profile
- * @param {Object} req - Express request object
+ * 
+ * Retrieves authenticated user's profile with populated wishlist
+ *
+ * @param {Object} req - Express request object with authenticated user
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getProfile = async (req, res, next) => {
@@ -128,10 +134,12 @@ export const getProfile = async (req, res, next) => {
 
 /**
  * logout
- * Logs out the user
+ * 
+ * Logs out the user (client-side token removal)
+ *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const logout = async (req, res, next) => {
@@ -144,10 +152,12 @@ export const logout = async (req, res, next) => {
 
 /**
  * transferCart
- * Transfers or merges guest cart to user cart
+ * 
+ * Transfers or merges guest cart items to user cart
+ *
  * @param {string} sessionId - Guest session ID
  * @param {string} userId - User ID
- * @param {boolean} merge - Whether to merge with existing cart
+ * @param {boolean} merge - Whether to merge with existing cart or transfer completely
  * @return {Promise<void>}
  */
 async function transferCart(sessionId, userId, merge) {

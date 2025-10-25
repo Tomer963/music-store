@@ -5,10 +5,12 @@ import { formatResponse } from "../utils/helpers.js";
 
 /**
  * getOrders
+ * 
  * Retrieves all orders for the authenticated user
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with authenticated user
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getOrders = async (req, res, next) => {
@@ -25,10 +27,12 @@ export const getOrders = async (req, res, next) => {
 
 /**
  * getAllOrders
- * Retrieves all orders in the system (Admin only)
- * @param {Object} req - Express request object
+ * 
+ * Retrieves all orders in the system with pagination (Admin only)
+ *
+ * @param {Object} req - Express request object with optional pagination params
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getAllOrders = async (req, res, next) => {
@@ -63,10 +67,12 @@ export const getAllOrders = async (req, res, next) => {
 
 /**
  * getOrder
- * Retrieves a single order by ID
- * @param {Object} req - Express request object
+ * 
+ * Retrieves a single order by ID with authorization check
+ *
+ * @param {Object} req - Express request object with order ID in params
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getOrder = async (req, res, next) => {
@@ -94,37 +100,32 @@ export const getOrder = async (req, res, next) => {
 
 /**
  * createOrder
- * Creates a new order from cart items
- * @param {Object} req - Express request object
+ * 
+ * Creates a new order from cart items with validation and stock updates
+ *
+ * @param {Object} req - Express request object with order details in body
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const createOrder = async (req, res, next) => {
   try {
-    console.log('🔵 === Order Creation Started ===');
-    console.log('🔵 Request body:', JSON.stringify(req.body, null, 2));
-    console.log('🔵 User ID:', req.user?._id);
-    
     const { paymentMethod, billingInfo, totalAmount } = req.body;
 
-    // Validation checks with detailed logging
+    // Validate required fields
     if (!totalAmount) {
-      console.log('❌ Total amount missing');
       return res
         .status(400)
         .json(formatResponse(false, "Total amount is required"));
     }
 
     if (!paymentMethod) {
-      console.log('❌ Payment method missing');
       return res
         .status(400)
         .json(formatResponse(false, "Payment method is required"));
     }
 
     if (!billingInfo) {
-      console.log('❌ Billing info missing');
       return res
         .status(400)
         .json(formatResponse(false, "Billing information is required"));
@@ -132,20 +133,15 @@ export const createOrder = async (req, res, next) => {
 
     // Check required billing fields
     if (!billingInfo.address || !billingInfo.city || !billingInfo.zipCode || !billingInfo.phone) {
-      console.log('❌ Billing info incomplete:', billingInfo);
       return res
         .status(400)
         .json(formatResponse(false, "Complete billing information is required"));
     }
 
-    console.log('✅ Validations passed');
-
     // Get user's cart items
     const cartItems = await CartItem.find({ user: req.user._id }).populate("album");
-    console.log('🛒 Cart items found:', cartItems.length);
 
     if (cartItems.length === 0) {
-      console.log('❌ Cart is empty');
       return res.status(400).json(formatResponse(false, "Cart is empty"));
     }
 
@@ -154,10 +150,8 @@ export const createOrder = async (req, res, next) => {
     let calculatedTotal = 0;
 
     for (const cartItem of cartItems) {
-      console.log(`📀 Processing: ${cartItem.album.title} x${cartItem.quantity}`);
-      
+      // Check stock availability
       if (!cartItem.album.canPurchase(cartItem.quantity)) {
-        console.log(`❌ Out of stock: ${cartItem.album.title}`);
         return res
           .status(400)
           .json(
@@ -174,13 +168,8 @@ export const createOrder = async (req, res, next) => {
       calculatedTotal += cartItem.album.price * cartItem.quantity;
     }
 
-    console.log('💰 Calculated total:', calculatedTotal);
-    console.log('💰 Sent total:', totalAmount);
-
     const paymentData = {};
 
-    console.log('📝 Creating order...');
-    
     // Create the order
     const order = await Order.create({
       user: req.user._id,
@@ -191,41 +180,33 @@ export const createOrder = async (req, res, next) => {
       billingInfo,
     });
 
-    console.log('✅ Order created:', order.orderNumber);
-
     // Update stock for each album
     await Promise.all(
       cartItems.map((item) => item.album.updateStock(item.quantity))
     );
 
-    console.log('✅ Stock updated');
-
     // Clear user's cart
     await CartItem.deleteMany({ user: req.user._id });
-    console.log('✅ Cart cleared');
     
     await order.populate("items.album");
-
-    console.log('🔵 === Order Creation Completed ===');
     
     res
       .status(201)
       .json(formatResponse(true, "Order created successfully", order));
   } catch (error) {
-    console.error('❌ === Order Creation Error ===');
-    console.error('❌ Error name:', error.name);
-    console.error('❌ Error message:', error.message);
-    console.error('❌ Error stack:', error.stack);
+    console.error("Order creation error:", error.message);
     next(error);
   }
 };
 
 /**
  * updateOrder
- * Updates order details (Admin only)
- * @param {Object} req - Express request object
+ * 
+ * Updates order details with protection for critical fields (Admin only)
+ *
+ * @param {Object} req - Express request object with order ID in params and update data in body
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const updateOrder = async (req, res, next) => {
@@ -269,10 +250,12 @@ export const updateOrder = async (req, res, next) => {
 
 /**
  * deleteOrder
- * Permanently deletes an order (Admin only)
- * @param {Object} req - Express request object
+ * 
+ * Permanently deletes an order and restores stock (Admin only)
+ *
+ * @param {Object} req - Express request object with order ID in params
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const deleteOrder = async (req, res, next) => {
@@ -305,10 +288,12 @@ export const deleteOrder = async (req, res, next) => {
 
 /**
  * getOrderStatistics
- * Get order statistics (Admin only)
+ * 
+ * Retrieves order statistics including total count and revenue (Admin only)
+ *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getOrderStatistics = async (req, res, next) => {

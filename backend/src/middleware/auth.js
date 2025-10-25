@@ -2,6 +2,16 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { MESSAGES } from "../config/constants.js";
 
+/**
+ * authenticate
+ * 
+ * Middleware to authenticate user via JWT token
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @return {Promise<void>}
+ */
 export const authenticate = async (req, res, next) => {
   try {
     const token = req.header("Authorization")?.replace("Bearer ", "");
@@ -42,6 +52,16 @@ export const authenticate = async (req, res, next) => {
   }
 };
 
+/**
+ * isAdmin
+ * 
+ * Middleware to check if authenticated user has admin role
+ *
+ * @param {Object} req - Express request object with authenticated user
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @return {void}
+ */
 export const isAdmin = (req, res, next) => {
   if (req.user.role !== "admin") {
     return res.status(403).json({
@@ -53,6 +73,16 @@ export const isAdmin = (req, res, next) => {
   next();
 };
 
+/**
+ * optionalAuth
+ * 
+ * Middleware for optional authentication (doesn't fail if no token provided)
+ *
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @return {Promise<void>}
+ */
 export const optionalAuth = async (req, res, next) => {
   try {
     const token = req.header("Authorization")?.replace("Bearer ", "");
@@ -68,6 +98,7 @@ export const optionalAuth = async (req, res, next) => {
     }
     next();
   } catch {
+    // Silently fail for optional auth
     next();
   }
 };

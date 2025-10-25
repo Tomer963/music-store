@@ -73,7 +73,9 @@ const orderSchema = new mongoose.Schema(
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ orderNumber: 1 });
 
-// Pre-save hook to generate unique order number
+/**
+ * Pre-save hook to generate unique order number
+ */
 orderSchema.pre("save", async function (next) {
   if (this.isNew) {
     this.orderNumber = `ORD-${Date.now()}-${Math.random()
@@ -86,7 +88,9 @@ orderSchema.pre("save", async function (next) {
 
 /**
  * calculateTotal
+ * 
  * Calculates the total amount for the order
+ *
  * @return {number}
  */
 orderSchema.methods.calculateTotal = function () {

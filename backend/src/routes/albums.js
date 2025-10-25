@@ -4,7 +4,7 @@ import { authenticate, isAdmin } from "../middleware/auth.js";
 import { validateRequest } from "../middleware/validation.js";
 import { 
   albumValidation, 
-  albumUpdateValidation, // ✅ ייבוא הולידטור החדש לעדכון
+  albumUpdateValidation,
   mongoIdValidation 
 } from "../utils/validators.js";
 
@@ -22,8 +22,6 @@ router.get(
 );
 
 // Admin routes
-
-// ✅ יצירת אלבום - משתמש ב-albumValidation (כל השדות חובה)
 router.post(
   "/",
   authenticate,
@@ -33,13 +31,12 @@ router.post(
   albumController.createAlbum
 );
 
-// ✅ עדכון אלבום - משתמש ב-albumUpdateValidation (שדות אופציונליים)
 router.put(
   "/:id",
   authenticate,
   isAdmin,
   mongoIdValidation,
-  albumUpdateValidation, // ✅ שינוי מ-albumValidation
+  albumUpdateValidation,
   validateRequest,
   albumController.updateAlbum
 );

@@ -5,10 +5,12 @@ import { formatResponse } from "../utils/helpers.js";
 
 /**
  * getCategories
- * Retrieves all active categories
+ * 
+ * Retrieves all active categories with album count
+ *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getCategories = async (req, res, next) => {
@@ -25,10 +27,12 @@ export const getCategories = async (req, res, next) => {
 
 /**
  * getCategory
+ * 
  * Retrieves a single category by ID
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with category ID in params
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getCategory = async (req, res, next) => {
@@ -47,10 +51,12 @@ export const getCategory = async (req, res, next) => {
 
 /**
  * getAlbumsByCategory
+ * 
  * Retrieves all albums in a specific category
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with category ID in params
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getAlbumsByCategory = async (req, res, next) => {
@@ -79,10 +85,12 @@ export const getAlbumsByCategory = async (req, res, next) => {
 
 /**
  * createCategory
+ * 
  * Creates a new category (Admin only)
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with category data in body
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const createCategory = async (req, res, next) => {
@@ -98,10 +106,12 @@ export const createCategory = async (req, res, next) => {
 
 /**
  * updateCategory
+ * 
  * Updates an existing category (Admin only)
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with category ID in params and update data in body
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const updateCategory = async (req, res, next) => {
@@ -125,10 +135,12 @@ export const updateCategory = async (req, res, next) => {
 
 /**
  * deleteCategory
+ * 
  * Deletes a category if it has no albums (Admin only)
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with category ID in params
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const deleteCategory = async (req, res, next) => {

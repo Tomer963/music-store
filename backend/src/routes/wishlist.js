@@ -10,12 +10,14 @@ const router = Router();
 router.use(authenticate);
 
 router.get("/", wishlistController.getWishlist);
+
 router.post(
   "/:albumId",
   albumIdValidation,
   validateRequest,
   wishlistController.addToWishlist
 );
+
 router.delete(
   "/:albumId",
   albumIdValidation,

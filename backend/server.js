@@ -13,7 +13,9 @@ let isShuttingDown = false;
 
 /**
  * startServer
+ * 
  * Initializes database connection and starts Express server
+ *
  * @return {Promise<void>}
  */
 const startServer = async () => {
@@ -21,35 +23,37 @@ const startServer = async () => {
     await connectDatabase();
 
     server = app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`📍 Environment: ${process.env.NODE_ENV || "development"}`);
-      console.log(`🔗 API URL: http://localhost:${PORT}`);
+      console.log(`Server running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+      console.log(`API URL: http://localhost:${PORT}`);
     });
 
     // Handle server errors
     server.on("error", (error) => {
-      console.error("❌ Server error:", error.message);
+      console.error("Server error:", error.message);
       if (error.code === "EADDRINUSE") {
-        console.error(`❌ Port ${PORT} is already in use`);
+        console.error(`Port ${PORT} is already in use`);
         process.exit(1);
       }
     });
 
-    // Keep alive message every 30 seconds in development
+    // Keep alive message in development mode
     if (process.env.NODE_ENV === "development") {
       setInterval(() => {
-        console.log("💓 Server is alive...");
+        console.log("Server is alive...");
       }, 30000);
     }
   } catch (error) {
-    console.error("❌ Failed to start server:", error.message);
+    console.error("Failed to start server:", error.message);
     process.exit(1);
   }
 };
 
 /**
  * gracefulShutdown
- * Handles graceful application shutdown
+ * 
+ * Handles graceful application shutdown, closing database and server connections
+ *
  * @param {string} signal - Termination signal received
  * @return {void}
  */
@@ -65,23 +69,22 @@ const gracefulShutdown = async (signal) => {
   // Stop accepting new connections
   if (server) {
     server.close(async () => {
-      console.log("✅ HTTP server closed");
+      console.log("HTTP server closed");
 
       try {
-        // Close database connection
         await closeDatabaseConnection();
-        console.log("✅ Database connection closed");
-        console.log("👋 Graceful shutdown completed");
+        console.log("Database connection closed");
+        console.log("Graceful shutdown completed");
         process.exit(0);
       } catch (error) {
-        console.error("❌ Error during shutdown:", error.message);
+        console.error("Error during shutdown:", error.message);
         process.exit(1);
       }
     });
 
     // Force shutdown after 10 seconds if graceful shutdown fails
     setTimeout(() => {
-      console.error("⚠️ Forced shutdown after timeout");
+      console.error("Forced shutdown after timeout");
       process.exit(1);
     }, 10000);
   } else {
@@ -96,13 +99,13 @@ process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 
 // Handle uncaught exceptions
 process.on("uncaughtException", (error) => {
-  console.error("💥 Uncaught Exception:", error);
+  console.error("Uncaught Exception:", error);
   gracefulShutdown("UNCAUGHT_EXCEPTION");
 });
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (reason, promise) => {
-  console.error("💥 Unhandled Rejection at:", promise, "reason:", reason);
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
   gracefulShutdown("UNHANDLED_REJECTION");
 });
 

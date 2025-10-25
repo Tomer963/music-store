@@ -5,10 +5,12 @@ import { formatResponse, generateSessionId } from "../utils/helpers.js";
 
 /**
  * getCart
- * Retrieves the user's cart items
+ * 
+ * Retrieves the user's cart items with calculated total
+ *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getCart = async (req, res, next) => {
@@ -40,10 +42,12 @@ export const getCart = async (req, res, next) => {
 
 /**
  * addToCart
- * Adds an album to the cart
- * @param {Object} req - Express request object
+ * 
+ * Adds an album to the cart or updates quantity if already exists
+ *
+ * @param {Object} req - Express request object with albumId and quantity in body
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const addToCart = async (req, res, next) => {
@@ -109,10 +113,12 @@ export const addToCart = async (req, res, next) => {
 
 /**
  * updateCartItem
+ * 
  * Updates the quantity of a cart item
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with cart item ID in params and quantity in body
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const updateCartItem = async (req, res, next) => {
@@ -125,13 +131,14 @@ export const updateCartItem = async (req, res, next) => {
       return res.status(404).json(formatResponse(false, "Cart item not found"));
     }
 
-    // Check authorization
+    // Check authorization for authenticated users
     if (req.user && cartItem.user && !cartItem.user.equals(req.user._id)) {
       return res
         .status(403)
         .json(formatResponse(false, MESSAGES.ERROR.UNAUTHORIZED));
     }
 
+    // Check authorization for guest users
     if (!req.user && cartItem.sessionId !== req.headers["x-session-id"]) {
       return res
         .status(403)
@@ -155,10 +162,12 @@ export const updateCartItem = async (req, res, next) => {
 
 /**
  * removeFromCart
+ * 
  * Removes an item from the cart
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with cart item ID in params
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const removeFromCart = async (req, res, next) => {
@@ -169,13 +178,14 @@ export const removeFromCart = async (req, res, next) => {
       return res.status(404).json(formatResponse(false, "Cart item not found"));
     }
 
-    // Check authorization
+    // Check authorization for authenticated users
     if (req.user && cartItem.user && !cartItem.user.equals(req.user._id)) {
       return res
         .status(403)
         .json(formatResponse(false, MESSAGES.ERROR.UNAUTHORIZED));
     }
 
+    // Check authorization for guest users
     if (!req.user && cartItem.sessionId !== req.headers["x-session-id"]) {
       return res
         .status(403)
@@ -192,10 +202,12 @@ export const removeFromCart = async (req, res, next) => {
 
 /**
  * clearCart
+ * 
  * Removes all items from the cart
+ *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const clearCart = async (req, res, next) => {

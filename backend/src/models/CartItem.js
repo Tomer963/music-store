@@ -54,14 +54,22 @@ cartItemSchema.index(
 cartItemSchema.index({ user: 1 });
 cartItemSchema.index({ sessionId: 1 });
 
-// Virtual: Calculate total price for this cart item
+/**
+ * Virtual: totalPrice
+ * 
+ * Calculates total price for this cart item
+ *
+ * @return {number}
+ */
 cartItemSchema.virtual("totalPrice").get(function () {
   return this.album?.price ? this.album.price * this.quantity : 0;
 });
 
 /**
  * updateQuantity
+ * 
  * Updates the quantity of the cart item
+ *
  * @param {number} newQuantity - New quantity value
  * @return {Promise<CartItem>}
  */

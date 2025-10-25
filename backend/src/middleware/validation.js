@@ -3,10 +3,12 @@ import { MESSAGES } from "../config/constants.js";
 
 /**
  * validateRequest
- * Checks validation results and returns errors if any
+ * 
+ * Middleware to check validation results and return errors if any
+ *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {void}
  */
 export const validateRequest = (req, res, next) => {

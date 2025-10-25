@@ -4,10 +4,12 @@ import { paginate, formatResponse } from "../utils/helpers.js";
 
 /**
  * getAlbums
+ * 
  * Retrieves all albums with pagination and optional category filter
+ *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getAlbums = async (req, res, next) => {
@@ -19,7 +21,7 @@ export const getAlbums = async (req, res, next) => {
       category = null,
     } = req.query;
 
-    // Build query filter
+    // Build query filter for category if specified
     const queryFilter = category ? { category } : {};
     const query = Album.find(queryFilter)
       .populate("category", "name")
@@ -34,10 +36,12 @@ export const getAlbums = async (req, res, next) => {
 
 /**
  * getAlbum
- * Retrieves a single album by ID
- * @param {Object} req - Express request object
+ * 
+ * Retrieves a single album by ID with populated category
+ *
+ * @param {Object} req - Express request object with album ID in params
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getAlbum = async (req, res, next) => {
@@ -61,17 +65,19 @@ export const getAlbum = async (req, res, next) => {
 
 /**
  * searchAlbums
- * Searches albums by title, artist or description
- * @param {Object} req - Express request object
+ * 
+ * Searches albums by title, artist or description using regex matching
+ *
+ * @param {Object} req - Express request object with search query in query string
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const searchAlbums = async (req, res, next) => {
   try {
     const { q } = req.query;
 
-    // Validate search query length
+    // Validate minimum search query length
     if (!q || q.trim().length < 3) {
       return res.json(formatResponse(true, "Search results", []));
     }
@@ -98,10 +104,12 @@ export const searchAlbums = async (req, res, next) => {
 
 /**
  * getNewAlbums
+ * 
  * Retrieves newest albums sorted by creation date
+ *
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getNewAlbums = async (req, res, next) => {
@@ -119,10 +127,12 @@ export const getNewAlbums = async (req, res, next) => {
 
 /**
  * createAlbum
+ * 
  * Creates a new album (Admin only)
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with album data in body
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const createAlbum = async (req, res, next) => {
@@ -138,10 +148,12 @@ export const createAlbum = async (req, res, next) => {
 
 /**
  * updateAlbum
+ * 
  * Updates an existing album (Admin only)
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with album ID in params and update data in body
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const updateAlbum = async (req, res, next) => {
@@ -165,10 +177,12 @@ export const updateAlbum = async (req, res, next) => {
 
 /**
  * deleteAlbum
+ * 
  * Deletes an album (Admin only)
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with album ID in params
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const deleteAlbum = async (req, res, next) => {

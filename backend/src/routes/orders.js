@@ -14,12 +14,14 @@ router.use(authenticate);
 
 // User routes
 router.get("/", orderController.getOrders);
+
 router.get(
   "/:id",
   mongoIdValidation,
   validateRequest,
   orderController.getOrder
 );
+
 router.post(
   "/",
   orderValidation,
@@ -30,6 +32,7 @@ router.post(
 // Admin routes
 router.get("/admin/all", isAdmin, orderController.getAllOrders);
 router.get("/admin/statistics", isAdmin, orderController.getOrderStatistics);
+
 router.put(
   "/:id",
   isAdmin,
@@ -37,6 +40,7 @@ router.put(
   validateRequest,
   orderController.updateOrder
 );
+
 router.delete(
   "/:id",
   isAdmin,

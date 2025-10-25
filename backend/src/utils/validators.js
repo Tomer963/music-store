@@ -1,6 +1,9 @@
 import { body, param } from "express-validator";
 import { VALIDATION } from "../config/constants.js";
 
+/**
+ * Registration validation rules
+ */
 export const registerValidation = [
   body("firstName")
     .trim()
@@ -46,6 +49,9 @@ export const registerValidation = [
     .withMessage("SessionId must be a string"),
 ];
 
+/**
+ * Login validation rules
+ */
 export const loginValidation = [
   body("email")
     .trim()
@@ -61,7 +67,9 @@ export const loginValidation = [
     .withMessage("SessionId must be a string"),
 ];
 
-// ✅ ולידטור ליצירת אלבום - כל השדות חובה
+/**
+ * Album creation validation rules (all fields required)
+ */
 export const albumValidation = [
   body("title")
     .trim()
@@ -99,7 +107,9 @@ export const albumValidation = [
     .withMessage("Description cannot exceed 500 characters"),
 ];
 
-// ✅ ולידטור לעדכון אלבום - כל השדות אופציונליים
+/**
+ * Album update validation rules (all fields optional)
+ */
 export const albumUpdateValidation = [
   body("title")
     .optional()
@@ -146,7 +156,9 @@ export const albumUpdateValidation = [
     .withMessage("Description cannot exceed 500 characters"),
 ];
 
-// ✅ ולידטור ליצירת קטגוריה - רק שם חובה
+/**
+ * Category creation validation rules (name required)
+ */
 export const categoryValidation = [
   body("name")
     .trim()
@@ -156,7 +168,9 @@ export const categoryValidation = [
     .withMessage("Category name cannot exceed 50 characters"),
 ];
 
-// ✅ ולידטור לעדכון קטגוריה - רק שם אופציונלי
+/**
+ * Category update validation rules (name optional)
+ */
 export const categoryUpdateValidation = [
   body("name")
     .optional()
@@ -167,7 +181,9 @@ export const categoryUpdateValidation = [
     .withMessage("Category name cannot exceed 50 characters"),
 ];
 
-// ✅ ולידטור להוספה לעגלה
+/**
+ * Cart item validation rules
+ */
 export const cartItemValidation = [
   body("albumId")
     .exists()
@@ -186,7 +202,7 @@ export const cartItemValidation = [
     .isString()
     .withMessage("SessionId must be a string"),
 
-  // ✅ דחה כל שדה נוסף שלא מוכר
+  // Reject any unexpected fields
   body()
     .custom((value, { req }) => {
       const allowedFields = ['albumId', 'quantity', 'sessionId'];
@@ -203,6 +219,9 @@ export const cartItemValidation = [
     }),
 ];
 
+/**
+ * Order creation validation rules
+ */
 export const orderValidation = [
   body("paymentMethod")
     .isIn(["credit_card", "check"])
@@ -230,10 +249,16 @@ export const orderValidation = [
     .withMessage("Phone must be in format 03-1234567 or 050-1234567"),
 ];
 
+/**
+ * MongoDB ID validation for route parameters
+ */
 export const mongoIdValidation = [
   param("id").isMongoId().withMessage("Invalid ID format"),
 ];
 
+/**
+ * Album ID validation for route parameters
+ */
 export const albumIdValidation = [
   param("albumId").isMongoId().withMessage("Invalid album ID format"),
 ];

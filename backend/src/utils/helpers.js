@@ -1,10 +1,12 @@
 /**
  * paginate
- * Paginates query results
+ * 
+ * Paginates query results with metadata
+ *
  * @param {Object} query - Mongoose query object
- * @param {number} page - Page number
- * @param {number} limit - Items per page
- * @return {Promise<Object>}
+ * @param {number} page - Page number (default: 1)
+ * @param {number} limit - Items per page (default: 12)
+ * @return {Promise<Object>} Paginated results with metadata
  */
 export const paginate = async (query, page = 1, limit = 12) => {
   const skip = (page - 1) * limit;
@@ -27,12 +29,14 @@ export const paginate = async (query, page = 1, limit = 12) => {
 
 /**
  * formatResponse
- * Creates standardized API response
+ * 
+ * Creates standardized API response object
+ *
  * @param {boolean} success - Success status
  * @param {string} message - Response message
- * @param {*} data - Response data
- * @param {Array} errors - Validation errors
- * @return {Object}
+ * @param {*} data - Response data (optional)
+ * @param {Array} errors - Validation errors (optional)
+ * @return {Object} Formatted response object
  */
 export const formatResponse = (
   success,
@@ -50,12 +54,11 @@ export const formatResponse = (
 
 /**
  * generateSessionId
+ * 
  * Generates unique session ID for anonymous users
- * @return {string}
+ *
+ * @return {string} Unique session identifier
  */
 export const generateSessionId = () => {
   return `sess_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 };
-
-// ✅ הסרנו את sanitizeCardNumber - לא צריך יותר
-// אין צורך בפונקציה זו כי לא שומרים פרטי כרטיס אשראי

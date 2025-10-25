@@ -65,7 +65,9 @@ const userSchema = new mongoose.Schema(
 // Index for faster email lookups
 userSchema.index({ email: 1 });
 
-// Pre-save hook to hash password
+/**
+ * Pre-save hook to hash password before saving
+ */
 userSchema.pre("save", async function (next) {
   // Only hash if password is modified
   if (!this.isModified("password")) {
@@ -83,7 +85,9 @@ userSchema.pre("save", async function (next) {
 
 /**
  * comparePassword
+ * 
  * Compares provided password with hashed password
+ *
  * @param {string} candidatePassword - Password to compare
  * @return {Promise<boolean>}
  */
@@ -93,7 +97,9 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 
 /**
  * generateAuthToken
+ * 
  * Generates JWT token for authentication
+ *
  * @return {string}
  */
 userSchema.methods.generateAuthToken = function () {
@@ -112,7 +118,9 @@ userSchema.methods.generateAuthToken = function () {
 
 /**
  * addToWishlist
- * Adds album to user's wishlist
+ * 
+ * Adds album to user's wishlist if not already present
+ *
  * @param {string} albumId - Album ID to add
  * @return {Promise<Array>}
  */
@@ -127,7 +135,9 @@ userSchema.methods.addToWishlist = async function (albumId) {
 
 /**
  * removeFromWishlist
+ * 
  * Removes album from user's wishlist
+ *
  * @param {string} albumId - Album ID to remove
  * @return {Promise<Array>}
  */

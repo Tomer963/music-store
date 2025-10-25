@@ -13,19 +13,21 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
-// 1. CRITICAL: Trust proxy MUST be set FIRST
+// Trust proxy for proper IP detection behind reverse proxies
 app.set("trust proxy", 1);
 
-// 2. Security headers
+// Security headers middleware
 app.use(helmet());
 
-// 3. CORS configuration
+// CORS configuration
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
       "http://localhost:4200",
       "http://localhost:3000",
     ];
+    
+    // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -40,11 +42,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// 4. Body parsing (BEFORE rate limiting)
+// Body parsing middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// 5. Request logging (development only)
+// Request logging in development mode
 if (process.env.NODE_ENV === "development") {
   app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
@@ -52,21 +54,15 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
-// 6. ✅ FIXED: Rate limiting with draft-7 headers
+// Rate limiting configuration
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  
-  // Different limits for dev vs production
   max: process.env.NODE_ENV === "production" ? 100 : 1000,
-  
-  // ✅ CRITICAL: Use 'draft-7' (string, not boolean)
   standardHeaders: 'draft-7',
   legacyHeaders: false,
-  
-  // ✅ Add this to ensure headers are sent
   requestWasSuccessful: (req, res) => res.statusCode < 400,
   
-  // Proper IP extraction
+  // Extract client IP from various headers
   keyGenerator: (req) => {
     const forwarded = req.headers["x-forwarded-for"];
     const realIp = req.headers["x-real-ip"];
@@ -79,10 +75,11 @@ const limiter = rateLimit({
       clientIp = realIp;
     }
     
+    // Remove IPv6 prefix
     clientIp = clientIp.replace(/^::ffff:/, "");
     
     if (process.env.NODE_ENV === "development") {
-      console.log(`🔍 Rate limit key: ${clientIp}`);
+      console.log(`Rate limit key: ${clientIp}`);
     }
     
     return clientIp;
@@ -94,7 +91,7 @@ const limiter = rateLimit({
     const env = process.env.NODE_ENV || "development";
     const limit = env === "production" ? 100 : 1000;
     
-    console.log(`⛔ Rate limit exceeded for IP: ${clientIp} (${env} mode: ${limit} req/15min)`);
+    console.log(`Rate limit exceeded for IP: ${clientIp} (${env} mode: ${limit} req/15min)`);
     
     res.status(429).json({
       success: false,
@@ -106,20 +103,19 @@ const limiter = rateLimit({
     });
   },
   
-  // Skip rate limiting for health endpoints
+  // Skip rate limiting for health check endpoints
   skip: (req) => {
     return req.path === "/health" || req.path === "/health/detailed";
   },
 });
 
-// 7. Apply rate limiter to ALL /api routes
+// Apply rate limiter to all API routes
 app.use("/api", limiter);
 
-// Log rate limiting configuration on startup
-console.log(`🛡️  Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`);
-console.log(`🛡️  Rate Limit Headers: draft-7 standard`);
+console.log(`Rate Limiting: ${process.env.NODE_ENV === "production" ? "100" : "1000"} requests per 15 minutes`);
+console.log(`Rate Limit Headers: draft-7 standard`);
 
-// 8. Database connection check
+// Database connection check middleware
 app.use((req, res, next) => {
   if (mongoose.connection.readyState !== 1) {
     return res.status(503).json({
@@ -131,7 +127,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// 9. Root endpoint
+// Root endpoint
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -150,7 +146,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// 10. Health check endpoints
+// Basic health check endpoint
 app.get("/health", async (req, res) => {
   const dbState = mongoose.connection.readyState;
   const isConnected = dbState === 1;
@@ -178,6 +174,7 @@ app.get("/health", async (req, res) => {
   });
 });
 
+// Detailed health check endpoint
 app.get("/health/detailed", async (req, res) => {
   const dbState = mongoose.connection.readyState;
   const isConnected = dbState === 1;
@@ -216,7 +213,7 @@ app.get("/health/detailed", async (req, res) => {
   });
 });
 
-// 11. API routes
+// API routes
 const API_PREFIX = `/api/${process.env.API_VERSION || "v1"}`;
 
 app.use(`${API_PREFIX}/albums`, albumRoutes);
@@ -226,7 +223,7 @@ app.use(`${API_PREFIX}/cart`, cartRoutes);
 app.use(`${API_PREFIX}/orders`, orderRoutes);
 app.use(`${API_PREFIX}/wishlist`, wishlistRoutes);
 
-// 12. 404 handler MUST be BEFORE errorHandler
+// 404 handler for undefined routes
 app.use((req, res, next) => {
   res.status(404).json({
     success: false,
@@ -235,7 +232,7 @@ app.use((req, res, next) => {
   });
 });
 
-// 13. Global error handler - MUST be LAST
+// Global error handler (must be last)
 app.use(errorHandler);
 
 export default app;

@@ -12,8 +12,24 @@ router.post(
   validateRequest,
   authController.register
 );
-router.post("/login", loginValidation, validateRequest, authController.login);
-router.get("/profile", authenticate, authController.getProfile);
-router.get("/logout", authenticate, authController.logout);
+
+router.post(
+  "/login", 
+  loginValidation, 
+  validateRequest, 
+  authController.login
+);
+
+router.get(
+  "/profile", 
+  authenticate, 
+  authController.getProfile
+);
+
+router.get(
+  "/logout", 
+  authenticate, 
+  authController.logout
+);
 
 export default router;

@@ -4,10 +4,12 @@ import { formatResponse } from "../utils/helpers.js";
 
 /**
  * getWishlist
- * Retrieves the user's wishlist
- * @param {Object} req - Express request object
+ * 
+ * Retrieves the user's wishlist with populated album details
+ *
+ * @param {Object} req - Express request object with authenticated user
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const getWishlist = async (req, res, next) => {
@@ -25,10 +27,12 @@ export const getWishlist = async (req, res, next) => {
 
 /**
  * addToWishlist
+ * 
  * Adds an album to the user's wishlist
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with albumId in params
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const addToWishlist = async (req, res, next) => {
@@ -50,10 +54,12 @@ export const addToWishlist = async (req, res, next) => {
 
 /**
  * removeFromWishlist
+ * 
  * Removes an album from the user's wishlist
- * @param {Object} req - Express request object
+ *
+ * @param {Object} req - Express request object with albumId in params
  * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware
+ * @param {Function} next - Express next middleware function
  * @return {Promise<void>}
  */
 export const removeFromWishlist = async (req, res, next) => {

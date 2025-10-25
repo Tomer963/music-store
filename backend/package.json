@@ -6,9 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "cross-env NODE_ENV=development nodemon server.js",
-    "test:connection": "node test-connection.js",
-    "monitor": "node monitor.js"
+    "dev": "cross-env NODE_ENV=development nodemon server.js"
   },
   "engines": {
     "node": ">=16.x"
@@ -56,8 +54,8 @@
     },
     "signal": "SIGTERM",
     "events": {
-      "restart": "echo '🔄 Restarting server...'",
-      "crash": "echo '💥 Server crashed - waiting for file changes before restart'"
+      "restart": "echo 'Restarting server...'",
+      "crash": "echo 'Server crashed - waiting for file changes before restart'"
     }
   }
 }
