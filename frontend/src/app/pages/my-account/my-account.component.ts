@@ -32,8 +32,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * Ng On Init
-   *
+   * NgOnInit
+   * 
    * Initializes component and loads user data
    *
    * @return void
@@ -44,9 +44,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Ng On Destroy
-   *
-   * Cleans up subscriptions
+   * NgOnDestroy
+   * 
+   * Cleans up subscriptions to prevent memory leaks
    *
    * @return void
    */
@@ -56,8 +56,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load User Profile
-   *
+   * LoadUserProfile
+   * 
    * Fetches user profile from API
    *
    * @return void
@@ -76,8 +76,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load Orders
-   *
+   * LoadOrders
+   * 
    * Fetches user orders with album details
    *
    * @return void
@@ -93,9 +93,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Process Orders
-   *
-   * Fetches album details for each order item
+   * ProcessOrders
+   * 
+   * Fetches album details for each order item and enriches order data
    *
    * @param (Order[]) orders - Array of orders
    * @return void
@@ -113,6 +113,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
       let itemsProcessed = 0;
       const totalItems = order.items.length;
 
+      // Handle orders with no items
       if (totalItems === 0) {
         if (++processedCount === orders.length) {
           this.orders = orders;
@@ -123,14 +124,13 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
       // Fetch album details for each item
       order.items.forEach((item: OrderItem) => {
+        // Check if album is stored as ID string
         if (typeof item.album === "string") {
           this.albumService.getAlbum(item.album).subscribe({
             next: (album) => {
+              // Replace ID with full album object
               (item as any).album = album;
-              if (
-                ++itemsProcessed === totalItems &&
-                ++processedCount === orders.length
-              ) {
+              if (++itemsProcessed === totalItems && ++processedCount === orders.length) {
                 this.orders = orders;
                 this.isLoadingOrders = false;
               }
@@ -142,19 +142,14 @@ export class MyAccountComponent implements OnInit, OnDestroy {
                 title: "Unknown Album",
                 artist: "Unknown Artist",
               };
-              if (
-                ++itemsProcessed === totalItems &&
-                ++processedCount === orders.length
-              ) {
+              if (++itemsProcessed === totalItems && ++processedCount === orders.length) {
                 this.orders = orders;
                 this.isLoadingOrders = false;
               }
             },
           });
-        } else if (
-          ++itemsProcessed === totalItems &&
-          ++processedCount === orders.length
-        ) {
+        } else if (++itemsProcessed === totalItems && ++processedCount === orders.length) {
+          // Album already populated
           this.orders = orders;
           this.isLoadingOrders = false;
         }
@@ -163,8 +158,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Switch Tab
-   *
+   * SwitchTab
+   * 
    * Switches between profile and orders tabs
    *
    * @param ("profile" | "orders") tab - Target tab
@@ -175,8 +170,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Format Date
-   *
+   * FormatDate
+   * 
    * Formats date for display
    *
    * @param (string | undefined) date - Date string
@@ -194,8 +189,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Format Price
-   *
+   * FormatPrice
+   * 
    * Formats price as currency
    *
    * @param (number) price - Price value
@@ -206,8 +201,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get Payment Method Text
-   *
+   * GetPaymentMethodText
+   * 
    * Formats payment method for display
    *
    * @param (string) method - Payment method
@@ -218,8 +213,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get Total Items
-   *
+   * GetTotalItems
+   * 
    * Calculates total items in order
    *
    * @param (Order) order - Order object
@@ -230,8 +225,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Is Order Expandable
-   *
+   * IsOrderExpandable
+   * 
    * Checks if order has items to display
    *
    * @param (Order) order - Order object
@@ -242,8 +237,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Toggle Order Details
-   *
+   * ToggleOrderDetails
+   * 
    * Toggles order details visibility
    *
    * @param (string) orderId - Order ID
@@ -255,8 +250,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get Item Display Name
-   *
+   * GetItemDisplayName
+   * 
    * Formats item name as "Artist - Title"
    *
    * @param (OrderItem) item - Order item
@@ -271,8 +266,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get Album Image
-   *
+   * GetAlbumImage
+   * 
    * Gets album image URL with fallback
    *
    * @param (OrderItem) item - Order item

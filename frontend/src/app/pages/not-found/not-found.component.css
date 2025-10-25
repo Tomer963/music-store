@@ -1,5 +1,3 @@
-/* Uses shared: .btn, .btn-primary, .btn-outline */
-
 .not-found-page {
   min-height: calc(100vh - 120px);
   background-color: #f5f5f5;
@@ -82,6 +80,7 @@
   position: relative;
 }
 
+/* Record texture overlay */
 .record::before {
   content: "";
   position: absolute;
@@ -117,6 +116,7 @@
   z-index: 2;
 }
 
+/* Center hole */
 .record-label::before {
   content: "";
   position: absolute;
@@ -156,17 +156,6 @@
   }
   to {
     transform: rotate(360deg);
-  }
-}
-
-/* Floating animation for decorative elements */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
   }
 }
 
@@ -616,7 +605,7 @@
   }
 }
 
-/* Accessibility improvements */
+/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   .record {
     animation: none;
@@ -631,7 +620,7 @@
   }
 }
 
-/* High contrast mode support */
+/* High Contrast Mode */
 @media (prefers-contrast: high) {
   .not-found-content {
     border: 2px solid var(--secondary-color);

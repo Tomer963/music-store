@@ -1,19 +1,10 @@
-/* Uses shared: .loading-container, .page-container, .title-wrapper, .page-title, .btn-primary */
-
 .my-account-page {
   min-height: calc(100vh - 200px);
   background-color: var(--background-color);
   padding: 40px 0;
 }
 
-/* Desktop Styles - Full Screen */
-@media (min-width: 1024px) {
-  .my-account-page {
-    padding: 40px 0;
-  }
-}
-
-/* Container uses shared .page-container styles */
+/* Container Responsive Padding */
 .container {
   max-width: 100%;
   margin: 0 auto;
@@ -21,7 +12,6 @@
   width: 100%;
 }
 
-/* Extra Large Screens */
 @media (min-width: 1600px) {
   .container {
     padding: 0 256px;
@@ -64,7 +54,7 @@
   }
 }
 
-/* ✅ SYNCHRONIZED TITLE WRAPPER - matches home page new-products-title */
+/* Title Section */
 .title-wrapper {
   background-color: var(--white);
   padding: 8px 12px;
@@ -82,7 +72,7 @@
   display: block;
 }
 
-/* Tabs */
+/* Tabs Navigation */
 .account-tabs {
   display: flex;
   gap: 0;
@@ -118,7 +108,7 @@
   border-right: 1px solid var(--gray-light);
 }
 
-/* Content */
+/* Content Container */
 .tab-content {
   background-color: var(--white);
   border-radius: var(--radius-md);
@@ -126,7 +116,7 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* Info Grid */
+/* Info Grid Layout */
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -169,7 +159,7 @@
   color: var(--secondary-color);
 }
 
-/* Orders */
+/* Empty Orders State */
 .no-orders {
   text-align: center;
   padding: var(--spacing-xxl) 0;
@@ -191,6 +181,7 @@
   margin-bottom: var(--spacing-xl);
 }
 
+/* Orders List */
 .orders-list {
   display: flex;
   flex-direction: column;
@@ -254,6 +245,7 @@
   display: inline-block;
 }
 
+/* Order Details Expandable Section */
 .order-details {
   max-height: 0;
   overflow: hidden;
@@ -270,7 +262,7 @@
   border-top: 1px solid var(--gray-light);
 }
 
-/* Common Elements */
+/* Section Titles */
 .section-subtitle {
   font-size: 1rem;
   color: var(--secondary-color);
@@ -278,6 +270,7 @@
   font-weight: 600;
 }
 
+/* Detail Rows */
 .detail-row {
   display: flex;
   gap: var(--spacing-sm);
@@ -358,43 +351,50 @@
 
 /* Billing Details */
 .billing-details p {
-  margin: 0;
-  margin-bottom: var(--spacing-xs);
+  margin: 0 0 var(--spacing-xs) 0;
   color: var(--secondary-color);
 }
 
-/* Responsive */
+/* Tablet & Mobile Responsive */
 @media (max-width: 768px) {
   .info-grid {
     grid-template-columns: 1fr;
   }
+  
   .account-tabs {
     flex-direction: column;
   }
+  
   .tab-button:not(:last-child) {
     border-right: none;
     border-bottom: 1px solid var(--gray-light);
   }
+  
   .order-header {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--spacing-md);
   }
+  
   .order-summary {
     margin-left: 0;
     margin-right: 0;
   }
+  
   .page-title {
     font-size: 1.25rem;
   }
+  
   .item-row {
     flex-direction: column;
     align-items: flex-start;
   }
+  
   .item-image {
     width: 80px;
     height: 80px;
   }
+  
   .item-details {
     width: 100%;
     justify-content: space-between;
@@ -405,23 +405,28 @@
   .tab-content {
     padding: var(--spacing-md);
   }
+  
   .page-title {
     font-size: 1.125rem;
   }
+  
   .order-summary {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--spacing-sm);
   }
+  
   .item-image {
     width: 60px;
     height: 60px;
   }
+  
   .item-details {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--spacing-xs);
   }
+  
   .item-total {
     text-align: left;
   }

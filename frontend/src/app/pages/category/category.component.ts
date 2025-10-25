@@ -54,7 +54,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Component
-   * 
+   *
    * Sets up subscriptions and loads category data
    *
    * @return void
@@ -67,7 +67,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Cleanup Component
-   * 
+   *
    * Unsubscribes from all observables
    *
    * @return void
@@ -79,7 +79,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Wishlist
-   * 
+   *
    * Sets up wishlist subscriptions
    *
    * @return void
@@ -95,7 +95,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Subscribe To Loading States
-   * 
+   *
    * Tracks loading states for wishlist operations
    *
    * @return void
@@ -113,7 +113,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Route Params
-   * 
+   *
    * Subscribes to route params and reloads on category change
    *
    * @return void
@@ -133,7 +133,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Reset State
-   * 
+   *
    * Resets component state for new category
    *
    * @return void
@@ -147,7 +147,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Load Category Data
-   * 
+   *
    * Loads category info and albums in parallel
    *
    * @return void
@@ -177,7 +177,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Load Albums
-   * 
+   *
    * Fetches albums for current page
    *
    * @return void
@@ -198,7 +198,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Handle Albums Response
-   * 
+   *
    * Processes albums response and updates state
    *
    * @param (any) response - API response
@@ -221,7 +221,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Handle Albums Error
-   * 
+   *
    * Handles album loading errors
    *
    * @return void
@@ -235,7 +235,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * On Window Scroll
-   * 
+   *
    * Handles infinite scroll for loading more albums
    *
    * @return void
@@ -255,7 +255,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Load More Albums
-   * 
+   *
    * Loads next page for infinite scroll
    *
    * @return void
@@ -271,7 +271,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * View Album From Card
-   * 
+   *
    * Navigates to album detail when clicking on card
    *
    * @param (Event) event - Click event
@@ -295,7 +295,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * View Album
-   * 
+   *
    * Navigates to album detail when clicking info button
    *
    * @param (Event) event - Click event
@@ -310,7 +310,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Add To Cart
-   * 
+   *
    * Adds album to cart with loading state
    *
    * @param (Event) event - Click event
@@ -341,7 +341,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Add To Wishlist Link
-   * 
+   *
    * Toggles wishlist via link
    *
    * @param (Event) event - Click event
@@ -356,7 +356,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Add To Compare
-   * 
+   *
    * Placeholder for compare feature
    *
    * @param (Event) event - Click event
@@ -370,7 +370,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Is In Wishlist
-   * 
+   *
    * Checks if album is in wishlist
    *
    * @param (string) albumId - Album ID
@@ -382,7 +382,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Get Main Image URL
-   * 
+   *
    * Gets primary image URL with fallback
    *
    * @param (Album) album - Album object
@@ -394,7 +394,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Format Price
-   * 
+   *
    * Formats price as currency
    *
    * @param (number) price - Price value
@@ -406,7 +406,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Get Truncated Description
-   * 
+   *
    * Smart truncation that respects word boundaries
    *
    * @param (string) description - Full description text
@@ -437,7 +437,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Go Home
-   * 
+   *
    * Navigates to home page
    *
    * @return void
@@ -448,7 +448,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   /**
    * Track By Album
-   * 
+   *
    * TrackBy function for ngFor performance
    *
    * @param (number) index - Item index

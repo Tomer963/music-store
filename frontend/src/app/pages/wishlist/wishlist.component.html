@@ -1,8 +1,5 @@
-<!-- Empty state - without layout wrapper -->
-<div
-  class="wishlist-page-standalone"
-  *ngIf="!isLoading && wishlistItems.length === 0"
->
+<!-- Empty State -->
+<div class="wishlist-page-standalone" *ngIf="!isLoading && wishlistItems.length === 0">
   <div class="empty-wishlist">
     <div class="empty-icon">❤️</div>
     <h2>Your wishlist is empty</h2>
@@ -11,7 +8,7 @@
   </div>
 </div>
 
-<!-- Full layout with sidebar - only when there are items -->
+<!-- Wishlist with Items -->
 <app-content-layout *ngIf="!isLoading && wishlistItems.length > 0">
   <div breadcrumb>
     <a routerLink="/" class="breadcrumb-link">Home</a>
@@ -29,10 +26,7 @@
           </h1>
         </section>
 
-        <section
-          class="items-section"
-          [class.no-scroll]="wishlistItems.length <= 3"
-        >
+        <section class="items-section" [class.no-scroll]="wishlistItems.length <= 3">
           <div class="items-grid">
             <div
               *ngFor="let album of wishlistItems; trackBy: trackByAlbum"
@@ -64,10 +58,7 @@
                       </p>
                       <p
                         class="original-price"
-                        *ngIf="
-                          album.originalPrice &&
-                          album.originalPrice > album.price
-                        "
+                        *ngIf="album.originalPrice && album.originalPrice > album.price"
                       >
                         {{ formatPrice(album.originalPrice) }}
                       </p>
@@ -103,11 +94,7 @@
 
                       <button
                         class="album-icon-btn info-btn"
-                        (click)="
-                          viewAlbumInfo($event, album._id);
-                          $event.stopPropagation();
-                          $event.preventDefault()
-                        "
+                        (click)="viewAlbumInfo($event, album._id); $event.stopPropagation(); $event.preventDefault()"
                         title="View Details"
                       >
                         <span class="album-info-icon">ℹ</span>
@@ -120,7 +107,6 @@
           </div>
         </section>
 
-        <!-- End message with same styling as home page -->
         <div class="no-more-plain" *ngIf="wishlistItems.length > 0">
           You've reached the end!
         </div>
@@ -129,7 +115,7 @@
   </div>
 </app-content-layout>
 
-<!-- Loading state - standalone -->
+<!-- Loading State -->
 <div class="wishlist-page-standalone" *ngIf="isLoading">
   <div class="loading-container">
     <app-spinner></app-spinner>

@@ -34,8 +34,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * Ng On Init
-   *
+   * NgOnInit
+   * 
    * Initializes component and loads wishlist
    *
    * @return void
@@ -61,14 +61,14 @@ export class WishlistComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((loading) => (this.isLoading = loading));
 
-    // Force refresh
+    // Force refresh wishlist data
     this.wishlistService.refreshWishlist();
   }
 
   /**
-   * Ng On Destroy
-   *
-   * Cleans up subscriptions
+   * NgOnDestroy
+   * 
+   * Cleans up subscriptions to prevent memory leaks
    *
    * @return void
    */
@@ -78,16 +78,16 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * View Album
-   *
-   * Navigates to album detail page (called when clicking on card)
+   * ViewAlbum
+   * 
+   * Navigates to album detail page when clicking on card
    *
    * @param (Event) event - Click event
    * @param (string) albumId - Album ID
    * @return void
    */
   viewAlbum(event: Event, albumId: string): void {
-    // Check if the click came from a button
+    // Check if click came from a button to prevent navigation
     const target = event.target as HTMLElement;
     if (target.closest(".album-icon-btn") || target.closest("button")) {
       return;
@@ -97,9 +97,9 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * View Album Info
-   *
-   * Navigates to album detail page (called when clicking info button)
+   * ViewAlbumInfo
+   * 
+   * Navigates to album detail page when clicking info button
    *
    * @param (Event) event - Click event
    * @param (string) albumId - Album ID
@@ -112,8 +112,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Add To Cart
-   *
+   * AddToCart
+   * 
    * Adds album to cart from wishlist
    *
    * @param (Event) event - Click event
@@ -126,8 +126,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Toggle Wishlist
-   *
+   * ToggleWishlist
+   * 
    * Removes album from wishlist
    *
    * @param (Event) event - Click event
@@ -141,8 +141,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get Main Image URL
-   *
+   * GetMainImageUrl
+   * 
    * Gets primary image URL with fallback
    *
    * @param (Album) album - Album object
@@ -153,8 +153,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Format Price
-   *
+   * FormatPrice
+   * 
    * Formats price as currency string
    *
    * @param (number) price - Price value
@@ -165,8 +165,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get Truncated Description
-   *
+   * GetTruncatedDescription
+   * 
    * Smart truncation that respects word boundaries
    *
    * @param (string) description - Full description text
@@ -175,15 +175,17 @@ export class WishlistComponent implements OnInit, OnDestroy {
   getTruncatedDescription(description: string): string {
     if (!description) return "";
 
-    const maxLength = 85; // ~2 lines
+    const maxLength = 85; // Approximately 2 lines
 
     if (description.length <= maxLength) {
       return description;
     }
 
+    // Truncate at max length
     let truncated = description.substring(0, maxLength);
+    
+    // Find last space to avoid cutting words
     const lastSpace = truncated.lastIndexOf(" ");
-
     if (lastSpace > 0) {
       truncated = truncated.substring(0, lastSpace);
     }
@@ -195,9 +197,9 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Track By Album
-   *
-   * TrackBy function for ngFor performance
+   * TrackByAlbum
+   * 
+   * TrackBy function for ngFor performance optimization
    *
    * @param (number) index - Item index
    * @param (Album) album - Album object
