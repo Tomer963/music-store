@@ -53,7 +53,6 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.mainImageUrl = this.albumService.getMainImageUrl(this.album);
 
-    // Subscribe to wishlist status
     this.wishlistService
       .isInWishlist(this.album._id)
       .pipe(takeUntil(this.destroy$))
@@ -70,44 +69,23 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  /**
-   * Should Hide Content
-   *
-   * Determines if content should be hidden based on index
-   *
-   * @return True if content should be hidden
-   */
   shouldHideContent(): boolean {
     return this.albumIndex !== undefined && this.albumIndex > 10;
   }
 
-  /**
-   * Should Prevent Image Click
-   *
-   * Checks if image click should be prevented
-   *
-   * @return True if click should be prevented
-   */
   shouldPreventImageClick(): boolean {
     return false;
   }
 
-  /**
-   * Handle Image Click
-   *
-   * Handles click on album image
-   *
-   * @param event - Click event
-   * @return void
-   */
   handleImageClick(event: Event): void {
-    // Don't navigate if clicking buttons
     const target = event.target as HTMLElement;
     if (
       target.closest(".overlay-icon-btn") ||
       target.closest(".center-icon-btn") ||
       target.closest(".cart-counter") ||
-      target.closest(".overlay-cart-counter")
+      target.closest(".overlay-cart-counter") ||
+      target.closest(".red-overlay-icon-btn") ||
+      target.closest(".red-overlay-cart-counter")
     ) {
       return;
     }
@@ -115,13 +93,6 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     this.viewAlbum(event);
   }
 
-  /**
-   * Check Cart Status
-   *
-   * Monitors cart changes and updates local state
-   *
-   * @return void
-   */
   private checkCartStatus(): void {
     this.cartService.cart$.pipe(takeUntil(this.destroy$)).subscribe((cart) => {
       const cartItem = cart.items.find(
@@ -130,6 +101,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
       if (cartItem) {
         this.cartQuantity = cartItem.quantity;
         this.cartItemId = cartItem._id;
+        this.showCartCounter = true;
       } else {
         this.cartQuantity = 1;
         this.cartItemId = null;
@@ -138,14 +110,6 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * View Album
-   *
-   * Navigates to album detail page
-   *
-   * @param event - Click event
-   * @return void
-   */
   viewAlbum(event: Event): void {
     event.stopPropagation();
     if (this.showCartCounter) return;
@@ -156,26 +120,17 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
       .finally(() => (this.isInfoLoading = false));
   }
 
-  /**
-   * Add To Cart
-   *
-   * Adds album to cart
-   *
-   * @param event - Click event
-   * @return void
-   */
   addToCart(event: Event): void {
     event.stopPropagation();
-    if (this.hasRedBackground || this.isCartLoading || !this.album.inStock)
+    if (this.isCartLoading || !this.album.inStock || this.isAddingToCart)
       return;
 
     this.isAddingToCart = true;
+    this.isCartLoading = true;
 
-    // Show counter for hover cards
-    if (this.showHover || this.hasBlackBackground) {
+    if (this.showHover || this.hasBlackBackground || this.hasRedBackground) {
       this.showCartCounter = true;
       this.cartQuantity = 1;
-      this.isCartLoading = true;
 
       this.cartService.addToCart(this.album._id, 1).subscribe({
         next: (response) => {
@@ -192,8 +147,6 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Regular add to cart
-    this.isCartLoading = true;
     this.cartService.addToCart(this.album._id, 1).subscribe({
       next: () => {
         this.isCartLoading = false;
@@ -206,14 +159,6 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Increment Cart
-   *
-   * Increases cart quantity by 1
-   *
-   * @param event - Click event
-   * @return void
-   */
   incrementCart(event: Event): void {
     event.stopPropagation();
     if (this.isUpdatingCart || this.cartQuantity >= this.album.stock) return;
@@ -241,14 +186,6 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Decrement Cart
-   *
-   * Removes item from cart
-   *
-   * @param event - Click event
-   * @return void
-   */
   decrementCart(event: Event): void {
     event.stopPropagation();
     if (this.isUpdatingCart) return;
@@ -272,14 +209,6 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Toggle Wishlist
-   *
-   * Adds or removes album from wishlist
-   *
-   * @param event - Click event
-   * @return void
-   */
   toggleWishlist(event: Event): void {
     event.stopPropagation();
     if (this.isWishlistLoading) return;
@@ -291,37 +220,16 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Get Formatted Price
-   *
-   * Formats album price for display
-   *
-   * @return Formatted price
-   */
   getFormattedPrice(): string {
     return this.albumService.formatPrice(this.album.price);
   }
 
-  /**
-   * Format Original Price
-   *
-   * Formats original price for display
-   *
-   * @return Formatted original price
-   */
   formatOriginalPrice(): string {
     return this.album.originalPrice
       ? this.albumService.formatPrice(this.album.originalPrice)
       : "";
   }
 
-  /**
-   * Get Truncated Description
-   *
-   * Returns truncated description
-   *
-   * @return Truncated description
-   */
   getTruncatedDescription(): string {
     const maxLength = 100;
     return this.album.description.length <= maxLength

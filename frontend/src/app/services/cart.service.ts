@@ -28,25 +28,11 @@ export class CartService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  /**
-   * Initialize Cart
-   *
-   * Restores cart from session or user account
-   *
-   * @return void
-   */
   initializeCart(): void {
     this.sessionId = this.getOrCreateSessionId();
     this.loadCart();
   }
 
-  /**
-   * Refresh Cart
-   *
-   * Reloads cart and merges guest cart with user cart after login
-   *
-   * @return Refreshed cart data
-   */
   refreshCart(): Observable<Cart> {
     const isAuth = this.authService.isAuthenticated();
 
@@ -54,7 +40,6 @@ export class CartService {
       tap((cart) => {
         this.cartSubject.next(cart);
 
-        // Clear session ID after merge for authenticated users
         if (isAuth && this.sessionId) {
           this.sessionId = null;
           localStorage.removeItem(environment.sessionIdKey);
@@ -63,13 +48,6 @@ export class CartService {
     );
   }
 
-  /**
-   * Get Cart
-   *
-   * Fetches current cart from server
-   *
-   * @return Cart data
-   */
   getCart(): Observable<Cart> {
     return this.http
       .get<ApiResponse<Cart>>(this.apiUrl, {
@@ -85,15 +63,6 @@ export class CartService {
       );
   }
 
-  /**
-   * Add To Cart
-   *
-   * Adds item to cart or increases quantity
-   *
-   * @param albumId - Album ID to add
-   * @param quantity - Quantity to add
-   * @return Response with sessionId for guests
-   */
   addToCart(albumId: string, quantity = 1): Observable<CartResponse> {
     const request: AddToCartRequest = { albumId, quantity };
 
@@ -104,7 +73,6 @@ export class CartService {
       .pipe(
         map((response) => response.data!),
         tap((response) => {
-          // Store session ID for guest users
           if (response.sessionId && !this.authService.isAuthenticated()) {
             this.setSessionId(response.sessionId);
           }
@@ -114,15 +82,6 @@ export class CartService {
       );
   }
 
-  /**
-   * Update Cart Item
-   *
-   * Updates quantity of existing cart item
-   *
-   * @param itemId - Cart item ID
-   * @param quantity - New quantity
-   * @return Updated cart item
-   */
   updateCartItem(itemId: string, quantity: number): Observable<CartItem> {
     const request: UpdateCartItemRequest = { quantity };
 
@@ -137,14 +96,6 @@ export class CartService {
       );
   }
 
-  /**
-   * Remove From Cart
-   *
-   * Removes item completely from cart
-   *
-   * @param itemId - Cart item ID to remove
-   * @return void
-   */
   removeFromCart(itemId: string): Observable<void> {
     return this.http
       .delete<ApiResponse<void>>(`${this.apiUrl}/items/${itemId}`, {
@@ -157,13 +108,6 @@ export class CartService {
       );
   }
 
-  /**
-   * Clear Cart
-   *
-   * Removes all items from cart
-   *
-   * @return void
-   */
   clearCart(): Observable<void> {
     return this.http
       .delete<ApiResponse<void>>(this.apiUrl, {
@@ -176,59 +120,24 @@ export class CartService {
       );
   }
 
-  /**
-   * Get Item Count
-   *
-   * Returns total items in cart
-   *
-   * @return Total item count
-   */
   getItemCount(): number {
     return this.cartSubject.value.itemCount;
   }
 
-  /**
-   * Get Total
-   *
-   * Returns cart total price
-   *
-   * @return Total price
-   */
   getTotal(): number {
     return this.cartSubject.value.total;
   }
 
-  /**
-   * Get Session ID
-   *
-   * Returns current session ID for guest users
-   *
-   * @return Session ID or null
-   */
   getSessionId(): string | null {
     return this.sessionId;
   }
 
-  /**
-   * Clear Session
-   *
-   * Clears cart for guest users on logout
-   *
-   * @return void
-   */
   clearSession(): void {
     if (!this.authService.isAuthenticated()) {
       this.cartSubject.next({ items: [], itemCount: 0, total: 0 });
     }
   }
 
-  /**
-   * Load Cart
-   *
-   * Internal method to fetch and update cart state
-   *
-   * @return void
-   */
   private loadCart(): void {
     this.getCart().subscribe({
       next: (cart) => {
@@ -240,13 +149,6 @@ export class CartService {
     });
   }
 
-  /**
-   * Get Or Create Session ID
-   *
-   * Retrieves existing session ID or creates new one
-   *
-   * @return Session ID
-   */
   private getOrCreateSessionId(): string {
     let sessionId = localStorage.getItem(environment.sessionIdKey);
 
@@ -259,37 +161,15 @@ export class CartService {
     return sessionId;
   }
 
-  /**
-   * Generate Session ID
-   *
-   * Creates unique session ID for guest users
-   *
-   * @return Generated session ID
-   */
   private generateSessionId(): string {
     return `sess_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  /**
-   * Set Session ID
-   *
-   * Stores session ID in memory and localStorage
-   *
-   * @param sessionId - Session ID to store
-   * @return void
-   */
   private setSessionId(sessionId: string): void {
     this.sessionId = sessionId;
     localStorage.setItem(environment.sessionIdKey, sessionId);
   }
 
-  /**
-   * Get Headers
-   *
-   * Creates HTTP headers with session ID
-   *
-   * @return Headers with session ID for cart merge
-   */
   private getHeaders(): HttpHeaders {
     let headers = new HttpHeaders({ "Content-Type": "application/json" });
 
@@ -300,14 +180,6 @@ export class CartService {
     return headers;
   }
 
-  /**
-   * Handle Error
-   *
-   * Centralized error handling
-   *
-   * @param error - Error object
-   * @return Error observable
-   */
   private handleError(error: any): Observable<never> {
     return throwError(() => error);
   }

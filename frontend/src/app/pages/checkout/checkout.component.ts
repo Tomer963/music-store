@@ -78,7 +78,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private cartService: CartService,
     private orderService: OrderService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -231,6 +231,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((values) => {
         this.billingInfo = { ...values };
+        
+        Object.keys(this.billingForm.controls).forEach((key) => {
+          const control = this.billingForm.get(key);
+          if (control && control.touched && !control.value) {
+            control.markAsUntouched();
+          }
+        });
+        
         this.saveFormData();
       });
 
@@ -245,9 +253,16 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     });
 
     this.setupPaymentValidators();
-    this.paymentForm.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.saveFormData());
+    this.paymentForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      Object.keys(this.paymentForm.controls).forEach((key) => {
+        const control = this.paymentForm.get(key);
+        if (control && control.touched && !control.value) {
+          control.markAsUntouched();
+        }
+      });
+      
+      this.saveFormData();
+    });
 
     this.setupExpiryListeners();
   }
@@ -304,7 +319,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       if (monthNum < this.CURRENT_MONTH) {
         this.years = Array.from(
           { length: 20 },
-          (_, i) => this.CURRENT_YEAR + 1 + i,
+          (_, i) => this.CURRENT_YEAR + 1 + i
         );
       } else {
         this.initializeYears();
@@ -319,7 +334,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       if (yearNum === this.CURRENT_YEAR && monthNum < this.CURRENT_MONTH) {
         this.paymentForm.patchValue(
           { expiryMonth: "", expiryYear: "" },
-          { emitEvent: false },
+          { emitEvent: false }
         );
 
         this.months = [...ALL_MONTHS];
@@ -337,7 +352,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         if (monthNum < this.CURRENT_MONTH) {
           this.years = Array.from(
             { length: 20 },
-            (_, i) => this.CURRENT_YEAR + 1 + i,
+            (_, i) => this.CURRENT_YEAR + 1 + i
           );
         } else {
           this.initializeYears();
@@ -394,19 +409,19 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       }
 
       controls.forEach((control) =>
-        this.paymentForm.get(control)?.updateValueAndValidity(),
+        this.paymentForm.get(control)?.updateValueAndValidity()
       );
     });
   }
 
   private addressValidator(
-    control: AbstractControl,
+    control: AbstractControl
   ): { [key: string]: boolean } | null {
     const value = control.value?.trim();
     if (!value) return null;
 
     const addressPattern = /^[\p{L}]{3,}[\p{L}\s]*\s+\d+/u;
-    
+
     if (!addressPattern.test(value)) {
       return { invalidAddress: true };
     }
@@ -415,7 +430,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   private cityValidator(
-    control: AbstractControl,
+    control: AbstractControl
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
@@ -423,7 +438,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   private zipCodeValidator(
-    control: AbstractControl,
+    control: AbstractControl
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
@@ -431,7 +446,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   private phoneValidator(
-    control: AbstractControl,
+    control: AbstractControl
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
@@ -439,7 +454,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   private cardholderNameValidator(
-    control: AbstractControl,
+    control: AbstractControl
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
@@ -457,7 +472,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   private cardTypeValidator(
-    control: AbstractControl,
+    control: AbstractControl
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value || value === "") return { invalidCardType: true };
@@ -465,7 +480,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   private cardNumberValidator(
-    control: AbstractControl,
+    control: AbstractControl
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
@@ -474,7 +489,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   private cvvValidator(
-    control: AbstractControl,
+    control: AbstractControl
   ): { [key: string]: boolean } | null {
     const value = control.value;
     if (!value) return null;
@@ -495,23 +510,22 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       };
       sessionStorage.setItem(
         this.CHECKOUT_STORAGE_KEY,
-        JSON.stringify(formData),
+        JSON.stringify(formData)
       );
       sessionStorage.setItem(
         this.CHECKOUT_STEP_KEY,
-        this.currentStep.toString(),
+        this.currentStep.toString()
       );
       sessionStorage.setItem(
         this.HIGHEST_STEP_KEY,
-        this.highestStepReached.toString(),
+        this.highestStepReached.toString()
       );
       sessionStorage.setItem(this.FORM_TIMESTAMP_KEY, Date.now().toString());
 
       if (this.currentUserId) {
         sessionStorage.setItem(this.CHECKOUT_USER_KEY, this.currentUserId);
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   private loadSavedFormData(): void {
@@ -596,7 +610,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     if (fieldName === "cardNumber" || fieldName === "cvv") {
       const numericValue = value.replace(/\D/g, "");
-      this.paymentForm.get(fieldName)?.setValue(numericValue, { emitEvent: false });
+      this.paymentForm
+        .get(fieldName)
+        ?.setValue(numericValue, { emitEvent: false });
       this.paymentForm.get(fieldName)?.markAsTouched();
       target.value = numericValue;
     } else {
@@ -705,7 +721,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         this.billingForm.get(key)?.markAsTouched();
         this.billingForm.get(key)?.updateValueAndValidity();
       });
-      
+
       Object.keys(this.paymentForm.controls).forEach((key) => {
         this.paymentForm.get(key)?.markAsTouched();
         this.paymentForm.get(key)?.updateValueAndValidity();
@@ -782,15 +798,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   shouldShowError(
     form: FormGroup,
     fieldName: string,
-    formSubmitted: boolean,
+    formSubmitted: boolean
   ): boolean {
     const control = form.get(fieldName);
     if (!control) return false;
-    
+
     if (!control.value && !control.touched && !formSubmitted) {
       return false;
     }
-    
+
     return control.invalid && (control.touched || formSubmitted);
   }
 
@@ -801,7 +817,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     if (control.errors["required"]) return "This is a required field";
 
     const errorMessages: { [key: string]: string } = {
-      address: "Address must start with a street name (at least 3 letters) followed by a space and a house number (e.g., 'Herzl 34', 'King George 5')",
+      address:
+        "Address must start with a street name (at least 3 letters) followed by a space and a house number (e.g., 'Herzl 34', 'King George 5')",
       city: "City must contain only letters in English and be at least 3 characters",
       zipCode: "Zip code must be 5 or 7 digits",
       phone: "Phone format: 03-6381414 or 050-1112222",
