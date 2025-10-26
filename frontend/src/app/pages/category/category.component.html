@@ -112,8 +112,7 @@
                 </div>
 
                 <div class="album-action-links">
-                  <a
-                    href="#"
+                  <span
                     class="action-link"
                     (click)="addToWishlistLink($event, album._id)"
                   >
@@ -122,14 +121,13 @@
                         ? "Remove from Wishlist"
                         : "Add to Wishlist"
                     }}
-                  </a>
-                  <a
-                    href="#"
+                  </span>
+                  <span
                     class="action-link compare-link"
                     (click)="addToCompare($event, album._id)"
                   >
                     Add to Compare
-                  </a>
+                  </span>
                 </div>
               </div>
             </div>
@@ -147,10 +145,7 @@
           <p>Loading more albums...</p>
         </div>
 
-        <div
-          class="no-more"
-          *ngIf="!hasMore && !isLoadingMore && albums.length >= 12"
-        >
+        <div class="no-more" *ngIf="shouldShowEndMessage()">
           <p>You've reached the end!</p>
         </div>
       </section>

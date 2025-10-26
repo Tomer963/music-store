@@ -52,38 +52,17 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef
   ) {}
 
-  /**
-   * Initialize Component
-   *
-   * Sets up subscriptions and loads category data
-   *
-   * @return void
-   */
   ngOnInit(): void {
     this.initializeWishlist();
     this.initializeRouteParams();
     this.subscribeToLoadingStates();
   }
 
-  /**
-   * Cleanup Component
-   *
-   * Unsubscribes from all observables
-   *
-   * @return void
-   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  /**
-   * Initialize Wishlist
-   *
-   * Sets up wishlist subscriptions
-   *
-   * @return void
-   */
   private initializeWishlist(): void {
     this.wishlistService.wishlistIds$
       .pipe(takeUntil(this.destroy$))
@@ -93,13 +72,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
       });
   }
 
-  /**
-   * Subscribe To Loading States
-   *
-   * Tracks loading states for wishlist operations
-   *
-   * @return void
-   */
   private subscribeToLoadingStates(): void {
     this.wishlistService.itemLoading$
       .pipe(takeUntil(this.destroy$))
@@ -111,13 +83,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
       });
   }
 
-  /**
-   * Initialize Route Params
-   *
-   * Subscribes to route params and reloads on category change
-   *
-   * @return void
-   */
   private initializeRouteParams(): void {
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.categoryId = params["id"];
@@ -131,13 +96,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Reset State
-   *
-   * Resets component state for new category
-   *
-   * @return void
-   */
   private resetState(): void {
     this.error = null;
     this.albums = [];
@@ -145,17 +103,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
     window.scrollTo(0, 0);
   }
 
-  /**
-   * Load Category Data
-   *
-   * Loads category info and albums in parallel
-   *
-   * @return void
-   */
   private loadCategoryData(): void {
     this.isLoading = true;
 
-    // Load category details
     this.categoryService
       .getCategory(this.categoryId)
       .pipe(takeUntil(this.destroy$))
@@ -171,17 +121,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
         },
       });
 
-    // Load albums
     this.loadAlbums();
   }
 
-  /**
-   * Load Albums
-   *
-   * Fetches albums for current page
-   *
-   * @return void
-   */
   private loadAlbums(): void {
     this.albumService
       .getAlbumsByCategory(
@@ -196,19 +138,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
       });
   }
 
-  /**
-   * Handle Albums Response
-   *
-   * Processes albums response and updates state
-   *
-   * @param (any) response - API response
-   * @return void
-   */
   private handleAlbumsResponse(response: any): void {
     const newAlbums = response.data?.results || [];
     const pagination = response.data?.pagination;
 
-    // Append or replace albums based on page
     this.albums =
       this.currentPage === 1 ? newAlbums : [...this.albums, ...newAlbums];
 
@@ -219,13 +152,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  /**
-   * Handle Albums Error
-   *
-   * Handles album loading errors
-   *
-   * @return void
-   */
   private handleAlbumsError(): void {
     this.error = "Failed to load albums. Please try again.";
     this.isLoading = false;
@@ -233,13 +159,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  /**
-   * On Window Scroll
-   *
-   * Handles infinite scroll for loading more albums
-   *
-   * @return void
-   */
   @HostListener("window:scroll", ["$event"])
   onWindowScroll(): void {
     if (this.isLoadingMore || !this.hasMore || this.isLoading) return;
@@ -247,19 +166,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
     const scrollPosition = window.pageYOffset + window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
 
-    // Trigger load when within 300px of bottom
     if (scrollPosition >= documentHeight - 300) {
       this.loadMoreAlbums();
     }
   }
 
-  /**
-   * Load More Albums
-   *
-   * Loads next page for infinite scroll
-   *
-   * @return void
-   */
   private loadMoreAlbums(): void {
     if (!this.hasMore || this.isLoadingMore) return;
 
@@ -269,17 +180,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.loadAlbums();
   }
 
-  /**
-   * View Album From Card
-   *
-   * Navigates to album detail when clicking on card
-   *
-   * @param (Event) event - Click event
-   * @param (string) albumId - Album ID
-   * @return void
-   */
   viewAlbumFromCard(event: Event, albumId: string): void {
-    // Check if click came from button or link
     const target = event.target as HTMLElement;
     if (
       target.closest(".album-icon-btn") ||
@@ -293,30 +194,12 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.router.navigate(["/album", albumId]);
   }
 
-  /**
-   * View Album
-   *
-   * Navigates to album detail when clicking info button
-   *
-   * @param (Event) event - Click event
-   * @param (string) albumId - Album ID
-   * @return void
-   */
   viewAlbum(event: Event, albumId: string): void {
     event.stopPropagation();
     event.preventDefault();
     this.router.navigate(["/album", albumId]);
   }
 
-  /**
-   * Add To Cart
-   *
-   * Adds album to cart with loading state
-   *
-   * @param (Event) event - Click event
-   * @param (string) albumId - Album ID
-   * @return void
-   */
   addToCart(event: Event, albumId: string): void {
     event.stopPropagation();
     event.preventDefault();
@@ -339,89 +222,38 @@ export class CategoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Add To Wishlist Link
-   *
-   * Toggles wishlist via link
-   *
-   * @param (Event) event - Click event
-   * @param (string) albumId - Album ID
-   * @return void
-   */
   addToWishlistLink(event: Event, albumId: string): void {
     event.preventDefault();
     event.stopPropagation();
     this.wishlistService.toggleWishlist(albumId).subscribe();
   }
 
-  /**
-   * Add To Compare
-   *
-   * Placeholder for compare feature
-   *
-   * @param (Event) event - Click event
-   * @param (string) albumId - Album ID
-   * @return void
-   */
   addToCompare(event: Event, albumId: string): void {
     event.preventDefault();
     event.stopPropagation();
   }
 
-  /**
-   * Is In Wishlist
-   *
-   * Checks if album is in wishlist
-   *
-   * @param (string) albumId - Album ID
-   * @return boolean True if in wishlist
-   */
   isInWishlist(albumId: string): boolean {
     return this.wishlistIds.has(albumId);
   }
 
-  /**
-   * Get Main Image URL
-   *
-   * Gets primary image URL with fallback
-   *
-   * @param (Album) album - Album object
-   * @return string Image URL
-   */
   getMainImageUrl(album: Album): string {
     return this.albumService.getMainImageUrl(album);
   }
 
-  /**
-   * Format Price
-   *
-   * Formats price as currency
-   *
-   * @param (number) price - Price value
-   * @return string Formatted price
-   */
   formatPrice(price: number): string {
     return this.albumService.formatPrice(price);
   }
 
-  /**
-   * Get Truncated Description
-   *
-   * Smart truncation that respects word boundaries
-   *
-   * @param (string) description - Full description text
-   * @return string Truncated description with ellipsis if needed
-   */
   getTruncatedDescription(description: string): string {
     if (!description) return "";
 
-    const maxLength = 85; // Approx 2 lines
+    const maxLength = 85;
 
     if (description.length <= maxLength) {
       return description;
     }
 
-    // Find last complete word before limit
     let truncated = description.substring(0, maxLength);
     const lastSpace = truncated.lastIndexOf(" ");
 
@@ -429,33 +261,20 @@ export class CategoryComponent implements OnInit, OnDestroy {
       truncated = truncated.substring(0, lastSpace);
     }
 
-    // Remove trailing punctuation
     truncated = truncated.replace(/[.,;:!?-]+$/, "");
 
     return truncated + "...";
   }
 
-  /**
-   * Go Home
-   *
-   * Navigates to home page
-   *
-   * @return void
-   */
   goHome(): void {
     this.router.navigate(["/"]);
   }
 
-  /**
-   * Track By Album
-   *
-   * TrackBy function for ngFor performance
-   *
-   * @param (number) index - Item index
-   * @param (Album) album - Album object
-   * @return string Unique ID
-   */
   trackByAlbum(index: number, album: Album): string {
     return album._id;
+  }
+
+  shouldShowEndMessage(): boolean {
+    return !this.hasMore && !this.isLoadingMore && this.albums.length > 0;
   }
 }
