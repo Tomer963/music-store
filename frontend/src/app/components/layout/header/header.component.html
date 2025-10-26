@@ -84,7 +84,7 @@
           <a routerLink="/login" (click)="closeMenu()">Log In</a>
         </li>
         <li *ngIf="currentUser">
-          <a href="#" (click)="logout(); $event.preventDefault()">Logout</a>
+          <a href="#" (click)="logout(); closeMenu(); $event.preventDefault()">Logout</a>
         </li>
       </ul>
     </div>

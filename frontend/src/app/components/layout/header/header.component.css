@@ -77,7 +77,7 @@
   display: flex;
   align-items: center;
   height: 100%;
-  margin-left: -40px; // Alignment adjustment
+  margin-left: -40px; /* Alignment adjustment */
   margin-right: auto;
 }
 
@@ -206,7 +206,7 @@
 .mobile-menu {
   position: fixed;
   top: 0;
-  right: -300px; // Hidden by default
+  right: -300px; /* Hidden by default */
   width: 300px;
   height: 100vh;
   background-color: var(--white);

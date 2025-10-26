@@ -78,7 +78,7 @@ body {
 }
 
 body {
-  overflow-x: hidden; // Prevent horizontal scroll
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 /* ========================================

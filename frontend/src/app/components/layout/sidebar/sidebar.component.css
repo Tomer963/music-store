@@ -86,7 +86,7 @@
   position: relative;
   flex: 1;
   overflow: hidden;
-  width: calc(100% + 32px); // Full width with negative margins
+  width: calc(100% + 32px); /* Full width with negative margins */
   display: flex;
   flex-direction: column;
   min-height: 0;
