@@ -175,22 +175,19 @@ export class WishlistComponent implements OnInit, OnDestroy {
   getTruncatedDescription(description: string): string {
     if (!description) return "";
 
-    const maxLength = 85; // Approximately 2 lines
+    const maxLength = 85;
 
     if (description.length <= maxLength) {
       return description;
     }
 
-    // Truncate at max length
     let truncated = description.substring(0, maxLength);
     
-    // Find last space to avoid cutting words
     const lastSpace = truncated.lastIndexOf(" ");
     if (lastSpace > 0) {
       truncated = truncated.substring(0, lastSpace);
     }
 
-    // Remove trailing punctuation
     truncated = truncated.replace(/[.,;:!?-]+$/, "");
 
     return truncated + "...";

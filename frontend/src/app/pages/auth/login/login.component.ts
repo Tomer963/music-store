@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   /**
-   * ngOnInit
+   * NgOnInit
    *
    * Initialize component and setup login form with return URL
    *
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * initializeForm
+   * InitializeForm
    *
    * Initialize login form with email and password validators
    *
@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * passwordValidator
+   * PasswordValidator
    *
    * Custom validator for password format (min 6 chars with uppercase)
    *
@@ -102,7 +102,7 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * onLogin
+   * OnLogin
    *
    * Handle login form submission and redirect on success
    *
@@ -167,7 +167,7 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * onRegisterSuccess
+   * OnRegisterSuccess
    *
    * Handle successful registration - auto-login or fill email field
    *

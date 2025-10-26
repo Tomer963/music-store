@@ -239,161 +239,7 @@
   z-index: 1;
 }
 
-/* Extra Large Screens */
-@media (min-width: 1600px) {
-  .not-found-page {
-    padding: var(--spacing-xxl) 0;
-  }
-
-  .not-found-content {
-    padding: 60px;
-  }
-
-  .record {
-    width: 220px;
-    height: 220px;
-  }
-
-  .record-label {
-    width: 90px;
-    height: 90px;
-  }
-
-  .record-label span {
-    font-size: 2.75rem;
-  }
-
-  .error-title {
-    font-size: 2.75rem;
-  }
-
-  .error-description {
-    font-size: 1.25rem;
-  }
-
-  .illustration {
-    height: 280px;
-  }
-}
-
-/* Large Desktop */
-@media (min-width: 1400px) and (max-width: 1599px) {
-  .record {
-    width: 210px;
-    height: 210px;
-  }
-
-  .record-label {
-    width: 85px;
-    height: 85px;
-  }
-
-  .illustration {
-    height: 260px;
-  }
-}
-
-/* Medium Desktop */
-@media (min-width: 1200px) and (max-width: 1399px) {
-  .not-found-content {
-    padding: var(--spacing-xl);
-  }
-
-  .record {
-    width: 190px;
-    height: 190px;
-  }
-
-  .record-label {
-    width: 75px;
-    height: 75px;
-  }
-
-  .record-label span {
-    font-size: 2.25rem;
-  }
-
-  .error-title {
-    font-size: 2.25rem;
-  }
-
-  .illustration {
-    height: 240px;
-  }
-}
-
-/* Small Desktop */
-@media (min-width: 992px) and (max-width: 1199px) {
-  .not-found-content {
-    padding: var(--spacing-xl);
-  }
-
-  .record {
-    width: 180px;
-    height: 180px;
-  }
-
-  .record-label {
-    width: 70px;
-    height: 70px;
-  }
-
-  .record-label span {
-    font-size: 2.125rem;
-  }
-
-  .error-title {
-    font-size: 2.125rem;
-  }
-
-  .illustration {
-    height: 230px;
-  }
-}
-
-/* Tablet */
-@media (max-width: 991px) {
-  .not-found-page {
-    min-height: calc(100vh - 100px);
-    padding: var(--spacing-lg) 0;
-  }
-
-  .not-found-content {
-    padding: var(--spacing-xl);
-  }
-
-  .record {
-    width: 170px;
-    height: 170px;
-  }
-
-  .record-label {
-    width: 68px;
-    height: 68px;
-  }
-
-  .record-label span {
-    font-size: 2rem;
-  }
-
-  .error-title {
-    font-size: 2rem;
-  }
-
-  .error-description {
-    font-size: 1.0625rem;
-  }
-
-  .illustration {
-    height: 220px;
-  }
-
-  .btn {
-    padding: 12px 24px;
-  }
-}
-
-/* Mobile Large */
+/* Responsive Design */
 @media (max-width: 768px) {
   .not-found-page {
     min-height: calc(100vh - 80px);
@@ -436,12 +282,7 @@
   }
 }
 
-/* Mobile Medium */
 @media (max-width: 576px) {
-  .not-found-page {
-    padding: var(--spacing-sm) 0;
-  }
-
   .container {
     padding: 0 var(--spacing-sm);
   }
@@ -499,20 +340,9 @@
   }
 }
 
-/* Mobile Small */
 @media (max-width: 429px) {
-  .not-found-page {
-    padding: var(--spacing-xs) 0;
-    min-height: calc(100vh - 70px);
-  }
-
-  .container {
-    padding: 0 var(--spacing-xs);
-  }
-
   .not-found-content {
     padding: var(--spacing-sm);
-    border-radius: 0;
   }
 
   .record {
@@ -535,98 +365,18 @@
 
   .error-title {
     font-size: 1.25rem;
-    margin-bottom: 8px;
   }
 
   .error-description {
     font-size: 0.875rem;
-    line-height: 1.5;
   }
 
   .illustration {
     height: 150px;
-    margin-bottom: var(--spacing-sm);
-  }
-
-  .error-message {
-    margin-bottom: var(--spacing-sm);
-  }
-
-  .action-buttons {
-    gap: 8px;
-    margin-top: var(--spacing-sm);
   }
 
   .btn {
     padding: 8px 16px;
     font-size: 0.875rem;
-  }
-
-  .icon {
-    font-size: 1rem;
-  }
-}
-
-/* Extra Small Mobile */
-@media (max-width: 360px) {
-  .not-found-content {
-    padding: 12px;
-  }
-
-  .record {
-    width: 90px;
-    height: 90px;
-  }
-
-  .record-label {
-    width: 36px;
-    height: 36px;
-  }
-
-  .record-label span {
-    font-size: 1.125rem;
-  }
-
-  .error-title {
-    font-size: 1.125rem;
-  }
-
-  .error-description {
-    font-size: 0.813rem;
-  }
-
-  .illustration {
-    height: 140px;
-  }
-
-  .btn {
-    padding: 7px 14px;
-    font-size: 0.813rem;
-  }
-}
-
-/* Accessibility */
-@media (prefers-reduced-motion: reduce) {
-  .record {
-    animation: none;
-  }
-
-  .not-found-content {
-    animation: none;
-  }
-
-  .btn::before {
-    transition: none;
-  }
-}
-
-/* High Contrast Mode */
-@media (prefers-contrast: high) {
-  .not-found-content {
-    border: 2px solid var(--secondary-color);
-  }
-
-  .btn-outline {
-    border-width: 3px;
   }
 }

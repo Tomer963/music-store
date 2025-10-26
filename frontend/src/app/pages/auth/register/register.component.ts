@@ -76,7 +76,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * Setup Field Change Tracking
+   * SetupFieldChangeTracking
    *
    * Track field changes to remove errors when user starts typing
    *
@@ -103,7 +103,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * Email Validator
+   * EmailValidator
    *
    * Custom email validator supporting Hebrew and English characters
    *
@@ -121,7 +121,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * Password Match Validator
+   * PasswordMatchValidator
    *
    * Validate that password and confirm password match
    *
@@ -151,7 +151,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * Should Show Error
+   * ShouldShowError
    *
    * Determine if error should be displayed for a field
    *
@@ -169,7 +169,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * Close Modal
+   * CloseModal
    *
    * Close registration modal and reset form
    *
@@ -183,7 +183,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * Go To Login
+   * GoToLogin
    *
    * Navigate to login page and close modal
    *
@@ -198,7 +198,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * On Submit
+   * OnSubmit
    *
    * Handle registration form submission
    *
@@ -255,7 +255,7 @@ export class RegisterModalComponent {
   }
 
   /**
-   * Reset Form
+   * ResetForm
    *
    * Reset form to initial state and clear all flags
    *
