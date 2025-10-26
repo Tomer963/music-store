@@ -583,7 +583,63 @@
   border-radius: var(--radius-full);
 }
 
-/* Responsive Design */
+/* Tablet Responsive - Show controls always and adjust sizes */
+@media (min-width: 768px) and (max-width: 1199px) {
+  /* For albums 1-11: Always show overlay controls on tablet */
+  .text-overlay {
+    height: 110px;
+    padding: var(--spacing-md);
+    background: rgba(0, 0, 0, 0.85);
+  }
+
+  .overlay-static-content {
+    bottom: 58px;
+    top: auto;
+  }
+
+  .hover-content {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .red-background-overlay {
+    height: 70px;
+    padding: 12px var(--spacing-md);
+    background: rgba(0, 0, 0, 0.85);
+  }
+
+  .red-hover-content {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* Keep standard icon sizes for tablet - cards are bigger now */
+  .overlay-icon-btn,
+  .red-overlay-icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .overlay-icon-btn.info-icon span,
+  .red-overlay-icon-btn.info-icon span {
+    font-size: 26px;
+  }
+
+  .overlay-price,
+  .red-overlay-price {
+    font-size: 1.5rem;
+  }
+
+  .cart-icon-svg,
+  .red-cart-icon-svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .red-background-overlay,
   .text-overlay {

@@ -446,6 +446,11 @@
   .content-with-sidebar {
     gap: var(--spacing-md);
   }
+
+  /* Change albums grid to 2 columns for tablet */
+  .albums-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -515,6 +520,7 @@
     order: 4;
   }
 
+  /* Change albums grid to 2 columns for tablet */
   .albums-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -524,27 +530,6 @@
   }
   .album-content.red-background .album-artist-line.large-artist {
     font-size: 1.125rem;
-  }
-
-  .album-icon-btn.wishlist-btn,
-  .album-icon-btn.cart-btn,
-  .album-icon-btn.info-btn,
-  .album-icon-btn.out-of-stock {
-    width: 32px;
-    height: 32px;
-  }
-
-  .album-cart-icon {
-    width: 22px;
-    height: 22px;
-  }
-
-  .wishlist-heart-icon {
-    font-size: 22px;
-  }
-
-  .album-info-icon {
-    font-size: 18px;
   }
 
   .new-products-title h2 {
