@@ -35,7 +35,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * NgOnInit
-   * 
+   *
    * Initializes component and loads wishlist
    *
    * @return void
@@ -67,7 +67,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * NgOnDestroy
-   * 
+   *
    * Cleans up subscriptions to prevent memory leaks
    *
    * @return void
@@ -79,7 +79,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * ViewAlbum
-   * 
+   *
    * Navigates to album detail page when clicking on card
    *
    * @param (Event) event - Click event
@@ -98,7 +98,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * ViewAlbumInfo
-   * 
+   *
    * Navigates to album detail page when clicking info button
    *
    * @param (Event) event - Click event
@@ -113,7 +113,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * AddToCart
-   * 
+   *
    * Adds album to cart from wishlist
    *
    * @param (Event) event - Click event
@@ -127,7 +127,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * ToggleWishlist
-   * 
+   *
    * Removes album from wishlist
    *
    * @param (Event) event - Click event
@@ -142,7 +142,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * GetMainImageUrl
-   * 
+   *
    * Gets primary image URL with fallback
    *
    * @param (Album) album - Album object
@@ -154,7 +154,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * FormatPrice
-   * 
+   *
    * Formats price as currency string
    *
    * @param (number) price - Price value
@@ -166,7 +166,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * GetTruncatedDescription
-   * 
+   *
    * Smart truncation that respects word boundaries
    *
    * @param (string) description - Full description text
@@ -182,7 +182,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
     }
 
     let truncated = description.substring(0, maxLength);
-    
+
     const lastSpace = truncated.lastIndexOf(" ");
     if (lastSpace > 0) {
       truncated = truncated.substring(0, lastSpace);
@@ -195,7 +195,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   /**
    * TrackByAlbum
-   * 
+   *
    * TrackBy function for ngFor performance optimization
    *
    * @param (number) index - Item index

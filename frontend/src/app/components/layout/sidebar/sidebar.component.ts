@@ -30,7 +30,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Initialize Component
    * Loads categories and sets up route monitoring
-   * 
+   *
    * @return (void)
    */
   ngOnInit(): void {
@@ -42,7 +42,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Cleanup Component
    * Unsubscribes from observables
-   * 
+   *
    * @return (void)
    */
   ngOnDestroy(): void {
@@ -53,7 +53,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Load Categories
    * Loads categories from state service
-   * 
+   *
    * @return (void)
    */
   private loadCategories(): void {
@@ -96,7 +96,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Setup Route Listener
    * Monitors navigation events
-   * 
+   *
    * @return (void)
    */
   private setupRouteListener(): void {
@@ -111,7 +111,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Check Current Route
    * Updates component state based on route
-   * 
+   *
    * @return (void)
    */
   private checkCurrentRoute(): void {
@@ -143,7 +143,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Get Album Category
    * Fetches album's category for sidebar highlighting
-   * 
+   *
    * @param (string) albumId - Album ID
    * @return (void)
    */
@@ -162,7 +162,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Select Category
    * Navigates to category page
-   * 
+   *
    * @param (string) categoryId - Category ID
    * @return (void)
    */
@@ -173,7 +173,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Is Category Active
    * Checks if category is currently active
-   * 
+   *
    * @param (string) categoryId - Category ID
    * @return (boolean) True if active
    */
@@ -187,7 +187,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Get Sidebar Classes
    * Returns CSS classes based on current page
-   * 
+   *
    * @return (string) Space-separated class names
    */
   getSidebarClasses(): string {

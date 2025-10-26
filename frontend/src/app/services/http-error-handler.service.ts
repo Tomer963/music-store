@@ -16,7 +16,7 @@ export class HttpErrorHandlerService {
   /**
    * Handle Error
    * Centralized HTTP error handling
-   * 
+   *
    * @param (HttpErrorResponse) error - HTTP error response
    * @param (string) context - Context for logging
    * @return (Observable<never>) Error observable
@@ -35,7 +35,7 @@ export class HttpErrorHandlerService {
   /**
    * Get Error Message
    * Extracts user-friendly error message
-   * 
+   *
    * @param (HttpErrorResponse) error - HTTP error response
    * @return (string) Error message
    */
@@ -76,7 +76,7 @@ export class HttpErrorHandlerService {
   /**
    * Get Errors
    * Extracts validation errors array
-   * 
+   *
    * @param (HttpErrorResponse) error - HTTP error response
    * @return (string[] | undefined) Array of error messages
    */
@@ -90,7 +90,7 @@ export class HttpErrorHandlerService {
   /**
    * Is Client Error
    * Checks if error is client-side
-   * 
+   *
    * @param (ApiError) error - API error
    * @return (boolean) True if client error
    */
@@ -101,7 +101,7 @@ export class HttpErrorHandlerService {
   /**
    * Is Server Error
    * Checks if error is server-side
-   * 
+   *
    * @param (ApiError) error - API error
    * @return (boolean) True if server error
    */
@@ -112,7 +112,7 @@ export class HttpErrorHandlerService {
   /**
    * Is Network Error
    * Checks if error is network error
-   * 
+   *
    * @param (ApiError) error - API error
    * @return (boolean) True if network error
    */

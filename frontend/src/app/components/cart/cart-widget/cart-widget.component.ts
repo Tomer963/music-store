@@ -28,7 +28,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Component
-   * 
+   *
    * Subscribes to cart updates from service
    *
    * @return void
@@ -42,7 +42,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Cleanup Component
-   * 
+   *
    * Unsubscribes from observables to prevent memory leaks
    *
    * @return void
@@ -54,7 +54,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Check Album Page
-   * 
+   *
    * Determines if currently viewing album detail page
    *
    * @return boolean - True if in album page
@@ -65,7 +65,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Should Display Scroll
-   * 
+   *
    * Calculates if scrollbar should be visible based on item count
    *
    * @return boolean - True if scrollbar needed
@@ -79,7 +79,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Remove Item From Cart
-   * 
+   *
    * Removes specific item from cart
    *
    * @param string itemId - Cart item ID
@@ -95,7 +95,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Navigate To Checkout
-   * 
+   *
    * Redirects user to checkout page
    *
    * @return void
@@ -106,7 +106,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Navigate To Album
-   * 
+   *
    * Redirects user to specific album detail page
    *
    * @param string albumId - Album ID
@@ -118,7 +118,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Get Image URL
-   * 
+   *
    * Retrieves album main image URL
    *
    * @param CartItem item - Cart item
@@ -130,7 +130,7 @@ export class CartWidgetComponent implements OnInit, OnDestroy {
 
   /**
    * Format Price
-   * 
+   *
    * Formats price with currency symbol
    *
    * @param number price - Price value

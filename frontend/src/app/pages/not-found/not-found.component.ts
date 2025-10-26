@@ -14,7 +14,7 @@ export class NotFoundComponent {
 
   /**
    * GoHome
-   * 
+   *
    * Navigates to home page
    *
    * @return void
@@ -25,7 +25,7 @@ export class NotFoundComponent {
 
   /**
    * GoBack
-   * 
+   *
    * Navigates to previous page in browser history
    *
    * @return void

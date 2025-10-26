@@ -40,9 +40,9 @@ export class AuthService {
 
   /**
    * Setup Activity Tracking
-   * 
+   *
    * Monitors user interactions to track session activity
-   * 
+   *
    * @return void
    */
   private setupActivityTracking(): void {
@@ -64,9 +64,9 @@ export class AuthService {
 
   /**
    * Setup Inactivity Check
-   * 
+   *
    * Periodically checks for session timeout due to user inactivity
-   * 
+   *
    * @return void
    */
   private setupInactivityCheck(): void {
@@ -85,9 +85,9 @@ export class AuthService {
 
   /**
    * Update Last Activity
-   * 
+   *
    * Records current timestamp as last user activity
-   * 
+   *
    * @return void
    */
   private updateLastActivity(): void {
@@ -96,9 +96,9 @@ export class AuthService {
 
   /**
    * Get Last Activity
-   * 
+   *
    * Retrieves timestamp of last recorded user activity
-   * 
+   *
    * @return (number | null) Timestamp in milliseconds or null if not found
    */
   private getLastActivity(): number | null {
@@ -108,9 +108,9 @@ export class AuthService {
 
   /**
    * Handle Session Expiry
-   * 
+   *
    * Clears authentication data and redirects to home with session expired flag
-   * 
+   *
    * @return void
    */
   private handleSessionExpiry(): void {
@@ -122,9 +122,9 @@ export class AuthService {
 
   /**
    * Initialize Auth
-   * 
+   *
    * Restores user session on application startup from stored token
-   * 
+   *
    * @return void
    */
   initializeAuth(): void {
@@ -170,9 +170,9 @@ export class AuthService {
 
   /**
    * Register
-   * 
+   *
    * Creates new user account with provided registration data
-   * 
+   *
    * @param (RegistrationData) data User registration information
    * @return (Observable<AuthResponse>) Observable containing authentication response with token
    */
@@ -190,9 +190,9 @@ export class AuthService {
 
   /**
    * Login
-   * 
+   *
    * Authenticates user with credentials and stores session data
-   * 
+   *
    * @param (LoginCredentials) credentials User email and password
    * @return (Observable<AuthResponse>) Observable containing authentication response with token
    */
@@ -214,9 +214,9 @@ export class AuthService {
 
   /**
    * Save Return URL
-   * 
+   *
    * Stores URL to redirect user after successful login
-   * 
+   *
    * @param (string) url URL to return to after login
    * @return void
    */
@@ -228,9 +228,9 @@ export class AuthService {
 
   /**
    * Get Return URL
-   * 
+   *
    * Retrieves saved return URL from session storage
-   * 
+   *
    * @return (string | null) Saved URL or null if not found
    */
   getReturnUrl(): string | null {
@@ -239,9 +239,9 @@ export class AuthService {
 
   /**
    * Clear Return URL
-   * 
+   *
    * Removes saved return URL from session storage
-   * 
+   *
    * @return void
    */
   clearReturnUrl(): void {
@@ -250,9 +250,9 @@ export class AuthService {
 
   /**
    * Logout
-   * 
+   *
    * Clears user session and notifies server
-   * 
+   *
    * @return void
    */
   logout(): void {
@@ -270,9 +270,9 @@ export class AuthService {
 
   /**
    * Get Profile
-   * 
+   *
    * Fetches complete user profile data from server
-   * 
+   *
    * @return (Observable<User>) Observable containing user profile data
    */
   getProfile(): Observable<User> {
@@ -288,9 +288,9 @@ export class AuthService {
 
   /**
    * Is Authenticated
-   * 
+   *
    * Checks if user has valid active session
-   * 
+   *
    * @return (boolean) True if user is authenticated with valid token
    */
   isAuthenticated(): boolean {
@@ -300,9 +300,9 @@ export class AuthService {
 
   /**
    * Get Current User
-   * 
+   *
    * Returns current user from local state
-   * 
+   *
    * @return (User | null) Current user object or null if not authenticated
    */
   getCurrentUser(): User | null {
@@ -311,9 +311,9 @@ export class AuthService {
 
   /**
    * Get Token
-   * 
+   *
    * Retrieves JWT authentication token from local storage
-   * 
+   *
    * @return (string | null) JWT token or null if not found
    */
   getToken(): string | null {
@@ -322,9 +322,9 @@ export class AuthService {
 
   /**
    * Set Auth Data
-   * 
+   *
    * Stores authentication data in local storage and updates user state
-   * 
+   *
    * @param (AuthResponse) authData Authentication response containing token and user data
    * @return void
    */
@@ -335,9 +335,9 @@ export class AuthService {
 
   /**
    * Clear Auth
-   * 
+   *
    * Removes all authentication data from storage and resets user state
-   * 
+   *
    * @return void
    */
   private clearAuth(): void {
@@ -349,9 +349,9 @@ export class AuthService {
 
   /**
    * Load User Profile
-   * 
+   *
    * Fetches full user profile in background without blocking UI
-   * 
+   *
    * @return void
    */
   private loadUserProfile(): void {
@@ -366,9 +366,9 @@ export class AuthService {
 
   /**
    * Is Token Expired
-   * 
+   *
    * Checks if JWT token has expired based on exp claim
-   * 
+   *
    * @param (string) token JWT token to check
    * @return (boolean) True if token is expired
    */
@@ -383,9 +383,9 @@ export class AuthService {
 
   /**
    * Decode Token
-   * 
+   *
    * Extracts and parses payload from JWT token
-   * 
+   *
    * @param (string) token JWT token to decode
    * @return (TokenPayload) Decoded token payload data
    */
@@ -403,9 +403,9 @@ export class AuthService {
 
   /**
    * Handle Error
-   * 
+   *
    * Centralized error handling for HTTP requests
-   * 
+   *
    * @param (HttpErrorResponse) error HTTP error response object
    * @return (Observable<never>) Error observable for RxJS stream
    */

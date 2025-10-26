@@ -485,7 +485,7 @@
     min-width: 350px;
     max-width: 350px;
   }
-  
+
   .content-with-sidebar {
     gap: var(--spacing-md);
   }
@@ -611,7 +611,7 @@
   .album-content.red-background .album-artist-line.large-artist {
     font-size: 1.125rem;
   }
-  
+
   .album-icons-group {
     gap: 6px;
   }
@@ -757,7 +757,7 @@
   .no-more-plain p {
     font-size: 1rem;
   }
-  
+
   .album-icons-group {
     gap: 4px;
   }

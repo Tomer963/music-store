@@ -48,7 +48,7 @@ export class WishlistService {
   /**
    * Toggle Wishlist
    * Adds or removes album from wishlist
-   * 
+   *
    * @param (string) albumId - Album ID
    * @return (Observable<boolean>) True if added, false if removed
    */
@@ -72,7 +72,7 @@ export class WishlistService {
   /**
    * Is Item Loading
    * Checks loading state for specific item
-   * 
+   *
    * @param (string) albumId - Album ID
    * @return (boolean) True if loading
    */
@@ -83,7 +83,7 @@ export class WishlistService {
   /**
    * Is In Wishlist
    * Checks if album exists in wishlist
-   * 
+   *
    * @param (string) albumId - Album ID
    * @return (Observable<boolean>) True if in wishlist
    */
@@ -94,7 +94,7 @@ export class WishlistService {
   /**
    * Get Real Time Wishlist
    * Returns current wishlist albums stream
-   * 
+   *
    * @return (Observable<Album[]>) Wishlist albums
    */
   getRealTimeWishlist(): Observable<Album[]> {
@@ -104,7 +104,7 @@ export class WishlistService {
   /**
    * Refresh Wishlist
    * Forces reload of wishlist
-   * 
+   *
    * @return (void)
    */
   refreshWishlist(): void {
@@ -114,7 +114,7 @@ export class WishlistService {
   /**
    * Add To Wishlist
    * Internal method to add album
-   * 
+   *
    * @param (string) albumId - Album ID
    * @return (Observable<{wishlist: string[]}>) Updated wishlist IDs
    */
@@ -133,7 +133,7 @@ export class WishlistService {
   /**
    * Remove From Wishlist
    * Internal method to remove album
-   * 
+   *
    * @param (string) albumId - Album ID
    * @return (Observable<{wishlist: string[]}>) Updated wishlist IDs
    */
@@ -148,7 +148,7 @@ export class WishlistService {
   /**
    * Initialize Wishlist IDs
    * Loads wishlist from server or localStorage
-   * 
+   *
    * @return (void)
    */
   private initializeWishlistIds(): void {
@@ -178,7 +178,7 @@ export class WishlistService {
   /**
    * Get Server Wishlist
    * Fetches wishlist from API
-   * 
+   *
    * @return (Observable<Album[]>) Wishlist albums
    */
   private getServerWishlist(): Observable<Album[]> {
@@ -191,7 +191,7 @@ export class WishlistService {
   /**
    * Add To Server Wishlist
    * Adds album to server wishlist
-   * 
+   *
    * @param (string) albumId - Album ID
    * @return (Observable<{wishlist: string[]}>) Updated wishlist IDs
    */
@@ -232,7 +232,7 @@ export class WishlistService {
   /**
    * Remove From Server Wishlist
    * Removes album from server wishlist
-   * 
+   *
    * @param (string) albumId - Album ID
    * @return (Observable<{wishlist: string[]}>) Updated wishlist IDs
    */
@@ -251,7 +251,7 @@ export class WishlistService {
   /**
    * Add To Local Wishlist
    * Adds album to localStorage wishlist
-   * 
+   *
    * @param (string) albumId - Album ID
    * @return (Observable<{wishlist: string[]}>) Updated wishlist IDs
    */
@@ -288,7 +288,7 @@ export class WishlistService {
   /**
    * Remove From Local Wishlist
    * Removes album from localStorage wishlist
-   * 
+   *
    * @param (string) albumId - Album ID
    * @return (Observable<{wishlist: string[]}>) Updated wishlist IDs
    */
@@ -305,7 +305,7 @@ export class WishlistService {
   /**
    * Update After Removal
    * Updates state after removing item
-   * 
+   *
    * @param (string) albumId - Album ID
    * @return (void)
    */
@@ -323,7 +323,7 @@ export class WishlistService {
   /**
    * Load Local Wishlist Albums
    * Fetches album details for localStorage IDs
-   * 
+   *
    * @return (void)
    */
   private loadLocalWishlistAlbums(): void {
@@ -367,7 +367,7 @@ export class WishlistService {
   /**
    * Sync Local To Server
    * Syncs localStorage wishlist to server on login
-   * 
+   *
    * @return (Observable<any>) Sync operation
    */
   private syncLocalToServer(): Observable<any> {
@@ -392,7 +392,7 @@ export class WishlistService {
   /**
    * Set Item Loading
    * Updates loading state for item
-   * 
+   *
    * @param (string) albumId - Album ID
    * @param (boolean) isLoading - Loading state
    * @return (void)
@@ -405,7 +405,7 @@ export class WishlistService {
   /**
    * Get Local Wishlist IDs
    * Retrieves wishlist IDs from localStorage
-   * 
+   *
    * @return (string[]) Array of album IDs
    */
   private getLocalWishlistIds(): string[] {
@@ -421,7 +421,7 @@ export class WishlistService {
   /**
    * Save Local Wishlist IDs
    * Stores wishlist IDs in localStorage
-   * 
+   *
    * @param (string[]) wishlistIds - Array of album IDs
    * @return (void)
    */
@@ -436,7 +436,7 @@ export class WishlistService {
   /**
    * Clear Local Wishlist
    * Removes wishlist from localStorage
-   * 
+   *
    * @return (void)
    */
   private clearLocalWishlist(): void {
@@ -446,7 +446,7 @@ export class WishlistService {
   /**
    * Handle Error
    * Centralized error handling
-   * 
+   *
    * @param (any) error - Error object
    * @return (Observable<never>) Error observable
    */

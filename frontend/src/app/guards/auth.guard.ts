@@ -5,7 +5,7 @@ import { AuthService } from "../services/auth.service";
 /**
  * Auth Guard
  * Protects routes requiring authentication
- * 
+ *
  * @param (ActivatedRouteSnapshot) route - Current route
  * @param (RouterStateSnapshot) state - Router state
  * @return (boolean) True if user can access route

@@ -137,17 +137,17 @@
   .albums-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .album-icon-btn {
     width: 30px;
     height: 30px;
   }
-  
+
   .album-cart-icon {
     width: 22px;
     height: 22px;
   }
-  
+
   .action-link {
     font-size: 0.625rem;
   }
@@ -158,21 +158,21 @@
     grid-template-columns: 1fr;
     gap: var(--spacing-sm);
   }
-  
+
   .album-icon-btn {
     width: 28px;
     height: 28px;
   }
-  
+
   .album-cart-icon {
     width: 20px;
     height: 20px;
   }
-  
+
   .album-info-icon {
     font-size: 18px;
   }
-  
+
   .action-link {
     font-size: 0.563rem;
   }

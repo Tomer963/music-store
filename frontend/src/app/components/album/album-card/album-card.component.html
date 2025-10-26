@@ -35,7 +35,9 @@
               [class.active]="isInWishlist"
               [disabled]="isWishlistLoading"
               (click)="toggleWishlist($event)"
-              [title]="isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'"
+              [title]="
+                isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'
+              "
             >
               <div class="icon-spinner" *ngIf="isWishlistLoading"></div>
               <span *ngIf="!isWishlistLoading">{{
@@ -123,7 +125,9 @@
               [class.active]="isInWishlist"
               [disabled]="isWishlistLoading"
               (click)="toggleWishlist($event)"
-              [title]="isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'"
+              [title]="
+                isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'
+              "
             >
               <div class="icon-spinner" *ngIf="isWishlistLoading"></div>
               <span *ngIf="!isWishlistLoading">{{

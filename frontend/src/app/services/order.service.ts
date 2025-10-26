@@ -17,7 +17,7 @@ export class OrderService {
   /**
    * Get Orders
    * Fetches all orders for authenticated user
-   * 
+   *
    * @return (Observable<Order[]>) Array of orders
    */
   getOrders(): Observable<Order[]> {
@@ -30,7 +30,7 @@ export class OrderService {
   /**
    * Get Order
    * Fetches single order by ID
-   * 
+   *
    * @param (string) id - Order ID
    * @return (Observable<Order>) Order details
    */
@@ -44,7 +44,7 @@ export class OrderService {
   /**
    * Create Order
    * Creates new order from cart
-   * 
+   *
    * @param (CreateOrderRequest) orderData - Order creation data
    * @return (Observable<Order>) Created order
    */
@@ -58,7 +58,7 @@ export class OrderService {
   /**
    * Handle Error
    * Centralized error handling
-   * 
+   *
    * @param (any) error - Error object
    * @return (Observable<never>) Error observable
    */

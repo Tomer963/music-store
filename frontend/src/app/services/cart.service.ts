@@ -31,7 +31,7 @@ export class CartService {
   /**
    * Initialize Cart
    * Sets up cart with session ID and loads cart data
-   * 
+   *
    * @return (void)
    */
   initializeCart(): void {
@@ -42,7 +42,7 @@ export class CartService {
   /**
    * Refresh Cart
    * Reloads cart from server and updates local state
-   * 
+   *
    * @return (Observable<Cart>) Updated cart data
    */
   refreshCart(): Observable<Cart> {
@@ -64,7 +64,7 @@ export class CartService {
   /**
    * Get Cart
    * Fetches cart from server
-   * 
+   *
    * @return (Observable<Cart>) Cart data
    */
   getCart(): Observable<Cart> {
@@ -85,7 +85,7 @@ export class CartService {
   /**
    * Add To Cart
    * Adds album to cart
-   * 
+   *
    * @param (string) albumId - Album ID to add
    * @param (number) quantity - Quantity to add
    * @return (Observable<CartResponse>) Cart response with item
@@ -113,7 +113,7 @@ export class CartService {
   /**
    * Update Cart Item
    * Updates quantity of cart item
-   * 
+   *
    * @param (string) itemId - Cart item ID
    * @param (number) quantity - New quantity
    * @return (Observable<CartItem>) Updated cart item
@@ -135,7 +135,7 @@ export class CartService {
   /**
    * Remove From Cart
    * Removes item from cart
-   * 
+   *
    * @param (string) itemId - Cart item ID to remove
    * @return (Observable<void>) Void observable
    */
@@ -154,7 +154,7 @@ export class CartService {
   /**
    * Clear Cart
    * Removes all items from cart
-   * 
+   *
    * @return (Observable<void>) Void observable
    */
   clearCart(): Observable<void> {
@@ -172,7 +172,7 @@ export class CartService {
   /**
    * Get Item Count
    * Returns total number of items in cart
-   * 
+   *
    * @return (number) Item count
    */
   getItemCount(): number {
@@ -182,7 +182,7 @@ export class CartService {
   /**
    * Get Total
    * Returns cart total price
-   * 
+   *
    * @return (number) Total price
    */
   getTotal(): number {
@@ -192,7 +192,7 @@ export class CartService {
   /**
    * Get Session ID
    * Returns current session ID
-   * 
+   *
    * @return (string | null) Session ID or null
    */
   getSessionId(): string | null {
@@ -202,7 +202,7 @@ export class CartService {
   /**
    * Clear Session
    * Clears cart for guest users
-   * 
+   *
    * @return (void)
    */
   clearSession(): void {
@@ -214,7 +214,7 @@ export class CartService {
   /**
    * Load Cart
    * Internal method to load cart data
-   * 
+   *
    * @return (void)
    */
   private loadCart(): void {
@@ -231,7 +231,7 @@ export class CartService {
   /**
    * Get Or Create Session ID
    * Gets existing or creates new session ID
-   * 
+   *
    * @return (string) Session ID
    */
   private getOrCreateSessionId(): string {
@@ -249,7 +249,7 @@ export class CartService {
   /**
    * Generate Session ID
    * Creates unique session ID
-   * 
+   *
    * @return (string) New session ID
    */
   private generateSessionId(): string {
@@ -259,7 +259,7 @@ export class CartService {
   /**
    * Set Session ID
    * Stores session ID in localStorage
-   * 
+   *
    * @param (string) sessionId - Session ID to store
    * @return (void)
    */
@@ -271,7 +271,7 @@ export class CartService {
   /**
    * Get Headers
    * Builds HTTP headers with session ID
-   * 
+   *
    * @return (HttpHeaders) HTTP headers
    */
   private getHeaders(): HttpHeaders {
@@ -287,7 +287,7 @@ export class CartService {
   /**
    * Handle Error
    * Error handler for cart operations
-   * 
+   *
    * @param (any) error - Error object
    * @return (Observable<never>) Error observable
    */

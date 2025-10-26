@@ -43,7 +43,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
-    
+
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       const albumId = params["id"];
       if (albumId) this.loadAlbum(albumId);
@@ -57,9 +57,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Load Album
-   * 
+   *
    * Fetches album details from API and initializes component state
-   * 
+   *
    * @param albumId Album ID to load
    */
   private loadAlbum(albumId: string): void {
@@ -84,7 +84,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Subscribe To Wishlist Status
-   * 
+   *
    * Sets up subscription to track if album is in user's wishlist
    */
   private subscribeToWishlistStatus(): void {
@@ -101,9 +101,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Build Thumbnails
-   * 
+   *
    * Creates thumbnail array from album images with fallback placeholder
-   * 
+   *
    * @return Array of album images for thumbnail display
    */
   private buildThumbnails(): AlbumImage[] {
@@ -111,7 +111,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
     const thumbnails: AlbumImage[] = [];
     const mainImageUrl = this.albumService.getMainImageUrl(this.album);
-    
+
     // Add main image first
     thumbnails.push({ url: mainImageUrl, isMain: true });
 
@@ -144,9 +144,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Select Image
-   * 
+   *
    * Changes the main displayed image
-   * 
+   *
    * @param index Index of thumbnail to display
    */
   selectImage(index: number): void {
@@ -157,9 +157,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Get Selected Image URL
-   * 
+   *
    * Returns URL of currently selected image
-   * 
+   *
    * @return Image URL or placeholder
    */
   getSelectedImageUrl(): string {
@@ -167,7 +167,10 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
       return "/assets/images/album-placeholder.svg";
     }
 
-    if (this.selectedImageIndex >= 0 && this.selectedImageIndex < this.thumbnails.length) {
+    if (
+      this.selectedImageIndex >= 0 &&
+      this.selectedImageIndex < this.thumbnails.length
+    ) {
       return this.thumbnails[this.selectedImageIndex].url;
     }
 
@@ -176,9 +179,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Get Three Thumbnails
-   * 
+   *
    * Returns the thumbnail array for display
-   * 
+   *
    * @return Array of three thumbnail images
    */
   getThreeThumbnails(): AlbumImage[] {
@@ -187,7 +190,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Add To Cart
-   * 
+   *
    * Adds the album to cart with selected quantity
    */
   addToCart(): void {
@@ -211,7 +214,7 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle Wishlist
-   * 
+   *
    * Adds or removes album from wishlist
    */
   toggleWishlist(): void {
@@ -225,9 +228,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Is Category
-   * 
+   *
    * Type guard to check if category is populated object
-   * 
+   *
    * @param category Category to check
    * @return True if category is object
    */
@@ -237,9 +240,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Get Category ID
-   * 
+   *
    * Extracts category ID from album
-   * 
+   *
    * @return Category ID or empty string
    */
   getCategoryId(): string {
@@ -250,9 +253,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Get Category Name
-   * 
+   *
    * Extracts category name from album
-   * 
+   *
    * @return Category name or empty string
    */
   getCategoryName(): string {
@@ -263,9 +266,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Format Price
-   * 
+   *
    * Formats price with currency symbol
-   * 
+   *
    * @param price Price value
    * @return Formatted price string
    */
@@ -275,9 +278,9 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
 
   /**
    * Get Formatted Description
-   * 
+   *
    * Splits long description into paragraphs
-   * 
+   *
    * @return Array of description paragraphs
    */
   getFormattedDescription(): string[] {

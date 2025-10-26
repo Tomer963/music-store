@@ -1,5 +1,8 @@
 <!-- Empty State -->
-<div class="wishlist-page-standalone" *ngIf="!isLoading && wishlistItems.length === 0">
+<div
+  class="wishlist-page-standalone"
+  *ngIf="!isLoading && wishlistItems.length === 0"
+>
   <div class="empty-wishlist">
     <div class="empty-icon">&#10084;</div>
     <h2>Your wishlist is empty</h2>
@@ -26,7 +29,10 @@
           </h1>
         </section>
 
-        <section class="items-section" [class.no-scroll]="wishlistItems.length <= 3">
+        <section
+          class="items-section"
+          [class.no-scroll]="wishlistItems.length <= 3"
+        >
           <div class="items-grid">
             <div
               *ngFor="let album of wishlistItems; trackBy: trackByAlbum"
@@ -58,7 +64,10 @@
                       </p>
                       <p
                         class="original-price"
-                        *ngIf="album.originalPrice && album.originalPrice > album.price"
+                        *ngIf="
+                          album.originalPrice &&
+                          album.originalPrice > album.price
+                        "
                       >
                         {{ formatPrice(album.originalPrice) }}
                       </p>
@@ -94,7 +103,11 @@
 
                       <button
                         class="album-icon-btn info-btn"
-                        (click)="viewAlbumInfo($event, album._id); $event.stopPropagation(); $event.preventDefault()"
+                        (click)="
+                          viewAlbumInfo($event, album._id);
+                          $event.stopPropagation();
+                          $event.preventDefault()
+                        "
                         title="View Details"
                       >
                         <span class="album-info-icon">&#8505;</span>

@@ -5,7 +5,7 @@ import { AuthService } from "../services/auth.service";
 /**
  * Guest Guard
  * Prevents authenticated users from accessing guest-only pages
- * 
+ *
  * @param (ActivatedRouteSnapshot) route - Current route
  * @param (RouterStateSnapshot) state - Router state
  * @return (boolean) True if guest can access route

@@ -83,9 +83,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * NgOnInit
-   * 
+   *
    * Initializes checkout component and verifies authentication
-   * 
+   *
    * @return void
    */
   ngOnInit(): void {
@@ -140,9 +140,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * NgOnDestroy
-   * 
+   *
    * Saves form data and cleans up subscriptions
-   * 
+   *
    * @return void
    */
   ngOnDestroy(): void {
@@ -153,9 +153,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Check User Change
-   * 
+   *
    * Verifies if user has changed and clears old checkout data
-   * 
+   *
    * @return void
    */
   private checkUserChange(): void {
@@ -176,9 +176,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Clear All Checkout Data
-   * 
+   *
    * Removes all saved checkout data and resets forms
-   * 
+   *
    * @return void
    */
   private clearAllCheckoutData(): void {
@@ -192,9 +192,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Reset Forms
-   * 
+   *
    * Resets billing and payment forms to initial state
-   * 
+   *
    * @return void
    */
   private resetForms(): void {
@@ -229,9 +229,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Reset To Step 1
-   * 
+   *
    * Resets checkout process to first step
-   * 
+   *
    * @return void
    */
   private resetToStep1(): void {
@@ -244,9 +244,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Load Cart Data
-   * 
+   *
    * Subscribes to cart updates and refreshes cart data
-   * 
+   *
    * @return void
    */
   private loadCartData(): void {
@@ -268,9 +268,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Forms
-   * 
+   *
    * Creates and configures billing and payment forms with validators
-   * 
+   *
    * @return void
    */
   initializeForms(): void {
@@ -287,7 +287,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((values) => {
         this.billingInfo = { ...values };
-        
+
         // Clear touched state for empty fields
         Object.keys(this.billingForm.controls).forEach((key) => {
           const control = this.billingForm.get(key);
@@ -295,7 +295,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             control.markAsUntouched();
           }
         });
-        
+
         this.saveFormData();
       });
 
@@ -310,26 +310,28 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     });
 
     this.setupPaymentValidators();
-    this.paymentForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      // Clear touched state for empty fields
-      Object.keys(this.paymentForm.controls).forEach((key) => {
-        const control = this.paymentForm.get(key);
-        if (control && control.touched && !control.value) {
-          control.markAsUntouched();
-        }
+    this.paymentForm.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        // Clear touched state for empty fields
+        Object.keys(this.paymentForm.controls).forEach((key) => {
+          const control = this.paymentForm.get(key);
+          if (control && control.touched && !control.value) {
+            control.markAsUntouched();
+          }
+        });
+
+        this.saveFormData();
       });
-      
-      this.saveFormData();
-    });
 
     this.setupExpiryListeners();
   }
 
   /**
    * Initialize Years
-   * 
+   *
    * Generates array of years for credit card expiry (current year + 20 years)
-   * 
+   *
    * @return void
    */
   private initializeYears(): void {
@@ -340,9 +342,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Setup Expiry Listeners
-   * 
+   *
    * Configures listeners for credit card expiry month/year interactions
-   * 
+   *
    * @return void
    */
   private setupExpiryListeners(): void {
@@ -363,9 +365,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Update Available Months And Years
-   * 
+   *
    * Dynamically filters available months/years based on selections to prevent invalid dates
-   * 
+   *
    * @return void
    */
   private updateAvailableMonthsAndYears(): void {
@@ -446,9 +448,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Setup Payment Validators
-   * 
+   *
    * Dynamically adds/removes validators based on payment method selection
-   * 
+   *
    * @return void
    */
   setupPaymentValidators(): void {
@@ -508,9 +510,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Address Validator
-   * 
+   *
    * Validates address format (street name + house number)
-   * 
+   *
    * @param (AbstractControl) control Form control to validate
    * @return ({ [key: string]: boolean } | null) Validation error or null
    */
@@ -532,9 +534,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * City Validator
-   * 
+   *
    * Validates city name (letters only, minimum 3 characters)
-   * 
+   *
    * @param (AbstractControl) control Form control to validate
    * @return ({ [key: string]: boolean } | null) Validation error or null
    */
@@ -548,9 +550,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Zip Code Validator
-   * 
+   *
    * Validates zip code format (5 or 7 digits)
-   * 
+   *
    * @param (AbstractControl) control Form control to validate
    * @return ({ [key: string]: boolean } | null) Validation error or null
    */
@@ -564,9 +566,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Phone Validator
-   * 
+   *
    * Validates phone number format (XX-XXXXXXX or XXX-XXXXXXX)
-   * 
+   *
    * @param (AbstractControl) control Form control to validate
    * @return ({ [key: string]: boolean } | null) Validation error or null
    */
@@ -580,9 +582,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Cardholder Name Validator
-   * 
+   *
    * Validates cardholder name (at least 2 words, each with minimum 2 letters)
-   * 
+   *
    * @param (AbstractControl) control Form control to validate
    * @return ({ [key: string]: boolean } | null) Validation error or null
    */
@@ -606,9 +608,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Card Type Validator
-   * 
+   *
    * Validates that card type is selected
-   * 
+   *
    * @param (AbstractControl) control Form control to validate
    * @return ({ [key: string]: boolean } | null) Validation error or null
    */
@@ -622,9 +624,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Card Number Validator
-   * 
+   *
    * Validates credit card number format (exactly 16 digits)
-   * 
+   *
    * @param (AbstractControl) control Form control to validate
    * @return ({ [key: string]: boolean } | null) Validation error or null
    */
@@ -639,9 +641,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * CVV Validator
-   * 
+   *
    * Validates CVV format (exactly 3 digits)
-   * 
+   *
    * @param (AbstractControl) control Form control to validate
    * @return ({ [key: string]: boolean } | null) Validation error or null
    */
@@ -656,9 +658,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Save Form Data
-   * 
+   *
    * Persists form data to session storage
-   * 
+   *
    * @return void
    */
   private saveFormData(): void {
@@ -696,9 +698,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Load Saved Form Data
-   * 
+   *
    * Restores form data from session storage if not expired
-   * 
+   *
    * @return void
    */
   private loadSavedFormData(): void {
@@ -773,9 +775,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Clear Saved Form Data
-   * 
+   *
    * Removes all saved checkout data from session storage
-   * 
+   *
    * @return void
    */
   private clearSavedFormData(): void {
@@ -789,9 +791,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Update Form Field
-   * 
+   *
    * Updates specific form field with input validation
-   * 
+   *
    * @param (string) fieldName Field name to update
    * @param (Event) event Input event
    * @return void
@@ -818,9 +820,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * On Payment Method Change
-   * 
+   *
    * Handles payment method selection change
-   * 
+   *
    * @param (string) method Selected payment method
    * @return void
    */
@@ -842,9 +844,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Continue To Next Step
-   * 
+   *
    * Validates current step and advances to next step
-   * 
+   *
    * @return void
    */
   continueToNextStep(): void {
@@ -889,9 +891,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Change Step
-   * 
+   *
    * Changes to specified step after validation
-   * 
+   *
    * @param (number) step Target step number
    * @return void
    */
@@ -971,9 +973,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Submit Order
-   * 
+   *
    * Submits order to server and redirects to account page
-   * 
+   *
    * @return void
    */
   submitOrder(): void {
@@ -1014,9 +1016,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Edit Cart
-   * 
+   *
    * Saves progress and navigates back to home to edit cart
-   * 
+   *
    * @param (Event) event Click event
    * @return void
    */
@@ -1028,9 +1030,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Go Shopping
-   * 
+   *
    * Navigates to home page
-   * 
+   *
    * @return void
    */
   goShopping(): void {
@@ -1039,9 +1041,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Should Show Error
-   * 
+   *
    * Determines if validation error should be displayed
-   * 
+   *
    * @param (FormGroup) form Form group to check
    * @param (string) fieldName Field name to check
    * @param (boolean) formSubmitted Whether form has been submitted
@@ -1065,9 +1067,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Get Error Message
-   * 
+   *
    * Returns appropriate error message for field
-   * 
+   *
    * @param (FormGroup) form Form group containing field
    * @param (string) field Field name
    * @return (string) Error message text
@@ -1120,9 +1122,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Format Price
-   * 
+   *
    * Formats numeric price to currency string
-   * 
+   *
    * @param (number) price Price value
    * @return (string) Formatted price string
    */
@@ -1132,9 +1134,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Get Card Type Name
-   * 
+   *
    * Converts card type code to display name
-   * 
+   *
    * @param (string) type Card type code
    * @return (string) Formatted card type name
    */
@@ -1149,9 +1151,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Get City Zip
-   * 
+   *
    * Formats city and zip code for display
-   * 
+   *
    * @return (string) Formatted city and zip code
    */
   getCityZip(): string {
@@ -1170,9 +1172,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Get Phone Formatted
-   * 
+   *
    * Formats phone number for display
-   * 
+   *
    * @return (string) Formatted phone number with prefix
    */
   getPhoneFormatted(): string {
@@ -1184,9 +1186,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Get User Full Name
-   * 
+   *
    * Returns current user's full name
-   * 
+   *
    * @return (string) User's full name or empty string
    */
   getUserFullName(): string {
@@ -1198,9 +1200,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Is Step Active
-   * 
+   *
    * Checks if specified step is currently active
-   * 
+   *
    * @param (number) step Step number to check
    * @return (boolean) True if step is active
    */
@@ -1210,9 +1212,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Is Step Completed
-   * 
+   *
    * Checks if specified step is completed
-   * 
+   *
    * @param (number) step Step number to check
    * @return (boolean) True if step is completed
    */
@@ -1222,9 +1224,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Is Step Disabled
-   * 
+   *
    * Checks if specified step is disabled
-   * 
+   *
    * @param (number) step Step number to check
    * @return (boolean) True if step is disabled
    */
@@ -1234,9 +1236,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Is Step Collapsed
-   * 
+   *
    * Checks if specified step should be collapsed
-   * 
+   *
    * @param (number) step Step number to check
    * @return (boolean) True if step should be collapsed
    */
@@ -1246,9 +1248,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Has Reached Step
-   * 
+   *
    * Checks if user has reached specified step
-   * 
+   *
    * @param (number) step Step number to check
    * @return (boolean) True if user has reached this step
    */
@@ -1258,9 +1260,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Has Billing Info
-   * 
+   *
    * Checks if billing information has been entered
-   * 
+   *
    * @return (boolean) True if billing address is filled
    */
   hasBillingInfo(): boolean {
@@ -1269,9 +1271,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   /**
    * Has Payment Info
-   * 
+   *
    * Checks if payment information has been entered
-   * 
+   *
    * @return (boolean) True if payment method is selected
    */
   hasPaymentInfo(): boolean {

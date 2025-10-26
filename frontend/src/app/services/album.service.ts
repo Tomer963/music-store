@@ -22,7 +22,7 @@ export class AlbumService {
   /**
    * Get Albums
    * Fetches paginated list of albums
-   * 
+   *
    * @param (number) page - Page number
    * @param (number) limit - Items per page
    * @param (string) sort - Sort order
@@ -50,7 +50,7 @@ export class AlbumService {
   /**
    * Get Album
    * Fetches single album by ID
-   * 
+   *
    * @param (string) id - Album ID
    * @return (Observable<Album>) Album data
    */
@@ -66,7 +66,7 @@ export class AlbumService {
   /**
    * Get New Albums
    * Fetches newest albums
-   * 
+   *
    * @param (number) page - Page number
    * @param (number) limit - Items per page
    * @return (Observable<any>) Paginated new albums
@@ -95,7 +95,7 @@ export class AlbumService {
   /**
    * Search Albums
    * Searches albums by query string
-   * 
+   *
    * @param (string) query - Search query
    * @return (Observable<Album[]>) Array of matching albums
    */
@@ -114,7 +114,7 @@ export class AlbumService {
   /**
    * Get Albums By Category
    * Fetches albums filtered by category
-   * 
+   *
    * @param (string) categoryId - Category ID
    * @param (number) page - Page number
    * @param (number) limit - Items per page
@@ -146,7 +146,7 @@ export class AlbumService {
   /**
    * Get Main Image URL
    * Retrieves main album image or returns placeholder
-   * 
+   *
    * @param (Album) album - Album object
    * @return (string) Image URL
    */
@@ -172,7 +172,7 @@ export class AlbumService {
   /**
    * Format Price
    * Formats price with currency symbol
-   * 
+   *
    * @param (number) price - Price value
    * @return (string) Formatted price string
    */

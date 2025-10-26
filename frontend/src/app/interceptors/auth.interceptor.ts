@@ -5,7 +5,7 @@ import { AuthService } from "../services/auth.service";
 /**
  * Auth Interceptor
  * Adds JWT token to HTTP requests
- * 
+ *
  * @param (HttpRequest) req - HTTP request
  * @param (HttpHandler) next - Next handler
  * @return (Observable) HTTP event stream

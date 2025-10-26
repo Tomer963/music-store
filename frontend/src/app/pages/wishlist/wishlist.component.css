@@ -148,18 +148,18 @@
     min-height: calc(100vh - 100px);
     padding: var(--spacing-lg) var(--spacing-md);
   }
-  
+
   .items-section {
     overflow-y: visible;
     padding-right: 0;
     flex: initial;
   }
-  
+
   .wishlist-items-container {
     height: auto;
     flex: initial;
   }
-  
+
   .items-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-md);
@@ -171,21 +171,21 @@
     min-height: calc(100vh - 80px);
     padding: var(--spacing-md) var(--spacing-sm);
   }
-  
+
   .items-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .album-icon-btn {
     width: 30px;
     height: 30px;
   }
-  
+
   .album-cart-icon {
     width: 22px;
     height: 22px;
   }
-  
+
   .wishlist-heart-icon {
     font-size: 22px;
   }
@@ -195,26 +195,26 @@
   .wishlist-page-standalone {
     padding: var(--spacing-sm);
   }
-  
+
   .items-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-sm);
   }
-  
+
   .album-icon-btn {
     width: 28px;
     height: 28px;
   }
-  
+
   .album-cart-icon {
     width: 20px;
     height: 20px;
   }
-  
+
   .album-info-icon {
     font-size: 18px;
   }
-  
+
   .wishlist-heart-icon {
     font-size: 20px;
   }

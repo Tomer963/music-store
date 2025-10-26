@@ -65,9 +65,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * NgOnInit
-   * 
+   *
    * Initializes component and loads initial data
-   * 
+   *
    * @return void
    */
   ngOnInit(): void {
@@ -79,9 +79,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * NgOnDestroy
-   * 
+   *
    * Cleans up subscriptions to prevent memory leaks
-   * 
+   *
    * @return void
    */
   ngOnDestroy(): void {
@@ -91,9 +91,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Setup Wishlist Subscription
-   * 
+   *
    * Monitors wishlist changes and updates UI accordingly
-   * 
+   *
    * @return void
    */
   private setupWishlistSubscription(): void {
@@ -112,9 +112,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Setup Cart Subscription
-   * 
+   *
    * Monitors cart changes and updates quantity counters
-   * 
+   *
    * @return void
    */
   private setupCartSubscription(): void {
@@ -136,9 +136,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Setup Scroll Listener
-   * 
+   *
    * Configures infinite scroll with debounce for performance
-   * 
+   *
    * @return void
    */
   private setupScrollListener(): void {
@@ -149,9 +149,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * On Window Scroll
-   * 
+   *
    * HostListener backup for scroll detection
-   * 
+   *
    * @return void
    */
   @HostListener("window:scroll", ["$event"])
@@ -161,9 +161,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * On Scroll
-   * 
+   *
    * Checks scroll position and triggers next page load when near bottom
-   * 
+   *
    * @return void
    */
   private onScroll(): void {
@@ -180,9 +180,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Load Initial Albums
-   * 
+   *
    * Fetches first page of albums and organizes them into layout groups
-   * 
+   *
    * @return void
    */
   private loadInitialAlbums(): void {
@@ -215,9 +215,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Load More Albums
-   * 
+   *
    * Fetches next page for infinite scroll functionality
-   * 
+   *
    * @return void
    */
   private loadMoreAlbums(): void {
@@ -253,10 +253,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Process Initial Albums
-   * 
+   *
    * Organizes first page albums into specific layout positions:
    * [0] = featured, [1-8] = top grid, [9-10] = sidebar, [11+] = main grid
-   * 
+   *
    * @param (Album[]) albums Albums array to organize
    * @return void
    */
@@ -274,9 +274,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Process Additional Albums
-   * 
+   *
    * Appends newly loaded albums to the main grid
-   * 
+   *
    * @param (Album[]) albums New albums from pagination
    * @return void
    */
@@ -299,9 +299,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Update Pagination Info
-   * 
+   *
    * Updates pagination state from API response
-   * 
+   *
    * @param (any) pagination Pagination data from API
    * @return void
    */
@@ -313,9 +313,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * View Album
-   * 
+   *
    * Navigates to album detail page
-   * 
+   *
    * @param (Event) event Click event
    * @param (string) albumId Album ID to view
    * @return void
@@ -328,9 +328,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Add To Cart
-   * 
+   *
    * Adds album to cart with optimistic UI update
-   * 
+   *
    * @param (Event) event Click event
    * @param (string) albumId Album ID to add
    * @return void
@@ -359,9 +359,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Increment Cart
-   * 
+   *
    * Increases album quantity in cart, respecting stock limit
-   * 
+   *
    * @param (Event) event Click event
    * @param (string) albumId Album ID to increment
    * @return void
@@ -396,9 +396,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Decrement Cart
-   * 
+   *
    * Removes album completely from cart (trash icon behavior)
-   * 
+   *
    * @param (Event) event Click event
    * @param (string) albumId Album ID to remove
    * @return void
@@ -434,9 +434,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle Wishlist
-   * 
+   *
    * Adds or removes album from user's wishlist
-   * 
+   *
    * @param (Event) event Click event
    * @param (string) albumId Album ID to toggle
    * @return void
@@ -449,9 +449,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Is In Wishlist
-   * 
+   *
    * Checks if album is in user's wishlist
-   * 
+   *
    * @param (string) albumId Album ID to check
    * @return (boolean) True if album is in wishlist
    */
@@ -461,9 +461,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Get Main Image URL
-   * 
+   *
    * Gets primary album cover image URL with fallback
-   * 
+   *
    * @param (Album) album Album object
    * @return (string) Image URL
    */
@@ -473,9 +473,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Format Price
-   * 
+   *
    * Formats numeric price to currency string
-   * 
+   *
    * @param (number) price Price value
    * @return (string) Formatted price string
    */
@@ -485,9 +485,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /**
    * Track By Album
-   * 
+   *
    * TrackBy function for ngFor performance optimization
-   * 
+   *
    * @param (number) index Item index in array
    * @param (Album) album Album object
    * @return (string) Unique identifier for tracking

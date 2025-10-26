@@ -42,7 +42,7 @@ export class StateService {
   /**
    * Get Current State
    * Returns current snapshot of application state
-   * 
+   *
    * @return (AppState) Current state
    */
   getCurrentState(): AppState {
@@ -52,7 +52,7 @@ export class StateService {
   /**
    * Get State
    * Returns state as observable
-   * 
+   *
    * @return (Observable<AppState>) State stream
    */
   getState(): Observable<AppState> {
@@ -62,7 +62,7 @@ export class StateService {
   /**
    * Load Initial Data
    * Loads albums and categories on initialization
-   * 
+   *
    * @return (Observable<AppState>) Loaded state
    */
   loadInitialData(): Observable<AppState> {
@@ -109,7 +109,7 @@ export class StateService {
   /**
    * Update State
    * Merges partial state update
-   * 
+   *
    * @param (Partial<AppState>) partial - Partial state to merge
    * @return (void)
    */

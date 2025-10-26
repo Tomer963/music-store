@@ -33,9 +33,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * NgOnInit
-   * 
+   *
    * Initializes component and loads user profile and order data
-   * 
+   *
    * @return void
    */
   ngOnInit(): void {
@@ -45,9 +45,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * NgOnDestroy
-   * 
+   *
    * Cleans up subscriptions to prevent memory leaks
-   * 
+   *
    * @return void
    */
   ngOnDestroy(): void {
@@ -57,9 +57,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Load User Profile
-   * 
+   *
    * Fetches current user profile data from API
-   * 
+   *
    * @return void
    */
   private loadUserProfile(): void {
@@ -77,9 +77,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Load Orders
-   * 
+   *
    * Fetches user orders and enriches them with album details
-   * 
+   *
    * @return void
    */
   private loadOrders(): void {
@@ -94,9 +94,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Process Orders
-   * 
+   *
    * Fetches full album details for each order item to replace album IDs with complete data
-   * 
+   *
    * @param (Order[]) orders Array of orders to process
    * @return void
    */
@@ -130,7 +130,10 @@ export class MyAccountComponent implements OnInit, OnDestroy {
             next: (album) => {
               // Replace ID with full album object
               (item as any).album = album;
-              if (++itemsProcessed === totalItems && ++processedCount === orders.length) {
+              if (
+                ++itemsProcessed === totalItems &&
+                ++processedCount === orders.length
+              ) {
                 this.orders = orders;
                 this.isLoadingOrders = false;
               }
@@ -142,13 +145,19 @@ export class MyAccountComponent implements OnInit, OnDestroy {
                 title: "Unknown Album",
                 artist: "Unknown Artist",
               };
-              if (++itemsProcessed === totalItems && ++processedCount === orders.length) {
+              if (
+                ++itemsProcessed === totalItems &&
+                ++processedCount === orders.length
+              ) {
                 this.orders = orders;
                 this.isLoadingOrders = false;
               }
             },
           });
-        } else if (++itemsProcessed === totalItems && ++processedCount === orders.length) {
+        } else if (
+          ++itemsProcessed === totalItems &&
+          ++processedCount === orders.length
+        ) {
           // Album already populated as full object
           this.orders = orders;
           this.isLoadingOrders = false;
@@ -159,9 +168,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Switch Tab
-   * 
+   *
    * Switches between profile and orders tabs
-   * 
+   *
    * @param ("profile" | "orders") tab Target tab to display
    * @return void
    */
@@ -171,9 +180,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Format Date
-   * 
+   *
    * Formats ISO date string to readable format
-   * 
+   *
    * @param (string | undefined) date ISO date string
    * @return (string) Formatted date string or "N/A"
    */
@@ -190,9 +199,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Format Price
-   * 
+   *
    * Formats numeric price to currency string
-   * 
+   *
    * @param (number) price Price value to format
    * @return (string) Formatted price string with dollar sign
    */
@@ -202,9 +211,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Get Payment Method Text
-   * 
+   *
    * Converts payment method code to readable text
-   * 
+   *
    * @param (string) method Payment method code
    * @return (string) Human-readable payment method text
    */
@@ -214,9 +223,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Get Total Items
-   * 
+   *
    * Calculates total quantity of items in order
-   * 
+   *
    * @param (Order) order Order object
    * @return (number) Total quantity of all items
    */
@@ -226,9 +235,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Is Order Expandable
-   * 
+   *
    * Checks if order has items that can be displayed
-   * 
+   *
    * @param (Order) order Order object to check
    * @return (boolean) True if order has items
    */
@@ -238,9 +247,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle Order Details
-   * 
+   *
    * Expands or collapses order details section
-   * 
+   *
    * @param (string) orderId Order ID to toggle
    * @return void
    */
@@ -251,9 +260,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Get Item Display Name
-   * 
+   *
    * Formats order item name as "Artist - Title"
-   * 
+   *
    * @param (OrderItem) item Order item object
    * @return (string) Formatted display name
    */
@@ -267,9 +276,9 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
   /**
    * Get Album Image
-   * 
+   *
    * Retrieves album cover image URL with fallback to placeholder
-   * 
+   *
    * @param (OrderItem) item Order item object
    * @return (string) Image URL
    */

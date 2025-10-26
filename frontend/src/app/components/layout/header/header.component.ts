@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /**
    * Initialize Component
    * Sets up subscriptions for user and cart
-   * 
+   *
    * @return (void)
    */
   ngOnInit(): void {
@@ -50,7 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /**
    * Cleanup Component
    * Unsubscribes from observables
-   * 
+   *
    * @return (void)
    */
   ngOnDestroy(): void {
@@ -61,7 +61,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /**
    * Toggle Menu
    * Opens or closes mobile navigation
-   * 
+   *
    * @return (void)
    */
   toggleMenu(): void {
@@ -71,7 +71,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /**
    * Close Menu
    * Closes mobile navigation
-   * 
+   *
    * @return (void)
    */
   closeMenu(): void {
@@ -81,7 +81,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /**
    * Logout
    * Logs out user and navigates
-   * 
+   *
    * @return (void)
    */
   logout(): void {
@@ -94,7 +94,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /**
    * Navigate To Checkout
    * Navigates to checkout page
-   * 
+   *
    * @return (void)
    */
   navigateToCheckout(): void {

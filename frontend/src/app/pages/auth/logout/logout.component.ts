@@ -17,9 +17,9 @@ export class LogoutComponent implements OnInit, OnDestroy {
 
   /**
    * NgOnInit
-   * 
+   *
    * Initializes component and starts countdown timer
-   * 
+   *
    * @return void
    */
   ngOnInit(): void {
@@ -28,9 +28,9 @@ export class LogoutComponent implements OnInit, OnDestroy {
 
   /**
    * NgOnDestroy
-   * 
+   *
    * Cleans up countdown interval when component is destroyed
-   * 
+   *
    * @return void
    */
   ngOnDestroy(): void {
@@ -41,9 +41,9 @@ export class LogoutComponent implements OnInit, OnDestroy {
 
   /**
    * Start Countdown
-   * 
+   *
    * Initiates countdown timer and automatically redirects to home after 5 seconds
-   * 
+   *
    * @return void
    */
   private startCountdown(): void {
@@ -60,9 +60,9 @@ export class LogoutComponent implements OnInit, OnDestroy {
 
   /**
    * Navigate To Home
-   * 
+   *
    * Redirects user to home page and clears countdown interval
-   * 
+   *
    * @return void
    */
   navigateToHome(): void {

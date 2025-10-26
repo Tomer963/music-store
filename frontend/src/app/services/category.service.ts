@@ -16,7 +16,7 @@ export class CategoryService {
   /**
    * Get Categories
    * Fetches all categories with albums
-   * 
+   *
    * @return (Observable<Category[]>) Array of categories
    */
   getCategories(): Observable<Category[]> {
@@ -38,7 +38,7 @@ export class CategoryService {
   /**
    * Get Category
    * Fetches single category by ID
-   * 
+   *
    * @param (string) id - Category ID
    * @return (Observable<Category>) Category data
    */
@@ -52,7 +52,7 @@ export class CategoryService {
   /**
    * Handle Error
    * Centralized error handling
-   * 
+   *
    * @param (any) error - Error object
    * @return (Observable<never>) Error observable
    */
