@@ -546,6 +546,10 @@
   .album-info-icon {
     font-size: 18px;
   }
+
+  .new-products-title h2 {
+    font-size: 1.25rem;
+  }
 }
 
 @media (max-width: 767px) {
@@ -591,6 +595,10 @@
 
   .new-products-title {
     order: 2;
+  }
+
+  .new-products-title h2 {
+    font-size: 1.125rem;
   }
 
   .content-with-sidebar {
@@ -719,7 +727,7 @@
   }
 
   .new-products-title h2 {
-    font-size: 1.25rem;
+    font-size: 1rem;
   }
 
   .content-with-sidebar {
@@ -836,7 +844,7 @@
   }
 
   .new-products-title h2 {
-    font-size: 1.125rem;
+    font-size: 0.875rem;
   }
 
   .side-albums-mobile-wrapper {

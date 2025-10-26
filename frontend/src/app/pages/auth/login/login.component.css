@@ -371,3 +371,9 @@
     background-size: 150px 150px;
   }
 }
+
+@media (max-width: 429px) {
+  .page-title {
+    font-size: 1rem;
+  }
+}

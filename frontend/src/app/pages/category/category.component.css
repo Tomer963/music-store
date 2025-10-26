@@ -176,7 +176,7 @@
 
 @media (max-width: 992px) {
   .category-title {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
   }
   .albums-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -198,7 +198,7 @@
     padding: 8px 12px;
   }
   .category-title {
-    font-size: 1rem;
+    font-size: 1.125rem;
   }
   .albums-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -230,7 +230,7 @@
     margin-bottom: var(--spacing-lg);
   }
   .category-title {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
   .albums-grid {
     grid-template-columns: 1fr;
@@ -271,6 +271,9 @@
 }
 
 @media (max-width: 429px) {
+  .category-title {
+    font-size: 0.875rem;
+  }
   .no-more-plain p {
     font-size: 0.938rem;
   }
