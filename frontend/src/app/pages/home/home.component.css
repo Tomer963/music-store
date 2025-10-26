@@ -21,7 +21,6 @@
   width: 100%;
 }
 
-/* Empty state */
 .no-albums-container {
   display: flex;
   justify-content: center;
@@ -55,7 +54,6 @@
   line-height: 1.5;
 }
 
-/* Featured section */
 .featured-section {
   display: flex;
   flex-direction: column;
@@ -96,7 +94,6 @@
   width: 100%;
 }
 
-/* Side albums mobile section */
 .side-albums-mobile-section {
   display: none;
 }
@@ -108,7 +105,6 @@
   margin-bottom: var(--spacing-lg);
 }
 
-/* Content below featured */
 .content-below-featured {
   width: 100%;
   padding-top: var(--spacing-lg);
@@ -189,7 +185,6 @@
   margin-bottom: var(--spacing-xl);
 }
 
-/* Album image container */
 .album-image-container {
   height: 280px;
   cursor: pointer;
@@ -208,7 +203,6 @@
   transform: scale(1.05);
 }
 
-/* Album content variants */
 .album-content.no-description {
   padding: var(--spacing-sm) var(--spacing-md);
   min-height: auto;
@@ -243,7 +237,6 @@
   line-height: 1.4;
 }
 
-/* Action icons group */
 .album-icons-group {
   display: flex;
   gap: var(--spacing-sm);
@@ -253,7 +246,6 @@
   flex-shrink: 0;
 }
 
-/* Wishlist button */
 .album-icon-btn.wishlist-btn {
   background-color: transparent;
   padding: 5px;
@@ -278,7 +270,6 @@
   color: var(--primary-dark);
 }
 
-/* Out of stock button */
 .album-icon-btn.out-of-stock {
   background-color: transparent;
   cursor: not-allowed;
@@ -295,7 +286,6 @@
   font-size: 20px;
 }
 
-/* Cart button */
 .album-icon-btn.cart-btn.gray-cart-btn {
   background-color: transparent !important;
   padding: 5px;
@@ -324,7 +314,6 @@
   color: #555555;
 }
 
-/* Info button */
 .album-icon-btn.info-btn {
   background-color: #737373;
   width: 34px;
@@ -347,7 +336,6 @@
   color: var(--black);
 }
 
-/* Cart counter */
 .bottom-cart-counter {
   display: flex;
   align-items: center;
@@ -408,26 +396,26 @@
 
 .no-more-plain {
   text-align: center;
-  padding: var(--spacing-md) 0 var(--spacing-sm) 0;
+  padding: 0;
+  margin: var(--spacing-xl) 0 var(--spacing-xxl) 0;
+}
+
+.no-more-plain p {
   color: var(--gray-medium);
   font-size: 1.125rem;
   font-weight: 500;
-  margin-bottom: var(--spacing-xxl);
-  margin-top: var(--spacing-xl);
+  margin: 0;
 }
 
-/* Animations */
 .albums-grid .home-album-card,
 .side-albums-vertical .home-album-card {
   animation: fadeInUp 0.5s ease-out backwards;
 }
 
-/* Hide sidebar-mobile-section on desktop */
 .sidebar-mobile-section {
   display: none;
 }
 
-/* Responsive breakpoints */
 @media (min-width: 1400px) {
   .featured-wrapper {
     min-height: 600px;
@@ -460,7 +448,6 @@
   }
 }
 
-/* Medium screens */
 @media (min-width: 768px) and (max-width: 1023px) {
   .featured-wrapper {
     grid-template-columns: 1fr;
@@ -477,7 +464,6 @@
     grid-template-rows: auto;
   }
 
-  /* Show side albums after top albums on mobile */
   .side-albums-mobile-section {
     display: block;
     margin-bottom: var(--spacing-xl);
@@ -490,12 +476,10 @@
     gap: var(--spacing-lg);
   }
 
-  /* Hide desktop side albums */
   .side-albums-vertical.desktop-only {
     display: none !important;
   }
 
-  /* Main content ordering */
   .content-below-featured {
     display: flex;
     flex-direction: column;
@@ -542,7 +526,6 @@
     font-size: 1.125rem;
   }
 
-  /* Icon sizes for medium screens */
   .album-icon-btn.wishlist-btn,
   .album-icon-btn.cart-btn,
   .album-icon-btn.info-btn,
@@ -646,7 +629,6 @@
     font-size: 1.125rem;
   }
   
-  /* Icon sizes for tablet */
   .album-icons-group {
     gap: 6px;
   }
@@ -786,13 +768,12 @@
 
   .no-more-plain {
     order: 4;
-    margin-top: var(--spacing-lg);
-    margin-bottom: var(--spacing-xxl);
+  }
+
+  .no-more-plain p {
     font-size: 1rem;
-    padding: var(--spacing-sm) 0;
   }
   
-  /* Icon sizes for mobile */
   .album-icons-group {
     gap: 4px;
   }
@@ -846,10 +827,8 @@
     font-size: 0.938rem;
   }
 
-  .no-more-plain {
+  .no-more-plain p {
     font-size: 0.938rem;
-    padding: 8px 0;
-    margin-bottom: var(--spacing-xl);
   }
 
   .new-products-title {

@@ -542,12 +542,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         }
 
         if (formData.billing) {
-          this.billingForm.patchValue(formData.billing);
+          this.billingForm.patchValue(formData.billing, { emitEvent: false });
           this.billingInfo = { ...formData.billingInfo };
         }
 
         if (formData.payment) {
-          this.paymentForm.patchValue(formData.payment);
+          this.paymentForm.patchValue(formData.payment, { emitEvent: false });
           this.setupPaymentValidators();
           this.updateAvailableMonthsAndYears();
         }
@@ -596,11 +596,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     if (fieldName === "cardNumber" || fieldName === "cvv") {
       const numericValue = value.replace(/\D/g, "");
-      this.paymentForm.get(fieldName)?.setValue(numericValue);
+      this.paymentForm.get(fieldName)?.setValue(numericValue, { emitEvent: false });
       this.paymentForm.get(fieldName)?.markAsTouched();
       target.value = numericValue;
     } else {
-      this.paymentForm.get(fieldName)?.setValue(value);
+      this.paymentForm.get(fieldName)?.setValue(value, { emitEvent: false });
       this.paymentForm.get(fieldName)?.markAsTouched();
     }
 
@@ -787,7 +787,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const control = form.get(fieldName);
     if (!control) return false;
     
-    return control.invalid && control.touched && (formSubmitted || control.dirty);
+    if (!control.value && !control.touched && !formSubmitted) {
+      return false;
+    }
+    
+    return control.invalid && (control.touched || formSubmitted);
   }
 
   getErrorMessage(form: FormGroup, field: string): string {
