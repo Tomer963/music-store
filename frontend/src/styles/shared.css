@@ -822,14 +822,9 @@
 
 .breadcrumb .breadcrumb-separator {
   margin: 0 clamp(4px, 1vw, 8px);
-  color: #000000 !important;
+  color: #999999 !important;
   font-weight: 400;
   display: inline;
-}
-
-.breadcrumb .breadcrumb-separator:last-of-type {
-  color: #999999 !important;
-  margin: 0 clamp(4px, 1vw, 8px);
 }
 
 .breadcrumb .breadcrumb-current {

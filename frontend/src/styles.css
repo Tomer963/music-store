@@ -183,15 +183,10 @@ img {
 }
 
 .breadcrumb .breadcrumb-separator {
-  color: #000000 !important;
+  color: #999999 !important;
   display: inline !important;
   margin: 0 8px !important;
   font-weight: 400 !important;
-}
-
-.breadcrumb .breadcrumb-separator:last-of-type {
-  color: #999999 !important;
-  margin: 0 8px !important;
 }
 
 .breadcrumb .breadcrumb-current {
