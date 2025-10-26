@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Component
-   * 
+   *
    * Sets up subscriptions for user authentication and cart updates
    *
    * @return void
@@ -50,7 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Cleanup Component
-   * 
+   *
    * Unsubscribes from all observables to prevent memory leaks
    *
    * @return void
@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle Menu
-   * 
+   *
    * Opens or closes mobile navigation menu
    *
    * @return void
@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Close Menu
-   * 
+   *
    * Closes mobile navigation menu
    *
    * @return void
@@ -84,7 +84,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Logout
-   * 
+   *
    * Logs out user, clears cart session and navigates to logout page
    *
    * @return void
@@ -98,7 +98,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Navigate To Checkout
-   * 
+   *
    * Navigates to checkout page
    *
    * @return void

@@ -33,7 +33,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Component
-   * 
+   *
    * Sets up search with debounce and minimum character requirement
    *
    * @return void
@@ -78,7 +78,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Cleanup Component
-   * 
+   *
    * Unsubscribes from all observables
    *
    * @return void
@@ -90,7 +90,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Clear Search
-   * 
+   *
    * Resets search input and results
    *
    * @return void
@@ -105,7 +105,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * On Search
-   * 
+   *
    * Handles search form submission
    *
    * @return void
@@ -120,7 +120,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Select Album
-   * 
+   *
    * Navigates to album detail page
    *
    * @param (string) albumId - Album ID
@@ -135,7 +135,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Hide Results
-   * 
+   *
    * Closes search results dropdown
    *
    * @return void
@@ -146,7 +146,7 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * On Click Outside
-   * 
+   *
    * Closes dropdown when clicking outside search box
    *
    * @param (Event) event - Mouse click event

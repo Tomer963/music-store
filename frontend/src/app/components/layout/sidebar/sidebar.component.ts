@@ -29,7 +29,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Component
-   * 
+   *
    * Loads categories and sets up route monitoring
    *
    * @return void
@@ -42,7 +42,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Cleanup Component
-   * 
+   *
    * Unsubscribes from all observables
    *
    * @return void
@@ -54,7 +54,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Load Categories
-   * 
+   *
    * Loads categories with albums from state service
    *
    * @return void
@@ -98,7 +98,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Setup Route Listener
-   * 
+   *
    * Monitors navigation events to update sidebar state
    *
    * @return void
@@ -114,7 +114,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Check Current Route
-   * 
+   *
    * Updates component state based on current route
    *
    * @return void
@@ -147,7 +147,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Get Album Category
-   * 
+   *
    * Fetches album's category for sidebar highlighting
    *
    * @param (string) albumId - Album identifier
@@ -167,7 +167,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Select Category
-   * 
+   *
    * Navigates to category page
    *
    * @param (string) categoryId - Category identifier
@@ -179,7 +179,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Is Category Active
-   * 
+   *
    * Checks if category is currently active
    *
    * @param (string) categoryId - Category identifier
@@ -194,7 +194,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Get Sidebar Classes
-   * 
+   *
    * Returns CSS classes based on current page
    *
    * @return string Space-separated CSS class names

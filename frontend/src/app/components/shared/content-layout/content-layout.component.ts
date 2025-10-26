@@ -21,7 +21,7 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Component
-   * 
+   *
    * Sets up route monitoring
    *
    * @return void
@@ -42,7 +42,7 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
 
   /**
    * Cleanup Component
-   * 
+   *
    * Unsubscribes from all observables
    *
    * @return void
@@ -54,7 +54,7 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
 
   /**
    * Check Current Route
-   * 
+   *
    * Updates flags based on current URL
    *
    * @return void
