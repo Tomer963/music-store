@@ -84,7 +84,12 @@
           </div>
 
           <div class="no-orders" *ngIf="!isLoadingOrders && orders.length === 0">
-            <div class="empty-icon">📦</div>
+            <div class="empty-icon">
+              <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="15" y="25" width="50" height="40" rx="2" stroke="#ccc" stroke-width="2" fill="none"/>
+                <path d="M20 35 L30 45 L60 25" stroke="#ccc" stroke-width="3" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
             <h3>No orders yet</h3>
             <p>When you place your first order, it will appear here.</p>
             <a routerLink="/" class="btn btn-primary">Start Shopping</a>
@@ -111,7 +116,7 @@
                   </div>
                 </div>
                 <div class="order-expand-icon" *ngIf="isOrderExpandable(order)">
-                  <span class="expand-icon">▼</span>
+                  <span class="expand-icon">&#9660;</span>
                 </div>
               </div>
 

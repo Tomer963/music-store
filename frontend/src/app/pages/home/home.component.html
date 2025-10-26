@@ -13,7 +13,7 @@
         *ngIf="!featuredAlbum && allAlbums.length === 0"
       >
         <div class="no-albums-message">
-          <i class="fas fa-music"></i>
+          <div class="empty-icon">&#9834;</div>
           <h2>No Albums Available</h2>
           <p>There are no albums in the system yet. Please check back later.</p>
         </div>
@@ -200,7 +200,7 @@
                               *ngIf="!isWishlistLoadingMap[album._id]"
                               class="wishlist-heart-icon"
                             >
-                              {{ isInWishlist(album._id) ? "❤️" : "🤍" }}
+                              {{ isInWishlist(album._id) ? "&#10084;" : "&#129293;" }}
                             </span>
                             <div
                               *ngIf="isWishlistLoadingMap[album._id]"
@@ -214,7 +214,7 @@
                             class="album-icon-btn out-of-stock"
                             title="Out of Stock"
                           >
-                            <span>🚫</span>
+                            <span>&#10008;</span>
                           </div>
 
                           <!-- Cart button or counter -->
@@ -261,7 +261,7 @@
                               [disabled]="isUpdatingCart[album._id]"
                               (click)="decrementCart($event, album._id)"
                             >
-                              🗑️
+                              &#128465;
                             </button>
                             <span class="bottom-counter-value">{{
                               cartQuantities[album._id] || 1
@@ -289,7 +289,7 @@
                             "
                             title="View Details"
                           >
-                            <span class="album-info-icon">ℹ</span>
+                            <span class="album-info-icon">&#8505;</span>
                           </button>
                         </div>
                       </div>

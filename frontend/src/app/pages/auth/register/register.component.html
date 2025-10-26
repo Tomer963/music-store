@@ -21,13 +21,13 @@
         [disabled]="isLoading"
         (click)="closeModal()"
       >
-        ×
+        &times;
       </button>
     </div>
 
     <!-- Success Message -->
     <div class="success-message" *ngIf="showSuccess">
-      <div class="success-icon">✓</div>
+      <div class="success-icon">&#10003;</div>
       <p class="success-text">Registration successful!</p>
       <p class="redirect-text">Redirecting to login...</p>
     </div>
@@ -133,7 +133,8 @@
             (touchend)="showPassword = false"
             tabindex="-1"
           >
-            {{ showPassword ? "👁️" : "👁️‍🗨️" }}
+            <span *ngIf="!showPassword">&#128065;</span>
+            <span *ngIf="showPassword">&#128064;</span>
           </button>
         </div>
         <span class="form-error" *ngIf="shouldShowError('password')">
@@ -168,7 +169,8 @@
             (touchend)="showConfirmPassword = false"
             tabindex="-1"
           >
-            {{ showConfirmPassword ? "👁️" : "👁️‍🗨️" }}
+            <span *ngIf="!showConfirmPassword">&#128065;</span>
+            <span *ngIf="showConfirmPassword">&#128064;</span>
           </button>
         </div>
         <span class="form-error" *ngIf="shouldShowError('confirmPassword')">

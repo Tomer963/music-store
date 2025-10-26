@@ -1,7 +1,7 @@
 <!-- Empty State -->
 <div class="wishlist-page-standalone" *ngIf="!isLoading && wishlistItems.length === 0">
   <div class="empty-wishlist">
-    <div class="empty-icon">❤️</div>
+    <div class="empty-icon">&#10084;</div>
     <h2>Your wishlist is empty</h2>
     <p>Save items you love to your wishlist and they'll appear here</p>
     <a routerLink="/" class="btn btn-primary">Continue Shopping</a>
@@ -70,7 +70,7 @@
                         (click)="toggleWishlist($event, album._id)"
                         title="Remove from Wishlist"
                       >
-                        <span class="wishlist-heart-icon">❤️</span>
+                        <span class="wishlist-heart-icon">&#10084;</span>
                       </button>
 
                       <button
@@ -97,7 +97,7 @@
                         (click)="viewAlbumInfo($event, album._id); $event.stopPropagation(); $event.preventDefault()"
                         title="View Details"
                       >
-                        <span class="album-info-icon">ℹ</span>
+                        <span class="album-info-icon">&#8505;</span>
                       </button>
                     </div>
                   </div>
