@@ -583,12 +583,8 @@
   border-radius: var(--radius-full);
 }
 
-/* ========================================
-   TABLET RESPONSIVE (768px - 1199px)
-   Always show controls on tablet for ALL albums
-   ======================================== */
+/* Tablet Responsive - Always show controls */
 @media (min-width: 768px) and (max-width: 1199px) {
-  /* For albums 1-11: Always show overlay controls on tablet */
   .text-overlay {
     height: 110px;
     padding: var(--spacing-md);
@@ -618,7 +614,6 @@
     pointer-events: auto;
   }
 
-  /* Keep standard icon sizes for tablet - cards are bigger now */
   .overlay-icon-btn,
   .red-overlay-icon-btn {
     width: 40px;
@@ -642,9 +637,7 @@
   }
 }
 
-/* ========================================
-   MOBILE RESPONSIVE (< 768px)
-   ======================================== */
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .red-background-overlay,
   .text-overlay {

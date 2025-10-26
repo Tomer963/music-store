@@ -55,6 +55,13 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  /**
+   * Load Album
+   * 
+   * Fetches album details from API and initializes component state
+   * 
+   * @param albumId Album ID to load
+   */
   private loadAlbum(albumId: string): void {
     this.albumService
       .getAlbum(albumId)
@@ -75,6 +82,11 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Subscribe To Wishlist Status
+   * 
+   * Sets up subscription to track if album is in user's wishlist
+   */
   private subscribeToWishlistStatus(): void {
     if (!this.album) return;
 
@@ -87,37 +99,39 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Build Thumbnails
+   * 
+   * Creates thumbnail array from album images with fallback placeholder
+   * 
+   * @return Array of album images for thumbnail display
+   */
   private buildThumbnails(): AlbumImage[] {
     if (!this.album) return [];
 
     const thumbnails: AlbumImage[] = [];
-
     const mainImageUrl = this.albumService.getMainImageUrl(this.album);
-    thumbnails.push({
-      url: mainImageUrl,
-      isMain: true,
-    });
+    
+    // Add main image first
+    thumbnails.push({ url: mainImageUrl, isMain: true });
 
     if (this.album.images && this.album.images.length > 0) {
       const secondaryImages = this.album.images.filter((img) => !img.isMain);
 
+      // Add up to 2 secondary images
       for (let i = 0; i < Math.min(2, secondaryImages.length); i++) {
-        thumbnails.push({
-          url: secondaryImages[i].url,
-          isMain: false,
-        });
+        thumbnails.push({ url: secondaryImages[i].url, isMain: false });
       }
 
+      // Fallback if only main image exists
       if (thumbnails.length === 1 && this.album.images.length > 1) {
         for (let i = 1; i < Math.min(3, this.album.images.length); i++) {
-          thumbnails.push({
-            url: this.album.images[i].url,
-            isMain: false,
-          });
+          thumbnails.push({ url: this.album.images[i].url, isMain: false });
         }
       }
     }
 
+    // Fill remaining slots with placeholder
     while (thumbnails.length < 3) {
       thumbnails.push({
         url: "/assets/images/album-placeholder.svg",
@@ -128,34 +142,58 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
     return thumbnails;
   }
 
+  /**
+   * Select Image
+   * 
+   * Changes the main displayed image
+   * 
+   * @param index Index of thumbnail to display
+   */
   selectImage(index: number): void {
     if (index >= 0 && index < this.thumbnails.length) {
       this.selectedImageIndex = index;
     }
   }
 
+  /**
+   * Get Selected Image URL
+   * 
+   * Returns URL of currently selected image
+   * 
+   * @return Image URL or placeholder
+   */
   getSelectedImageUrl(): string {
     if (!this.album || this.thumbnails.length === 0) {
       return "/assets/images/album-placeholder.svg";
     }
 
-    if (
-      this.selectedImageIndex >= 0 &&
-      this.selectedImageIndex < this.thumbnails.length
-    ) {
+    if (this.selectedImageIndex >= 0 && this.selectedImageIndex < this.thumbnails.length) {
       return this.thumbnails[this.selectedImageIndex].url;
     }
 
     return this.thumbnails[0].url;
   }
 
+  /**
+   * Get Three Thumbnails
+   * 
+   * Returns the thumbnail array for display
+   * 
+   * @return Array of three thumbnail images
+   */
   getThreeThumbnails(): AlbumImage[] {
     return this.thumbnails;
   }
 
+  /**
+   * Add To Cart
+   * 
+   * Adds the album to cart with selected quantity
+   */
   addToCart(): void {
     if (!this.album || this.isAddingToCart || !this.album.inStock) return;
 
+    // Validate quantity
     if (this.quantity < 1 || this.quantity > this.album.stock) {
       this.quantity = 1;
       return;
@@ -171,6 +209,11 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Toggle Wishlist
+   * 
+   * Adds or removes album from wishlist
+   */
   toggleWishlist(): void {
     if (!this.album) return;
 
@@ -180,26 +223,63 @@ export class AlbumDetailComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
+  /**
+   * Is Category
+   * 
+   * Type guard to check if category is populated object
+   * 
+   * @param category Category to check
+   * @return True if category is object
+   */
   isCategory(category: string | Category): category is Category {
     return typeof category === "object" && category !== null;
   }
 
+  /**
+   * Get Category ID
+   * 
+   * Extracts category ID from album
+   * 
+   * @return Category ID or empty string
+   */
   getCategoryId(): string {
     return this.album && this.isCategory(this.album.category)
       ? this.album.category._id
       : "";
   }
 
+  /**
+   * Get Category Name
+   * 
+   * Extracts category name from album
+   * 
+   * @return Category name or empty string
+   */
   getCategoryName(): string {
     return this.album && this.isCategory(this.album.category)
       ? this.album.category.name
       : "";
   }
 
+  /**
+   * Format Price
+   * 
+   * Formats price with currency symbol
+   * 
+   * @param price Price value
+   * @return Formatted price string
+   */
   formatPrice(price: number): string {
     return this.albumService.formatPrice(price);
   }
 
+  /**
+   * Get Formatted Description
+   * 
+   * Splits long description into paragraphs
+   * 
+   * @return Array of description paragraphs
+   */
   getFormattedDescription(): string[] {
     if (!this.album?.longDescription) {
       return ["No detailed description available."];

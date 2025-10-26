@@ -6,9 +6,7 @@
       placeholder="Search"
       [formControl]="searchControl"
       autocomplete="off"
-      (focus)="
-        showResults = searchResults.length > 0 || searchQuery.length >= 3
-      "
+      (focus)="showResults = searchResults.length > 0 || searchQuery.length >= 3"
     />
     <button
       type="button"
@@ -44,12 +42,7 @@
 
   <div
     class="search-results"
-    *ngIf="
-      showResults &&
-      (searchResults.length > 0 ||
-        isSearching ||
-        (searchQuery.length >= 3 && !isSearching))
-    "
+    *ngIf="showResults && (searchResults.length > 0 || isSearching || (searchQuery.length >= 3 && !isSearching))"
   >
     <div class="search-loading" *ngIf="isSearching">
       <app-spinner [size]="'small'"></app-spinner>
@@ -63,11 +56,7 @@
         (click)="selectAlbum(album._id)"
       >
         <img
-          [src]="
-            album.images && album.images[0]
-              ? album.images[0].url
-              : '/assets/images/placeholder-svg-full.svg'
-          "
+          [src]="album.images && album.images[0] ? album.images[0].url : '/assets/images/placeholder-svg-full.svg'"
           [alt]="album.title"
           class="result-image"
         />
@@ -76,16 +65,13 @@
           <div class="result-artist">{{ album.artist }}</div>
           <div class="result-year">Released {{ album.releaseYear }}</div>
         </div>
-
         <hr class="result-separator" *ngIf="!last" />
       </div>
     </div>
 
     <div
       class="no-results"
-      *ngIf="
-        !isSearching && searchResults.length === 0 && searchQuery.length >= 3
-      "
+      *ngIf="!isSearching && searchResults.length === 0 && searchQuery.length >= 3"
     >
       No results found
     </div>
