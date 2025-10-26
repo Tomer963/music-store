@@ -208,7 +208,7 @@
 }
 
 .description-line {
-  max-height: 52px;
+  max-height: 60px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
