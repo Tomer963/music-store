@@ -436,7 +436,46 @@
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1399px) {
+/* ========================================
+   TABLET OPTIMIZATIONS (iPad Pro: 1024x1366)
+   Grid change: 2 columns × 4 rows for albums 2-9
+   ======================================== */
+@media (min-width: 768px) and (max-width: 1199px) {
+  /* Featured wrapper - increase height to match 4 rows */
+  .featured-wrapper {
+    grid-template-columns: 1fr 2fr;
+    min-height: 1040px;
+    max-height: 1200px;
+    gap: 0;
+  }
+
+  /* Featured album - matches the total height of 4 rows */
+  .featured-album {
+    min-height: 1040px;
+    height: 100%;
+  }
+
+  /* Top albums grid - CHANGED TO 2 columns × 4 rows */
+  .top-albums-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, minmax(255px, 1fr));
+    min-height: 1040px;
+    height: 100%;
+    gap: 0;
+  }
+
+  .top-albums-grid > * {
+    min-height: 255px;
+    height: 100%;
+  }
+
+  /* Main albums grid - 2 columns for better sizing */
+  .albums-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  /* Sidebar adjustments */
   .sidebar-column {
     flex: 0 0 350px;
     min-width: 350px;
@@ -447,96 +486,43 @@
     gap: var(--spacing-md);
   }
 
-  /* Change albums grid to 2 columns for tablet */
-  .albums-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .featured-wrapper {
-    grid-template-columns: 1fr;
-    min-height: auto;
-    max-height: none;
-  }
-
-  .featured-album {
-    min-height: auto;
-  }
-
-  .top-albums-grid {
-    min-height: auto;
-    grid-template-rows: auto;
-  }
-
-  .side-albums-mobile-section {
-    display: block;
-    margin-bottom: var(--spacing-xl);
-    order: 1;
-  }
-
-  .side-albums-mobile-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
-  }
-
-  .side-albums-vertical.desktop-only {
-    display: none !important;
-  }
-
-  .content-below-featured {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .new-products-title {
-    order: 2;
-  }
-
-  .content-with-sidebar {
-    order: 3;
-    flex-direction: column;
-    gap: var(--spacing-xl);
-    width: 100%;
-    margin: 0;
-    padding: 0 var(--spacing-md);
-  }
-
-  .main-albums-wrapper {
-    order: 1;
-    width: 100%;
-  }
-
-  .sidebar-column {
-    order: 2;
-    flex: 1;
-    width: 100%;
-    min-width: 100%;
-    max-width: 100%;
-  }
-
-  .no-more-plain {
-    order: 4;
-  }
-
-  /* Change albums grid to 2 columns for tablet */
-  .albums-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
+  /* Red background album text sizes */
   .album-content.red-background .album-title-line.large-title {
-    font-size: 1.5rem;
-  }
-  .album-content.red-background .album-artist-line.large-artist {
-    font-size: 1.125rem;
+    font-size: 1.75rem;
   }
 
-  .new-products-title h2 {
+  .album-content.red-background .album-artist-line.large-artist {
     font-size: 1.25rem;
   }
 }
 
+/* ========================================
+   SMALL TABLET (768px - 991px)
+   Slightly reduced height for smaller tablets
+   ======================================== */
+@media (min-width: 768px) and (max-width: 991px) {
+  .featured-wrapper {
+    min-height: 920px;
+    max-height: 1100px;
+  }
+
+  .featured-album {
+    min-height: 920px;
+  }
+
+  .top-albums-grid {
+    grid-template-rows: repeat(4, minmax(225px, 1fr));
+    min-height: 920px;
+  }
+
+  .top-albums-grid > * {
+    min-height: 225px;
+  }
+}
+
+/* ========================================
+   MOBILE & SMALL TABLET (< 768px)
+   ======================================== */
 @media (max-width: 767px) {
   .home-page {
     min-height: calc(100vh - 80px);
@@ -553,8 +539,14 @@
   }
 
   .top-albums-grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, minmax(270px, 1fr));
     min-height: auto;
-    grid-template-rows: auto;
+    height: auto;
+  }
+
+  .top-albums-grid > * {
+    min-height: auto;
   }
 
   .side-albums-mobile-section {

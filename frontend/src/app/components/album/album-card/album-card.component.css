@@ -583,7 +583,10 @@
   border-radius: var(--radius-full);
 }
 
-/* Tablet Responsive - Show controls always and adjust sizes */
+/* ========================================
+   TABLET RESPONSIVE (768px - 1199px)
+   Always show controls on tablet for ALL albums
+   ======================================== */
 @media (min-width: 768px) and (max-width: 1199px) {
   /* For albums 1-11: Always show overlay controls on tablet */
   .text-overlay {
@@ -639,7 +642,9 @@
   }
 }
 
-/* Mobile Responsive */
+/* ========================================
+   MOBILE RESPONSIVE (< 768px)
+   ======================================== */
 @media (max-width: 768px) {
   .red-background-overlay,
   .text-overlay {
