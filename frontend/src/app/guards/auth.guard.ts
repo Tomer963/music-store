@@ -4,12 +4,11 @@ import { AuthService } from "../services/auth.service";
 
 /**
  * Auth Guard
- *
- * Protects routes that require user authentication
- *
- * @param route - Activated route snapshot
- * @param state - Current router state
- * @return True if user can activate route
+ * Protects routes requiring authentication
+ * 
+ * @param (ActivatedRouteSnapshot) route - Current route
+ * @param (RouterStateSnapshot) state - Router state
+ * @return (boolean) True if user can access route
  */
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -19,7 +18,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  // Save return URL and redirect to login
+  // Store return URL for post-login redirect
   authService.saveReturnUrl(state.url);
   router.navigate(["/login"], {
     queryParams: { returnUrl: state.url },

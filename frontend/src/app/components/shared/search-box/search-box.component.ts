@@ -33,10 +33,9 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Component
-   *
    * Sets up search with debounce and minimum character requirement
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   ngOnInit(): void {
     this.searchControl.valueChanges
@@ -78,10 +77,9 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Cleanup Component
-   *
-   * Unsubscribes from all observables
-   *
-   * @return void
+   * Unsubscribes from observables
+   * 
+   * @return (void)
    */
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -90,10 +88,9 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Clear Search
-   *
    * Resets search input and results
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   clearSearch(): void {
     this.searchControl.setValue("");
@@ -105,10 +102,9 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * On Search
-   *
    * Handles search form submission
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   onSearch(): void {
     const query = this.searchControl.value?.trim();
@@ -120,11 +116,10 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Select Album
-   *
    * Navigates to album detail page
-   *
+   * 
    * @param (string) albumId - Album ID
-   * @return void
+   * @return (void)
    */
   selectAlbum(albumId: string): void {
     this.hideResults();
@@ -135,10 +130,9 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * Hide Results
-   *
    * Closes search results dropdown
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   hideResults(): void {
     this.showResults = false;
@@ -146,11 +140,10 @@ export class SearchBoxComponent implements OnInit, OnDestroy {
 
   /**
    * On Click Outside
-   *
    * Closes dropdown when clicking outside search box
-   *
+   * 
    * @param (Event) event - Mouse click event
-   * @return void
+   * @return (void)
    */
   @HostListener("document:click", ["$event"])
   onClickOutside(event: Event): void {

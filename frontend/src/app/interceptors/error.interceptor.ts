@@ -6,12 +6,11 @@ import { catchError, throwError } from "rxjs";
 
 /**
  * Error Interceptor
- *
  * Handles HTTP errors globally
- *
- * @param req - HTTP request
- * @param next - HTTP handler
- * @return Observable HTTP event with error handling
+ * 
+ * @param (HttpRequest) req - HTTP request
+ * @param (HttpHandler) next - Next handler
+ * @return (Observable) HTTP event stream with error handling
  */
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
@@ -19,10 +18,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // Handle specific HTTP status codes
+      // Handle 401 - Unauthorized (except login endpoint)
       if (error.status === 401 && !req.url.includes("/auth/login")) {
         authService.logout();
-      } else if (error.status === 403) {
+      } 
+      // Handle 403 - Forbidden
+      else if (error.status === 403) {
         router.navigate(["/"]);
       }
 

@@ -21,10 +21,9 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Component
-   *
    * Sets up route monitoring
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   ngOnInit(): void {
     // Listen to route changes
@@ -42,10 +41,9 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
 
   /**
    * Cleanup Component
-   *
-   * Unsubscribes from all observables
-   *
-   * @return void
+   * Unsubscribes from observables
+   * 
+   * @return (void)
    */
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -54,10 +52,9 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
 
   /**
    * Check Current Route
-   *
    * Updates flags based on current URL
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   private checkCurrentRoute(): void {
     const url = this.router.url;

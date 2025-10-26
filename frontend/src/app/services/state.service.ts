@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, of } from "rxjs";
-import { tap, map, switchMap, catchError } from "rxjs/operators";
+import { switchMap, map, catchError } from "rxjs/operators";
 import { Album, Category } from "../models/album.model";
 import { AlbumService } from "./album.service";
 import { CategoryService } from "./category.service";
@@ -41,10 +41,9 @@ export class StateService {
 
   /**
    * Get Current State
-   *
-   * Returns the current snapshot of application state
-   *
-   * @return Current state object
+   * Returns current snapshot of application state
+   * 
+   * @return (AppState) Current state
    */
   getCurrentState(): AppState {
     return this.stateSubject.value;
@@ -52,10 +51,9 @@ export class StateService {
 
   /**
    * Get State
-   *
-   * Returns state as an observable
-   *
-   * @return State observable
+   * Returns state as observable
+   * 
+   * @return (Observable<AppState>) State stream
    */
   getState(): Observable<AppState> {
     return this.state$;
@@ -63,10 +61,9 @@ export class StateService {
 
   /**
    * Load Initial Data
-   *
-   * Loads albums and categories on app initialization
-   *
-   * @return Loaded state
+   * Loads albums and categories on initialization
+   * 
+   * @return (Observable<AppState>) Loaded state
    */
   loadInitialData(): Observable<AppState> {
     // Return cached state if already loaded
@@ -74,7 +71,7 @@ export class StateService {
       return of(this.getCurrentState());
     }
 
-    // First load albums, then categories
+    // Load albums first, then categories
     return this.albumService.getNewAlbums(1, 23).pipe(
       switchMap((response) => {
         const albums = response.results || [];
@@ -94,11 +91,11 @@ export class StateService {
           totalItems: pagination.total || albums.length,
         });
 
-        // Now fetch categories
+        // Fetch categories
         return this.categoryService.getCategories();
       }),
       map((categories) => {
-        // Merge categories into existing state
+        // Merge categories into state
         const newState = { ...this.getCurrentState(), categories };
         this.updateState(newState);
         return newState;
@@ -111,11 +108,10 @@ export class StateService {
 
   /**
    * Update State
-   *
-   * Merges partial state update with current state
-   *
-   * @param partial - Partial state to merge
-   * @return void
+   * Merges partial state update
+   * 
+   * @param (Partial<AppState>) partial - Partial state to merge
+   * @return (void)
    */
   private updateState(partial: Partial<AppState>): void {
     this.stateSubject.next({ ...this.getCurrentState(), ...partial });

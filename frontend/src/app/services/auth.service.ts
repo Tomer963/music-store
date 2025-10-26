@@ -40,10 +40,9 @@ export class AuthService {
 
   /**
    * Setup Activity Tracking
-   *
    * Monitors user interactions to track session activity
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   private setupActivityTracking(): void {
     // Combine multiple user activity events
@@ -64,10 +63,9 @@ export class AuthService {
 
   /**
    * Setup Inactivity Check
-   *
    * Periodically checks for session timeout
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   private setupInactivityCheck(): void {
     interval(this.ACTIVITY_CHECK_INTERVAL).subscribe(() => {
@@ -85,10 +83,9 @@ export class AuthService {
 
   /**
    * Update Last Activity
-   *
    * Records current timestamp as last user activity
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   private updateLastActivity(): void {
     localStorage.setItem(this.lastActivityKey, Date.now().toString());
@@ -96,10 +93,9 @@ export class AuthService {
 
   /**
    * Get Last Activity
-   *
    * Retrieves timestamp of last user activity
-   *
-   * @return Timestamp or null if not found
+   * 
+   * @return (number | null) Timestamp or null
    */
   private getLastActivity(): number | null {
     const timestamp = localStorage.getItem(this.lastActivityKey);
@@ -108,10 +104,9 @@ export class AuthService {
 
   /**
    * Handle Session Expiry
-   *
    * Clears auth data and redirects to home
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   private handleSessionExpiry(): void {
     this.clearAuth();
@@ -122,10 +117,9 @@ export class AuthService {
 
   /**
    * Initialize Auth
-   *
    * Restores user session on app startup
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   initializeAuth(): void {
     const token = this.getToken();
@@ -170,11 +164,10 @@ export class AuthService {
 
   /**
    * Register
-   *
    * Creates new user account
-   *
-   * @param data - User registration information
-   * @return Authentication response with token
+   * 
+   * @param (RegistrationData) data - User registration information
+   * @return (Observable<AuthResponse>) Authentication response with token
    */
   register(data: RegistrationData): Observable<AuthResponse> {
     const sessionId = localStorage.getItem(environment.sessionIdKey);
@@ -190,11 +183,10 @@ export class AuthService {
 
   /**
    * Login
-   *
    * Authenticates user and stores session
-   *
-   * @param credentials - Email and password
-   * @return Authentication response with token
+   * 
+   * @param (LoginCredentials) credentials - Email and password
+   * @return (Observable<AuthResponse>) Authentication response with token
    */
   login(credentials: LoginCredentials): Observable<AuthResponse> {
     const sessionId = localStorage.getItem(environment.sessionIdKey);
@@ -214,11 +206,10 @@ export class AuthService {
 
   /**
    * Save Return URL
-   *
    * Stores URL to redirect after login
-   *
-   * @param url - URL to return to
-   * @return void
+   * 
+   * @param (string) url - URL to return to
+   * @return (void)
    */
   saveReturnUrl(url: string): void {
     if (url && url !== "/login" && url !== "/") {
@@ -228,10 +219,9 @@ export class AuthService {
 
   /**
    * Get Return URL
-   *
    * Retrieves saved return URL
-   *
-   * @return Saved URL or null
+   * 
+   * @return (string | null) Saved URL or null
    */
   getReturnUrl(): string | null {
     return sessionStorage.getItem(this.returnUrlKey);
@@ -239,10 +229,9 @@ export class AuthService {
 
   /**
    * Clear Return URL
-   *
    * Removes saved return URL
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   clearReturnUrl(): void {
     sessionStorage.removeItem(this.returnUrlKey);
@@ -250,10 +239,9 @@ export class AuthService {
 
   /**
    * Logout
-   *
    * Clears user session
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   logout(): void {
     const token = this.getToken();
@@ -270,10 +258,9 @@ export class AuthService {
 
   /**
    * Get Profile
-   *
    * Fetches complete user profile from server
-   *
-   * @return User profile data
+   * 
+   * @return (Observable<User>) User profile data
    */
   getProfile(): Observable<User> {
     return this.http.get<ApiResponse<User>>(`${this.apiUrl}/profile`).pipe(
@@ -288,10 +275,9 @@ export class AuthService {
 
   /**
    * Is Authenticated
-   *
    * Checks if user has valid session
-   *
-   * @return True if authenticated
+   * 
+   * @return (boolean) True if authenticated
    */
   isAuthenticated(): boolean {
     const token = this.getToken();
@@ -300,10 +286,9 @@ export class AuthService {
 
   /**
    * Get Current User
-   *
    * Returns current user from local state
-   *
-   * @return Current user or null
+   * 
+   * @return (User | null) Current user or null
    */
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
@@ -311,10 +296,9 @@ export class AuthService {
 
   /**
    * Get Token
-   *
    * Retrieves JWT token from storage
-   *
-   * @return Token or null
+   * 
+   * @return (string | null) Token or null
    */
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
@@ -322,11 +306,10 @@ export class AuthService {
 
   /**
    * Set Auth Data
-   *
    * Stores authentication data locally
-   *
-   * @param authData - Token and user info
-   * @return void
+   * 
+   * @param (AuthResponse) authData - Token and user info
+   * @return (void)
    */
   private setAuthData(authData: AuthResponse): void {
     localStorage.setItem(this.tokenKey, authData.token);
@@ -335,10 +318,9 @@ export class AuthService {
 
   /**
    * Clear Auth
-   *
    * Removes all authentication data
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   private clearAuth(): void {
     localStorage.removeItem(this.tokenKey);
@@ -349,10 +331,9 @@ export class AuthService {
 
   /**
    * Load User Profile
-   *
    * Fetches full profile in background
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   private loadUserProfile(): void {
     this.getProfile()
@@ -366,11 +347,10 @@ export class AuthService {
 
   /**
    * Is Token Expired
-   *
    * Checks if JWT token has expired
-   *
-   * @param token - JWT token to check
-   * @return True if expired
+   * 
+   * @param (string) token - JWT token to check
+   * @return (boolean) True if expired
    */
   private isTokenExpired(token: string): boolean {
     try {
@@ -383,11 +363,10 @@ export class AuthService {
 
   /**
    * Decode Token
-   *
    * Extracts payload from JWT token
-   *
-   * @param token - JWT token to decode
-   * @return Decoded token data
+   * 
+   * @param (string) token - JWT token to decode
+   * @return (TokenPayload) Decoded token data
    */
   private decodeToken(token: string): TokenPayload {
     const base64Url = token.split(".")[1];
@@ -403,11 +382,10 @@ export class AuthService {
 
   /**
    * Handle Error
-   *
    * Centralized error handling
-   *
-   * @param error - HTTP error object
-   * @return Error observable
+   * 
+   * @param (HttpErrorResponse) error - HTTP error object
+   * @return (Observable<never>) Error observable
    */
   private handleError(error: HttpErrorResponse): Observable<never> {
     return throwError(() => error);

@@ -29,10 +29,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Component
-   *
    * Loads categories and sets up route monitoring
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   ngOnInit(): void {
     this.loadCategories();
@@ -42,10 +41,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Cleanup Component
-   *
-   * Unsubscribes from all observables
-   *
-   * @return void
+   * Unsubscribes from observables
+   * 
+   * @return (void)
    */
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -54,10 +52,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Load Categories
-   *
-   * Loads categories with albums from state service
-   *
-   * @return void
+   * Loads categories from state service
+   * 
+   * @return (void)
    */
   private loadCategories(): void {
     this.isLoadingCategories = true;
@@ -98,10 +95,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Setup Route Listener
-   *
-   * Monitors navigation events to update sidebar state
-   *
-   * @return void
+   * Monitors navigation events
+   * 
+   * @return (void)
    */
   private setupRouteListener(): void {
     this.router.events
@@ -114,10 +110,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Check Current Route
-   *
-   * Updates component state based on current route
-   *
-   * @return void
+   * Updates component state based on route
+   * 
+   * @return (void)
    */
   private checkCurrentRoute(): void {
     const url = this.router.url;
@@ -147,11 +142,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Get Album Category
-   *
    * Fetches album's category for sidebar highlighting
-   *
-   * @param (string) albumId - Album identifier
-   * @return void
+   * 
+   * @param (string) albumId - Album ID
+   * @return (void)
    */
   private getAlbumCategory(albumId: string): void {
     const state = this.stateService.getCurrentState();
@@ -167,11 +161,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Select Category
-   *
    * Navigates to category page
-   *
-   * @param (string) categoryId - Category identifier
-   * @return void
+   * 
+   * @param (string) categoryId - Category ID
+   * @return (void)
    */
   selectCategory(categoryId: string): void {
     this.router.navigate(["/category", categoryId]);
@@ -179,11 +172,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Is Category Active
-   *
    * Checks if category is currently active
-   *
-   * @param (string) categoryId - Category identifier
-   * @return boolean True if category is active
+   * 
+   * @param (string) categoryId - Category ID
+   * @return (boolean) True if active
    */
   isCategoryActive(categoryId: string): boolean {
     return (
@@ -194,10 +186,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   /**
    * Get Sidebar Classes
-   *
    * Returns CSS classes based on current page
-   *
-   * @return string Space-separated CSS class names
+   * 
+   * @return (string) Space-separated class names
    */
   getSidebarClasses(): string {
     const classes = [];

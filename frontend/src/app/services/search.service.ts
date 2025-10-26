@@ -18,11 +18,10 @@ export class SearchService {
 
   /**
    * Search Albums
-   *
-   * Searches for albums with client-side caching
-   *
-   * @param query - Search query string
-   * @return Array of matching albums
+   * Searches albums with client-side caching
+   * 
+   * @param (string) query - Search query
+   * @return (Observable<Album[]>) Array of matching albums
    */
   searchAlbums(query: string): Observable<Album[]> {
     const trimmedQuery = query.trim();
@@ -51,10 +50,9 @@ export class SearchService {
 
   /**
    * Clear Cache
-   *
    * Clears all cached search results
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   clearCache(): void {
     this.cache.clear();
@@ -62,17 +60,16 @@ export class SearchService {
 
   /**
    * Cache Results
-   *
    * Stores search results with LRU eviction
-   *
-   * @param key - Cache key
-   * @param albums - Albums to cache
-   * @return void
+   * 
+   * @param (string) key - Cache key
+   * @param (Album[]) albums - Albums to cache
+   * @return (void)
    */
   private cacheResults(key: string, albums: Album[]): void {
     this.cache.set(key, albums);
 
-    // Remove oldest entry if cache is full
+    // Remove oldest entry if cache is full (LRU)
     if (this.cache.size > this.MAX_CACHE_SIZE) {
       const firstKey = this.cache.keys().next().value;
       if (firstKey) this.cache.delete(firstKey);

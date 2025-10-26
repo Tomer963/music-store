@@ -28,10 +28,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize Component
-   *
-   * Sets up subscriptions for user authentication and cart updates
-   *
-   * @return void
+   * Sets up subscriptions for user and cart
+   * 
+   * @return (void)
    */
   ngOnInit(): void {
     // Subscribe to authentication changes
@@ -50,10 +49,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Cleanup Component
-   *
-   * Unsubscribes from all observables to prevent memory leaks
-   *
-   * @return void
+   * Unsubscribes from observables
+   * 
+   * @return (void)
    */
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -62,10 +60,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Toggle Menu
-   *
-   * Opens or closes mobile navigation menu
-   *
-   * @return void
+   * Opens or closes mobile navigation
+   * 
+   * @return (void)
    */
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
@@ -73,10 +70,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Close Menu
-   *
-   * Closes mobile navigation menu
-   *
-   * @return void
+   * Closes mobile navigation
+   * 
+   * @return (void)
    */
   closeMenu(): void {
     this.isMenuOpen = false;
@@ -84,10 +80,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Logout
-   *
-   * Logs out user, clears cart session and navigates to logout page
-   *
-   * @return void
+   * Logs out user and navigates
+   * 
+   * @return (void)
    */
   logout(): void {
     this.cartService.clearSession();
@@ -98,10 +93,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   /**
    * Navigate To Checkout
-   *
    * Navigates to checkout page
-   *
-   * @return void
+   * 
+   * @return (void)
    */
   navigateToCheckout(): void {
     this.router.navigate(["/checkout"]);

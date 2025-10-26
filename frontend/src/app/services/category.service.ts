@@ -15,10 +15,9 @@ export class CategoryService {
 
   /**
    * Get Categories
-   *
-   * Fetches all categories that have albums
-   *
-   * @return Array of categories with albums
+   * Fetches all categories with albums
+   * 
+   * @return (Observable<Category[]>) Array of categories
    */
   getCategories(): Observable<Category[]> {
     return this.http.get<ApiResponse<Category[]>>(this.apiUrl).pipe(
@@ -38,11 +37,10 @@ export class CategoryService {
 
   /**
    * Get Category
-   *
-   * Fetches a single category by ID
-   *
-   * @param id - Category ID
-   * @return Category data
+   * Fetches single category by ID
+   * 
+   * @param (string) id - Category ID
+   * @return (Observable<Category>) Category data
    */
   getCategory(id: string): Observable<Category> {
     return this.http.get<ApiResponse<Category>>(`${this.apiUrl}/${id}`).pipe(
@@ -53,11 +51,10 @@ export class CategoryService {
 
   /**
    * Handle Error
-   *
    * Centralized error handling
-   *
-   * @param error - Error object
-   * @return Error observable
+   * 
+   * @param (any) error - Error object
+   * @return (Observable<never>) Error observable
    */
   private handleError(error: any): Observable<never> {
     return throwError(() => error);

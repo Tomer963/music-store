@@ -14,13 +14,12 @@ export interface ApiError {
 })
 export class HttpErrorHandlerService {
   /**
-   * Handle HTTP Error
-   *
-   * Centralized HTTP error handling with standardized error format
-   *
-   * @param error - HTTP error response
-   * @param context - Context for logging
-   * @return Observable error
+   * Handle Error
+   * Centralized HTTP error handling
+   * 
+   * @param (HttpErrorResponse) error - HTTP error response
+   * @param (string) context - Context for logging
+   * @return (Observable<never>) Error observable
    */
   handleError(error: HttpErrorResponse, context?: string): Observable<never> {
     const apiError: ApiError = {
@@ -35,11 +34,10 @@ export class HttpErrorHandlerService {
 
   /**
    * Get Error Message
-   *
    * Extracts user-friendly error message
-   *
-   * @param error - HTTP error response
-   * @return Error message
+   * 
+   * @param (HttpErrorResponse) error - HTTP error response
+   * @return (string) Error message
    */
   private getErrorMessage(error: HttpErrorResponse): string {
     // Client-side or network error
@@ -77,11 +75,10 @@ export class HttpErrorHandlerService {
 
   /**
    * Get Errors
-   *
    * Extracts validation errors array
-   *
-   * @param error - HTTP error response
-   * @return Array of error messages
+   * 
+   * @param (HttpErrorResponse) error - HTTP error response
+   * @return (string[] | undefined) Array of error messages
    */
   private getErrors(error: HttpErrorResponse): string[] | undefined {
     if (error.error?.errors && Array.isArray(error.error.errors)) {
@@ -92,11 +89,10 @@ export class HttpErrorHandlerService {
 
   /**
    * Is Client Error
-   *
    * Checks if error is client-side
-   *
-   * @param error - API error
-   * @return True if client error
+   * 
+   * @param (ApiError) error - API error
+   * @return (boolean) True if client error
    */
   isClientError(error: ApiError): boolean {
     return error.statusCode >= 400 && error.statusCode < 500;
@@ -104,11 +100,10 @@ export class HttpErrorHandlerService {
 
   /**
    * Is Server Error
-   *
    * Checks if error is server-side
-   *
-   * @param error - API error
-   * @return True if server error
+   * 
+   * @param (ApiError) error - API error
+   * @return (boolean) True if server error
    */
   isServerError(error: ApiError): boolean {
     return error.statusCode >= 500;
@@ -116,11 +111,10 @@ export class HttpErrorHandlerService {
 
   /**
    * Is Network Error
-   *
    * Checks if error is network error
-   *
-   * @param error - API error
-   * @return True if network error
+   * 
+   * @param (ApiError) error - API error
+   * @return (boolean) True if network error
    */
   isNetworkError(error: ApiError): boolean {
     return error.statusCode === 0;

@@ -4,12 +4,11 @@ import { AuthService } from "../services/auth.service";
 
 /**
  * Guest Guard
- *
  * Prevents authenticated users from accessing guest-only pages
- *
- * @param route - Activated route snapshot
- * @param state - Current router state
- * @return True if user can activate route
+ * 
+ * @param (ActivatedRouteSnapshot) route - Current route
+ * @param (RouterStateSnapshot) state - Router state
+ * @return (boolean) True if guest can access route
  */
 export const guestGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -19,7 +18,6 @@ export const guestGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  // Redirect authenticated users to home
   router.navigate(["/"]);
   return false;
 };

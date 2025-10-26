@@ -21,13 +21,12 @@ export class AlbumService {
 
   /**
    * Get Albums
-   *
    * Fetches paginated list of albums
-   *
-   * @param page - Page number
-   * @param limit - Items per page
-   * @param sort - Sort order
-   * @return Paginated albums response
+   * 
+   * @param (number) page - Page number
+   * @param (number) limit - Items per page
+   * @param (string) sort - Sort order
+   * @return (Observable<PaginatedResponse<Album>>) Paginated albums response
    */
   getAlbums(
     page = 1,
@@ -50,11 +49,10 @@ export class AlbumService {
 
   /**
    * Get Album
-   *
    * Fetches single album by ID
-   *
-   * @param id - Album ID
-   * @return Album data
+   * 
+   * @param (string) id - Album ID
+   * @return (Observable<Album>) Album data
    */
   getAlbum(id: string): Observable<Album> {
     return this.http.get<ApiResponse<Album>>(`${this.apiUrl}/${id}`).pipe(
@@ -67,12 +65,11 @@ export class AlbumService {
 
   /**
    * Get New Albums
-   *
    * Fetches newest albums
-   *
-   * @param page - Page number
-   * @param limit - Items per page
-   * @return Paginated new albums
+   * 
+   * @param (number) page - Page number
+   * @param (number) limit - Items per page
+   * @return (Observable<any>) Paginated new albums
    */
   getNewAlbums(page = 1, limit = 23): Observable<any> {
     const params = new HttpParams()
@@ -97,11 +94,10 @@ export class AlbumService {
 
   /**
    * Search Albums
-   *
    * Searches albums by query string
-   *
-   * @param query - Search query
-   * @return Array of matching albums
+   * 
+   * @param (string) query - Search query
+   * @return (Observable<Album[]>) Array of matching albums
    */
   searchAlbums(query: string): Observable<Album[]> {
     const params = new HttpParams().set("q", query);
@@ -117,13 +113,12 @@ export class AlbumService {
 
   /**
    * Get Albums By Category
-   *
    * Fetches albums filtered by category
-   *
-   * @param categoryId - Category ID
-   * @param page - Page number
-   * @param limit - Items per page
-   * @return Paginated albums response
+   * 
+   * @param (string) categoryId - Category ID
+   * @param (number) page - Page number
+   * @param (number) limit - Items per page
+   * @return (Observable<PaginatedResponse<Album>>) Paginated albums response
    */
   getAlbumsByCategory(
     categoryId: string,
@@ -150,11 +145,10 @@ export class AlbumService {
 
   /**
    * Get Main Image URL
-   *
    * Retrieves main album image or returns placeholder
-   *
-   * @param album - Album object
-   * @return Image URL
+   * 
+   * @param (Album) album - Album object
+   * @return (string) Image URL
    */
   getMainImageUrl(album: Album): string {
     if (!album.images || album.images.length === 0) {
@@ -177,11 +171,10 @@ export class AlbumService {
 
   /**
    * Format Price
-   *
    * Formats price with currency symbol
-   *
-   * @param price - Price value
-   * @return Formatted price string
+   * 
+   * @param (number) price - Price value
+   * @return (string) Formatted price string
    */
   formatPrice(price: number): string {
     return `$${price.toFixed(2)}`;

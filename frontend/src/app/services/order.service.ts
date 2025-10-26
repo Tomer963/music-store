@@ -16,10 +16,9 @@ export class OrderService {
 
   /**
    * Get Orders
-   *
-   * Fetches all orders for the authenticated user
-   *
-   * @return Array of user orders
+   * Fetches all orders for authenticated user
+   * 
+   * @return (Observable<Order[]>) Array of orders
    */
   getOrders(): Observable<Order[]> {
     return this.http.get<ApiResponse<Order[]>>(this.apiUrl).pipe(
@@ -30,11 +29,10 @@ export class OrderService {
 
   /**
    * Get Order
-   *
-   * Fetches a single order by ID
-   *
-   * @param id - Order ID
-   * @return Order details
+   * Fetches single order by ID
+   * 
+   * @param (string) id - Order ID
+   * @return (Observable<Order>) Order details
    */
   getOrder(id: string): Observable<Order> {
     return this.http.get<ApiResponse<Order>>(`${this.apiUrl}/${id}`).pipe(
@@ -45,11 +43,10 @@ export class OrderService {
 
   /**
    * Create Order
-   *
-   * Creates a new order from current cart
-   *
-   * @param orderData - Order creation data
-   * @return Created order
+   * Creates new order from cart
+   * 
+   * @param (CreateOrderRequest) orderData - Order creation data
+   * @return (Observable<Order>) Created order
    */
   createOrder(orderData: CreateOrderRequest): Observable<Order> {
     return this.http.post<ApiResponse<Order>>(this.apiUrl, orderData).pipe(
@@ -60,11 +57,10 @@ export class OrderService {
 
   /**
    * Handle Error
-   *
    * Centralized error handling
-   *
-   * @param error - Error object
-   * @return Error observable
+   * 
+   * @param (any) error - Error object
+   * @return (Observable<never>) Error observable
    */
   private handleError(error: any): Observable<never> {
     return throwError(() => error);

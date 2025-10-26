@@ -9,11 +9,10 @@ import { AuthService } from "./services/auth.service";
 
 /**
  * Initialize Auth Service
- *
  * Restores user session before app starts
- *
- * @param authService - Authentication service instance
- * @return Initialization function
+ * 
+ * @param (AuthService) authService - Authentication service instance
+ * @return (Function) Initialization function
  */
 function initializeAuth(authService: AuthService) {
   return () => {
