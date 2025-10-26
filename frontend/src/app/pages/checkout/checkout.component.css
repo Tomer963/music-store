@@ -62,6 +62,7 @@
   pointer-events: none;
 }
 
+/* Collapse step content when not active */
 .checkout-step.step-collapsed .step-form-container,
 .checkout-step.step-collapsed .order-review-container {
   display: none;
@@ -629,7 +630,7 @@
   line-height: 1.4;
 }
 
-/* Responsive container padding - matching header */
+/* Responsive container padding matching header */
 @media (min-width: 1600px) {
   .checkout-page .container {
     padding: 0 256px;

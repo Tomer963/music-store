@@ -21,6 +21,7 @@
   width: 100%;
 }
 
+/* Empty state when no albums available */
 .no-albums-container {
   display: flex;
   justify-content: center;
@@ -54,6 +55,7 @@
   line-height: 1.5;
 }
 
+/* Featured Section - Top hero area */
 .featured-section {
   display: flex;
   flex-direction: column;
@@ -78,6 +80,7 @@
   min-height: 550px;
 }
 
+/* Top albums grid - 4x2 grid layout */
 .top-albums-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -94,6 +97,7 @@
   width: 100%;
 }
 
+/* Mobile side albums section */
 .side-albums-mobile-section {
   display: none;
 }
@@ -105,6 +109,7 @@
   margin-bottom: var(--spacing-lg);
 }
 
+/* Content below featured area */
 .content-below-featured {
   width: 100%;
   padding-top: var(--spacing-lg);
@@ -130,6 +135,7 @@
   display: block;
 }
 
+/* Main content with sidebar layout */
 .content-with-sidebar {
   display: flex;
   gap: var(--spacing-lg);
@@ -178,6 +184,7 @@
   display: block;
 }
 
+/* Main albums grid - 3 columns */
 .albums-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -208,6 +215,7 @@
   min-height: auto;
 }
 
+/* Red background special album card */
 .album-content.red-background {
   background-color: var(--primary-color);
   color: var(--white);
@@ -237,6 +245,7 @@
   line-height: 1.4;
 }
 
+/* Album action icons group */
 .album-icons-group {
   display: flex;
   gap: var(--spacing-sm);
@@ -336,6 +345,7 @@
   color: var(--black);
 }
 
+/* Cart counter with quantity controls */
 .bottom-cart-counter {
   display: flex;
   align-items: center;
@@ -407,6 +417,7 @@
   margin: 0;
 }
 
+/* Fade in animation for album cards */
 .albums-grid .home-album-card,
 .side-albums-vertical .home-album-card {
   animation: fadeInUp 0.5s ease-out backwards;
@@ -416,6 +427,7 @@
   display: none;
 }
 
+/* Extra large screens */
 @media (min-width: 1400px) {
   .featured-wrapper {
     min-height: 600px;
@@ -436,12 +448,8 @@
   }
 }
 
-/* ========================================
-   TABLET OPTIMIZATIONS (iPad Pro: 1024x1366)
-   Grid change: 2 columns × 4 rows for albums 2-9
-   ======================================== */
+/* Tablet optimizations - 2 columns × 4 rows for albums 2-9 */
 @media (min-width: 768px) and (max-width: 1199px) {
-  /* Featured wrapper - increase height to match 4 rows */
   .featured-wrapper {
     grid-template-columns: 1fr 2fr;
     min-height: 1040px;
@@ -449,13 +457,11 @@
     gap: 0;
   }
 
-  /* Featured album - matches the total height of 4 rows */
   .featured-album {
     min-height: 1040px;
     height: 100%;
   }
 
-  /* Top albums grid - CHANGED TO 2 columns × 4 rows */
   .top-albums-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(4, minmax(255px, 1fr));
@@ -469,13 +475,11 @@
     height: 100%;
   }
 
-  /* Main albums grid - 2 columns for better sizing */
   .albums-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
   }
 
-  /* Sidebar adjustments */
   .sidebar-column {
     flex: 0 0 350px;
     min-width: 350px;
@@ -486,7 +490,6 @@
     gap: var(--spacing-md);
   }
 
-  /* Red background album text sizes */
   .album-content.red-background .album-title-line.large-title {
     font-size: 1.75rem;
   }
@@ -496,10 +499,7 @@
   }
 }
 
-/* ========================================
-   SMALL TABLET (768px - 991px)
-   Slightly reduced height for smaller tablets
-   ======================================== */
+/* Small tablet */
 @media (min-width: 768px) and (max-width: 991px) {
   .featured-wrapper {
     min-height: 920px;
@@ -520,9 +520,7 @@
   }
 }
 
-/* ========================================
-   MOBILE & SMALL TABLET (< 768px)
-   ======================================== */
+/* Mobile and small tablet */
 @media (max-width: 767px) {
   .home-page {
     min-height: calc(100vh - 80px);
@@ -645,6 +643,7 @@
   }
 }
 
+/* Mobile portrait */
 @media (max-width: 575px) {
   .home-page {
     min-height: calc(100vh - 65px);
@@ -790,6 +789,7 @@
   }
 }
 
+/* Small mobile devices */
 @media (max-width: 429px) {
   .home-page {
     min-height: calc(100vh - 56px);

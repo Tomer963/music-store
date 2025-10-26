@@ -1,3 +1,4 @@
+checkout.component.ts
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
@@ -59,7 +60,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private readonly HIGHEST_STEP_KEY = "checkout_highest_step";
   private readonly FORM_TIMESTAMP_KEY = "checkout_form_timestamp";
   private readonly CHECKOUT_USER_KEY = "checkout_user_id";
-  private readonly FORM_EXPIRY = 30 * 60 * 1000;
+  private readonly FORM_EXPIRY = 30 * 60 * 1000; // 30 minutes
 
   billingInfo = {
     address: "",
@@ -81,6 +82,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
+  /**
+   * NgOnInit
+   * 
+   * Initializes checkout component and verifies authentication
+   * 
+   * @return void
+   */
   ngOnInit(): void {
     setTimeout(() => {
       this.isAuthenticated = this.authService.isAuthenticated();
@@ -131,12 +139,26 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
+  /**
+   * NgOnDestroy
+   * 
+   * Saves form data and cleans up subscriptions
+   * 
+   * @return void
+   */
   ngOnDestroy(): void {
     this.saveFormData();
     this.destroy$.next();
     this.destroy$.complete();
   }
 
+  /**
+   * Check User Change
+   * 
+   * Verifies if user has changed and clears old checkout data
+   * 
+   * @return void
+   */
   private checkUserChange(): void {
     const savedUserId = sessionStorage.getItem(this.CHECKOUT_USER_KEY);
 
@@ -153,6 +175,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Clear All Checkout Data
+   * 
+   * Removes all saved checkout data and resets forms
+   * 
+   * @return void
+   */
   private clearAllCheckoutData(): void {
     this.clearSavedFormData();
     this.resetForms();
@@ -162,6 +191,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.paymentFormSubmitted = false;
   }
 
+  /**
+   * Reset Forms
+   * 
+   * Resets billing and payment forms to initial state
+   * 
+   * @return void
+   */
   private resetForms(): void {
     if (this.billingForm) {
       this.billingForm.reset({
@@ -192,6 +228,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     };
   }
 
+  /**
+   * Reset To Step 1
+   * 
+   * Resets checkout process to first step
+   * 
+   * @return void
+   */
   private resetToStep1(): void {
     this.currentStep = 1;
     this.highestStepReached = 1;
@@ -200,6 +243,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.saveFormData();
   }
 
+  /**
+   * Load Cart Data
+   * 
+   * Subscribes to cart updates and refreshes cart data
+   * 
+   * @return void
+   */
   private loadCartData(): void {
     this.cartService.cart$.pipe(takeUntil(this.destroy$)).subscribe((cart) => {
       this.cart = cart;
@@ -217,6 +267,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Initialize Forms
+   * 
+   * Creates and configures billing and payment forms with validators
+   * 
+   * @return void
+   */
   initializeForms(): void {
     this.initializeYears();
 
@@ -232,6 +289,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       .subscribe((values) => {
         this.billingInfo = { ...values };
         
+        // Clear touched state for empty fields
         Object.keys(this.billingForm.controls).forEach((key) => {
           const control = this.billingForm.get(key);
           if (control && control.touched && !control.value) {
@@ -254,6 +312,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     this.setupPaymentValidators();
     this.paymentForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      // Clear touched state for empty fields
       Object.keys(this.paymentForm.controls).forEach((key) => {
         const control = this.paymentForm.get(key);
         if (control && control.touched && !control.value) {
@@ -267,12 +326,26 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.setupExpiryListeners();
   }
 
+  /**
+   * Initialize Years
+   * 
+   * Generates array of years for credit card expiry (current year + 20 years)
+   * 
+   * @return void
+   */
   private initializeYears(): void {
     const startYear = this.CURRENT_YEAR;
     const yearCount = 20;
     this.years = Array.from({ length: yearCount }, (_, i) => startYear + i);
   }
 
+  /**
+   * Setup Expiry Listeners
+   * 
+   * Configures listeners for credit card expiry month/year interactions
+   * 
+   * @return void
+   */
   private setupExpiryListeners(): void {
     this.paymentForm
       .get("expiryMonth")
@@ -289,6 +362,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Update Available Months And Years
+   * 
+   * Dynamically filters available months/years based on selections to prevent invalid dates
+   * 
+   * @return void
+   */
   private updateAvailableMonthsAndYears(): void {
     const selectedMonth = this.paymentForm.get("expiryMonth")?.value;
     const selectedYear = this.paymentForm.get("expiryYear")?.value;
@@ -299,6 +379,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Only year selected - filter months if current year
     if (selectedYear && !selectedMonth) {
       const yearNum = parseInt(selectedYear, 10);
 
@@ -313,6 +394,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Only month selected - filter years if past month
     if (selectedMonth && !selectedYear) {
       const monthNum = parseInt(selectedMonth, 10);
 
@@ -327,11 +409,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Both selected - validate combination
     if (selectedMonth && selectedYear) {
       const monthNum = parseInt(selectedMonth, 10);
       const yearNum = parseInt(selectedYear, 10);
 
       if (yearNum === this.CURRENT_YEAR && monthNum < this.CURRENT_MONTH) {
+        // Invalid combination - reset both
         this.paymentForm.patchValue(
           { expiryMonth: "", expiryYear: "" },
           { emitEvent: false }
@@ -361,6 +445,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Setup Payment Validators
+   * 
+   * Dynamically adds/removes validators based on payment method selection
+   * 
+   * @return void
+   */
   setupPaymentValidators(): void {
     const paymentMethodControl = this.paymentForm.get("paymentMethod");
 
@@ -375,6 +466,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       ];
 
       if (method === "credit_card") {
+        // Add validators for credit card fields
         this.paymentForm
           .get("cardType")
           ?.setValidators([Validators.required, this.cardTypeValidator]);
@@ -402,6 +494,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             this.cvvValidator,
           ]);
       } else {
+        // Remove validators for check payment
         controls.forEach((control) => {
           this.paymentForm.get(control)?.clearValidators();
           this.paymentForm.get(control)?.setValue("");
@@ -414,12 +507,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Address Validator
+   * 
+   * Validates address format (street name + house number)
+   * 
+   * @param (AbstractControl) control Form control to validate
+   * @return ({ [key: string]: boolean } | null) Validation error or null
+   */
   private addressValidator(
     control: AbstractControl
   ): { [key: string]: boolean } | null {
     const value = control.value?.trim();
     if (!value) return null;
 
+    // Pattern: at least 3 letters, followed by space and number
     const addressPattern = /^[\p{L}]{3,}[\p{L}\s]*\s+\d+/u;
 
     if (!addressPattern.test(value)) {
@@ -429,6 +531,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  /**
+   * City Validator
+   * 
+   * Validates city name (letters only, minimum 3 characters)
+   * 
+   * @param (AbstractControl) control Form control to validate
+   * @return ({ [key: string]: boolean } | null) Validation error or null
+   */
   private cityValidator(
     control: AbstractControl
   ): { [key: string]: boolean } | null {
@@ -437,6 +547,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return /^[a-zA-Z\s]{3,}$/.test(value) ? null : { invalidCity: true };
   }
 
+  /**
+   * Zip Code Validator
+   * 
+   * Validates zip code format (5 or 7 digits)
+   * 
+   * @param (AbstractControl) control Form control to validate
+   * @return ({ [key: string]: boolean } | null) Validation error or null
+   */
   private zipCodeValidator(
     control: AbstractControl
   ): { [key: string]: boolean } | null {
@@ -445,6 +563,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return /^\d{5}$|^\d{7}$/.test(value) ? null : { invalidZipCode: true };
   }
 
+  /**
+   * Phone Validator
+   * 
+   * Validates phone number format (XX-XXXXXXX or XXX-XXXXXXX)
+   * 
+   * @param (AbstractControl) control Form control to validate
+   * @return ({ [key: string]: boolean } | null) Validation error or null
+   */
   private phoneValidator(
     control: AbstractControl
   ): { [key: string]: boolean } | null {
@@ -453,6 +579,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return /^0\d{1,2}-\d{7}$/.test(value) ? null : { invalidPhone: true };
   }
 
+  /**
+   * Cardholder Name Validator
+   * 
+   * Validates cardholder name (at least 2 words, each with minimum 2 letters)
+   * 
+   * @param (AbstractControl) control Form control to validate
+   * @return ({ [key: string]: boolean } | null) Validation error or null
+   */
   private cardholderNameValidator(
     control: AbstractControl
   ): { [key: string]: boolean } | null {
@@ -471,6 +605,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  /**
+   * Card Type Validator
+   * 
+   * Validates that card type is selected
+   * 
+   * @param (AbstractControl) control Form control to validate
+   * @return ({ [key: string]: boolean } | null) Validation error or null
+   */
   private cardTypeValidator(
     control: AbstractControl
   ): { [key: string]: boolean } | null {
@@ -479,6 +621,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  /**
+   * Card Number Validator
+   * 
+   * Validates credit card number format (exactly 16 digits)
+   * 
+   * @param (AbstractControl) control Form control to validate
+   * @return ({ [key: string]: boolean } | null) Validation error or null
+   */
   private cardNumberValidator(
     control: AbstractControl
   ): { [key: string]: boolean } | null {
@@ -488,6 +638,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  /**
+   * CVV Validator
+   * 
+   * Validates CVV format (exactly 3 digits)
+   * 
+   * @param (AbstractControl) control Form control to validate
+   * @return ({ [key: string]: boolean } | null) Validation error or null
+   */
   private cvvValidator(
     control: AbstractControl
   ): { [key: string]: boolean } | null {
@@ -497,6 +655,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  /**
+   * Save Form Data
+   * 
+   * Persists form data to session storage
+   * 
+   * @return void
+   */
   private saveFormData(): void {
     try {
       const formData = {
@@ -525,9 +690,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       if (this.currentUserId) {
         sessionStorage.setItem(this.CHECKOUT_USER_KEY, this.currentUserId);
       }
-    } catch (error) {}
+    } catch (error) {
+      // Silent fail for storage errors
+    }
   }
 
+  /**
+   * Load Saved Form Data
+   * 
+   * Restores form data from session storage if not expired
+   * 
+   * @return void
+   */
   private loadSavedFormData(): void {
     try {
       const savedData = sessionStorage.getItem(this.CHECKOUT_STORAGE_KEY);
@@ -539,6 +713,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         const timestamp = parseInt(savedTimestamp, 10);
         const now = Date.now();
 
+        // Check if data has expired
         if (now - timestamp > this.FORM_EXPIRY) {
           this.clearSavedFormData();
           return;
@@ -546,6 +721,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
         const formData = JSON.parse(savedData);
 
+        // Verify user hasn't changed
         if (
           formData.userId &&
           this.currentUserId &&
@@ -572,6 +748,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           this.highestStepReached = formData.highestStepReached;
         }
 
+        // Restore step based on form validity
         if (savedStep) {
           const step = parseInt(savedStep);
 
@@ -595,6 +772,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Clear Saved Form Data
+   * 
+   * Removes all saved checkout data from session storage
+   * 
+   * @return void
+   */
   private clearSavedFormData(): void {
     sessionStorage.removeItem(this.CHECKOUT_STORAGE_KEY);
     sessionStorage.removeItem(this.CHECKOUT_STEP_KEY);
@@ -604,10 +788,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.highestStepReached = 1;
   }
 
+  /**
+   * Update Form Field
+   * 
+   * Updates specific form field with input validation
+   * 
+   * @param (string) fieldName Field name to update
+   * @param (Event) event Input event
+   * @return void
+   */
   updateFormField(fieldName: string, event: Event): void {
     const target = event.target as HTMLInputElement | HTMLSelectElement;
     const value = target.value;
 
+    // Strip non-numeric characters for number fields
     if (fieldName === "cardNumber" || fieldName === "cvv") {
       const numericValue = value.replace(/\D/g, "");
       this.paymentForm
@@ -623,9 +817,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.saveFormData();
   }
 
+  /**
+   * On Payment Method Change
+   * 
+   * Handles payment method selection change
+   * 
+   * @param (string) method Selected payment method
+   * @return void
+   */
   onPaymentMethodChange(method: string): void {
     this.paymentForm.patchValue({ paymentMethod: method });
 
+    // Clear credit card fields if switching to check
     if (method === "check") {
       [
         "cardType",
@@ -638,6 +841,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Continue To Next Step
+   * 
+   * Validates current step and advances to next step
+   * 
+   * @return void
+   */
   continueToNextStep(): void {
     if (!this.hasItems) {
       return;
@@ -647,6 +857,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const currentForm = forms[this.currentStep];
 
     if (currentForm) {
+      // Mark all fields as touched to show validation errors
       Object.keys(currentForm.controls).forEach((key) => {
         currentForm.get(key)?.markAsTouched();
         currentForm.get(key)?.updateValueAndValidity();
@@ -677,6 +888,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Change Step
+   * 
+   * Changes to specified step after validation
+   * 
+   * @param (number) step Target step number
+   * @return void
+   */
   changeStep(step: number): void {
     if (step < 1 || step > 3) {
       return;
@@ -693,6 +912,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
 
     if (step === 2) {
+      // Validate billing form before allowing step 2
       Object.keys(this.billingForm.controls).forEach((key) => {
         this.billingForm.get(key)?.markAsTouched();
         this.billingForm.get(key)?.updateValueAndValidity();
@@ -717,6 +937,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
 
     if (step === 3) {
+      // Validate both forms before allowing step 3
       Object.keys(this.billingForm.controls).forEach((key) => {
         this.billingForm.get(key)?.markAsTouched();
         this.billingForm.get(key)?.updateValueAndValidity();
@@ -749,6 +970,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Submit Order
+   * 
+   * Submits order to server and redirects to account page
+   * 
+   * @return void
+   */
   submitOrder(): void {
     if (!this.hasItems) {
       return;
@@ -785,16 +1013,41 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Edit Cart
+   * 
+   * Saves progress and navigates back to home to edit cart
+   * 
+   * @param (Event) event Click event
+   * @return void
+   */
   editCart(event: Event): void {
     event.preventDefault();
     this.saveFormData();
     this.router.navigate(["/"]);
   }
 
+  /**
+   * Go Shopping
+   * 
+   * Navigates to home page
+   * 
+   * @return void
+   */
   goShopping(): void {
     this.router.navigate(["/"]);
   }
 
+  /**
+   * Should Show Error
+   * 
+   * Determines if validation error should be displayed
+   * 
+   * @param (FormGroup) form Form group to check
+   * @param (string) fieldName Field name to check
+   * @param (boolean) formSubmitted Whether form has been submitted
+   * @return (boolean) True if error should be shown
+   */
   shouldShowError(
     form: FormGroup,
     fieldName: string,
@@ -803,6 +1056,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const control = form.get(fieldName);
     if (!control) return false;
 
+    // Don't show error for untouched empty fields
     if (!control.value && !control.touched && !formSubmitted) {
       return false;
     }
@@ -810,6 +1064,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return control.invalid && (control.touched || formSubmitted);
   }
 
+  /**
+   * Get Error Message
+   * 
+   * Returns appropriate error message for field
+   * 
+   * @param (FormGroup) form Form group containing field
+   * @param (string) field Field name
+   * @return (string) Error message text
+   */
   getErrorMessage(form: FormGroup, field: string): string {
     const control = form.get(field);
     if (!control || !control.errors) return "";
@@ -856,10 +1119,26 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return errorMessages[field] || "Invalid input";
   }
 
+  /**
+   * Format Price
+   * 
+   * Formats numeric price to currency string
+   * 
+   * @param (number) price Price value
+   * @return (string) Formatted price string
+   */
   formatPrice(price: number): string {
     return `$${price.toFixed(2)}`;
   }
 
+  /**
+   * Get Card Type Name
+   * 
+   * Converts card type code to display name
+   * 
+   * @param (string) type Card type code
+   * @return (string) Formatted card type name
+   */
   getCardTypeName(type: string): string {
     const types: { [key: string]: string } = {
       visa: "Visa",
@@ -869,6 +1148,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return types[type] || "";
   }
 
+  /**
+   * Get City Zip
+   * 
+   * Formats city and zip code for display
+   * 
+   * @return (string) Formatted city and zip code
+   */
   getCityZip(): string {
     const parts: string[] = [];
 
@@ -883,6 +1169,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return parts.join(", ");
   }
 
+  /**
+   * Get Phone Formatted
+   * 
+   * Formats phone number for display
+   * 
+   * @return (string) Formatted phone number with prefix
+   */
   getPhoneFormatted(): string {
     if (this.billingInfo.phone) {
       return `T: ${this.billingInfo.phone}`;
@@ -890,6 +1183,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return "";
   }
 
+  /**
+   * Get User Full Name
+   * 
+   * Returns current user's full name
+   * 
+   * @return (string) User's full name or empty string
+   */
   getUserFullName(): string {
     if (this.currentUser) {
       return `${this.currentUser.firstName} ${this.currentUser.lastName}`;
@@ -897,30 +1197,84 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     return "";
   }
 
+  /**
+   * Is Step Active
+   * 
+   * Checks if specified step is currently active
+   * 
+   * @param (number) step Step number to check
+   * @return (boolean) True if step is active
+   */
   isStepActive(step: number): boolean {
     return this.currentStep === step;
   }
 
+  /**
+   * Is Step Completed
+   * 
+   * Checks if specified step is completed
+   * 
+   * @param (number) step Step number to check
+   * @return (boolean) True if step is completed
+   */
   isStepCompleted(step: number): boolean {
     return this.currentStep > step;
   }
 
+  /**
+   * Is Step Disabled
+   * 
+   * Checks if specified step is disabled
+   * 
+   * @param (number) step Step number to check
+   * @return (boolean) True if step is disabled
+   */
   isStepDisabled(step: number): boolean {
     return this.currentStep < step;
   }
 
+  /**
+   * Is Step Collapsed
+   * 
+   * Checks if specified step should be collapsed
+   * 
+   * @param (number) step Step number to check
+   * @return (boolean) True if step should be collapsed
+   */
   isStepCollapsed(step: number): boolean {
     return this.currentStep > step;
   }
 
+  /**
+   * Has Reached Step
+   * 
+   * Checks if user has reached specified step
+   * 
+   * @param (number) step Step number to check
+   * @return (boolean) True if user has reached this step
+   */
   hasReachedStep(step: number): boolean {
     return this.highestStepReached >= step;
   }
 
+  /**
+   * Has Billing Info
+   * 
+   * Checks if billing information has been entered
+   * 
+   * @return (boolean) True if billing address is filled
+   */
   hasBillingInfo(): boolean {
     return !!this.billingInfo.address;
   }
 
+  /**
+   * Has Payment Info
+   * 
+   * Checks if payment information has been entered
+   * 
+   * @return (boolean) True if payment method is selected
+   */
   hasPaymentInfo(): boolean {
     const paymentMethod = this.paymentForm.get("paymentMethod")?.value;
     return this.highestStepReached >= 2 && !!paymentMethod;

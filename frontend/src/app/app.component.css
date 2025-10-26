@@ -16,6 +16,7 @@
   min-height: calc(100vh - 120px);
 }
 
+/* Tablet and below */
 @media (max-width: 768px) {
   .main-content {
     padding-top: 80px;
@@ -26,6 +27,7 @@
   }
 }
 
+/* Mobile landscape and below */
 @media (max-width: 576px) {
   .main-content {
     padding-top: 65px;
@@ -36,6 +38,7 @@
   }
 }
 
+/* Small mobile devices */
 @media (max-width: 429px) {
   .main-content {
     padding-top: 56px;

@@ -34,8 +34,8 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   /**
    * NgOnInit
    * 
-   * Initializes component and loads user data
-   *
+   * Initializes component and loads user profile and order data
+   * 
    * @return void
    */
   ngOnInit(): void {
@@ -47,7 +47,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
    * NgOnDestroy
    * 
    * Cleans up subscriptions to prevent memory leaks
-   *
+   * 
    * @return void
    */
   ngOnDestroy(): void {
@@ -56,10 +56,10 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * LoadUserProfile
+   * Load User Profile
    * 
-   * Fetches user profile from API
-   *
+   * Fetches current user profile data from API
+   * 
    * @return void
    */
   private loadUserProfile(): void {
@@ -76,10 +76,10 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * LoadOrders
+   * Load Orders
    * 
-   * Fetches user orders with album details
-   *
+   * Fetches user orders and enriches them with album details
+   * 
    * @return void
    */
   private loadOrders(): void {
@@ -93,11 +93,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ProcessOrders
+   * Process Orders
    * 
-   * Fetches album details for each order item and enriches order data
-   *
-   * @param (Order[]) orders - Array of orders
+   * Fetches full album details for each order item to replace album IDs with complete data
+   * 
+   * @param (Order[]) orders Array of orders to process
    * @return void
    */
   private processOrders(orders: Order[]): void {
@@ -124,7 +124,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
 
       // Fetch album details for each item
       order.items.forEach((item: OrderItem) => {
-        // Check if album is stored as ID string
+        // Check if album is stored as ID string instead of full object
         if (typeof item.album === "string") {
           this.albumService.getAlbum(item.album).subscribe({
             next: (album) => {
@@ -136,7 +136,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
               }
             },
             error: () => {
-              // Fallback for failed fetch
+              // Fallback for failed album fetch
               (item as any).album = {
                 _id: item.album as string,
                 title: "Unknown Album",
@@ -149,7 +149,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
             },
           });
         } else if (++itemsProcessed === totalItems && ++processedCount === orders.length) {
-          // Album already populated
+          // Album already populated as full object
           this.orders = orders;
           this.isLoadingOrders = false;
         }
@@ -158,11 +158,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * SwitchTab
+   * Switch Tab
    * 
    * Switches between profile and orders tabs
-   *
-   * @param ("profile" | "orders") tab - Target tab
+   * 
+   * @param ("profile" | "orders") tab Target tab to display
    * @return void
    */
   switchTab(tab: "profile" | "orders"): void {
@@ -170,12 +170,12 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * FormatDate
+   * Format Date
    * 
-   * Formats date for display
-   *
-   * @param (string | undefined) date - Date string
-   * @return string Formatted date
+   * Formats ISO date string to readable format
+   * 
+   * @param (string | undefined) date ISO date string
+   * @return (string) Formatted date string or "N/A"
    */
   formatDate(date: string | undefined): string {
     if (!date) return "N/A";
@@ -189,59 +189,59 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * FormatPrice
+   * Format Price
    * 
-   * Formats price as currency
-   *
-   * @param (number) price - Price value
-   * @return string Formatted price
+   * Formats numeric price to currency string
+   * 
+   * @param (number) price Price value to format
+   * @return (string) Formatted price string with dollar sign
    */
   formatPrice(price: number): string {
     return `$${price.toFixed(2)}`;
   }
 
   /**
-   * GetPaymentMethodText
+   * Get Payment Method Text
    * 
-   * Formats payment method for display
-   *
-   * @param (string) method - Payment method
-   * @return string Formatted text
+   * Converts payment method code to readable text
+   * 
+   * @param (string) method Payment method code
+   * @return (string) Human-readable payment method text
    */
   getPaymentMethodText(method: string): string {
     return method === "credit_card" ? "Credit Card" : "Check / Money Order";
   }
 
   /**
-   * GetTotalItems
+   * Get Total Items
    * 
-   * Calculates total items in order
-   *
-   * @param (Order) order - Order object
-   * @return number Total quantity
+   * Calculates total quantity of items in order
+   * 
+   * @param (Order) order Order object
+   * @return (number) Total quantity of all items
    */
   getTotalItems(order: Order): number {
     return order.items.reduce((total, item) => total + item.quantity, 0);
   }
 
   /**
-   * IsOrderExpandable
+   * Is Order Expandable
    * 
-   * Checks if order has items to display
-   *
-   * @param (Order) order - Order object
-   * @return boolean True if expandable
+   * Checks if order has items that can be displayed
+   * 
+   * @param (Order) order Order object to check
+   * @return (boolean) True if order has items
    */
   isOrderExpandable(order: Order): boolean {
     return order.items.length > 0;
   }
 
   /**
-   * ToggleOrderDetails
+   * Toggle Order Details
    * 
-   * Toggles order details visibility
-   *
-   * @param (string) orderId - Order ID
+   * Expands or collapses order details section
+   * 
+   * @param (string) orderId Order ID to toggle
    * @return void
    */
   toggleOrderDetails(orderId: string): void {
@@ -250,12 +250,12 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * GetItemDisplayName
+   * Get Item Display Name
    * 
-   * Formats item name as "Artist - Title"
-   *
-   * @param (OrderItem) item - Order item
-   * @return string Formatted name
+   * Formats order item name as "Artist - Title"
+   * 
+   * @param (OrderItem) item Order item object
+   * @return (string) Formatted display name
    */
   getItemDisplayName(item: OrderItem): string {
     if (typeof item.album === "object" && item.album !== null) {
@@ -266,12 +266,12 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * GetAlbumImage
+   * Get Album Image
    * 
-   * Gets album image URL with fallback
-   *
-   * @param (OrderItem) item - Order item
-   * @return string Image URL
+   * Retrieves album cover image URL with fallback to placeholder
+   * 
+   * @param (OrderItem) item Order item object
+   * @return (string) Image URL
    */
   getAlbumImage(item: OrderItem): string {
     if (typeof item.album === "object" && item.album !== null) {

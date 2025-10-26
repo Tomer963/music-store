@@ -4,7 +4,7 @@
   padding: 40px 0;
 }
 
-/* Container with same padding as header */
+/* Container with same padding as header for consistency */
 .my-account-page .container {
   max-width: 100%;
   margin: 0 auto;
@@ -12,7 +12,7 @@
   width: 100%;
 }
 
-/* Title wrapper with negative margin to align with header-content */
+/* Title wrapper matches header alignment */
 .title-wrapper {
   background-color: var(--white);
   padding: 8px 12px;
@@ -32,7 +32,7 @@
   display: block;
 }
 
-/* Responsive container padding - matching header */
+/* Responsive container padding matching header */
 @media (min-width: 1600px) {
   .my-account-page .container {
     padding: 0 256px;
@@ -265,7 +265,7 @@
 }
 
 .order-details.show {
-  max-height: 1000px;
+  max-height: 1000px; // Large enough to fit content
 }
 
 .order-details > div {
@@ -366,7 +366,7 @@
   color: var(--secondary-color);
 }
 
-/* Responsive */
+/* Responsive Design */
 @media (max-width: 768px) {
   .info-grid {
     grid-template-columns: 1fr;

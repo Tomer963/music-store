@@ -25,7 +25,7 @@ import { CartWidgetComponent } from "../../components/cart/cart-widget/cart-widg
   styleUrls: ["./home.component.css"],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  // Album display groups
+  // Album display groups for layout
   featuredAlbum: Album | null = null;
   topAlbums: Album[] = [];
   sideAlbum10: Album | null = null;
@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   isLoadingMore = false;
   hasMore = true;
 
-  // Pagination
+  // Pagination configuration
   currentPage = 1;
   readonly itemsPerPage = 23; // 1 featured + 8 top + 2 side + 12 grid
   totalPages = 1;
@@ -64,10 +64,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * Initialize component
+   * NgOnInit
    * 
-   * Loads initial albums and sets up subscriptions
-   *
+   * Initializes component and loads initial data
+   * 
    * @return void
    */
   ngOnInit(): void {
@@ -78,10 +78,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Cleanup on destroy
+   * NgOnDestroy
    * 
-   * Unsubscribes from all observables
-   *
+   * Cleans up subscriptions to prevent memory leaks
+   * 
    * @return void
    */
   ngOnDestroy(): void {
@@ -90,10 +90,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Setup wishlist subscription
+   * Setup Wishlist Subscription
    * 
-   * Monitors wishlist changes and loading states
-   *
+   * Monitors wishlist changes and updates UI accordingly
+   * 
    * @return void
    */
   private setupWishlistSubscription(): void {
@@ -111,10 +111,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Setup cart subscription
+   * Setup Cart Subscription
    * 
-   * Updates UI counters based on cart changes
-   *
+   * Monitors cart changes and updates quantity counters
+   * 
    * @return void
    */
   private setupCartSubscription(): void {
@@ -135,10 +135,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Setup scroll listener
+   * Setup Scroll Listener
    * 
    * Configures infinite scroll with debounce for performance
-   *
+   * 
    * @return void
    */
   private setupScrollListener(): void {
@@ -148,10 +148,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handle window scroll
+   * On Window Scroll
    * 
    * HostListener backup for scroll detection
-   *
+   * 
    * @return void
    */
   @HostListener("window:scroll", ["$event"])
@@ -160,10 +160,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handle scroll event
+   * On Scroll
    * 
-   * Checks if user scrolled near bottom and triggers next page load
-   *
+   * Checks scroll position and triggers next page load when near bottom
+   * 
    * @return void
    */
   private onScroll(): void {
@@ -179,10 +179,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load initial albums
+   * Load Initial Albums
    * 
-   * Fetches first page of albums for home layout
-   *
+   * Fetches first page of albums and organizes them into layout groups
+   * 
    * @return void
    */
   private loadInitialAlbums(): void {
@@ -214,10 +214,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load more albums
+   * Load More Albums
    * 
-   * Fetches next page for infinite scroll
-   *
+   * Fetches next page for infinite scroll functionality
+   * 
    * @return void
    */
   private loadMoreAlbums(): void {
@@ -252,12 +252,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Process initial albums
+   * Process Initial Albums
    * 
-   * Organizes first page albums into layout groups:
-   * [0]=featured, [1-8]=top grid, [9-10]=sidebar, [11+]=main grid
-   *
-   * @param (Album[]) albums - Albums to process
+   * Organizes first page albums into specific layout positions:
+   * [0] = featured, [1-8] = top grid, [9-10] = sidebar, [11+] = main grid
+   * 
+   * @param (Album[]) albums Albums array to organize
    * @return void
    */
   private processInitialAlbums(albums: Album[]): void {
@@ -273,11 +273,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Process additional albums
+   * Process Additional Albums
    * 
-   * Appends new albums from pagination to main grid
-   *
-   * @param (Album[]) albums - New albums to append
+   * Appends newly loaded albums to the main grid
+   * 
+   * @param (Album[]) albums New albums from pagination
    * @return void
    */
   private processAdditionalAlbums(albums: Album[]): void {
@@ -298,11 +298,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Update pagination info
+   * Update Pagination Info
    * 
    * Updates pagination state from API response
-   *
-   * @param (any) pagination - Pagination data from API
+   * 
+   * @param (any) pagination Pagination data from API
    * @return void
    */
   private updatePaginationInfo(pagination: any): void {
@@ -312,12 +312,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * View album details
+   * View Album
    * 
    * Navigates to album detail page
-   *
-   * @param (Event) event - Click event
-   * @param (string) albumId - Album ID to view
+   * 
+   * @param (Event) event Click event
+   * @param (string) albumId Album ID to view
    * @return void
    */
   viewAlbum(event: Event, albumId: string): void {
@@ -327,19 +327,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Add album to cart
+   * Add To Cart
    * 
-   * Adds album to cart and shows quantity counter with optimistic UI update
-   *
-   * @param (Event) event - Click event
-   * @param (string) albumId - Album ID to add
+   * Adds album to cart with optimistic UI update
+   * 
+   * @param (Event) event Click event
+   * @param (string) albumId Album ID to add
    * @return void
    */
   addToCart(event: Event, albumId: string): void {
     event.stopPropagation();
 
     this.isCartLoadingMap[albumId] = true;
-    this.showCartCounter[albumId] = true; // Optimistic UI update
+    this.showCartCounter[albumId] = true; // Optimistic update
     this.cartQuantities[albumId] = 1;
 
     this.cartService.addToCart(albumId, 1).subscribe({
@@ -358,12 +358,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Increment cart quantity
+   * Increment Cart
    * 
-   * Increases quantity of album in cart, respects stock limit
-   *
-   * @param (Event) event - Click event
-   * @param (string) albumId - Album ID to increment
+   * Increases album quantity in cart, respecting stock limit
+   * 
+   * @param (Event) event Click event
+   * @param (string) albumId Album ID to increment
    * @return void
    */
   incrementCart(event: Event, albumId: string): void {
@@ -395,12 +395,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Decrement cart (remove item)
+   * Decrement Cart
    * 
-   * Removes item completely from cart
-   *
-   * @param (Event) event - Click event
-   * @param (string) albumId - Album ID to remove
+   * Removes album completely from cart (trash icon behavior)
+   * 
+   * @param (Event) event Click event
+   * @param (string) albumId Album ID to remove
    * @return void
    */
   decrementCart(event: Event, albumId: string): void {
@@ -433,12 +433,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Toggle wishlist
+   * Toggle Wishlist
    * 
-   * Adds or removes album from wishlist
-   *
-   * @param (Event) event - Click event
-   * @param (string) albumId - Album ID to toggle
+   * Adds or removes album from user's wishlist
+   * 
+   * @param (Event) event Click event
+   * @param (string) albumId Album ID to toggle
    * @return void
    */
   toggleWishlist(event: Event, albumId: string): void {
@@ -448,11 +448,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Check if in wishlist
+   * Is In Wishlist
    * 
    * Checks if album is in user's wishlist
-   *
-   * @param (string) albumId - Album ID to check
+   * 
+   * @param (string) albumId Album ID to check
    * @return (boolean) True if album is in wishlist
    */
   isInWishlist(albumId: string): boolean {
@@ -460,11 +460,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get main image URL
+   * Get Main Image URL
    * 
-   * Gets primary image URL with fallback
-   *
-   * @param (Album) album - Album object
+   * Gets primary album cover image URL with fallback
+   * 
+   * @param (Album) album Album object
    * @return (string) Image URL
    */
   getMainImageUrl(album: Album): string {
@@ -472,25 +472,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Format price
+   * Format Price
    * 
-   * Formats price as currency string
-   *
-   * @param (number) price - Price value
-   * @return (string) Formatted price
+   * Formats numeric price to currency string
+   * 
+   * @param (number) price Price value
+   * @return (string) Formatted price string
    */
   formatPrice(price: number): string {
     return this.albumService.formatPrice(price);
   }
 
   /**
-   * Track by album
+   * Track By Album
    * 
    * TrackBy function for ngFor performance optimization
-   *
-   * @param (number) index - Item index
-   * @param (Album) album - Album object
-   * @return (string) Unique identifier
+   * 
+   * @param (number) index Item index in array
+   * @param (Album) album Album object
+   * @return (string) Unique identifier for tracking
    */
   trackByAlbum(index: number, album: Album): string {
     return album._id;

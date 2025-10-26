@@ -30,8 +30,8 @@ export class AuthService {
   private tokenKey = environment.tokenKey;
   private returnUrlKey = "auth_return_url";
   private lastActivityKey = "last_activity_timestamp";
-  private readonly INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes
-  private readonly ACTIVITY_CHECK_INTERVAL = 60 * 1000; // 1 minute
+  private readonly INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
+  private readonly ACTIVITY_CHECK_INTERVAL = 60 * 1000; // Check every minute
 
   constructor(private http: HttpClient, private router: Router) {
     this.setupActivityTracking();
@@ -40,9 +40,10 @@ export class AuthService {
 
   /**
    * Setup Activity Tracking
+   * 
    * Monitors user interactions to track session activity
    * 
-   * @return (void)
+   * @return void
    */
   private setupActivityTracking(): void {
     // Combine multiple user activity events
@@ -52,7 +53,7 @@ export class AuthService {
       fromEvent(document, "keypress"),
       fromEvent(document, "scroll"),
       fromEvent(document, "touchstart")
-    ).pipe(throttleTime(5000));
+    ).pipe(throttleTime(5000)); // Throttle to every 5 seconds
 
     userActivity$.subscribe(() => {
       if (this.isAuthenticated()) {
@@ -63,9 +64,10 @@ export class AuthService {
 
   /**
    * Setup Inactivity Check
-   * Periodically checks for session timeout
    * 
-   * @return (void)
+   * Periodically checks for session timeout due to user inactivity
+   * 
+   * @return void
    */
   private setupInactivityCheck(): void {
     interval(this.ACTIVITY_CHECK_INTERVAL).subscribe(() => {
@@ -73,7 +75,7 @@ export class AuthService {
         const lastActivity = this.getLastActivity();
         const now = Date.now();
 
-        // Logout if inactivity exceeds timeout
+        // Logout if inactivity exceeds timeout threshold
         if (lastActivity && now - lastActivity > this.INACTIVITY_TIMEOUT) {
           this.handleSessionExpiry();
         }
@@ -83,9 +85,10 @@ export class AuthService {
 
   /**
    * Update Last Activity
+   * 
    * Records current timestamp as last user activity
    * 
-   * @return (void)
+   * @return void
    */
   private updateLastActivity(): void {
     localStorage.setItem(this.lastActivityKey, Date.now().toString());
@@ -93,9 +96,10 @@ export class AuthService {
 
   /**
    * Get Last Activity
-   * Retrieves timestamp of last user activity
    * 
-   * @return (number | null) Timestamp or null
+   * Retrieves timestamp of last recorded user activity
+   * 
+   * @return (number | null) Timestamp in milliseconds or null if not found
    */
   private getLastActivity(): number | null {
     const timestamp = localStorage.getItem(this.lastActivityKey);
@@ -104,9 +108,10 @@ export class AuthService {
 
   /**
    * Handle Session Expiry
-   * Clears auth data and redirects to home
    * 
-   * @return (void)
+   * Clears authentication data and redirects to home with session expired flag
+   * 
+   * @return void
    */
   private handleSessionExpiry(): void {
     this.clearAuth();
@@ -117,9 +122,10 @@ export class AuthService {
 
   /**
    * Initialize Auth
-   * Restores user session on app startup
    * 
-   * @return (void)
+   * Restores user session on application startup from stored token
+   * 
+   * @return void
    */
   initializeAuth(): void {
     const token = this.getToken();
@@ -137,7 +143,7 @@ export class AuthService {
       try {
         const payload = this.decodeToken(token);
 
-        // Create user object from token
+        // Create basic user object from token payload
         const user: User = {
           _id: payload.id,
           email: payload.email,
@@ -164,10 +170,11 @@ export class AuthService {
 
   /**
    * Register
-   * Creates new user account
    * 
-   * @param (RegistrationData) data - User registration information
-   * @return (Observable<AuthResponse>) Authentication response with token
+   * Creates new user account with provided registration data
+   * 
+   * @param (RegistrationData) data User registration information
+   * @return (Observable<AuthResponse>) Observable containing authentication response with token
    */
   register(data: RegistrationData): Observable<AuthResponse> {
     const sessionId = localStorage.getItem(environment.sessionIdKey);
@@ -183,10 +190,11 @@ export class AuthService {
 
   /**
    * Login
-   * Authenticates user and stores session
    * 
-   * @param (LoginCredentials) credentials - Email and password
-   * @return (Observable<AuthResponse>) Authentication response with token
+   * Authenticates user with credentials and stores session data
+   * 
+   * @param (LoginCredentials) credentials User email and password
+   * @return (Observable<AuthResponse>) Observable containing authentication response with token
    */
   login(credentials: LoginCredentials): Observable<AuthResponse> {
     const sessionId = localStorage.getItem(environment.sessionIdKey);
@@ -206,10 +214,11 @@ export class AuthService {
 
   /**
    * Save Return URL
-   * Stores URL to redirect after login
    * 
-   * @param (string) url - URL to return to
-   * @return (void)
+   * Stores URL to redirect user after successful login
+   * 
+   * @param (string) url URL to return to after login
+   * @return void
    */
   saveReturnUrl(url: string): void {
     if (url && url !== "/login" && url !== "/") {
@@ -219,9 +228,10 @@ export class AuthService {
 
   /**
    * Get Return URL
-   * Retrieves saved return URL
    * 
-   * @return (string | null) Saved URL or null
+   * Retrieves saved return URL from session storage
+   * 
+   * @return (string | null) Saved URL or null if not found
    */
   getReturnUrl(): string | null {
     return sessionStorage.getItem(this.returnUrlKey);
@@ -229,9 +239,10 @@ export class AuthService {
 
   /**
    * Clear Return URL
-   * Removes saved return URL
    * 
-   * @return (void)
+   * Removes saved return URL from session storage
+   * 
+   * @return void
    */
   clearReturnUrl(): void {
     sessionStorage.removeItem(this.returnUrlKey);
@@ -239,9 +250,10 @@ export class AuthService {
 
   /**
    * Logout
-   * Clears user session
    * 
-   * @return (void)
+   * Clears user session and notifies server
+   * 
+   * @return void
    */
   logout(): void {
     const token = this.getToken();
@@ -258,9 +270,10 @@ export class AuthService {
 
   /**
    * Get Profile
-   * Fetches complete user profile from server
    * 
-   * @return (Observable<User>) User profile data
+   * Fetches complete user profile data from server
+   * 
+   * @return (Observable<User>) Observable containing user profile data
    */
   getProfile(): Observable<User> {
     return this.http.get<ApiResponse<User>>(`${this.apiUrl}/profile`).pipe(
@@ -275,9 +288,10 @@ export class AuthService {
 
   /**
    * Is Authenticated
-   * Checks if user has valid session
    * 
-   * @return (boolean) True if authenticated
+   * Checks if user has valid active session
+   * 
+   * @return (boolean) True if user is authenticated with valid token
    */
   isAuthenticated(): boolean {
     const token = this.getToken();
@@ -286,9 +300,10 @@ export class AuthService {
 
   /**
    * Get Current User
+   * 
    * Returns current user from local state
    * 
-   * @return (User | null) Current user or null
+   * @return (User | null) Current user object or null if not authenticated
    */
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
@@ -296,9 +311,10 @@ export class AuthService {
 
   /**
    * Get Token
-   * Retrieves JWT token from storage
    * 
-   * @return (string | null) Token or null
+   * Retrieves JWT authentication token from local storage
+   * 
+   * @return (string | null) JWT token or null if not found
    */
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
@@ -306,10 +322,11 @@ export class AuthService {
 
   /**
    * Set Auth Data
-   * Stores authentication data locally
    * 
-   * @param (AuthResponse) authData - Token and user info
-   * @return (void)
+   * Stores authentication data in local storage and updates user state
+   * 
+   * @param (AuthResponse) authData Authentication response containing token and user data
+   * @return void
    */
   private setAuthData(authData: AuthResponse): void {
     localStorage.setItem(this.tokenKey, authData.token);
@@ -318,9 +335,10 @@ export class AuthService {
 
   /**
    * Clear Auth
-   * Removes all authentication data
    * 
-   * @return (void)
+   * Removes all authentication data from storage and resets user state
+   * 
+   * @return void
    */
   private clearAuth(): void {
     localStorage.removeItem(this.tokenKey);
@@ -331,9 +349,10 @@ export class AuthService {
 
   /**
    * Load User Profile
-   * Fetches full profile in background
    * 
-   * @return (void)
+   * Fetches full user profile in background without blocking UI
+   * 
+   * @return void
    */
   private loadUserProfile(): void {
     this.getProfile()
@@ -347,10 +366,11 @@ export class AuthService {
 
   /**
    * Is Token Expired
-   * Checks if JWT token has expired
    * 
-   * @param (string) token - JWT token to check
-   * @return (boolean) True if expired
+   * Checks if JWT token has expired based on exp claim
+   * 
+   * @param (string) token JWT token to check
+   * @return (boolean) True if token is expired
    */
   private isTokenExpired(token: string): boolean {
     try {
@@ -363,10 +383,11 @@ export class AuthService {
 
   /**
    * Decode Token
-   * Extracts payload from JWT token
    * 
-   * @param (string) token - JWT token to decode
-   * @return (TokenPayload) Decoded token data
+   * Extracts and parses payload from JWT token
+   * 
+   * @param (string) token JWT token to decode
+   * @return (TokenPayload) Decoded token payload data
    */
   private decodeToken(token: string): TokenPayload {
     const base64Url = token.split(".")[1];
@@ -382,10 +403,11 @@ export class AuthService {
 
   /**
    * Handle Error
-   * Centralized error handling
    * 
-   * @param (HttpErrorResponse) error - HTTP error object
-   * @return (Observable<never>) Error observable
+   * Centralized error handling for HTTP requests
+   * 
+   * @param (HttpErrorResponse) error HTTP error response object
+   * @return (Observable<never>) Error observable for RxJS stream
    */
   private handleError(error: HttpErrorResponse): Observable<never> {
     return throwError(() => error);

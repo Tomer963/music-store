@@ -110,7 +110,7 @@
   border-radius: var(--radius-sm);
 }
 
-/* Responsive */
+/* Responsive Design */
 @media (max-width: 768px) {
   .search-input {
     padding: var(--spacing-xs) var(--spacing-sm);
