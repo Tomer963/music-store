@@ -1,22 +1,16 @@
-<div
-  class="checkout-page"
-  [class.step-2]="currentStep === 2"
-  [class.step-3]="currentStep === 3"
->
+<div class="checkout-page">
   <div class="loading-container" *ngIf="isLoading">
     <app-spinner></app-spinner>
   </div>
 
   <div class="empty-cart-container" *ngIf="!isLoading && !hasItems">
-    <div class="container">
-      <div class="empty-cart-content">
-        <div class="empty-cart-icon">🛒</div>
-        <h2>Your cart is empty</h2>
-        <p>Please add items to your cart before proceeding to checkout.</p>
-        <button class="btn btn-primary" (click)="goShopping()">
-          Continue Shopping
-        </button>
-      </div>
+    <div class="empty-cart-content">
+      <div class="empty-cart-icon">🛒</div>
+      <h2>Your cart is empty</h2>
+      <p>Please add items to your cart before proceeding to checkout.</p>
+      <button class="btn btn-primary" (click)="goShopping()">
+        Continue Shopping
+      </button>
     </div>
   </div>
 
@@ -29,7 +23,6 @@
           </div>
 
           <div class="checkout-steps-container">
-            <!-- Step 1: Billing -->
             <div class="step-container">
               <div
                 class="checkout-step"
@@ -202,7 +195,6 @@
               </div>
             </div>
 
-            <!-- Step 2: Payment -->
             <div class="step-container">
               <div
                 class="checkout-step"
@@ -499,7 +491,6 @@
               </div>
             </div>
 
-            <!-- Step 3: Order Review -->
             <div class="step-container">
               <div
                 class="checkout-step"
