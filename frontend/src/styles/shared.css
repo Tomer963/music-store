@@ -3,6 +3,269 @@
    ======================================== */
 
 /* ========================================
+   PAGE CONTAINERS - Common page wrappers with responsive padding
+   ======================================== */
+
+.page-container,
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+  width: 100%;
+}
+
+/* Extra Large Screens */
+@media (min-width: 1600px) {
+  .page-container,
+  .container {
+    padding: 0 256px;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1400px) and (max-width: 1599px) {
+  .page-container,
+  .container {
+    padding: 0 200px;
+  }
+}
+
+/* Medium Desktop */
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .page-container,
+  .container {
+    padding: 0 120px;
+  }
+}
+
+/* Small Desktop */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .page-container,
+  .container {
+    padding: 0 40px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+  .page-container,
+  .container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-container,
+  .container {
+    padding: 0 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .page-container,
+  .container {
+    padding: 0 8px;
+  }
+}
+
+/* ========================================
+   TITLE WRAPPERS - Common title sections
+   ======================================== */
+
+.title-wrapper,
+.page-title-wrapper,
+.wishlist-header,
+.category-header,
+.checkout-title-wrapper,
+.new-products-title {
+  background-color: var(--white);
+  padding: 8px 12px;
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  display: block;
+}
+
+.page-title,
+.section-title,
+.wishlist-title,
+.category-title,
+.checkout-title,
+.new-products-title h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  text-align: left;
+  display: block;
+}
+
+/* Responsive title sizes */
+@media (max-width: 768px) {
+  .page-title,
+  .section-title,
+  .wishlist-title,
+  .category-title,
+  .checkout-title,
+  .new-products-title h2 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .page-title,
+  .section-title,
+  .wishlist-title,
+  .category-title,
+  .checkout-title,
+  .new-products-title h2 {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 429px) {
+  .page-title,
+  .section-title,
+  .wishlist-title,
+  .category-title,
+  .checkout-title,
+  .new-products-title h2 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 429px) {
+  .checkout-title {
+    font-size: 1.05rem;
+  }
+  
+  .new-products-title h2 {
+    font-size: 0.875rem;
+  }
+}
+
+/* ========================================
+   EMPTY STATE - Common empty state styles
+   ======================================== */
+
+.empty-state,
+.empty-wishlist,
+.empty-cart-container,
+.no-albums-container {
+  text-align: center;
+  padding: var(--spacing-xxl) var(--spacing-lg);
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background-color: #f5f5f5;
+}
+
+.empty-icon,
+.empty-cart-icon {
+  font-size: 5rem;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.3;
+}
+
+.empty-state h2,
+.empty-wishlist h2,
+.empty-cart-content h2 {
+  color: var(--secondary-color);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.empty-state p,
+.empty-wishlist p,
+.empty-cart-content p {
+  color: var(--gray-medium);
+  font-size: 1.125rem;
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.6;
+}
+
+/* Responsive empty state */
+@media (max-width: 768px) {
+  .empty-icon,
+  .empty-cart-icon {
+    font-size: 4rem;
+  }
+
+  .empty-state h2,
+  .empty-wishlist h2,
+  .empty-cart-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .empty-state p,
+  .empty-wishlist p,
+  .empty-cart-content p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .empty-state,
+  .empty-wishlist,
+  .empty-cart-content {
+    padding: var(--spacing-lg) var(--spacing-sm);
+    max-width: 100%;
+  }
+
+  .empty-icon,
+  .empty-cart-icon {
+    font-size: 3.5rem;
+  }
+
+  .empty-state h2,
+  .empty-wishlist h2,
+  .empty-cart-content h2 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 429px) {
+  .empty-icon,
+  .empty-cart-icon {
+    font-size: 3rem;
+  }
+
+  .empty-state h2,
+  .empty-wishlist h2,
+  .empty-cart-content h2 {
+    font-size: 1.05rem;
+  }
+
+  .empty-state p,
+  .empty-wishlist p,
+  .empty-cart-content p {
+    font-size: 0.85rem;
+  }
+}
+
+/* ========================================
+   LOADING CONTAINER - Common loading state
+   ======================================== */
+
+.loading-container,
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 450px;
+  padding: var(--spacing-lg);
+}
+
+.loading-state {
+  padding: var(--spacing-lg) 0;
+  min-height: auto;
+}
+
+/* ========================================
    ICON BUTTONS - Common styles for all icon buttons
    ======================================== */
 
@@ -223,18 +486,6 @@
 }
 
 /* ========================================
-   LOADING CONTAINER - Common loading state
-   ======================================== */
-
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 450px;
-  padding: var(--spacing-lg);
-}
-
-/* ========================================
    VINYL LOADER - Common vinyl record loader
    ======================================== */
 
@@ -443,176 +694,6 @@
 }
 
 /* ========================================
-   PAGE CONTAINERS - Common page wrappers
-   ======================================== */
-
-.page-container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0 16px;
-  width: 100%;
-}
-
-/* Extra Large Screens */
-@media (min-width: 1600px) {
-  .page-container {
-    padding: 0 256px;
-  }
-}
-
-/* Large Desktop */
-@media (min-width: 1400px) and (max-width: 1599px) {
-  .page-container {
-    padding: 0 200px;
-  }
-}
-
-/* Medium Desktop */
-@media (min-width: 1200px) and (max-width: 1399px) {
-  .page-container {
-    padding: 0 120px;
-  }
-}
-
-/* Small Desktop */
-@media (min-width: 992px) and (max-width: 1199px) {
-  .page-container {
-    padding: 0 40px;
-  }
-}
-
-/* Tablet */
-@media (max-width: 991px) {
-  .page-container {
-    padding: 0 16px;
-  }
-}
-
-@media (max-width: 768px) {
-  .page-container {
-    padding: 0 12px;
-  }
-}
-
-@media (max-width: 576px) {
-  .page-container {
-    padding: 0 8px;
-  }
-}
-
-/* ========================================
-   ANIMATIONS - Common animations
-   ======================================== */
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ========================================
-   BUTTON STYLES - Common button styles
-   ======================================== */
-
-.btn {
-  display: inline-block;
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: none;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  outline: none;
-}
-
-.btn-primary {
-  background-color: var(--primary-color);
-  color: var(--white);
-}
-
-.btn-primary:hover {
-  background-color: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.btn-outline {
-  background-color: transparent;
-  color: var(--secondary-color);
-  border: 2px solid var(--secondary-color);
-}
-
-.btn-outline:hover {
-  background-color: var(--secondary-color);
-  color: var(--white);
-}
-
-/* ========================================
-   EMPTY STATE - Common empty state styles
-   ======================================== */
-
-.empty-state {
-  text-align: center;
-  padding: var(--spacing-xxl) 0;
-}
-
-.empty-icon {
-  font-size: 4rem;
-  margin-bottom: var(--spacing-lg);
-  opacity: 0.3;
-}
-
-.empty-state h2 {
-  color: var(--secondary-color);
-  margin-bottom: var(--spacing-md);
-  font-size: 1.75rem;
-}
-
-.empty-state p {
-  color: var(--gray-medium);
-  font-size: 1.125rem;
-  margin-bottom: var(--spacing-xl);
-  line-height: 1.6;
-}
-
-/* ========================================
    ERROR CONTAINER - Common error state
    ======================================== */
 
@@ -739,27 +820,6 @@
 }
 
 /* ========================================
-   TITLE WRAPPERS - Common title sections
-   ======================================== */
-
-.title-wrapper,
-.page-title-wrapper {
-  background-color: var(--white);
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow-sm);
-}
-
-.page-title,
-.section-title {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--secondary-color);
-  text-align: left;
-}
-
-/* ========================================
    SCROLLBAR STYLES - Custom scrollbars
    ======================================== */
 
@@ -831,6 +891,28 @@
   font-weight: 400;
   color: #999999 !important;
   display: inline;
+}
+
+@media (max-width: 768px) {
+  .breadcrumb {
+    font-size: clamp(0.688rem, 1.2vw, 0.75rem);
+    padding: clamp(6px, 0.9vh, 8px) clamp(10px, 1.8vw, 16px);
+  }
+
+  .breadcrumb .breadcrumb-separator {
+    margin: 0 clamp(4px, 0.8vw, 6px);
+  }
+}
+
+@media (max-width: 576px) {
+  .breadcrumb {
+    font-size: clamp(0.625rem, 1.1vw, 0.688rem);
+    padding: clamp(5px, 0.8vh, 6px) clamp(8px, 1.5vw, 12px);
+  }
+
+  .breadcrumb .breadcrumb-separator {
+    margin: 0 clamp(3px, 0.6vw, 4px);
+  }
 }
 
 /* ========================================
@@ -1064,6 +1146,158 @@
 }
 
 /* ========================================
+   ANIMATIONS - Common animations
+   ======================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   BUTTON STYLES - Common button styles
+   ======================================== */
+
+.btn {
+  display: inline-block;
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(255, 0, 0, 0.3);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline:hover {
+  background-color: var(--secondary-color);
+  color: var(--white);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-outline:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.icon {
+  font-size: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================
+   NO MORE MESSAGE - Common end of list message
+   ======================================== */
+
+.no-more-plain {
+  text-align: center;
+  padding: 0;
+  margin: var(--spacing-xl) 0 var(--spacing-xxl) 0;
+}
+
+.no-more-plain p {
+  color: var(--gray-medium);
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+@media (max-width: 576px) {
+  .no-more-plain p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 429px) {
+  .no-more-plain p {
+    font-size: 0.938rem;
+  }
+}
+
+/* ========================================
    RESPONSIVE UTILITIES
    ======================================== */
 
@@ -1078,38 +1312,5 @@
 @media (min-width: 576px) {
   .mobile-only {
     display: none !important;
-  }
-}
-
-/* Responsive title sizes */
-@media (max-width: 768px) {
-  .page-title,
-  .section-title {
-    font-size: 1.25rem;
-  }
-
-  .breadcrumb {
-    font-size: clamp(0.688rem, 1.2vw, 0.75rem);
-    padding: clamp(6px, 0.9vh, 8px) clamp(10px, 1.8vw, 16px);
-  }
-
-  .breadcrumb .breadcrumb-separator {
-    margin: 0 clamp(4px, 0.8vw, 6px);
-  }
-}
-
-@media (max-width: 576px) {
-  .page-title,
-  .section-title {
-    font-size: 1.125rem;
-  }
-
-  .breadcrumb {
-    font-size: clamp(0.625rem, 1.1vw, 0.688rem);
-    padding: clamp(5px, 0.8vh, 6px) clamp(8px, 1.5vw, 12px);
-  }
-
-  .breadcrumb .breadcrumb-separator {
-    margin: 0 clamp(3px, 0.6vw, 4px);
   }
 }

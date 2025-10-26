@@ -8,57 +8,6 @@
   padding: 40px 0 32px 0;
 }
 
-/* Main Container - Synchronized padding with header-content */
-.container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 0 16px;
-  width: 100%;
-}
-
-/* Responsive Container Padding */
-@media (min-width: 1600px) {
-  .container {
-    padding: 0 256px;
-  }
-}
-
-@media (min-width: 1400px) and (max-width: 1599px) {
-  .container {
-    padding: 0 200px;
-  }
-}
-
-@media (min-width: 1200px) and (max-width: 1399px) {
-  .container {
-    padding: 0 120px;
-  }
-}
-
-@media (min-width: 992px) and (max-width: 1199px) {
-  .container {
-    padding: 0 40px;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  .container {
-    padding: 0 16px;
-  }
-}
-
-@media (max-width: 767px) {
-  .container {
-    padding: 0 12px;
-  }
-}
-
-@media (max-width: 576px) {
-  .container {
-    padding: 0 8px;
-  }
-}
-
 /* Page Title Section */
 .title-wrapper {
   background-color: var(--white);
@@ -148,7 +97,7 @@
   background-color: #ffffff;
 }
 
-/* SVG Background Icons - decorative background for each column */
+/* SVG Background Icons */
 .new-customers-column .column-content {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><g opacity="0.08"><circle cx="50" cy="45" r="18" fill="none" stroke="%23000000" stroke-width="3"/><path d="M50 68c-15 0-27 12-27 27v8h54v-8c0-15-12-27-27-27z" fill="none" stroke="%23000000" stroke-width="3"/><circle cx="80" cy="75" r="15" fill="none" stroke="%23000000" stroke-width="3"/><path d="M80 65v20M70 75h20" stroke="%23000000" stroke-width="3" stroke-linecap="round"/></g></svg>');
   background-repeat: no-repeat;
@@ -341,7 +290,6 @@
     text-align: center;
   }
 
-  /* Adjust background images for mobile */
   .new-customers-column .column-content,
   .registered-customers-column .column-content {
     background-position: center center;
