@@ -1,25 +1,24 @@
 # Music Store Frontend
 
-A modern, responsive online music store built with Angular 19. This Single Page Application (SPA) provides a seamless shopping experience for music albums.
+Modern, responsive online music store built with Angular 19. Single Page Application (SPA) providing seamless shopping experience for music albums.
 
 ## Features
 
-- 🎵 Browse music albums by category
-- 🔍 Real-time search functionality
-- 🛒 Shopping cart management
-- ❤️ Wishlist functionality
-- 👤 User authentication (login/register)
-- 💳 Secure checkout process
-- 📱 Fully responsive design
-- 🔄 Infinite scroll pagination
-- ⚡ Optimized performance with lazy loading
+- Browse music albums by category
+- Real-time search functionality
+- Shopping cart management
+- Wishlist functionality
+- User authentication
+- Secure checkout process
+- Fully responsive design
+- Infinite scroll pagination
+- Optimized performance with lazy loading
 
 ## Technologies
 
 - Angular 19
 - RxJS
-- HTML5
-- CSS3 (with CSS animations and transitions)
+- HTML5/CSS3
 - RESTful API integration
 
 ## Prerequisites
@@ -43,42 +42,42 @@ cd music-store-frontend
 npm install
 ```
 
-3. Copy environment file:
+3. Configure environment:
 
 ```bash
 cp .env.example .env
 ```
 
-4. Update the API URL in `src/environments/environment.ts` to match your backend server.
+4. Update API URL in `src/environments/environment.ts`
 
 ## Development
 
-Run the development server:
+Run development server:
 
 ```bash
 npm start
 ```
 
-Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Navigate to `http://localhost:4200/`
 
 ## Build
 
-Build the project for production:
+Build for production:
 
 ```bash
 npm run build
 ```
 
-The build artifacts will be stored in the `dist/` directory.
+Build artifacts will be in `dist/` directory.
 
 ## Project Structure
 
 ```
 src/
 ├── app/
-│   ├── components/     # Reusable UI components
+│   ├── components/     # UI components
 │   ├── pages/         # Page components
-│   ├── services/      # API and business logic services
+│   ├── services/      # Business logic services
 │   ├── models/        # TypeScript interfaces
 │   ├── guards/        # Route guards
 │   ├── interceptors/  # HTTP interceptors
@@ -89,36 +88,36 @@ src/
 └── styles.css        # Global styles
 ```
 
-## Key Features Implementation
+## Key Features
 
 ### Authentication
 
 - JWT-based authentication
 - Automatic token refresh
-- Protected routes with guards
+- Protected routes
 
 ### Shopping Cart
 
-- Session-based cart for anonymous users
+- Session-based cart for guests
 - Persistent cart for authenticated users
-- Real-time cart updates
+- Real-time updates
 
 ### Search
 
 - Debounced search input
 - Autocomplete suggestions
-- Search results highlighting
+- Results highlighting
 
-### Performance Optimizations
+### Performance
 
 - Lazy loading for images
 - Component lazy loading
 - HTTP request caching
-- CSS sprites for icons
+- CSS sprites
 
 ## API Integration
 
-The frontend integrates with the backend REST API endpoints:
+Backend REST API endpoints:
 
 - `/api/v1/albums` - Album management
 - `/api/v1/categories` - Category browsing
@@ -149,7 +148,7 @@ npm run e2e
 npm run build
 ```
 
-2. Deploy the contents of `dist/music-store-frontend` to your web server.
+2. Deploy `dist/music-store-frontend` contents to web server
 
 ## Browser Support
 

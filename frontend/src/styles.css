@@ -4,7 +4,9 @@
 /* Import Shared Styles */
 @import "./styles/shared.css";
 
-/* CSS Variables */
+/* ========================================
+   CSS VARIABLES - Design tokens
+   ======================================== */
 :root {
   /* Colors */
   --primary-color: #ff0000;
@@ -44,20 +46,24 @@
   --transition-normal: 0.3s ease;
   --transition-slow: 0.5s ease;
 
-  /* Z-index */
+  /* Z-index layers */
   --z-dropdown: 1000;
   --z-modal: 1100;
   --z-toast: 1200;
 }
 
-/* Reset */
+/* ========================================
+   RESET - Normalize browser defaults
+   ======================================== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Base Styles */
+/* ========================================
+   BASE STYLES
+   ======================================== */
 html,
 body {
   height: 100%;
@@ -72,10 +78,12 @@ body {
 }
 
 body {
-  overflow-x: hidden;
+  overflow-x: hidden; // Prevent horizontal scroll
 }
 
-/* Typography */
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
 a {
   color: inherit;
   text-decoration: none;
@@ -86,7 +94,9 @@ a:hover {
   color: var(--primary-color);
 }
 
-/* Form Elements */
+/* ========================================
+   FORM ELEMENTS
+   ======================================== */
 button {
   font-family: inherit;
   cursor: pointer;
@@ -105,14 +115,18 @@ select {
   font-size: inherit;
 }
 
-/* Images */
+/* ========================================
+   IMAGES
+   ======================================== */
 img {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-/* Utility Classes */
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
 .container {
   max-width: 1400px;
   margin: 0 auto;
@@ -145,7 +159,9 @@ img {
   display: none !important;
 }
 
-/* Scrollbar Styles */
+/* ========================================
+   SCROLLBAR STYLES
+   ======================================== */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -164,7 +180,9 @@ img {
   background: var(--gray-dark);
 }
 
-/* Breadcrumb Styles */
+/* ========================================
+   BREADCRUMB STYLES - Maintain consistent styling
+   ======================================== */
 .breadcrumb a,
 .breadcrumb .breadcrumb-link {
   color: #000000 !important;
@@ -195,7 +213,9 @@ img {
   font-weight: 400 !important;
 }
 
-/* Responsive Typography */
+/* ========================================
+   RESPONSIVE TYPOGRAPHY
+   ======================================== */
 @media (max-width: 768px) {
   html {
     font-size: 14px;

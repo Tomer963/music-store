@@ -1,4 +1,6 @@
-/* Main Header */
+/* ========================================
+   MAIN HEADER
+   ======================================== */
 .header-main {
   background-color: var(--primary-color);
   padding: 8px 0;
@@ -22,7 +24,9 @@
   height: 100%;
 }
 
-/* Responsive container padding */
+/* ========================================
+   RESPONSIVE CONTAINER PADDING
+   ======================================== */
 @media (min-width: 1600px) {
   .header .container {
     padding: 0 256px;
@@ -65,13 +69,15 @@
   }
 }
 
-/* Logo */
+/* ========================================
+   LOGO
+   ======================================== */
 .logo {
   flex-shrink: 0;
   display: flex;
   align-items: center;
   height: 100%;
-  margin-left: -40px;
+  margin-left: -40px; // Alignment adjustment
   margin-right: auto;
 }
 
@@ -89,14 +95,18 @@
   object-fit: contain;
 }
 
-/* Search */
+/* ========================================
+   SEARCH
+   ======================================== */
 .search-wrapper {
   flex: 1;
   max-width: 500px;
   margin: 0 auto;
 }
 
-/* Cart area */
+/* ========================================
+   CART AREA
+   ======================================== */
 .cart-wrapper {
   display: flex;
   align-items: center;
@@ -131,6 +141,7 @@
   transition: all var(--transition-fast);
 }
 
+/* Cart item count badge */
 .cart-count {
   position: absolute;
   top: 41%;
@@ -144,7 +155,9 @@
   text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
 }
 
-/* Mobile menu toggle */
+/* ========================================
+   MOBILE MENU TOGGLE
+   ======================================== */
 .menu-toggle {
   display: none;
   background: none;
@@ -158,6 +171,7 @@
   justify-content: center;
 }
 
+/* Hamburger icon */
 .menu-icon {
   display: block;
   width: 24px;
@@ -186,11 +200,13 @@
   transform: translateY(8px);
 }
 
-/* Mobile menu */
+/* ========================================
+   MOBILE MENU
+   ======================================== */
 .mobile-menu {
   position: fixed;
   top: 0;
-  right: -300px;
+  right: -300px; // Hidden by default
   width: 300px;
   height: 100vh;
   background-color: var(--white);
@@ -241,7 +257,9 @@
   color: var(--primary-color);
 }
 
-/* Responsive */
+/* ========================================
+   RESPONSIVE - TABLET
+   ======================================== */
 @media (max-width: 768px) {
   .nav-top {
     display: none;
@@ -279,6 +297,9 @@
   }
 }
 
+/* ========================================
+   RESPONSIVE - MOBILE
+   ======================================== */
 @media (max-width: 576px) {
   .header-main {
     padding: 5px 0;
@@ -317,6 +338,9 @@
   }
 }
 
+/* ========================================
+   RESPONSIVE - SMALL MOBILE
+   ======================================== */
 @media (max-width: 429px) {
   .header-main {
     padding: 4px 0;

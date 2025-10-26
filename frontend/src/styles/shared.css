@@ -1,11 +1,10 @@
 /* ========================================
-   SHARED STYLES - Common components used across the application
+   SHARED STYLES - Reusable components
    ======================================== */
 
 /* ========================================
-   PAGE CONTAINERS - Common page wrappers with responsive padding
+   PAGE CONTAINERS - Responsive wrappers
    ======================================== */
-
 .page-container,
 .container {
   max-width: 100%;
@@ -14,7 +13,7 @@
   width: 100%;
 }
 
-/* Extra Large Screens */
+/* Extra Large Screens (1600px+) */
 @media (min-width: 1600px) {
   .page-container,
   .container {
@@ -22,7 +21,7 @@
   }
 }
 
-/* Large Desktop */
+/* Large Desktop (1400-1599px) */
 @media (min-width: 1400px) and (max-width: 1599px) {
   .page-container,
   .container {
@@ -30,7 +29,7 @@
   }
 }
 
-/* Medium Desktop */
+/* Medium Desktop (1200-1399px) */
 @media (min-width: 1200px) and (max-width: 1399px) {
   .page-container,
   .container {
@@ -38,7 +37,7 @@
   }
 }
 
-/* Small Desktop */
+/* Small Desktop (992-1199px) */
 @media (min-width: 992px) and (max-width: 1199px) {
   .page-container,
   .container {
@@ -46,7 +45,7 @@
   }
 }
 
-/* Tablet */
+/* Tablet and Mobile */
 @media (max-width: 991px) {
   .page-container,
   .container {
@@ -69,9 +68,8 @@
 }
 
 /* ========================================
-   TITLE WRAPPERS - Common title sections
+   TITLE WRAPPERS - Page headers
    ======================================== */
-
 .title-wrapper,
 .page-title-wrapper,
 .wishlist-header,
@@ -131,9 +129,7 @@
   .new-products-title h2 {
     font-size: 1rem;
   }
-}
 
-@media (max-width: 429px) {
   .checkout-title {
     font-size: 1.05rem;
   }
@@ -144,9 +140,8 @@
 }
 
 /* ========================================
-   EMPTY STATE - Common empty state styles
+   EMPTY STATE - No content displays
    ======================================== */
-
 .empty-state,
 .empty-wishlist,
 .empty-cart-container,
@@ -248,9 +243,8 @@
 }
 
 /* ========================================
-   LOADING CONTAINER - Common loading state
+   LOADING CONTAINER
    ======================================== */
-
 .loading-container,
 .loading-state {
   display: flex;
@@ -266,9 +260,8 @@
 }
 
 /* ========================================
-   ICON BUTTONS - Common styles for all icon buttons
+   ICON BUTTONS - Action buttons
    ======================================== */
-
 .icon-btn,
 .album-icon-btn,
 .overlay-icon-btn,
@@ -306,7 +299,7 @@
   cursor: not-allowed;
 }
 
-/* Wishlist Icon Button */
+/* Wishlist Icon */
 .icon-btn.wishlist-icon,
 .album-icon-btn.wishlist-icon,
 .overlay-icon-btn.wishlist-icon,
@@ -325,7 +318,7 @@
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Cart Icon Button */
+/* Cart Icon */
 .icon-btn.cart-icon,
 .album-icon-btn.cart-icon,
 .overlay-icon-btn.cart-icon,
@@ -342,7 +335,7 @@
   background: rgba(76, 175, 80, 0.95);
 }
 
-/* Info Icon Button */
+/* Info Icon */
 .icon-btn.info-icon,
 .album-icon-btn.info-icon,
 .overlay-icon-btn.info-icon,
@@ -362,7 +355,7 @@
   background: rgba(140, 140, 140, 0.95);
 }
 
-/* Out of Stock Icon */
+/* Out of Stock */
 .icon-btn.out-of-stock,
 .album-icon-btn.out-of-stock,
 .overlay-icon-btn.out-of-stock,
@@ -374,9 +367,8 @@
 }
 
 /* ========================================
-   CART ICON SVG - Common styles for cart icons
+   CART ICON SVG
    ======================================== */
-
 .cart-icon-svg,
 .album-cart-icon,
 .red-cart-icon-svg {
@@ -386,9 +378,8 @@
 }
 
 /* ========================================
-   CART COUNTER - Common styles for cart counters
+   CART COUNTER - Quantity controls
    ======================================== */
-
 .cart-counter,
 .overlay-cart-counter,
 .red-overlay-cart-counter,
@@ -407,6 +398,7 @@
   flex-shrink: 0;
 }
 
+/* Counter buttons */
 .cart-counter .counter-btn,
 .overlay-cart-counter .counter-btn,
 .red-overlay-cart-counter .counter-btn,
@@ -427,6 +419,7 @@
   min-width: 30px;
 }
 
+/* Trash button */
 .cart-counter .counter-btn.trash-btn,
 .overlay-cart-counter .counter-btn.trash-btn,
 .red-overlay-cart-counter .counter-btn.trash-btn,
@@ -436,6 +429,7 @@
   order: 1;
 }
 
+/* Plus button */
 .cart-counter .counter-btn.plus-btn,
 .overlay-cart-counter .counter-btn.plus-btn,
 .red-overlay-cart-counter .counter-btn.plus-btn,
@@ -445,6 +439,7 @@
   order: -1;
 }
 
+/* Counter value display */
 .cart-counter .counter-value,
 .overlay-cart-counter .counter-value,
 .red-overlay-cart-counter .counter-value,
@@ -460,9 +455,8 @@
 }
 
 /* ========================================
-   LOADING SPINNER - Common spinner animation
+   LOADING SPINNER
    ======================================== */
-
 .icon-spinner,
 .spinner {
   width: 16px;
@@ -486,9 +480,8 @@
 }
 
 /* ========================================
-   VINYL LOADER - Common vinyl record loader
+   VINYL LOADER
    ======================================== */
-
 .vinyl-loader {
   width: 80px;
   height: 80px;
@@ -541,9 +534,8 @@
 }
 
 /* ========================================
-   ALBUM CARD - Common album card styles
+   ALBUM CARD - Product cards
    ======================================== */
-
 .album-card-base,
 .category-album-card,
 .wishlist-album-card,
@@ -694,9 +686,8 @@
 }
 
 /* ========================================
-   ERROR CONTAINER - Common error state
+   ERROR CONTAINER
    ======================================== */
-
 .error-container {
   display: flex;
   justify-content: center;
@@ -716,9 +707,8 @@
 }
 
 /* ========================================
-   MUSIC PRELOADER - Common music bar animation
+   MUSIC PRELOADER
    ======================================== */
-
 .music-preloader {
   display: flex;
   justify-content: center;
@@ -738,6 +728,7 @@
   border-radius: 2px;
 }
 
+/* Staggered animation delay */
 .music-preloader .bar:nth-child(1) {
   animation-delay: 0s;
 }
@@ -765,9 +756,8 @@
 }
 
 /* ========================================
-   FORM ELEMENTS - Common form styles
+   FORM ELEMENTS
    ======================================== */
-
 .form-control {
   width: 100%;
   padding: 7px 10px;
@@ -791,6 +781,7 @@
   border-color: var(--focus-color);
 }
 
+/* Error state */
 .form-control.error {
   border: 1px dashed var(--error-color) !important;
   background-color: rgba(244, 67, 54, 0.05);
@@ -820,9 +811,8 @@
 }
 
 /* ========================================
-   SCROLLBAR STYLES - Custom scrollbars
+   SCROLLBAR STYLES
    ======================================== */
-
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -843,9 +833,8 @@
 }
 
 /* ========================================
-   BREADCRUMB STYLES - Common breadcrumb navigation
+   BREADCRUMB NAVIGATION
    ======================================== */
-
 .breadcrumb-container {
   width: 100%;
   margin: 0 0 clamp(16px, 2.5vh, 24px) 0;
@@ -916,9 +905,8 @@
 }
 
 /* ========================================
-   HEADER STYLES - Common header components
+   HEADER COMPONENTS
    ======================================== */
-
 .header {
   position: fixed;
   top: 0;
@@ -962,9 +950,8 @@
 }
 
 /* ========================================
-   SIDEBAR STYLES - Common sidebar components
+   SIDEBAR COMPONENTS
    ======================================== */
-
 .sidebar {
   position: static;
   width: 100%;
@@ -1027,9 +1014,8 @@
 }
 
 /* ========================================
-   SEARCH BOX STYLES - Common search components
+   SEARCH BOX
    ======================================== */
-
 .search-box {
   position: relative;
   width: 100%;
@@ -1083,9 +1069,8 @@
 }
 
 /* ========================================
-   SPINNER STYLES - Common spinner components
+   SPINNER COMPONENTS
    ======================================== */
-
 .spinner-container {
   display: flex;
   flex-direction: column;
@@ -1102,6 +1087,7 @@
   justify-content: center;
 }
 
+/* Spinner sizes */
 .vinyl-spinner.small {
   width: 60px;
   height: 60px;
@@ -1146,9 +1132,8 @@
 }
 
 /* ========================================
-   ANIMATIONS - Common animations
+   ANIMATIONS
    ======================================== */
-
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -1190,9 +1175,8 @@
 }
 
 /* ========================================
-   BUTTON STYLES - Common button styles
+   BUTTON STYLES
    ======================================== */
-
 .btn {
   display: inline-block;
   padding: var(--spacing-md) var(--spacing-xl);
@@ -1209,6 +1193,7 @@
   overflow: hidden;
 }
 
+/* Ripple effect */
 .btn::before {
   content: "";
   position: absolute;
@@ -1227,6 +1212,7 @@
   height: 300px;
 }
 
+/* Primary button */
 .btn-primary {
   background-color: var(--primary-color);
   color: var(--white);
@@ -1244,6 +1230,7 @@
   box-shadow: 0 2px 10px rgba(255, 0, 0, 0.3);
 }
 
+/* Outline button */
 .btn-outline {
   background-color: transparent;
   color: var(--secondary-color);
@@ -1269,9 +1256,8 @@
 }
 
 /* ========================================
-   NO MORE MESSAGE - Common end of list message
+   NO MORE MESSAGE
    ======================================== */
-
 .no-more-plain {
   text-align: center;
   padding: 0;
@@ -1300,7 +1286,6 @@
 /* ========================================
    RESPONSIVE UTILITIES
    ======================================== */
-
 /* Hide on mobile */
 @media (max-width: 575px) {
   .desktop-only {
