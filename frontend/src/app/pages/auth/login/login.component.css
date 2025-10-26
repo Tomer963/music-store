@@ -8,6 +8,14 @@
   padding: 40px 0 32px 0;
 }
 
+/* Container with matching header width */
+.login-page .container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+  width: 100%;
+}
+
 /* Page Title Section */
 .title-wrapper {
   background-color: var(--white);
@@ -260,11 +268,46 @@
   min-width: 80px;
 }
 
+/* Responsive container padding - matching header */
+@media (min-width: 1600px) {
+  .login-page .container {
+    padding: 0 256px;
+  }
+}
+
+@media (min-width: 1400px) and (max-width: 1599px) {
+  .login-page .container {
+    padding: 0 200px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .login-page .container {
+    padding: 0 120px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .login-page .container {
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 991px) {
+  .login-page .container {
+    padding: 0 16px;
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .login-page {
     min-height: calc(100vh - 80px);
     padding: 32px 0;
+  }
+
+  .login-page .container {
+    padding: 0 12px;
   }
 
   .login-wrapper {
@@ -298,6 +341,10 @@
 }
 
 @media (max-width: 576px) {
+  .login-page .container {
+    padding: 0 8px;
+  }
+
   .page-title {
     font-size: 1.125rem;
   }

@@ -4,6 +4,91 @@
   padding: 40px 0;
 }
 
+/* Container with same padding as header */
+.my-account-page .container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+  width: 100%;
+}
+
+/* Title wrapper with negative margin to align with header-content */
+.title-wrapper {
+  background-color: var(--white);
+  padding: 8px 12px;
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  display: block;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  text-align: left;
+  display: block;
+}
+
+/* Responsive container padding - matching header */
+@media (min-width: 1600px) {
+  .my-account-page .container {
+    padding: 0 256px;
+  }
+}
+
+@media (min-width: 1400px) and (max-width: 1599px) {
+  .my-account-page .container {
+    padding: 0 200px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .my-account-page .container {
+    padding: 0 120px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .my-account-page .container {
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 991px) {
+  .my-account-page .container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .my-account-page .container {
+    padding: 0 12px;
+  }
+
+  .page-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .my-account-page .container {
+    padding: 0 8px;
+  }
+
+  .page-title {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 429px) {
+  .page-title {
+    font-size: 1rem;
+  }
+}
+
 /* Tabs Navigation */
 .account-tabs {
   display: flex;
